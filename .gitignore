@@ -1,0 +1,24 @@
+# Local agent configuration and credentials
+.agents/
+.codex/
+.aws/
+.env
+.env.*
+!.env.example
+
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+
+# Model weights and generated run outputs
+models/
+checkpoints/
+runs/
+outputs/
+wandb/
+
+.DS_Store

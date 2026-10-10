@@ -1,0 +1,55 @@
+{
+  "source_file": "QA_train.json",
+  "source_sha256": "2e740328c190466f0b70c9919e98a1efb1d802a5b913075a4fd36bd77364f0bb",
+  "seed": 42,
+  "validation_ratio": 0.1,
+  "stratification": "db; cross-source queries use ordered db1 -> db2",
+  "allocation_method": "largest_remainder",
+  "split_unit": "sample",
+  "output_order": "original_source_order",
+  "total_samples": 5830,
+  "train_samples": 5247,
+  "validation_samples": 583,
+  "strata": [
+    {
+      "stratum": "Elasticsearch",
+      "total": 370,
+      "train": 333,
+      "validation": 37
+    },
+    {
+      "stratum": "MYSQL",
+      "total": 1969,
+      "train": 1772,
+      "validation": 197
+    },
+    {
+      "stratum": "MYSQL -> POSTGRESQL",
+      "total": 50,
+      "train": 45,
+      "validation": 5
+    },
+    {
+      "stratum": "POSTGRESQL",
+      "total": 410,
+      "train": 369,
+      "validation": 41
+    },
+    {
+      "stratum": "POSTGRESQL -> MYSQL",
+      "total": 40,
+      "train": 36,
+      "validation": 4
+    },
+    {
+      "stratum": "SQLite",
+      "total": 2991,
+      "train": 2692,
+      "validation": 299
+    }
+  ],
+  "output_sha256": {
+    "train.json": "5b2a2353981f39b9562228d3d706df212ad9e52b375bf41a9e2025dda8ad7479",
+    "validation.json": "cf14be26d9d2f02d3a08738564eca713d929ff2dc3cfbe6cf7757e5a0503f864"
+  }
+}
