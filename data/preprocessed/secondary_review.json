@@ -1,0 +1,2778 @@
+{
+  "reviewer": "Codex 主代理二次逐项复核",
+  "date": "2026-10-11",
+  "scope": {
+    "previous_unknown_fields": 40,
+    "model_generated_fields_checked": 143,
+    "model_corrected_fields_checked": 38,
+    "all_schema_knowledge_type_conflicts_checked": 4,
+    "all_model_warning_tables_checked": 1,
+    "training_source": "splits/train.json only; no validation/test labels"
+  },
+  "field_reviews": [
+    {
+      "table_id": "SQLite:book_publishing_company.pub_info",
+      "field": "pub_id",
+      "before": "标识出版商的唯一ID编号",
+      "after": "标识出版商的唯一ID编号",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:book_publishing_company.pub_info",
+        "knowledge:546"
+      ]
+    },
+    {
+      "table_id": "SQLite:book_publishing_company.pub_info",
+      "field": "logo",
+      "before": "出版商的Logo",
+      "after": "出版商的Logo",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:book_publishing_company.pub_info",
+        "knowledge:547"
+      ]
+    },
+    {
+      "table_id": "SQLite:book_publishing_company.stores",
+      "field": "stor_address",
+      "before": "商店地址",
+      "after": "商店地址",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:book_publishing_company.stores"
+      ]
+    },
+    {
+      "table_id": "SQLite:citeseer.content",
+      "field": "word_cited_id",
+      "before": "被引用词的标识",
+      "after": "被引用词的标识",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:citeseer.content",
+        "knowledge:630"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Type",
+      "before": "方法参数的类型",
+      "after": "方法参数的类型",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "knowledge:643"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Name",
+      "before": "方法参数的名称",
+      "after": "方法参数的名称",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "knowledge:644"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.Solution",
+      "field": "Id",
+      "before": "解决方案ID",
+      "after": "解决方案ID",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.Solution",
+        "knowledge:651"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.director",
+      "field": "name",
+      "before": "唯一的电影名称",
+      "after": "唯一的电影名称",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.director",
+        "knowledge:698"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Year",
+      "before": "年份",
+      "after": "年份",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:706"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Studio Entertainment[NI 1]",
+      "before": "华特迪士尼公司的影视娱乐业务板块收入",
+      "after": "华特迪士尼公司的影视娱乐业务板块收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:707"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Consumer Products[NI 2]",
+      "before": "华特迪士尼公司的消费品业务板块收入",
+      "after": "华特迪士尼公司的消费品业务板块收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:708"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Interactive[NI 3][Rev 1]",
+      "before": "华特迪士尼公司的互动媒体业务板块收入",
+      "after": "华特迪士尼公司的互动媒体业务板块收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:709"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Walt Disney Parks and Resorts",
+      "before": "华特迪士尼公司的乐园及度假区业务板块收入",
+      "after": "华特迪士尼公司的乐园及度假区业务板块收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:710"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Media Networks",
+      "before": "华特迪士尼公司的媒体网络业务板块收入",
+      "after": "华特迪士尼公司的媒体网络业务板块收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:711"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Total",
+      "before": "总收入",
+      "after": "总收入",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.revenue",
+        "knowledge:712"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.voice-actors",
+      "field": "character",
+      "before": "配音演员所配音的动画角色",
+      "after": "配音演员所配音的动画角色",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.voice-actors"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.voice-actors",
+      "field": "voice-actor",
+      "before": "为角色配音的演员",
+      "after": "为角色配音的演员",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.voice-actors"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.voice-actors",
+      "field": "movie",
+      "before": "角色和配音演员所属的电影",
+      "after": "角色和配音演员所属的电影",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:disney.voice-actors"
+      ]
+    },
+    {
+      "table_id": "SQLite:hockey.GoaliesShootout",
+      "field": "playerID",
+      "before": "球员标识",
+      "after": "球员标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:hockey.GoaliesShootout"
+      ]
+    },
+    {
+      "table_id": "SQLite:language_corpus.langs_words",
+      "field": "wid",
+      "before": "词ID",
+      "after": "词ID",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:language_corpus.langs_words",
+        "knowledge:1056"
+      ]
+    },
+    {
+      "table_id": "SQLite:movie_3.country",
+      "field": "country",
+      "before": "国家名称",
+      "after": "国家名称",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:movie_3.country",
+        "knowledge:1095"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_players",
+      "field": "note",
+      "before": "获奖备注，例如是否并列",
+      "after": "获奖备注，例如是否并列",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.awards_players",
+        "knowledge:1220"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_coaches",
+      "field": "note",
+      "before": "获奖备注，例如是否并列",
+      "after": "获奖备注，例如是否并列",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.awards_coaches",
+        "knowledge:1215"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "tmID",
+      "before": "球队缩写",
+      "after": "球队缩写",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams",
+        "knowledge:1265"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostAssists",
+      "before": "季后赛助攻",
+      "after": "季后赛助攻",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostSteals",
+      "before": "季后赛抢断",
+      "after": "季后赛抢断",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostBlocks",
+      "before": "季后赛盖帽",
+      "after": "季后赛盖帽",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostTurnovers",
+      "before": "季后赛失误",
+      "after": "季后赛失误",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostPF",
+      "before": "季后赛个人犯规",
+      "after": "季后赛个人犯规",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostfgAttempted",
+      "before": "季后赛投篮出手次数",
+      "after": "季后赛投篮出手次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostfgMade",
+      "before": "季后赛投篮命中次数",
+      "after": "季后赛投篮命中次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostftAttempted",
+      "before": "季后赛罚球出手次数",
+      "after": "季后赛罚球出手次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostftMade",
+      "before": "季后赛罚球命中次数",
+      "after": "季后赛罚球命中次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostthreeAttempted",
+      "before": "季后赛三分球出手次数",
+      "after": "季后赛三分球出手次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "PostthreeMade",
+      "before": "季后赛三分球命中次数",
+      "after": "季后赛三分球命中次数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Categories",
+      "field": "category_id",
+      "before": "类别标识符",
+      "after": "类别标识符",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Categories"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Reviews",
+      "field": "review_stars",
+      "before": "对该商家的评论星级",
+      "after": "对该商家的评论星级",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Reviews",
+        "knowledge:1365"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_yelping_since_year",
+      "before": "用户加入Yelp的年份",
+      "after": "用户加入Yelp的年份",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Users",
+        "knowledge:1375"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_funny",
+      "before": "用户发出的“有趣”投票数量级别",
+      "after": "用户发出的“有趣”投票数量级别",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Users",
+        "knowledge:1377"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_useful",
+      "before": "用户创建了多少个“有用”投票",
+      "after": "用户创建了多少个“有用”投票",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Users",
+        "knowledge:1378"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_cool",
+      "before": "用户发出的“酷”投票数量级别",
+      "after": "用户发出的“酷”投票数量级别",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Users",
+        "knowledge:1379"
+      ]
+    },
+    {
+      "table_id": "SQLite:shakespeare.paragraphs",
+      "field": "ParagraphNum",
+      "before": "段落号",
+      "after": "段落号",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:shakespeare.paragraphs",
+        "knowledge:1397"
+      ]
+    },
+    {
+      "table_id": "SQLite:simpson_episodes.Person",
+      "field": "height_meters",
+      "before": "剧组人员的身高，单位为米",
+      "after": "剧组人员的身高，单位为米",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:simpson_episodes.Person",
+        "knowledge:1442"
+      ]
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "DOB",
+      "before": "球员的出生日期",
+      "after": "球员的出生日期",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:soccer_2016.Player",
+        "knowledge:1499"
+      ]
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "Batting_hand",
+      "before": "击球手（惯用手）的ID",
+      "after": "击球手（惯用手）的ID",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:soccer_2016.Player",
+        "knowledge:1500"
+      ]
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "Country_Name",
+      "before": "球员所属国家的ID",
+      "after": "球员所属国家的ID",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:soccer_2016.Player",
+        "knowledge:1502"
+      ]
+    },
+    {
+      "table_id": "SQLite:video_games.game_publisher",
+      "field": "id",
+      "before": "游戏发行商关联记录的唯一标识符",
+      "after": "游戏发行商关联记录的唯一标识符",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:SQLite:video_games.game_publisher",
+        "knowledge:1540"
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "field": "owner_id",
+      "before": "车主（驾驶员）身份证号",
+      "after": "车主（驾驶员）身份证号",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:transportation.vehicle"
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "field": "registered_capital",
+      "before": "注册资本（万元）",
+      "after": "注册资本（万元）",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:finance_tax.companies"
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "field": "stock_id",
+      "before": "股票记录标识",
+      "after": "股票记录标识",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:finance_tax.stocks"
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "field": "trade_id",
+      "before": "成交记录标识",
+      "after": "成交记录标识",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:finance_tax.stock_daily_trades"
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "field": "financial_id",
+      "before": "财务记录标识",
+      "after": "财务记录标识",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:finance_tax.company_financials"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "semester_id",
+      "before": "学期标识",
+      "after": "学期标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "academic_year",
+      "before": "学年",
+      "after": "学年",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "semester_code",
+      "before": "学期代码",
+      "after": "学期代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "start_date_key",
+      "before": "开始日期键",
+      "after": "开始日期键",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "end_date_key",
+      "before": "结束日期键",
+      "after": "结束日期键",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_id",
+      "before": "部门ID，用于唯一标识部门。",
+      "after": "部门ID，用于唯一标识部门。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_code",
+      "before": "部门代码。",
+      "after": "部门代码。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_name",
+      "before": "部门名称。",
+      "after": "部门名称。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_id",
+      "before": "教师ID",
+      "after": "教师ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_no",
+      "before": "教师编号",
+      "after": "教师编号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_name",
+      "before": "教师姓名",
+      "after": "教师姓名",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "department_id",
+      "before": "部门ID",
+      "after": "部门ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "gender_code",
+      "before": "性别代码",
+      "after": "性别代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "phone",
+      "before": "电话号码",
+      "after": "电话号码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "region_id",
+      "before": "地区ID",
+      "after": "地区ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_id",
+      "before": "班级标识",
+      "after": "班级标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_code",
+      "before": "班级编码",
+      "after": "班级编码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_name",
+      "before": "班级名称",
+      "after": "班级名称",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "department_id",
+      "before": "所属院系标识",
+      "after": "所属院系标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "grade_year",
+      "before": "年级年份",
+      "after": "年级年份",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_id",
+      "before": "学生标识",
+      "after": "学生标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_no",
+      "before": "学号",
+      "after": "学号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_name",
+      "before": "学生姓名",
+      "after": "学生姓名",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "gender_code",
+      "before": "性别代码",
+      "after": "性别代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "academic_level_code",
+      "before": "学历层次代码",
+      "after": "学历层次代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "department_id",
+      "before": "院系标识",
+      "after": "院系标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "class_id",
+      "before": "班级标识",
+      "after": "班级标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "home_region_id",
+      "before": "地区标识（具体地域口径待确认）",
+      "after": "学生家庭地区编号（具体地区编码映射未提供）",
+      "status": "confirmed",
+      "reason": "完整训练案例1637、1722、1857明确称家庭地区编号，不能自动等同生源地或common行政区划代码。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student",
+        "example:1637",
+        "example:1722",
+        "example:1857"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_status_code",
+      "before": "学籍状态代码",
+      "after": "学籍状态代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "admit_date_key",
+      "before": "入学日期键",
+      "after": "入学日期键",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_id",
+      "before": "课程标识",
+      "after": "课程标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_code",
+      "before": "课程代码",
+      "after": "课程代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_name",
+      "before": "课程名称",
+      "after": "课程名称",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "department_id",
+      "before": "所属院系标识",
+      "after": "所属院系标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "teacher_id",
+      "before": "授课教师标识",
+      "after": "授课教师标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "credit",
+      "before": "学分",
+      "after": "学分",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_type",
+      "before": "课程类型",
+      "after": "课程类型",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "max_score",
+      "before": "最高分数",
+      "after": "最高分数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "enrollment_id",
+      "before": "选课记录的唯一标识。",
+      "after": "选课记录的唯一标识。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "student_id",
+      "before": "选课学生的标识。",
+      "after": "选课学生的标识。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "course_id",
+      "before": "所选课程的标识。",
+      "after": "所选课程的标识。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "semester_id",
+      "before": "选课所属学期的标识。",
+      "after": "选课所属学期的标识。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "enroll_date_key",
+      "before": "选课日期的代理键。",
+      "after": "选课日期键（实际编码规则未提供）",
+      "status": "inferred",
+      "reason": "enrollment为选课记录；DDL没有日期维度外键，不能宣称代理键或自动按YYYYMMDD解码。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "take_mode",
+      "before": "选课方式。",
+      "after": "选课方式。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "is_withdraw",
+      "before": "是否退课。",
+      "after": "是否退课。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "exam_score_id",
+      "before": "考试分数记录的唯一标识。",
+      "after": "考试分数记录的唯一标识。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "enrollment_id",
+      "before": "关联的入学记录标识。",
+      "after": "关联的选课记录标识，指向enrollment.enrollment_id",
+      "status": "confirmed",
+      "reason": "DDL外键指向包含student_id/course_id/semester_id的选课表，不是学生入学记录。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score",
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "exam_item",
+      "before": "考试项目名称。",
+      "after": "考试项目名称。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "score",
+      "before": "考试得分。",
+      "after": "考试得分。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "score_date_key",
+      "before": "考试日期键值。",
+      "after": "考试日期键值。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "semester_id",
+      "before": "学期标识ID。",
+      "after": "学期标识ID。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "academic_year",
+      "before": "学年。",
+      "after": "学年。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "semester_code",
+      "before": "学期代码。",
+      "after": "学期代码。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "start_date_key",
+      "before": "开始日期键。",
+      "after": "开始日期键。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "end_date_key",
+      "before": "结束日期键。",
+      "after": "结束日期键。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_id",
+      "before": "部门ID，用于唯一标识部门。",
+      "after": "部门ID，用于唯一标识部门。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_code",
+      "before": "部门代码。",
+      "after": "部门代码。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_name",
+      "before": "部门名称。",
+      "after": "部门名称。",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.department"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_id",
+      "before": "教师ID",
+      "after": "教师ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_no",
+      "before": "教师编号",
+      "after": "教师编号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_name",
+      "before": "教师姓名",
+      "after": "教师姓名",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "department_id",
+      "before": "部门ID",
+      "after": "部门ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "gender_code",
+      "before": "性别代码",
+      "after": "性别代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "phone",
+      "before": "电话号码",
+      "after": "电话号码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "region_id",
+      "before": "地区ID",
+      "after": "地区ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.teacher"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_id",
+      "before": "班级标识ID",
+      "after": "班级标识ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_code",
+      "before": "班级编码",
+      "after": "班级编码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_name",
+      "before": "班级名称",
+      "after": "班级名称",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "department_id",
+      "before": "所属院系ID",
+      "after": "所属院系ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "grade_year",
+      "before": "年级年份",
+      "after": "年级年份",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_id",
+      "before": "学生标识ID",
+      "after": "学生标识ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_no",
+      "before": "学号",
+      "after": "学号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_name",
+      "before": "学生姓名",
+      "after": "学生姓名",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "gender_code",
+      "before": "性别代码",
+      "after": "性别代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "academic_level_code",
+      "before": "学历层次代码",
+      "after": "学历层次代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "department_id",
+      "before": "院系ID",
+      "after": "院系ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "class_id",
+      "before": "班级ID",
+      "after": "班级ID",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "home_region_id",
+      "before": "生源地ID",
+      "after": "学生家庭地区编号（具体地区编码映射未提供）",
+      "status": "confirmed",
+      "reason": "完整训练案例1637、1722、1857明确称家庭地区编号，不能自动等同生源地或common行政区划代码。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student",
+        "example:1637",
+        "example:1722",
+        "example:1857"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_status_code",
+      "before": "学籍状态代码",
+      "after": "学籍状态代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "admit_date_key",
+      "before": "入学日期键",
+      "after": "入学日期键",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_id",
+      "before": "课程标识",
+      "after": "课程标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_code",
+      "before": "课程代码",
+      "after": "课程代码",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_name",
+      "before": "课程名称",
+      "after": "课程名称",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "department_id",
+      "before": "院系标识",
+      "after": "院系标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "teacher_id",
+      "before": "教师标识",
+      "after": "教师标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "credit",
+      "before": "学分",
+      "after": "学分",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_type",
+      "before": "课程类型",
+      "after": "课程类型",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "max_score",
+      "before": "最高分数",
+      "after": "最高分数",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.course"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "enrollment_id",
+      "before": "选课记录标识",
+      "after": "选课记录标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "student_id",
+      "before": "学生标识",
+      "after": "学生标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "course_id",
+      "before": "课程标识",
+      "after": "课程标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "semester_id",
+      "before": "学期标识",
+      "after": "学期标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "enroll_date_key",
+      "before": "选课日期键",
+      "after": "选课日期键（实际编码规则未提供）",
+      "status": "inferred",
+      "reason": "enrollment为选课记录；DDL没有日期维度外键，不能宣称代理键或自动按YYYYMMDD解码。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "take_mode",
+      "before": "修读方式",
+      "after": "修读方式",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "is_withdraw",
+      "before": "是否退课",
+      "after": "是否退课",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "exam_score_id",
+      "before": "考试成绩记录标识",
+      "after": "考试成绩记录标识",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "enrollment_id",
+      "before": "关联的入学/注册记录标识",
+      "after": "关联的选课记录标识，指向enrollment.enrollment_id",
+      "status": "confirmed",
+      "reason": "DDL外键指向包含student_id/course_id/semester_id的选课表，不是学生入学记录。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score",
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "exam_item",
+      "before": "考试项目",
+      "after": "考试项目",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "score",
+      "before": "考试成绩",
+      "after": "考试成绩",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "score_date_key",
+      "before": "成绩日期键",
+      "after": "成绩日期键",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "id",
+      "before": "记录标识",
+      "after": "记录标识",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "sog",
+      "before": "对地航速",
+      "after": "对地航速",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "cog",
+      "before": "对地航向",
+      "after": "对地航向",
+      "status": "reviewed",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "rot",
+      "before": "转向率",
+      "after": "转向率",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "destination",
+      "before": "目的地",
+      "after": "目的地",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "draught",
+      "before": "吃水",
+      "after": "吃水",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "vessel_type",
+      "before": "船舶类型",
+      "after": "船舶类型",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "imo",
+      "before": "IMO编号",
+      "after": "IMO编号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "call_sign",
+      "before": "呼号",
+      "after": "呼号",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "eta",
+      "before": "预计到达时间",
+      "after": "预计到达时间",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "last_update",
+      "before": "最后更新时间",
+      "after": "最后更新时间",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "name",
+      "before": "医疗机构名称",
+      "after": "医疗机构名称",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "name.keyword",
+      "before": "医疗机构名称的关键字子字段，用于精确匹配和聚合",
+      "after": "医疗机构名称的关键字子字段，用于精确匹配和聚合",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "city",
+      "before": "所在城市",
+      "after": "所在城市",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "district",
+      "before": "所在区县",
+      "after": "所在区县",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "address",
+      "before": "详细地址",
+      "after": "详细地址",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "location",
+      "before": "地理位置坐标",
+      "after": "地理位置坐标",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "level",
+      "before": "医疗机构等级",
+      "after": "医疗机构等级",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "bed_count",
+      "before": "床位数量",
+      "after": "床位数量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "doctor_count",
+      "before": "医生数量",
+      "after": "医生数量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "nurse_count",
+      "before": "护士数量",
+      "after": "护士数量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "ambulance_count",
+      "before": "救护车数量",
+      "after": "救护车数量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "department_count",
+      "before": "科室数量",
+      "after": "科室数量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "annual_outpatient",
+      "before": "年门诊量",
+      "after": "年门诊量",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "has_icu",
+      "before": "是否设有重症监护室",
+      "after": "是否设有重症监护室",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "is_teaching_hospital",
+      "before": "是否为教学医院",
+      "after": "是否为教学医院",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "emergency_24h",
+      "before": "是否提供24小时急诊服务",
+      "after": "是否提供24小时急诊服务",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "rating",
+      "before": "评分",
+      "after": "评分",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "founded_year",
+      "before": "成立年份",
+      "after": "成立年份",
+      "status": "inferred",
+      "reason": "复核字段名、实际类型和业务表上下文；原有校验记录保留，字段名推断不等同于数据值验证。",
+      "evidence": [
+        "schema:Elasticsearch:medical_institutions"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "MethodId",
+      "before": null,
+      "after": "所属方法的标识（未声明外键，关联方式待验证）",
+      "status": "inferred",
+      "reason": "MethodParameter的字段MethodId与同库Method.Id共同支持方法标识；TEXT与INTEGER类型不同且没有外键，不能宣称已验证关联。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "schema:SQLite:codebase_comments.Method"
+      ]
+    },
+    {
+      "table_id": "SQLite:genes.Genes",
+      "field": "Localization",
+      "before": null,
+      "after": "基因对应的细胞内定位，例如细胞质或细胞核",
+      "status": "confirmed",
+      "reason": "训练案例3501、3502直接筛选Genes.Localization=nucleus；3491使用cytoplasm；不是仅通过Classification推断。",
+      "evidence": [
+        "schema:SQLite:genes.Genes",
+        "example:3491",
+        "example:3501",
+        "example:3502"
+      ]
+    },
+    {
+      "table_id": "SQLite:hockey.AwardsCoaches",
+      "field": "note",
+      "before": null,
+      "after": "教练获奖记录备注（具体取值含义未提供）",
+      "status": "inferred",
+      "reason": "note为获奖表的TEXT附加字段，可保守解释为备注，不推断posthumous等其他表的取值。",
+      "evidence": [
+        "schema:SQLite:hockey.AwardsCoaches"
+      ]
+    },
+    {
+      "table_id": "SQLite:hockey.ScoringSup",
+      "field": "year",
+      "before": null,
+      "after": "冰球助攻补充统计的年份（赛季年份编码未说明）",
+      "status": "inferred",
+      "reason": "year与playerID、PPA、SHA共同构成年度球员统计上下文，没有依据确定赛季起始年或结束年。",
+      "evidence": [
+        "schema:SQLite:hockey.ScoringSup",
+        "knowledge:895",
+        "knowledge:896"
+      ]
+    },
+    {
+      "table_id": "SQLite:movie_3.address",
+      "field": "city_id",
+      "before": null,
+      "after": "地址所属城市的标识，关联city.city_id",
+      "status": "confirmed",
+      "reason": "DDL声明REFERENCES city，解析为其主键city_id；知识356及训练案例5995直接支持。",
+      "evidence": [
+        "schema:SQLite:movie_3.address",
+        "knowledge:356",
+        "example:5995"
+      ]
+    },
+    {
+      "table_id": "SQLite:movie_3.staff",
+      "field": "picture",
+      "before": null,
+      "after": "员工图片的二进制数据（具体格式和用途未说明）",
+      "status": "inferred",
+      "reason": "staff上下文、picture名称及BLOB类型支持图片数据解释，不能确认编码格式、尺寸或是否头像。",
+      "evidence": [
+        "schema:SQLite:movie_3.staff"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "useFirst",
+      "before": null,
+      "after": null,
+      "status": "unresolved",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "nameGiven",
+      "before": null,
+      "after": null,
+      "status": "unresolved",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "fullGivenName",
+      "before": null,
+      "after": null,
+      "status": "unresolved",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "firstseason",
+      "before": null,
+      "after": "首次参与赛季的年份（具体赛季编码未说明）",
+      "status": "inferred",
+      "reason": "players上下文和整数类型支持生涯首末赛季解释，但没有直接注释或使用该字段的训练案例。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "lastseason",
+      "before": null,
+      "after": "最后参与赛季的年份（具体赛季编码未说明）",
+      "status": "inferred",
+      "reason": "players上下文和整数类型支持生涯首末赛季解释，但没有直接注释或使用该字段的训练案例。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.teams",
+      "field": "franchID",
+      "before": null,
+      "after": "球队特许经营实体标识（franchise；具体编码未提供）",
+      "status": "inferred",
+      "reason": "字段组合franchID/confID/confRank以及同类冰球字段知识支持保守解释，未声明相应外键，不能假定具体字典或分组取值。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.teams",
+        "knowledge:913"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.teams",
+      "field": "confID",
+      "before": null,
+      "after": "conference分组标识（具体编码未提供）",
+      "status": "inferred",
+      "reason": "字段组合franchID/confID/confRank以及同类冰球字段知识支持保守解释，未声明相应外键，不能假定具体字典或分组取值。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.teams",
+        "knowledge:914"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.teams",
+      "field": "confRank",
+      "before": null,
+      "after": "球队在conference分组中的排名（计算口径未提供）",
+      "status": "inferred",
+      "reason": "字段组合franchID/confID/confRank以及同类冰球字段知识支持保守解释，未声明相应外键，不能假定具体字典或分组取值。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "note",
+      "before": null,
+      "after": "球员赛季球队记录的备注（取值含义未提供）",
+      "status": "inferred",
+      "reason": "note为球员球队统计表的TEXT附加字段，保守解释为备注，不迁移获奖表的tie等取值。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.players_teams"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.series_post",
+      "field": "series",
+      "before": null,
+      "after": "季后赛系列赛标记（具体编码规则未提供）",
+      "status": "inferred",
+      "reason": "series_post表记录季后赛双方及胜负，series可解释为系列赛标记；不能断言为序号、名称或赛制。",
+      "evidence": [
+        "schema:SQLite:professional_basketball.series_post",
+        "knowledge:899"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Compliments",
+      "field": "compliment_id",
+      "before": null,
+      "after": "称赞类型记录的标识（主键）",
+      "status": "confirmed",
+      "reason": "DDL声明主键，Compliments存储类型；案例4168、4295使用该字段关联称赞类型，不能解释为称赞次数。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Compliments",
+        "knowledge:151",
+        "example:4168",
+        "example:4295"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_1",
+      "before": null,
+      "after": "当日01:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_2",
+      "before": null,
+      "after": "当日02:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_3",
+      "before": null,
+      "after": "当日03:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_4",
+      "before": null,
+      "after": "当日04:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_5",
+      "before": null,
+      "after": "当日05:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_6",
+      "before": null,
+      "after": "当日06:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_7",
+      "before": null,
+      "after": "当日07:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_8",
+      "before": null,
+      "after": "当日08:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_9",
+      "before": null,
+      "after": "当日09:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_10",
+      "before": null,
+      "after": "当日10:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_11",
+      "before": null,
+      "after": "当日11:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_12",
+      "before": null,
+      "after": "当日12:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_13",
+      "before": null,
+      "after": "当日13:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_14",
+      "before": null,
+      "after": "当日14:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_15",
+      "before": null,
+      "after": "当日15:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_16",
+      "before": null,
+      "after": "当日16:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_17",
+      "before": null,
+      "after": "当日17:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_18",
+      "before": null,
+      "after": "当日18:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_19",
+      "before": null,
+      "after": "当日19:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_20",
+      "before": null,
+      "after": "当日20:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_21",
+      "before": null,
+      "after": "当日21:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_22",
+      "before": null,
+      "after": "当日22:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "inferred",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_23",
+      "before": null,
+      "after": "当日23:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "confirmed",
+      "reason": "知识1358给出label_time_0与label_time_23的时间端点，DDL连续0至23支持小时序列；中间时段由序列推断，不能把后缀当星期编号。",
+      "evidence": [
+        "schema:SQLite:public_review_platform.Checkins",
+        "knowledge:1358",
+        "knowledge:152"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "field": "label_time_0",
+      "before": "商家的签到次数",
+      "after": "当日00:00对应时段的签到指标（TEXT；具体数值或级别口径未说明）",
+      "status": "confirmed",
+      "reason": "知识1358给出午夜端点，与连续0至23字段一致；不能把单个时段None推导成全天不营业。",
+      "evidence": [
+        "knowledge:1358",
+        "schema:SQLite:public_review_platform.Checkins"
+      ]
+    }
+  ],
+  "special_cases": [
+    {
+      "table_id": "SQLite:public_review_platform.Checkins",
+      "kind": "conflicting_time_and_business_rule",
+      "fields": [
+        "label_time_0",
+        "label_time_4",
+        "day_id"
+      ],
+      "resolution": "label_time后缀用于时段，星期由day_id关联Days确定。知识152及案例4176将label_time_4与周四绑定存在混淆；单一时段None不证明全天不营业。保留原文用于赛题追溯，不将该推理写入字段定义。",
+      "evidence": [
+        "knowledge:152",
+        "knowledge:1358",
+        "example:4176"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "kind": "incorrect_model_warning",
+      "fields": [
+        "exam_score_id",
+        "score_date_key"
+      ],
+      "resolution": "原始DDL明确exam_score_id INT AUTO_INCREMENT PRIMARY KEY，模型警告“未声明主键”错误。primary_key保留exam_score_id；模型警告只作为历史记录。score_date_key未声明日期维度外键，编码仍未知。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "kind": "undeclared_and_type_mismatched_relation",
+      "fields": [
+        "MethodId"
+      ],
+      "resolution": "MethodId TEXT与Method.Id INTEGER名称上支持关联，但未声明外键，不自动注入foreign_keys或默认类型转换。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "schema:SQLite:codebase_comments.Method"
+      ]
+    },
+    {
+      "table_id": "SQLite:genes.Genes",
+      "kind": "knowledge_primary_key_conflict",
+      "fields": [
+        "GeneID"
+      ],
+      "resolution": "知识39称GeneID是主键，但该表DDL只声明NOT NULL和外键，没有PRIMARY KEY；以DDL为准，不补造主键。",
+      "evidence": [
+        "knowledge:39",
+        "schema:SQLite:genes.Genes"
+      ]
+    },
+    {
+      "table_id": "SQLite:genes.Genes",
+      "kind": "knowledge_type_conflict",
+      "fields": [
+        "Chromosome"
+      ],
+      "resolution": "知识724记为TEXT，DDL实际为INTEGER；保留DDL类型，不能按知识改类型。TEXT数值字段在数值计算时应显式转换并检查非数值值。",
+      "evidence": [
+        "knowledge:724",
+        "schema:SQLite:genes.Genes"
+      ]
+    },
+    {
+      "table_id": "SQLite:hockey.GoaliesShootout",
+      "kind": "knowledge_type_conflict",
+      "fields": [
+        "stint"
+      ],
+      "resolution": "知识806记为TEXT，DDL实际为INTEGER；保留DDL类型，不能按知识改类型。TEXT数值字段在数值计算时应显式转换并检查非数值值。",
+      "evidence": [
+        "knowledge:806",
+        "schema:SQLite:hockey.GoaliesShootout"
+      ]
+    },
+    {
+      "table_id": "SQLite:hockey.GoaliesShootout",
+      "kind": "knowledge_type_conflict",
+      "fields": [
+        "tmID"
+      ],
+      "resolution": "知识807记为INTEGER，DDL实际为TEXT；保留DDL类型，不能按知识改类型。TEXT数值字段在数值计算时应显式转换并检查非数值值。",
+      "evidence": [
+        "knowledge:807",
+        "schema:SQLite:hockey.GoaliesShootout"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "kind": "knowledge_type_conflict",
+      "fields": [
+        "user_average_stars"
+      ],
+      "resolution": "知识1376记为REAL，DDL实际为TEXT；保留DDL类型，不能按知识改类型。TEXT数值字段在数值计算时应显式转换并检查非数值值。",
+      "evidence": [
+        "knowledge:1376",
+        "schema:SQLite:public_review_platform.Users"
+      ]
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "kind": "misleading_database_name",
+      "fields": [],
+      "resolution": "库名soccer_2016不能据此认定是足球：Player包含Batting_hand/Bowling_skill，训练案例3229明确为板球运动员；表摘要按资料描述为球员，保留真实库名。",
+      "evidence": [
+        "schema:SQLite:soccer_2016.Player",
+        "example:3229"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "start_date_key",
+        "end_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "admit_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "enroll_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "score_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2024.exam_score"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "start_date_key",
+        "end_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.semester"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "admit_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.student"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "enroll_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.enrollment"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "kind": "date_key_encoding_not_declared",
+      "fields": [
+        "score_date_key"
+      ],
+      "resolution": "日期键为INT且没有声明日期维度外键。部分学期开始日期案例使用20240101，但不能据此推广所有date_key字段均为YYYYMMDD。保留日期键含义，具体编码待数据验证。",
+      "evidence": [
+        "schema:MYSQL:education_2025.exam_score"
+      ]
+    }
+  ],
+  "remaining_unresolved": [
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "useFirst",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "nameGiven",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players",
+      "field": "fullGivenName",
+      "reason": "完整知识和全部训练案例均未解释该字段。useFirst的取值含义以及nameGiven/fullGivenName与firstName的区别不能由名称可靠确定；没有数据记录可验证。"
+    }
+  ],
+  "limitations": [
+    "仅有DDL、知识和问答标注，没有数据库原始记录；推断项不等于值域验证。",
+    "不能由字段名确认useFirst或姓名字段组成。",
+    "不把未声明的关联添加为外键；不将单个时段无签到等同于全天闭店。"
+  ]
+}

@@ -1,0 +1,622 @@
+{
+  "reviewer": "Codex (本会话主代理亲自对照资料检查；非用户人工审核)",
+  "date": "2026-10-11",
+  "sampling": {
+    "targeted_tables": [
+      "SQLite:hockey.Master",
+      "MYSQL:transportation.vessel",
+      "POSTGRESQL:public.vessel_ais_data",
+      "Elasticsearch:medical_institutions",
+      "SQLite:authors.Author",
+      "MYSQL:common.vessel_type_dict",
+      "MYSQL:education_2024.student",
+      "SQLite:hockey.CombinedShutouts"
+    ],
+    "random_seed": 42,
+    "random_tables": [
+      "SQLite:genes.Classification",
+      "SQLite:bike_share_1.status",
+      "SQLite:public_review_platform.Business_Attributes",
+      "SQLite:olympics.competitor_event",
+      "SQLite:music_platform_2.categories",
+      "SQLite:hockey.ScoringShootout",
+      "SQLite:disney.characters",
+      "SQLite:codebase_comments.Method"
+    ],
+    "full_table_count": 16,
+    "full_table_column_count": 135,
+    "all_model_corrected_fields_count": 38
+  },
+  "checks": [
+    {
+      "table_id": "SQLite:hockey.Master",
+      "scope": "table_description_and_all_columns",
+      "notes": "核对全部字段与知识，出生国家没有改写为培养国家；pos 已从知识253提取；没有推断 playerID 为主键。"
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "scope": "table_description_and_all_columns",
+      "notes": "核对静态船舶资料、max_load 单位、外键；增强表描述以区别 AIS 记录。"
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "scope": "table_description_and_all_columns",
+      "notes": "核对动态 AIS 字段、public schema 和未知业务库名；DDL 未声明主键，id 改为记录标识正确。"
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "scope": "table_description_and_all_columns",
+      "notes": "核对全部 mapping 字段和 name.keyword；生成描述未添加具体医院等级值或评分尺度。"
+    },
+    {
+      "table_id": "SQLite:authors.Author",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "scope": "table_description_and_all_columns",
+      "notes": "核对字段、主外键；home_region_id 的生源地解释缺少明确依据，改为地区标识并保留口径待确认。"
+    },
+    {
+      "table_id": "SQLite:hockey.CombinedShutouts",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:genes.Classification",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:bike_share_1.status",
+      "scope": "table_description_and_all_columns",
+      "notes": "time 有 knowledge321 依据，已补提取为记录时间；没有假定状态表主键或采样频率。"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Business_Attributes",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:olympics.competitor_event",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:music_platform_2.categories",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:hockey.ScoringShootout",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:disney.characters",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.Method",
+      "scope": "table_description_and_all_columns",
+      "notes": "对照原始DDL及所附知识逐字段检查，描述可接受；名称推断的表摘要保留模型来源。"
+    },
+    {
+      "table_id": "SQLite:book_publishing_company.pub_info",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "pub_id",
+        "logo"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:citeseer.content",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "word_cited_id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "Type",
+        "Name"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.Solution",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "Id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:disney.director",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "name"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "Year",
+        "Studio Entertainment[NI 1]",
+        "Disney Consumer Products[NI 2]",
+        "Disney Interactive[NI 3][Rev 1]",
+        "Walt Disney Parks and Resorts",
+        "Disney Media Networks",
+        "Total"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:language_corpus.langs_words",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "wid"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:movie_3.country",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "country"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_players",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "note"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_coaches",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "note"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "tmID"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Reviews",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "review_stars"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "user_yelping_since_year",
+        "user_votes_funny",
+        "user_votes_useful",
+        "user_votes_cool"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:shakespeare.paragraphs",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "ParagraphNum"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:simpson_episodes.Person",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "height_meters"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "DOB",
+        "Batting_hand",
+        "Country_Name"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "SQLite:video_games.game_publisher",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "owner_id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "registered_capital"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "stock_id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "trade_id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "scope": "model_corrected_fields_only",
+      "fields": [
+        "financial_id"
+      ],
+      "notes": "对照字段DDL、完整知识和必要的训练案例复核模型修正；有来源冲突或描述/理由不一致处另列修订。"
+    }
+  ],
+  "model_corrected_fields_checked": [
+    {
+      "table_id": "SQLite:book_publishing_company.pub_info",
+      "field": "pub_id"
+    },
+    {
+      "table_id": "SQLite:book_publishing_company.pub_info",
+      "field": "logo"
+    },
+    {
+      "table_id": "SQLite:citeseer.content",
+      "field": "word_cited_id"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Type"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Name"
+    },
+    {
+      "table_id": "SQLite:codebase_comments.Solution",
+      "field": "Id"
+    },
+    {
+      "table_id": "SQLite:disney.director",
+      "field": "name"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Year"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Studio Entertainment[NI 1]"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Consumer Products[NI 2]"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Interactive[NI 3][Rev 1]"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Walt Disney Parks and Resorts"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Disney Media Networks"
+    },
+    {
+      "table_id": "SQLite:disney.revenue",
+      "field": "Total"
+    },
+    {
+      "table_id": "SQLite:language_corpus.langs_words",
+      "field": "wid"
+    },
+    {
+      "table_id": "SQLite:movie_3.country",
+      "field": "country"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_players",
+      "field": "note"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_coaches",
+      "field": "note"
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "tmID"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Reviews",
+      "field": "review_stars"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_yelping_since_year"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_funny"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_useful"
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_cool"
+    },
+    {
+      "table_id": "SQLite:shakespeare.paragraphs",
+      "field": "ParagraphNum"
+    },
+    {
+      "table_id": "SQLite:simpson_episodes.Person",
+      "field": "height_meters"
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "DOB"
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "Batting_hand"
+    },
+    {
+      "table_id": "SQLite:soccer_2016.Player",
+      "field": "Country_Name"
+    },
+    {
+      "table_id": "SQLite:video_games.game_publisher",
+      "field": "id"
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "field": "owner_id"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "field": "registered_capital"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "field": "stock_id"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "field": "trade_id"
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "field": "financial_id"
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "id"
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "sog"
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "cog"
+    }
+  ],
+  "corrections": [
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "field": null,
+      "before": "船舶基础信息表",
+      "after": "船舶静态基础资料，包含MMSI、船舶类型、最大载重、最大航速、所属公司和船长信息。",
+      "reason": "增强静态属性和最大载重检索信息，区别动态AIS库。",
+      "evidence": [
+        "schema:MYSQL:transportation.vessel"
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": null,
+      "before": "船舶AIS数据存储表",
+      "after": "船舶AIS观测记录，包含记录时间、位置、对地航速、航向和航行状态。",
+      "reason": "明确记录粒度；不包含max_load，不能独立回答最大载重问题。",
+      "evidence": [
+        "schema:POSTGRESQL:public.vessel_ais_data"
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "home_region_id",
+      "before": "生源地标识",
+      "after": "地区标识（具体地域口径待确认）",
+      "reason": "原DDL没有注释和地区外键，不能确认其等同于生源地。",
+      "evidence": [
+        "schema:MYSQL:education_2024.student"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Type",
+      "before": "方法的类型",
+      "after": "方法参数的类型",
+      "reason": "表为MethodParameter，模型修正理由指出参数类型但输出未实际修改。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "knowledge:643"
+      ]
+    },
+    {
+      "table_id": "SQLite:codebase_comments.MethodParameter",
+      "field": "Name",
+      "before": "方法的名称",
+      "after": "方法参数的名称",
+      "reason": "表为MethodParameter，模型修正理由指出参数名称但输出未实际修改。",
+      "evidence": [
+        "schema:SQLite:codebase_comments.MethodParameter",
+        "knowledge:644"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_players",
+      "field": "note",
+      "before": "通知",
+      "after": "获奖备注，例如是否并列",
+      "reason": "知识1220的tie表示球员在奖项上并列，不是通知消息。",
+      "evidence": [
+        "knowledge:1220"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.awards_coaches",
+      "field": "note",
+      "before": "特殊通知",
+      "after": "获奖备注，例如是否并列",
+      "reason": "知识1215的tie表示教练在奖项上并列，不是通知消息。",
+      "evidence": [
+        "knowledge:1215"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_funny",
+      "before": "用户收到的“有趣”投票总数",
+      "after": "用户发出的“有趣”投票数量级别",
+      "reason": "知识141明确为发出且采用级别，模型改为收到缺少依据。",
+      "evidence": [
+        "knowledge:141",
+        "knowledge:1377"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_cool",
+      "before": "用户收到的“酷”投票总数",
+      "after": "用户发出的“酷”投票数量级别",
+      "reason": "知识141和166明确为发出且采用级别，模型改为收到缺少依据。",
+      "evidence": [
+        "knowledge:141",
+        "knowledge:166"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_votes_useful",
+      "before": "用户收到的“有用”投票总数",
+      "after": "用户创建了多少个“有用”投票",
+      "reason": "恢复知识1378原始定义，不能无依据改为收到，也不猜测是否为分段级别。",
+      "evidence": [
+        "knowledge:1378"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_fans",
+      "before": "用户拥有的粉丝/关注者总数",
+      "after": "用户粉丝数量级别",
+      "reason": "知识141和142给出Uber/High/Medium/Low/None级别，不是原始计数。",
+      "evidence": [
+        "knowledge:141",
+        "knowledge:142"
+      ]
+    },
+    {
+      "table_id": "SQLite:public_review_platform.Users",
+      "field": "user_review_count",
+      "before": "用户撰写的评论总数",
+      "after": "用户评论数量级别",
+      "reason": "知识141明确为级别，原标准化知识1380的总数解释粒度不够准确。",
+      "evidence": [
+        "knowledge:141",
+        "knowledge:1380"
+      ]
+    },
+    {
+      "table_id": "SQLite:citeseer.content",
+      "field": "word_cited_id",
+      "before": "被引用词的唯一字符串ID",
+      "after": "被引用词的标识",
+      "reason": "知识168支持词ID，但字段不是独立唯一键，避免暗示列值全局唯一。",
+      "evidence": [
+        "knowledge:168",
+        "schema:SQLite:citeseer.content"
+      ]
+    },
+    {
+      "table_id": "SQLite:professional_basketball.players_teams",
+      "field": "tmID",
+      "before": "球队名称",
+      "after": "球队缩写",
+      "reason": "知识59和1265取值说明支持缩写；明确区别球队全名。",
+      "evidence": [
+        "knowledge:59",
+        "knowledge:1265"
+      ]
+    },
+    {
+      "table_id": "SQLite:disney.director",
+      "field": "name",
+      "before": "电影名称",
+      "after": "唯一的电影名称",
+      "reason": "DDL声明name为主键，模型理由称唯一性无依据不成立；恢复原始定义。",
+      "evidence": [
+        "schema:SQLite:disney.director",
+        "knowledge:698"
+      ]
+    }
+  ],
+  "limitations": [
+    "抽查不是全部1694字段的人工核验。",
+    "缺少可信语义证据的字段保留null，不强行补全。",
+    "模型有些corrected记录的理由与最终文本不一致，原始模型审查保留用于追溯。",
+    "本地知识存在相互冲突；采用有具体取值、结构或查询依据的解释，保留所有原文。"
+  ]
+}

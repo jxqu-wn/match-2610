@@ -21,4 +21,7 @@ runs/
 outputs/
 wandb/
 
+# Temporary working files
+tmp/
+
 .DS_Store
