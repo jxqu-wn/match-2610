@@ -303,6 +303,33 @@ def finetuned_submission(
     )
 
 
+@app.command("experiment-sqlite50")
+def experiment_sqlite50(
+    endpoint: str = typer.Option("http://192.168.15.119:8000/v1", help="OpenAI 兼容端点"),
+    model: str = typer.Option("qwen-track8-text2sql", help="微调模型名"),
+    sample_size: int = typer.Option(50, help="验证集 SQLite 题抽样数"),
+    seed: int = typer.Option(42, help="抽样随机种子"),
+    max_tables: int = typer.Option(6, help="提示词最多注入的表数"),
+    max_output_tokens: int = typer.Option(768),
+    workers: int = typer.Option(4),
+    output_dir: Optional[Path] = typer.Option(None),
+) -> None:
+    """SQLite 50 题微调模型实验：覆盖率与 SQL 目标正确率。"""
+    from .experiments.sqlite50 import run
+
+    report = run(
+        endpoint=endpoint,
+        model=model,
+        sample_size=sample_size,
+        seed=seed,
+        max_tables=max_tables,
+        max_output_tokens=max_output_tokens,
+        workers=workers,
+        output_dir=output_dir,
+    )
+    _echo(report["metrics"])
+
+
 def main() -> None:
     setup_logging()
     app()
