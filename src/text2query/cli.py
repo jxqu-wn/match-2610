@@ -307,6 +307,8 @@ def finetuned_submission(
 def experiment_sqlite50(
     endpoint: str = typer.Option("http://192.168.15.119:8000/v1", help="OpenAI 兼容端点"),
     model: str = typer.Option("qwen-track8-text2sql", help="微调模型名"),
+    api_key: Optional[str] = typer.Option(None, "--api-key", help="API key；默认读 DEEPSEEK_API_KEY"),
+    thinking: Optional[bool] = typer.Option(None, "--thinking/--no-thinking", help="是否开启 thinking；不传则不发送该字段"),
     sample_size: int = typer.Option(50, help="验证集 SQLite 题抽样数"),
     seed: int = typer.Option(42, help="抽样随机种子"),
     max_tables: int = typer.Option(6, help="提示词最多注入的表数"),
@@ -320,6 +322,8 @@ def experiment_sqlite50(
     report = run(
         endpoint=endpoint,
         model=model,
+        api_key=api_key,
+        thinking=thinking,
         sample_size=sample_size,
         seed=seed,
         max_tables=max_tables,

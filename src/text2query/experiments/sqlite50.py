@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import random
+import re
 from pathlib import Path
 from typing import Any
 
@@ -69,14 +70,45 @@ def _qualified(table: Table) -> str:
     return f"{table.namespace}.{table.name}" if table.namespace else table.name
 
 
-def _parse_generated(sql: str, engine: str, resolver: SourceResolver, tables: dict[str, Table]) -> dict[str, Any]:
+def _parse_generated(
+    sql: str, engine: str, resolver: SourceResolver, tables: dict[str, Table], prompt_table_ids: list[str] = ()
+) -> dict[str, Any]:
     try:
         parsed = resolver.parse(sql, engine)
     except Exception as error:  # noqa: BLE001 - 生成结果可能不是合法 SQL
         return {"parse_status": "error", "error": f"{type(error).__name__}: {error}", "table_ids": []}
-    ids = parsed.get("table_ids", [])
+
+    ids = set(parsed.get("table_ids", []))
+    unresolved = list(parsed.get("unresolved_tables", []))
+    if unresolved:
+        # SQLite/MySQL 允许未限定表名；在引擎内唯一时按该表计，冲突时优先提示词中的表。
+        by_name: dict[str, list[str]] = {}
+        for table_id, table in tables.items():
+            if table.engine == engine:
+                by_name.setdefault(table.name.lower(), []).append(table_id)
+        prompt = set(prompt_table_ids)
+        remaining = []
+        for token in unresolved:
+            base = re.split(r"\s+as\s+", token, flags=re.I)[0].strip()
+            name = base.strip('`"').split(".")[-1].lower()
+            candidates = by_name.get(name, [])
+            if len(candidates) == 1:
+                ids.add(candidates[0])
+                continue
+            preferred = [candidate for candidate in candidates if candidate in prompt]
+            if len(preferred) == 1:
+                ids.add(preferred[0])
+                continue
+            remaining.append(token)
+        unresolved = remaining
+    status = parsed.get("parse_status")
+    if status == "unresolved_tables" and not unresolved:
+        status = "parsed_unqualified_resolved"
     return {
         **parsed,
+        "parse_status": status,
+        "table_ids": sorted(ids),
+        "unresolved_tables": unresolved,
         "databases": sorted({tables[key].namespace for key in ids if tables[key].namespace}),
         "tables": sorted({_qualified(tables[key]) for key in ids}),
     }
@@ -119,6 +151,8 @@ def run(
     *,
     endpoint: str = DEFAULT_ENDPOINT,
     model: str = DEFAULT_MODEL,
+    api_key: str | None = None,
+    thinking: bool | None = None,
     sample_size: int = 50,
     seed: int = 42,
     max_tables: int = 6,
@@ -181,28 +215,42 @@ def run(
         )
     logger.info("已准备 %d 题，开始调用 %s", len(prepared), model)
 
-    client = openai.OpenAI(api_key="not-needed", base_url=endpoint)
+    client = openai.OpenAI(api_key=api_key or settings.api_key or "not-needed", base_url=endpoint)
+    extra_body = None if thinking is None else {"thinking": {"type": "enabled" if thinking else "disabled"}}
 
     def generate(item: dict[str, Any]) -> dict[str, Any]:
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
+            request: dict[str, Any] = {
+                "model": model,
+                "messages": [
                     {"role": "system", "content": item["instruction"]},
                     {"role": "user", "content": item["row"]["question"]},
                 ],
-                temperature=0,
-                max_tokens=max_output_tokens,
-            )
-            content = response.choices[0].message.content or ""
-            finish = response.choices[0].finish_reason
+                "temperature": 0,
+                "max_tokens": max_output_tokens,
+            }
+            if extra_body is not None:
+                request["extra_body"] = extra_body
+            response = client.chat.completions.create(**request)
+            choice = response.choices[0]
+            content = choice.message.content or ""
+            reasoning = getattr(choice.message, "reasoning_content", None)
+            finish = choice.finish_reason
             usage = response.usage.model_dump() if response.usage else {}
         except Exception as error:  # noqa: BLE001 - 逐题记录失败
-            content, finish, usage = "", "error", {"error": f"{type(error).__name__}: {error}"}
+            content, reasoning, finish, usage = "", None, "error", {"error": f"{type(error).__name__}: {error}"}
         sql = strip_fences(content)
         engine = item["predicted_engines"][0] if len(item["predicted_engines"]) == 1 else "SQLite"
-        generated = _parse_generated(sql, engine, resolver, tables)
-        return {**item, "generated_sql": sql, "raw_output": content, "finish_reason": finish, "usage": usage, "generated": generated}
+        generated = _parse_generated(sql, engine, resolver, tables, item["prompt_table_ids"])
+        return {
+            **item,
+            "generated_sql": sql,
+            "raw_output": content,
+            "reasoning_content": reasoning,
+            "finish_reason": finish,
+            "usage": usage,
+            "generated": generated,
+        }
 
     results: list[dict[str, Any]] = []
     with ThreadPoolExecutor(max_workers=workers) as pool:
@@ -224,8 +272,7 @@ def run(
                 "question_id": item["row"]["question_id"],
                 "question": item["row"]["question"],
                 "reference_sql": item["row"].get("query", ""),
-                "reference_engines": expected["engines"],
-                "predicted_engines": item["predicted_engines"],
+                "reference_engines": expected["engines"],                "predicted_engines": item["predicted_engines"],
                 "engine_correct": expected["engines"] == item["predicted_engines"],
                 "expected_databases": expected["databases"],
                 "expected_tables": expected["tables"],
@@ -235,6 +282,7 @@ def run(
                 "prompt_db_coverage": _set_metrics(set(expected["databases"]), prompt_dbs),
                 "prompt_table_coverage": _set_metrics(set(expected["tables"]), prompt_tables),
                 "generated_sql": item["generated_sql"],
+                "raw_output": item.get("raw_output"),
                 "generated_parse_status": generated.get("parse_status"),
                 "generated_databases": generated.get("databases", []),
                 "generated_tables": generated.get("tables", []),
@@ -242,11 +290,12 @@ def run(
                 "generated_table_match": _set_metrics(set(expected["tables"]), set(generated.get("tables", []))),
                 "finish_reason": item["finish_reason"],
                 "usage": item["usage"],
+                "reasoning_content": item.get("reasoning_content"),
             }
         )
 
     report = _aggregate(details, sample_audit, model, endpoint, max_tables)
-    write_json(output_dir / "config.json", {"endpoint": endpoint, "model": model, "seed": seed, "max_tables": max_tables, "recall": recall})
+    write_json(output_dir / "config.json", {"endpoint": endpoint, "model": model, "thinking": thinking, "seed": seed, "max_tables": max_tables, "recall": recall})
     write_json(output_dir / "sample.json", [row["question_id"] for row in rows])
     write_jsonl(output_dir / "results.jsonl", details)
     write_json(output_dir / "report.json", report)
@@ -261,7 +310,9 @@ def _mean(values: list[float | None]) -> float | None:
 
 def _aggregate(details: list[dict[str, Any]], sample_audit: dict[str, Any], model: str, endpoint: str, max_tables: int) -> dict[str, Any]:
     total = len(details)
-    parseable = [d for d in details if d["generated_parse_status"] in ("parsed", "single_index_by_catalog")]
+    parseable = [
+        d for d in details if d["generated_parse_status"] in ("parsed", "single_index_by_catalog", "parsed_unqualified_resolved")
+    ]
     metrics = {
         "count": total,
         "engine_accuracy": _mean([1.0 if d["engine_correct"] else 0.0 for d in details]),
