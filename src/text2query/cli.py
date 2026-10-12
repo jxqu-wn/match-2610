@@ -334,6 +334,40 @@ def experiment_sqlite50(
     _echo(report["metrics"])
 
 
+@app.command("test-submission")
+def test_submission(
+    endpoint: str = typer.Option("http://192.168.15.119:8000/v1", help="OpenAI 兼容端点"),
+    model: str = typer.Option("qwen-track8-sqlite", help="微调模型名"),
+    api_key: Optional[str] = typer.Option(None, "--api-key"),
+    thinking: Optional[bool] = typer.Option(None, "--thinking/--no-thinking"),
+    training_source: Optional[Path] = typer.Option(None, help="检索索引使用的训练集，默认完整 QA_train.json"),
+    max_tables: int = typer.Option(6),
+    max_output_tokens: int = typer.Option(1024),
+    workers: int = typer.Option(8),
+    output_dir: Optional[Path] = typer.Option(None),
+    result_path: Optional[Path] = typer.Option(None),
+    limit: int = typer.Option(0),
+) -> None:
+    """用微调模型跑完整官方测试集并生成提交文件。"""
+    from .experiments.test_submission import run
+
+    _echo(
+        run(
+            endpoint=endpoint,
+            model=model,
+            api_key=api_key,
+            thinking=thinking,
+            training_source=training_source,
+            max_tables=max_tables,
+            max_output_tokens=max_output_tokens,
+            workers=workers,
+            output_dir=output_dir,
+            result_path=result_path,
+            limit=limit,
+        )
+    )
+
+
 def main() -> None:
     setup_logging()
     app()

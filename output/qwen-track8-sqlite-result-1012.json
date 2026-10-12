@@ -1,0 +1,2026 @@
+[
+  {
+    "question_id": 4,
+    "db": "MYSQL",
+    "query": "SELECT T1.type_name, SUM(T3.load_capacity) FROM common.vehicle_type_dict AS T1 INNER JOIN transportation.vehicle AS T2 ON T1.type_code = T2.vehicle_type_code INNER JOIN transportation.vehicle_company AS T3 ON T2.company_id = T3.company_id GROUP BY T1.type_name"
+  },
+  {
+    "question_id": 13,
+    "db": "MYSQL",
+    "query": "SELECT T1.status, COUNT(T1.status) FROM transportation.shipping_company AS T1 GROUP BY T1.status"
+  },
+  {
+    "question_id": 14,
+    "db": "MYSQL",
+    "query": "SELECT T3.city_name, COUNT(T1.vehicle_id) FROM transportation.vehicle AS T1 INNER JOIN transportation.driver AS T2 ON T1.owner_id = T2.driver_id INNER JOIN common.administrative_division AS T3 ON T2.area_id = T3.id INNER JOIN common.vehicle_type_dict AS T4 ON T1.vehicle_type_code = T4.type_code WHERE T3.province_name = '江苏省' GROUP BY T3.city_name"
+  },
+  {
+    "question_id": 16,
+    "db": "MYSQL",
+    "query": "SELECT T1.business_type, COUNT(T1.company_id) FROM transportation.shipping_company AS T1 INNER JOIN transportation.employee AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.companies AS T3 ON T2.company_id = T3.company_id GROUP BY T1.business_type"
+  },
+  {
+    "question_id": 17,
+    "db": "MYSQL",
+    "query": "SELECT T1.business_type, COUNT(T1.company_id) FROM transportation.shipping_company AS T1 GROUP BY T1.business_type"
+  },
+  {
+    "question_id": 45,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.mmsi) FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.max_load > 50000"
+  },
+  {
+    "question_id": 48,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.driver_id) FROM transportation.driver AS T1 INNER JOIN common.license_type_dict AS T2 ON T1.license_type = T2.license_code WHERE T2.license_name = 'A2'"
+  },
+  {
+    "question_id": 53,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.vehicle_id) FROM transportation.vehicle AS T1 INNER JOIN common.vehicle_type_dict AS T2 ON T1.vehicle_type_code = T2.type_code WHERE T1.area_id = 210000"
+  },
+  {
+    "question_id": 58,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T.vehicle_id) FROM transportation.vehicle AS T WHERE T.area_id LIKE '36%'"
+  },
+  {
+    "question_id": 72,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T.vehicle_id) FROM transportation.vehicle AS T WHERE T.area_id = '630000'"
+  },
+  {
+    "question_id": 80,
+    "db": "MYSQL",
+    "query": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.max_load < 5000"
+  },
+  {
+    "question_id": 82,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, sog FROM ais.vessel_ais_data WHERE sog > 10"
+  },
+  {
+    "question_id": 102,
+    "db": "MYSQL",
+    "query": "SELECT T1.vehicle_id FROM transportation.vehicle AS T1 INNER JOIN transportation.driver AS T2 ON T1.owner_id = T2.driver_id INNER JOIN transportation.vehicle_company AS T3 ON T1.company_id = T3.company_id INNER JOIN common.vehicle_type_dict AS T4 ON T1.vehicle_type_code = T4.type_code INNER JOIN common.license_type_dict AS T5 ON T2.license_type = T5.license_code WHERE T1.load_capacity IS NULL"
+  },
+  {
+    "question_id": 111,
+    "db": "MYSQL",
+    "query": "SELECT T1.plate_number FROM transportation.vehicle AS T1 INNER JOIN transportation.driver AS T2 ON T1.owner_id = T2.driver_id INNER JOIN transportation.vehicle_company AS T3 ON T1.company_id = T3.company_id INNER JOIN common.vehicle_type_dict AS T4 ON T1.vehicle_type_code = T4.type_code INNER JOIN common.license_type_dict AS T5 ON T2.license_type = T5.license_code WHERE T1.model = 'X5'"
+  },
+  {
+    "question_id": 112,
+    "db": "MYSQL",
+    "query": "SELECT T1.name FROM transportation.driver AS T1 INNER JOIN common.license_type_dict AS T2 ON T1.license_type = T2.license_code WHERE T1.birth_date > '1990-01-01'"
+  },
+  {
+    "question_id": 113,
+    "db": "MYSQL",
+    "query": "SELECT T1.name FROM transportation.employee AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id WHERE T1.gender = '女'"
+  },
+  {
+    "question_id": 115,
+    "db": "MYSQL",
+    "query": "SELECT T1.name FROM transportation.driver AS T1 INNER JOIN common.license_type_dict AS T2 ON T1.license_type = T2.license_code WHERE T2.license_name = 'C1'"
+  },
+  {
+    "question_id": 120,
+    "db": "MYSQL",
+    "query": "SELECT T1.plate_number, T1.brand FROM transportation.vehicle AS T1 INNER JOIN transportation.driver AS T2 ON T1.owner_id = T2.driver_id INNER JOIN transportation.vehicle_company AS T3 ON T1.company_id = T3.company_id INNER JOIN common.vehicle_type_dict AS T4 ON T1.vehicle_type_code = T4.type_code INNER JOIN ecommerce.orders AS T5 ON T3.company_id = T5.customer_id"
+  },
+  {
+    "question_id": 126,
+    "db": "MYSQL",
+    "query": "SELECT T1.vehicle_id FROM transportation.vehicle AS T1 WHERE T1.load_capacity > ( SELECT AVG(load_capacity) FROM transportation.vehicle )"
+  },
+  {
+    "question_id": 141,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name, COUNT(T3.product_id) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.stocks AS T2 ON T1.company_id = T2.company_id INNER JOIN ecommerce.order_item AS T3 ON T2.stock_code = T3.product_id INNER JOIN common.dict_registration_type AS T4 ON T1.registration_type_code = T4.type_code WHERE T4.type_name = '车辆' GROUP BY T1.company_name"
+  },
+  {
+    "question_id": 143,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name, SUM(T2.load_capacity) FROM transportation.vehicle_company AS T1 INNER JOIN transportation.vehicle AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_name"
+  },
+  {
+    "question_id": 173,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_id, AVG(T2.max_speed) FROM transportation.shipping_company AS T1 INNER JOIN transportation.vessel AS T2 ON T1.company_id = T2.company_id GROUP BY T1.company_id"
+  },
+  {
+    "question_id": 175,
+    "db": "MYSQL",
+    "query": "SELECT T1.province_code, T3.type_name, COUNT(T2.vehicle_id) FROM common.administrative_division AS T1 INNER JOIN transportation.vehicle AS T2 ON T1.id = T2.area_id INNER JOIN common.vehicle_type_dict AS T3 ON T2.vehicle_type_code = T3.type_code WHERE T1.division_type = 'province' GROUP BY T1.province_code, T3.type_name"
+  },
+  {
+    "question_id": 195,
+    "db": "MYSQL",
+    "query": "SELECT T1.brand, T2.province_code FROM ecommerce.product AS T1 INNER JOIN ecommerce.inventory AS T2 ON T1.product_id = T2.product_id GROUP BY T1.brand, T2.province_code"
+  },
+  {
+    "question_id": 215,
+    "db": "MYSQL",
+    "query": "SELECT AVG(T1.total_assets) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T1.industry_code = T3.industry_code WHERE T3.industry_name = '货车'"
+  },
+  {
+    "question_id": 217,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN common.dict_size_category AS T3 ON T1.size_category_code = T3.size_code INNER JOIN common.dict_registration_type AS T4 ON T1.registration_type_code = T4.type_code INNER JOIN ecommerce.orders AS T5 ON T1.company_id = T5.customer_id INNER JOIN ecommerce.inventory AS T6 ON T5.order_id = T6.inventory_id WHERE T2.industry_name = '重型货车' AND T5.receiver_city_code = '230100'"
+  },
+  {
+    "question_id": 230,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT mmsi FROM ais.vessel_ais_data WHERE vessel_type = 35"
+  },
+  {
+    "question_id": 259,
+    "db": "MYSQL",
+    "query": "SELECT T1.vehicle_id FROM transportation.vehicle AS T1 INNER JOIN transportation.vehicle_company AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.companies AS T3 ON T2.company_name = T3.company_name INNER JOIN common.dict_registration_type AS T4 ON T3.registration_type_code = T4.type_code INNER JOIN common.dict_size_category AS T5 ON T3.size_category_code = T5.size_code WHERE T4.type_name = '长三角地区'"
+  },
+  {
+    "question_id": 280,
+    "db": "MYSQL",
+    "query": "SELECT T1.vehicle_id, T1.plate_number, T1.brand, T1.model, T1.manufacture_year, T1.load_capacity, T1.color, T1.register_date, T1.insurance_expire FROM transportation.vehicle AS T1 INNER JOIN transportation.driver AS T2 ON T1.owner_id = T2.driver_id INNER JOIN transportation.vehicle_company AS T3 ON T1.company_id = T3.company_id INNER JOIN common.vehicle_type_dict AS T4 ON T1.vehicle_type_code = T4.type_code INNER JOIN common.license_type_dict AS T5 ON T2.license_type = T5.license_code WHERE T1.brand = '福田' AND T1.load_capacity > 10"
+  },
+  {
+    "question_id": 288,
+    "db": "MYSQL",
+    "query": "SELECT T1.size_name, COUNT(T3.vehicle_id) FROM common.dict_size_category AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.size_code = T2.size_category_code INNER JOIN transportation.vehicle AS T3 ON T2.company_id = T3.company_id GROUP BY T1.size_name"
+  },
+  {
+    "question_id": 312,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_name, T1.listing_date FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id WHERE T1.listing_date < '2015-01-01'"
+  },
+  {
+    "question_id": 321,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN common.dict_size_category AS T4 ON T1.size_category_code = T4.size_code INNER JOIN common.dict_registration_type AS T5 ON T1.registration_type_code = T5.type_code INNER JOIN common.dict_industry AS T6 ON T1.industry_code = T6.industry_code WHERE T2.tax_year = 2025"
+  },
+  {
+    "question_id": 325,
+    "db": "MYSQL",
+    "query": "SELECT T3.open_price, T3.close_price FROM finance_tax.companies AS T1 INNER JOIN finance_tax.stocks AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stock_daily_trades AS T3 ON T2.stock_id = T3.stock_id WHERE T1.stock_code = '000001' AND T3.trade_date = '2025-12-31'"
+  },
+  {
+    "question_id": 332,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN common.dict_industry AS T4 ON T1.industry_code = T4.industry_code INNER JOIN common.dict_size_category AS T5 ON T1.size_category_code = T5.size_code INNER JOIN common.dict_registration_type AS T6 ON T1.registration_type_code = T6.type_code WHERE T2.is_restricted_industry = 0"
+  },
+  {
+    "question_id": 368,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_id, T1.stock_code, T1.stock_name, T1.current_price * T1.total_shares AS current_market_value FROM finance_tax.stocks AS T1 WHERE T1.market_class = 'A'"
+  },
+  {
+    "question_id": 376,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name, T3.revenue FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T3 ON T1.company_id = T3.company_id WHERE T3.tax_year = 2025 ORDER BY T3.revenue DESC"
+  },
+  {
+    "question_id": 389,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name, T2.revenue - T3.revenue AS diff FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.corporate_income_tax_returns AS T3 ON T1.company_id = T3.company_id WHERE T2.tax_year = 2025 AND T3.tax_year = 2024"
+  },
+  {
+    "question_id": 392,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_registration_type AS T3 ON T1.registration_type_code = T3.type_code INNER JOIN common.dict_size_category AS T4 ON T1.size_category_code = T4.size_code INNER JOIN common.dict_industry AS T5 ON T1.industry_code = T5.industry_code INNER JOIN finance_tax.stocks AS T6 ON T1.company_id = T6.company_id WHERE T3.type_name = '港澳台商投资企业' ORDER BY T2.revenue DESC LIMIT 1"
+  },
+  {
+    "question_id": 397,
+    "db": "MYSQL",
+    "query": "SELECT T1.industry_name, COUNT(T3.company_id) FROM common.dict_industry AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.industry_code = T2.industry_code INNER JOIN finance_tax.stocks AS T3 ON T2.company_id = T3.company_id WHERE T2.is_private = 1 GROUP BY T1.industry_name"
+  },
+  {
+    "question_id": 418,
+    "db": "MYSQL",
+    "query": "SELECT (T1.total_assets - T1.total_liabilities) / T2.total_shares AS net_assets_per_share FROM finance_tax.company_financials AS T1 INNER JOIN finance_tax.stocks AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.companies AS T3 ON T1.company_id = T3.company_id WHERE T3.company_name = '贵州茅台' AND T1.report_date = '2025-03-31'"
+  },
+  {
+    "question_id": 438,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_id, SUM(T2.high_price - T2.low_price) / SUM(T2.close_price) FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.stock_daily_trades AS T2 ON T1.stock_id = T2.stock_id WHERE T2.trade_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY T1.stock_id"
+  },
+  {
+    "question_id": 442,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_name FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.company_financials AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stock_daily_trades AS T3 ON T1.stock_id = T3.stock_id INNER JOIN finance_tax.companies AS T4 ON T1.company_id = T4.company_id INNER JOIN common.dict_stock_type AS T5 ON T1.share_right_type = T5.type_code WHERE T5.type_name = 'Common Stock' ORDER BY T3.close_price / (T2.total_assets - T2.total_liabilities) DESC LIMIT 5"
+  },
+  {
+    "question_id": 455,
+    "db": "MYSQL",
+    "query": "SELECT AVG(T1.revenue - T1.non_taxable_income - T1.deductions - T1.prior_year_losses) FROM finance_tax.corporate_income_tax_returns AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_registration_type AS T3 ON T2.registration_type_code = T3.type_code INNER JOIN common.dict_size_category AS T4 ON T2.size_category_code = T4.size_code INNER JOIN common.dict_industry AS T5 ON T2.industry_code = T5.industry_code WHERE T1.tax_year = 2025"
+  },
+  {
+    "question_id": 461,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.revenue - T1.non_taxable_income - T1.deductions - T1.prior_year_losses) * 0.25 - SUM(T1.revenue - T1.non_taxable_income - T1.deductions - T1.prior_year_losses) * 0.15 FROM finance_tax.corporate_income_tax_returns AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T2.company_id = T3.company_id WHERE T3.stock_name = '腾讯控股' AND T1.tax_year = 2024"
+  },
+  {
+    "question_id": 487,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.revenue - T1.non_taxable_income - T1.deductions - T1.prior_year_losses) / SUM(T1.revenue) FROM finance_tax.corporate_income_tax_returns AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T2.company_id = T3.company_id INNER JOIN finance_tax.company_financials AS T4 ON T2.company_id = T4.company_id WHERE T2.company_name = '中国中车' AND T1.tax_year = 2025 AND T4.report_date = '2025-12-31'"
+  },
+  {
+    "question_id": 507,
+    "db": "MYSQL",
+    "query": "SELECT (SELECT T1.dividend_cash / T2.total_assets * 100 FROM finance_tax.company_financials AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T2.industry_code = T3.industry_code WHERE T2.company_name = '中国石化' AND T1.report_date = '2025-12-31') - (SELECT AVG(T1.dividend_cash / T2.total_assets * 100) FROM finance_tax.company_financials AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T2.industry_code = T3.industry_code WHERE T3.industry_name = '石油和天然气开采业' AND T1.report_date = '2025-12-31') AS diff FROM finance_tax.companies AS T2 INNER JOIN common.dict_industry AS T3 ON T2.industry_code = T3.industry_code WHERE T2.company_name = '中国石化'"
+  },
+  {
+    "question_id": 513,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN common.dict_size_category AS T4 ON T1.size_category_code = T4.size_code INNER JOIN common.dict_registration_type AS T5 ON T1.registration_type_code = T5.type_code INNER JOIN common.dict_industry AS T6 ON T1.industry_code = T6.industry_code WHERE T2.non_taxable_income / T2.revenue > 0.5"
+  },
+  {
+    "question_id": 517,
+    "db": "MYSQL",
+    "query": "SELECT T1.industry_name, AVG(CASE WHEN T3.is_private = 1 THEN T2.revenue - T2.non_taxable_income - T2.deductions - T2.prior_year_losses ELSE 0 END) AS private_avg, AVG(CASE WHEN T3.is_private = 0 THEN T2.revenue - T2.non_taxable_income - T2.deductions - T2.prior_year_losses ELSE 0 END) AS state_avg FROM common.dict_industry AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T2.company_id = T3.company_id INNER JOIN finance_tax.companies AS T3 ON T3.industry_code = T1.industry_code GROUP BY T1.industry_name"
+  },
+  {
+    "question_id": 537,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_id, SQRT(POWER(AVG(T3.close_price - T4.close_price), 2) * 250) AS annual_volatility FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stock_daily_trades AS T3 ON T1.stock_id = T3.stock_id INNER JOIN finance_tax.stock_daily_trades AS T4 ON T1.stock_id = T4.stock_id AND T4.trade_date = DATE_SUB(T3.trade_date, INTERVAL 1 DAY) WHERE T3.trade_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY T1.stock_id"
+  },
+  {
+    "question_id": 550,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_code FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.company_financials AS T3 ON T2.company_id = T3.company_id INNER JOIN finance_tax.stock_daily_trades AS T4 ON T1.stock_id = T4.stock_id INNER JOIN common.dict_industry AS T5 ON T2.industry_code = T5.industry_code WHERE T3.report_date = '2025-12-31' AND T4.trade_date = '2025-12-31' AND T3.dividend_cash / T4.close_price > ( SELECT AVG(T3.dividend_cash / T4.close_price) FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.company_financials AS T3 ON T2.company_id = T3.company_id INNER JOIN finance_tax.stock_daily_trades AS T4 ON T1.stock_id = T4.stock_id INNER JOIN common.dict_industry AS T5 ON T2.industry_code = T5.industry_code WHERE T3.report_date = '2025-12-31' AND T4.trade_date = '2025-12-31' AND T5.industry_name = ( SELECT T5.industry_name FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.company_financials AS T3 ON T2.company_id = T3.company_id INNER JOIN finance_tax.stock_daily_trades AS T4 ON T1.stock_id = T4.stock_id INNER JOIN common.dict_industry AS T5 ON T2.industry_code = T5.industry_code WHERE T3.report_date = '2025-12-31' AND T4.trade_date = '2025-12-31' ) )"
+  },
+  {
+    "question_id": 574,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN common.dict_size_category AS T3 ON T1.size_category_code = T3.size_code INNER JOIN finance_tax.stocks AS T4 ON T1.company_id = T4.company_id INNER JOIN finance_tax.company_financials AS T5 ON T1.company_id = T5.company_id WHERE T2.industry_name = '电力、热力、燃气及水生产和供应业' AND T3.size_name = '微型'"
+  },
+  {
+    "question_id": 586,
+    "db": "MYSQL",
+    "query": "SELECT T1.station_name FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code INNER JOIN finance_tax.companies AS T3 ON T1.company_id = T3.company_id INNER JOIN common.dict_industry AS T4 ON T3.industry_code = T4.industry_code WHERE T4.industry_name = '拉萨市'"
+  },
+  {
+    "question_id": 591,
+    "db": "MYSQL",
+    "query": "SELECT T1.station_name FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code INNER JOIN common.energy_type_dict AS T3 ON T1.energy_type_code = T3.type_code WHERE T2.type_name = '发电场站' AND T1.grid_connect_date > '2020-01-01'"
+  },
+  {
+    "question_id": 602,
+    "db": "MYSQL",
+    "query": "SELECT T1.company_name FROM finance_tax.companies AS T1 INNER JOIN finance_tax.company_financials AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T1.industry_code = T3.industry_code WHERE T3.industry_name = '发电、输电、变电和配电' AND T2.total_assets > ( SELECT AVG(T2.total_assets) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.company_financials AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T1.industry_code = T3.industry_code WHERE T3.industry_name = '发电、输电、变电和配电' )"
+  },
+  {
+    "question_id": 634,
+    "db": "MYSQL",
+    "query": "SELECT T1.education, COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN energy.energy_company AS T2 ON T1.company_id = T2.company_id INNER JOIN common.energy_position_dict AS T3 ON T1.position_code = T3.position_code WHERE T2.company_name LIKE '西藏电力%' AND T3.category = '管理' GROUP BY T1.education"
+  },
+  {
+    "question_id": 649,
+    "db": "MYSQL",
+    "query": "SELECT T3.type_name, COUNT(T1.station_id) FROM energy.energy_station AS T1 INNER JOIN common.administrative_division AS T2 ON T1.area_id = T2.id INNER JOIN common.energy_type_dict AS T3 ON T1.energy_type_code = T3.type_code WHERE T2.division_name = '格尔木市' GROUP BY T3.type_name"
+  },
+  {
+    "question_id": 658,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN finance_tax.company_financials AS T3 ON T1.company_id = T3.company_id INNER JOIN finance_tax.stocks AS T4 ON T1.company_id = T4.company_id INNER JOIN finance_tax.stock_daily_trades AS T5 ON T4.stock_id = T5.stock_id INNER JOIN common.dict_size_category AS T6 ON T1.size_category_code = T6.size_code WHERE T2.industry_name = '电力、热力生产和供应业'"
+  },
+  {
+    "question_id": 667,
+    "db": "MYSQL",
+    "query": "SELECT AVG(CURDATE() - T1.established_year) FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN finance_tax.corporate_income_tax_returns AS T4 ON T1.company_id = T4.company_id WHERE T2.industry_name = '电力、热力生产和供应业' GROUP BY T3.share_right_type"
+  },
+  {
+    "question_id": 670,
+    "db": "MYSQL",
+    "query": "SELECT T2.position_name, COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN common.energy_position_dict AS T2 ON T1.position_code = T2.position_code GROUP BY T2.position_name ORDER BY COUNT(T1.employee_id) DESC"
+  },
+  {
+    "question_id": 687,
+    "db": "MYSQL",
+    "query": "SELECT T1.area_id, COUNT(T1.station_id) FROM energy.energy_station AS T1 WHERE T1.energy_type_code = 'PV' GROUP BY T1.area_id"
+  },
+  {
+    "question_id": 693,
+    "db": "MYSQL",
+    "query": "SELECT T1.type_name, AVG(T3.employee_count) FROM common.dict_registration_type AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.type_code = T2.registration_type_code INNER JOIN finance_tax.corporate_income_tax_returns AS T3 ON T2.company_id = T3.company_id INNER JOIN common.dict_industry AS T4 ON T2.industry_code = T4.industry_code WHERE T4.industry_name = '电力、热力生产和供应业' GROUP BY T1.type_name"
+  },
+  {
+    "question_id": 699,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN finance_tax.company_financials AS T4 ON T1.company_id = T4.company_id WHERE T2.industry_name = '电力、热力、燃气及水生产和供应业'"
+  },
+  {
+    "question_id": 732,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T2.employee_id) FROM energy.energy_station AS T1 INNER JOIN energy.employee AS T2 ON T1.station_id = T2.station_id INNER JOIN common.station_type_dict AS T3 ON T1.station_type_code = T3.type_code WHERE T3.type_name = '火电厂' AND T1.station_name LIKE '徐州%'"
+  },
+  {
+    "question_id": 736,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN energy.energy_station AS T2 ON T1.station_id = T2.station_id INNER JOIN common.station_type_dict AS T3 ON T2.station_type_code = T3.type_code WHERE T3.type_name = '火电厂' AND T2.station_name LIKE '呼伦贝尔%'"
+  },
+  {
+    "question_id": 737,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN energy.energy_station AS T2 ON T1.station_id = T2.station_id INNER JOIN common.station_type_dict AS T3 ON T2.station_type_code = T3.type_code WHERE T3.type_name = '火电厂' AND T2.station_name LIKE '安庆%'"
+  },
+  {
+    "question_id": 740,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN energy.energy_station AS T2 ON T1.station_id = T2.station_id INNER JOIN common.station_type_dict AS T3 ON T2.station_type_code = T3.type_code WHERE T3.type_name = '水电站' AND T2.station_name LIKE '甘孜%'"
+  },
+  {
+    "question_id": 745,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.employee_id) FROM energy.employee AS T1 INNER JOIN energy.energy_station AS T2 ON T1.station_id = T2.station_id INNER JOIN common.station_type_dict AS T3 ON T2.station_type_code = T3.type_code WHERE T3.type_name = '核电厂' AND T2.area_id = 441700"
+  },
+  {
+    "question_id": 783,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN common.dict_industry AS T2 ON T1.industry_code = T2.industry_code INNER JOIN common.dict_academic_level AS T3 ON T3.level_name = '大专' WHERE T2.industry_name = '电力、热力的生产和供应业'"
+  },
+  {
+    "question_id": 846,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.installed_capacity) FROM energy.energy_station AS T1 INNER JOIN common.energy_type_dict AS T2 ON T1.energy_type_code = T2.type_code INNER JOIN common.station_type_dict AS T3 ON T1.station_type_code = T3.type_code INNER JOIN energy.supply_area AS T4 ON T1.company_id = T4.company_id WHERE T2.type_name = '太阳能' AND T3.type_name = '光伏电站' AND T4.area_id = 632801"
+  },
+  {
+    "question_id": 867,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.station_id) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code WHERE T1.area_id = 220200 AND T2.type_name = '水电站'"
+  },
+  {
+    "question_id": 876,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.annual_supply) FROM energy.supply_area AS T1 INNER JOIN energy.energy_company AS T2 ON T1.company_id = T2.company_id INNER JOIN transportation.vehicle_company AS T3 ON T2.company_id = T3.company_id WHERE T3.area_id = '370300'"
+  },
+  {
+    "question_id": 889,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.station_id) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code WHERE T2.type_name = '风电场' AND T1.area_id = 620500"
+  },
+  {
+    "question_id": 894,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.annual_generation) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code INNER JOIN common.energy_type_dict AS T3 ON T1.energy_type_code = T3.type_code WHERE T2.type_name = '风电场' AND T3.type_name = '风电'"
+  },
+  {
+    "question_id": 911,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.station_id) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code WHERE T1.area_id = 510700 AND T2.type_name = '天然气发电站'"
+  },
+  {
+    "question_id": 946,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.annual_generation) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code INNER JOIN common.energy_type_dict AS T3 ON T1.energy_type_code = T3.type_code INNER JOIN energy.supply_area AS T4 ON T1.company_id = T4.company_id WHERE T2.type_name = '水电站' AND T4.area_id = 513200"
+  },
+  {
+    "question_id": 978,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T1.annual_generation) FROM energy.energy_station AS T1 INNER JOIN common.station_type_dict AS T2 ON T1.station_type_code = T2.type_code INNER JOIN common.energy_type_dict AS T3 ON T1.energy_type_code = T3.type_code INNER JOIN energy.supply_area AS T4 ON T1.company_id = T4.company_id WHERE T2.type_name = '光伏电站' AND T4.area_id = '640500'"
+  },
+  {
+    "question_id": 988,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.company_id) FROM finance_tax.companies AS T1 INNER JOIN finance_tax.corporate_income_tax_returns AS T2 ON T1.company_id = T2.company_id INNER JOIN finance_tax.stocks AS T3 ON T1.company_id = T3.company_id INNER JOIN common.dict_industry AS T4 ON T1.industry_code = T4.industry_code WHERE T4.industry_name = '风力发电' AND T2.tax_year = 2021"
+  },
+  {
+    "question_id": 992,
+    "db": "MYSQL",
+    "query": "SELECT T1.station_name, T1.installed_capacity FROM energy.energy_station AS T1 INNER JOIN common.energy_type_dict AS T2 ON T1.energy_type_code = T2.type_code INNER JOIN common.dict_exam_item AS T3 ON T2.type_code = T3.item_code WHERE T2.type_name = '水力' AND T1.area_id LIKE '42%'"
+  },
+  {
+    "question_id": 994,
+    "db": "MYSQL",
+    "query": "SELECT T1.station_name, T1.installed_capacity FROM energy.energy_station AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_industry AS T3 ON T2.industry_code = T3.industry_code INNER JOIN common.energy_type_dict AS T4 ON T1.energy_type_code = T4.type_code WHERE T3.industry_name = '风力发电' AND T4.type_name = '风力'"
+  },
+  {
+    "question_id": 1004,
+    "db": "MYSQL",
+    "query": "SELECT T1.station_name FROM energy.energy_station AS T1 INNER JOIN finance_tax.companies AS T2 ON T1.company_id = T2.company_id INNER JOIN common.dict_size_category AS T3 ON T2.size_category_code = T3.size_code WHERE T3.size_name = '小型'"
+  },
+  {
+    "question_id": 1124,
+    "db": "MYSQL",
+    "query": "SELECT SUM(T2.item_amount) FROM common.platform_dict AS T1 INNER JOIN ecommerce.orders AS T2 ON T1.platform_code = T2.platform_code INNER JOIN ecommerce.order_item AS T3 ON T2.order_id = T3.order_id INNER JOIN ecommerce.customer AS T4 ON T2.customer_id = T4.customer_id INNER JOIN common.dict_gender AS T5 ON T4.gender = T5.gender_code INNER JOIN common.dict_academic_level AS T6 ON T4.level_code = T6.level_code WHERE T1.platform_name = 'TMALL'"
+  },
+  {
+    "question_id": 1218,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.payment_id) FROM ecommerce.payment AS T1 INNER JOIN ecommerce.orders AS T2 ON T1.order_id = T2.order_id INNER JOIN ecommerce.customer AS T3 ON T2.customer_id = T3.customer_id INNER JOIN ecommerce.order_item AS T4 ON T2.order_id = T4.order_id INNER JOIN ecommerce.product AS T5 ON T4.product_id = T5.product_id INNER JOIN ecommerce.inventory AS T6 ON T5.product_id = T6.product_id WHERE T1.payment_status_code = 'REFUNDED'"
+  },
+  {
+    "question_id": 1226,
+    "db": "MYSQL",
+    "query": "SELECT T1.customer_id FROM ecommerce.customer AS T1 INNER JOIN common.customer_level_dict AS T2 ON T1.level_code = T2.level_code WHERE T2.level_name = 'GOLD'"
+  },
+  {
+    "question_id": 1275,
+    "db": "MYSQL",
+    "query": "SELECT T1.order_id FROM ecommerce.orders AS T1 INNER JOIN ecommerce.payment AS T2 ON T1.order_id = T2.order_id INNER JOIN ecommerce.order_item AS T3 ON T1.order_id = T3.order_id INNER JOIN ecommerce.product AS T4 ON T3.product_id = T4.product_id INNER JOIN ecommerce.customer AS T5 ON T1.customer_id = T5.customer_id INNER JOIN finance_tax.corporate_income_tax_returns AS T6 ON T1.order_id = T6.company_id ORDER BY T1.payable_amount DESC LIMIT 20"
+  },
+  {
+    "question_id": 1301,
+    "db": "MYSQL",
+    "query": "SELECT T1.customer_id FROM ecommerce.customer AS T1 INNER JOIN ecommerce.orders AS T2 ON T1.customer_id = T2.customer_id INNER JOIN ecommerce.payment AS T3 ON T2.order_id = T3.order_id GROUP BY T1.customer_id ORDER BY SUM(T3.payment_amount) DESC LIMIT 5"
+  },
+  {
+    "question_id": 1327,
+    "db": "MYSQL",
+    "query": "SELECT T1.customer_id FROM ecommerce.customer AS T1 INNER JOIN ecommerce.orders AS T2 ON T1.customer_id = T2.customer_id INNER JOIN ecommerce.payment AS T3 ON T2.order_id = T3.order_id GROUP BY T1.customer_id ORDER BY SUM(T3.payment_amount) DESC LIMIT 20"
+  },
+  {
+    "question_id": 1383,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(T1.order_id) FROM ecommerce.orders AS T1 INNER JOIN common.order_channel_dict AS T2 ON T1.order_channel_code = T2.channel_code WHERE T2.channel_name = 'APP'"
+  },
+  {
+    "question_id": 1439,
+    "db": "MYSQL",
+    "query": "SELECT DATE_FORMAT(issue_date, '%Y-%m') AS month, COUNT(DISTINCT driver_id) AS gmv FROM transportation.driver GROUP BY month ORDER BY month"
+  },
+  {
+    "question_id": 1524,
+    "db": "MYSQL",
+    "query": "SELECT T1.product_id, T1.product_name FROM ecommerce.product AS T1 INNER JOIN ecommerce.order_item AS T2 ON T1.product_id = T2.product_id INNER JOIN ecommerce.orders AS T3 ON T2.order_id = T3.order_id INNER JOIN ecommerce.customer AS T4 ON T3.customer_id = T4.customer_id INNER JOIN common.product_category AS T5 ON T1.category_id = T5.category_id GROUP BY T1.product_id, T1.product_name ORDER BY SUM(T2.quantity) DESC LIMIT 20"
+  },
+  {
+    "question_id": 1597,
+    "db": "MYSQL",
+    "query": "SELECT T1.product_id, T1.product_name, T3.stock_quantity FROM ecommerce.product AS T1 INNER JOIN ecommerce.order_item AS T2 ON T1.product_id = T2.product_id INNER JOIN ecommerce.inventory AS T3 ON T1.product_id = T3.product_id WHERE T3.stock_quantity < 10"
+  },
+  {
+    "question_id": 1636,
+    "db": "MYSQL",
+    "query": "SELECT T1.semester_code, T1.start_date_key, T1.end_date_key FROM ( SELECT T2.semester_code, T2.start_date_key, T2.end_date_key, T2.academic_year FROM common.dict_semester_type AS T1 INNER JOIN education_2024.semester AS T2 ON T1.semester_code = T2.semester_code UNION ALL SELECT T2.semester_code, T2.start_date_key, T2.end_date_key, T2.academic_year FROM common.dict_semester_type AS T1 INNER JOIN education_2025.semester AS T2 ON T1.semester_code = T2.semester_code ) AS T1 ORDER BY T1.academic_year ASC LIMIT 10"
+  },
+  {
+    "question_id": 1648,
+    "db": "MYSQL",
+    "query": "SELECT T1.course_code, T1.course_name FROM education_2025.course AS T1 INNER JOIN common.dict_course_type AS T2 ON T1.course_type = T2.type_code WHERE T2.type_name = '选修' ORDER BY T1.course_name LIMIT 30"
+  },
+  {
+    "question_id": 1737,
+    "db": "MYSQL",
+    "query": "SELECT DISTINCT T1.semester_code, T1.start_date_key, T1.end_date_key FROM education_2024.semester AS T1 INNER JOIN education_2024.enrollment AS T2 ON T1.semester_id = T2.semester_id WHERE T1.start_date_key >= 20240101 ORDER BY T1.start_date_key ASC LIMIT 10"
+  },
+  {
+    "question_id": 1781,
+    "db": "MYSQL",
+    "query": "SELECT T1.course_code, T1.course_name, COUNT(DISTINCT T3.teacher_no) AS num FROM education_2024.course AS T1 INNER JOIN education_2024.enrollment AS T2 ON T1.course_id = T2.course_id INNER JOIN education_2024.teacher AS T3 ON T1.teacher_id = T3.teacher_id WHERE T2.semester_id = 1 GROUP BY T1.course_code, T1.course_name ORDER BY num DESC LIMIT 10"
+  },
+  {
+    "question_id": 1825,
+    "db": "MYSQL",
+    "query": "SELECT T1.department_id, COUNT(T1.course_id) AS num FROM education_2024.course AS T1 INNER JOIN education_2025.course AS T2 ON T1.course_id = T2.course_id GROUP BY T1.department_id ORDER BY num DESC LIMIT 15"
+  },
+  {
+    "question_id": 2013,
+    "db": "MYSQL",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.phone IS NOT NULL AND T1.phone != '' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.teacher_id) AS percentage_2024, CAST(SUM(CASE WHEN T2.phone IS NOT NULL AND T2.phone != '' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T2.teacher_id) AS percentage_2025 FROM education_2024.teacher AS T1 INNER JOIN education_2025.teacher AS T2 ON T1.teacher_id = T2.teacher_id"
+  },
+  {
+    "question_id": 2017,
+    "db": "MYSQL",
+    "query": "SELECT (SELECT COUNT(T1.student_id) FROM education_2025.student AS T1 INNER JOIN common.dict_student_status AS T2 ON T1.student_status_code = T2.status_code WHERE T1.gender_code = 'F' AND T2.status_name = '在读') - (SELECT COUNT(T1.student_id) FROM education_2024.student AS T1 INNER JOIN common.dict_student_status AS T2 ON T1.student_status_code = T2.status_code WHERE T1.gender_code = 'F' AND T2.status_name = '在读') AS diff, (SELECT COUNT(T1.student_id) FROM education_2025.student AS T1 INNER JOIN common.dict_student_status AS T2 ON T1.student_status_code = T2.status_code WHERE T1.gender_code = 'F' AND T2.status_name = '在读') AS cnt_2025, (SELECT COUNT(T1.student_id) FROM education_2024.student AS T1 INNER JOIN common.dict_student_status AS T2 ON T1.student_status_code = T2.status_code WHERE T1.gender_code = 'F' AND T2.status_name = '在读') AS cnt_2024"
+  },
+  {
+    "question_id": 2032,
+    "db": "MYSQL",
+    "query": "SELECT SUM(CASE WHEN T1.start_date_key = 0 OR T1.start_date_key = '' THEN 1 ELSE 0 END) AS num_2024, SUM(CASE WHEN T2.start_date_key = 0 OR T2.start_date_key = '' THEN 1 ELSE 0 END) AS num_2025 FROM education_2024.semester AS T1 INNER JOIN education_2025.semester AS T2 ON T1.semester_id = T2.semester_id"
+  },
+  {
+    "question_id": 2040,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(CASE WHEN T1.student_status_code = 'ACTIVE' THEN T1.student_id ELSE NULL END) - COUNT(CASE WHEN T2.student_status_code = 'ACTIVE' THEN T2.student_id ELSE NULL END) AS diff, COUNT(CASE WHEN T1.student_status_code = 'ACTIVE' THEN T1.student_id ELSE NULL END) AS cnt_2025, COUNT(CASE WHEN T2.student_status_code = 'ACTIVE' THEN T2.student_id ELSE NULL END) AS cnt_2024 FROM education_2025.student AS T1 LEFT JOIN education_2024.student AS T2 ON T1.student_id = T2.student_id INNER JOIN common.dict_student_status AS T3 ON T1.student_status_code = T3.status_code INNER JOIN common.dict_student_status AS T4 ON T2.student_status_code = T4.status_code"
+  },
+  {
+    "question_id": 2051,
+    "db": "MYSQL",
+    "query": "SELECT T1.department_id, T1.cnt_2024, T2.cnt_2025 FROM ( SELECT department_id, COUNT(teacher_id) AS cnt_2024 FROM education_2024.teacher GROUP BY department_id ) AS T1 INNER JOIN ( SELECT department_id, COUNT(teacher_id) AS cnt_2025 FROM education_2025.teacher GROUP BY department_id ) AS T2 ON T1.department_id = T2.department_id"
+  },
+  {
+    "question_id": 2075,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"10km\",\"location\":{\"lat\":30.657,\"lon\":104.066}}}]}},\"_source\":[\"name\",\"emergency_24h\"]}"
+  },
+  {
+    "question_id": 2094,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"杭州\"}},{\"term\":{\"district\":\"西湖区\"}},{\"term\":{\"has_icu\":true}},{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.2421,\"lon\":120.1486}}}]},\"aggs\":{\"avg_doctor_count\":{\"avg\":{\"field\":\"doctor_count\"}}}}}"
+  },
+  {
+    "question_id": 2102,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"term\":{\"city\":\"广州\"}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":23.1064,\"lon\":113.3245}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}},\"total_doctors\":{\"sum\":{\"field\":\"doctor_count\"}}}}"
+  },
+  {
+    "question_id": 2103,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":22.547,\"lon\":114.055}}},\"aggs\":{\"total_ambulances\":{\"sum\":{\"field\":\"ambulance_count\"}},\"total_nurses\":{\"sum\":{\"field\":\"nurse_count\"}}}}"
+  },
+  {
+    "question_id": 2116,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"term\":{\"city\":\"武汉\"}},{\"term\":{\"district\":\"黄鹤楼\"}},{\"range\":{\"location\":{\"lat\":30.5431,\"lon\":114.3054,\"distance\":\"6km\"}}},{\"range\":{\"doctor_count\":{\"gt\":500}}}]}}}"
+  },
+  {
+    "question_id": 2126,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"武汉\"}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":30.545,\"lon\":114.305}}},{\"range\":{\"doctor_count\":{\"gt\":1000}}}]}},\"_source\":[\"name\"]}"
+  },
+  {
+    "question_id": 2128,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"上海\"}},{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":31.2235,\"lon\":121.4452}}},{\"range\":{\"annual_outpatient\":{\"gt\":3650000}}}]}}}"
+  },
+  {
+    "question_id": 2140,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"上海\"}},{\"term\":{\"emergency_24h\":true}},{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.2397,\"lon\":121.4903}}}],\"must_not\":[{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":31.2397,\"lon\":121.4903}}}]}}}"
+  },
+  {
+    "question_id": 2141,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"city\":\"北京\"}},{\"term\":{\"level\":\"三级甲等\"}},{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":39.916344,\"lon\":116.397152}}}],\"must_not\":[{\"geo_distance\":{\"distance\":\"1km\",\"location\":{\"lat\":39.916344,\"lon\":116.397152}}}]}}}"
+  },
+  {
+    "question_id": 2143,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":22.547,\"lon\":114.055}}},{\"term\":{\"has_icu\":true}}],\"must_not\":[{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":22.547,\"lon\":114.055}}}]}}}"
+  },
+  {
+    "question_id": 2148,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}},{\"bool\":{\"must_not\":{\"geo_distance\":{\"distance\":\"2km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}}}},{\"term\":{\"has_icu\":true}}]}}}"
+  },
+  {
+    "question_id": 2151,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":22.547,\"lon\":114.054}}},{\"bool\":{\"must_not\":[{\"geo_distance\":{\"distance\":\"3km\",\"location\":{\"lat\":22.547,\"lon\":114.054}}}]}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2178,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}}],\"must_not\":[{\"geo_distance\":{\"distance\":\"1km\",\"location\":{\"lat\":31.23,\"lon\":121.45}}}]}},\"aggs\":{\"bed_count_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2182,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"5km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}},{\"term\":{\"is_teaching_hospital\":true}}]}},\"size\":10000}"
+  },
+  {
+    "question_id": 2196,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.55,\"lon\":114.28},\"bottom_right\":{\"lat\":30.53,\"lon\":114.3}}}}}"
+  },
+  {
+    "question_id": 2198,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.24,\"lon\":121.44},\"bottom_right\":{\"lat\":31.22,\"lon\":121.46}}}}}"
+  },
+  {
+    "question_id": 2204,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.26,\"lon\":120.14},\"bottom_right\":{\"lat\":30.24,\"lon\":120.17}}}}]}},\"aggs\":{\"total_nurses\":{\"sum\":{\"field\":\"nurse_count\"}}}}"
+  },
+  {
+    "question_id": 2205,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":30.67,\"lon\":104.05},\"bottom_right\":{\"lat\":30.65,\"lon\":104.07}}}}]}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2207,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":34.27,\"lon\":108.95},\"bottom_right\":{\"lat\":34.25,\"lon\":108.97}}}},\"aggs\":{\"total_annual_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}}}"
+  },
+  {
+    "question_id": 2231,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":31.23,\"lon\":121.44},\"bottom_right\":{\"lat\":31.21,\"lon\":121.46}}}},{\"term\":{\"is_teaching_hospital\":true}}]}},\"_source\":[\"name\",\"bed_count\"]}"
+  },
+  {
+    "question_id": 2255,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[104.05,30.67],[104.07,30.66],[104.06,30.65],[104.04,30.66],[104.05,30.67]]]}}}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2265,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[104.05,30.67],[104.07,30.66],[104.06,30.65],[104.04,30.66],[104.05,30.67]]]}}}},\"aggs\":{\"avg_nurse_count\":{\"avg\":{\"field\":\"nurse_count\"}}}}"
+  },
+  {
+    "question_id": 2267,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[108.95,34.27],[108.97,34.26],[108.96,34.25],[108.94,34.26],[108.95,34.27]]]}}}},\"aggs\":{\"avg_doctor_count\":{\"avg\":{\"field\":\"doctor_count\"}}}}"
+  },
+  {
+    "question_id": 2272,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[116.39,39.92],[116.41,39.91],[116.4,39.9],[116.38,39.91],[116.39,39.92]]]}}}},\"aggs\":{\"ambulance_count_stats\":{\"stats\":{\"field\":\"ambulance_count\"}}}}"
+  },
+  {
+    "question_id": 2274,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[120.14,30.26],[120.16,30.25],[120.15,30.24],[120.13,30.25],[120.14,30.26]]]}}}},\"aggs\":{\"nurse_count_stats\":{\"stats\":{\"field\":\"nurse_count\"}}}}"
+  },
+  {
+    "question_id": 2286,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[114.28,30.55],[114.3,30.54],[114.29,30.53],[114.27,30.54],[114.28,30.55]]]}}}},{\"range\":{\"doctor_count\":{\"gt\":700}}}]}},\"_source\":[\"name\"]}"
+  },
+  {
+    "question_id": 2289,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_shape\":{\"location\":{\"shape\":{\"type\":\"polygon\",\"coordinates\":[[[116.35,39.95],[116.37,39.93],[116.36,39.91],[116.34,39.92],[116.35,39.95]]]},\"relation\":\"within\"}}},{\"term\":{\"has_icu\":true}},{\"range\":{\"bed_count\":{\"gt\":500}}}]}},\"_source\":[\"name\"]}"
+  },
+  {
+    "question_id": 2304,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"4km\",\"location\":{\"lat\":30.247,\"lon\":120.148}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.247,\"lon\":120.148},\"order\":\"asc\",\"unit\":\"km\"}}],\"size\":1000}"
+  },
+  {
+    "question_id": 2309,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"1km\",\"location\":{\"lat\":39.9163,\"lon\":116.3972}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9163,\"lon\":116.3972},\"order\":\"asc\",\"unit\":\"km\"}}],\"script_fields\":{\"distance_km\":{\"script\":{\"lang\":\"painless\",\"source\":\"double dist = Math.toRadians(Math.acos(Math.sin(Math.toRadians(params._source.location.lat)) * Math.sin(Math.toRadians(39.9163)) + Math.cos(Math.toRadians(params._source.location.lat)) * Math.cos(Math.toRadians(39.9163)) * Math.cos(Math.toRadians(params._source.location.lon - 116.3972)))); return dist * 6371;\"}}}}"
+  },
+  {
+    "question_id": 2322,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":22.549,\"lon\":114.0562}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.549,\"lon\":114.0562},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  {
+    "question_id": 2325,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"7km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":30.66,\"lon\":104.063},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  {
+    "question_id": 2330,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"knn\":{\"field\":\"location\",\"query_vector\":[121.4375,31.2122],\"k\":3,\"num_candidates\":100}}}"
+  },
+  {
+    "question_id": 2340,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":31.2122,\"lon\":121.4555}}},\"size\":5,\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2122,\"lon\":121.4555},\"order\":\"asc\",\"unit\":\"km\"}}],\"_source\":[\"name\",\"bed_count\",\"rating\"]}"
+  },
+  {
+    "question_id": 2345,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":22.5431,\"lon\":114.0579}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":22.5431,\"lon\":114.0579},\"order\":\"asc\",\"unit\":\"km\"}}],\"size\":4,\"_source\":[\"name\",\"department_count\"]}"
+  },
+  {
+    "question_id": 2353,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"is_teaching_hospital\":true}}]}},\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":30.64198,\"lon\":104.06342}},\"size\":4}"
+  },
+  {
+    "question_id": 2357,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"emergency_24h\":true}},{\"geo_distance\":{\"distance\":\"10km\",\"location\":{\"lat\":31.2235,\"lon\":121.4449}}}]}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4449},\"order\":\"asc\",\"unit\":\"km\"}}],\"size\":3}"
+  },
+  {
+    "question_id": 2360,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"name.keyword\":\"上海瑞金医院\"}}]}}}"
+  },
+  {
+    "question_id": 2368,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"北京市\"}},{\"range\":{\"bed_count\":{\"gt\":800}}}]}},\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":39.908722,\"lon\":116.397499}},\"size\":4,\"_source\":[\"name\",\"rating\"]}"
+  },
+  {
+    "question_id": 2369,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"level\":\"三级甲等\"}},{\"geo_distance\":{\"distance\":\"100km\",\"location\":{\"lat\":23.1063,\"lon\":113.3245}}}]}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.1063,\"lon\":113.3245},\"order\":\"asc\",\"unit\":\"km\"}}],\"size\":5,\"_source\":[\"name\",\"level\"]}"
+  },
+  {
+    "question_id": 2375,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"6km\",\"location\":{\"lat\":30.66,\"lon\":104.063}}},{\"term\":{\"level\":\"三级甲等\"}},{\"term\":{\"emergency_24h\":true}}]}}}"
+  },
+  {
+    "question_id": 2391,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"city\":\"北京\"}},{\"term\":{\"level\":\"三甲\"}},{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":39.9087,\"lon\":116.3975}}}]}},\"size\":1000,\"_source\":[\"name\",\"rating\",\"ambulance_count\"]}"
+  },
+  {
+    "question_id": 2399,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":31.2304,\"lon\":121.4737}}},{\"bool\":{\"should\":[{\"term\":{\"level\":\"三级甲等\"}},{\"range\":{\"bed_count\":{\"gt\":1500}}}]}},{\"range\":{\"rating\":{\"gte\":4.6}}}]}},\"sort\":[{\"annual_outpatient\":{\"order\":\"desc\"}}],\"aggs\":{\"total_bed_count\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2405,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}},\"query\":{\"term\":{\"level\":\"三级甲等\"}}}"
+  },
+  {
+    "question_id": 2418,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}}]}},\"aggs\":{\"ambulance_count\":{\"stats\":{\"field\":\"ambulance_count\"}}}}"
+  },
+  {
+    "question_id": 2437,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"term\":{\"level\":\"三乙\"}},\"_source\":[\"name\",\"nurse_count\"]}"
+  },
+  {
+    "question_id": 2439,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"filter\":[{\"term\":{\"has_icu\":false}}]}},\"_source\":[\"name\",\"founded_year\"]}"
+  },
+  {
+    "question_id": 2451,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"aggs\":{\"avg_doctor_count\":{\"filter\":{\"term\":{\"level\":\"大型\"}},\"aggs\":{\"avg\":{\"avg\":{\"field\":\"doctor_count\"}}}}}}"
+  },
+  {
+    "question_id": 2452,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"term\":{\"level\":\"大型\"}},\"aggs\":{\"total_beds\":{\"sum\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2456,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"aggs\":{\"total_annual_outpatient\":{\"sum\":{\"field\":\"annual_outpatient\"}}},\"query\":{\"bool\":{\"filter\":[{\"term\":{\"level\":\"三级甲等\"}},{\"term\":{\"rating\":5}}]}}}"
+  },
+  {
+    "question_id": 2475,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"term\":{\"level\":\"优秀\"}}]}}}"
+  },
+  {
+    "question_id": 2490,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE mmsi = 351000003"
+  },
+  {
+    "question_id": 2493,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE timestamp BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00' AND nav_status IN (0, 8)"
+  },
+  {
+    "question_id": 2509,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, \"timestamp\" FROM ais.vessel_ais_data WHERE \"timestamp\" BETWEEN '2026-05-08 00:00:00' AND '2026-05-08 23:59:59'"
+  },
+  {
+    "question_id": 2549,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, imo, last_update FROM ais.vessel_ais_data WHERE imo IS NOT NULL ORDER BY imo DESC, last_update ASC"
+  },
+  {
+    "question_id": 2560,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, MAX(draught) FROM ais.vessel_ais_data WHERE date_part('day', CURRENT_DATE) = date_part('day', \"timestamp\") GROUP BY mmsi ORDER BY MAX(draught) DESC LIMIT 3"
+  },
+  {
+    "question_id": 2570,
+    "db": "POSTGRESQL",
+    "query": "SELECT SUM(draught) FROM ais.vessel_ais_data WHERE vessel_type = 70 AND timestamp BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 23:59:59'"
+  },
+  {
+    "question_id": 2577,
+    "db": "POSTGRESQL",
+    "query": "SELECT COUNT(DISTINCT mmsi) FROM ais.vessel_ais_data"
+  },
+  {
+    "question_id": 2598,
+    "db": "SQLite",
+    "query": "SELECT T1.dest_address_id, COUNT(T1.dest_address_id) FROM books.cust_order AS T1 INNER JOIN books.customer_address AS T2 ON T1.customer_id = T2.customer_id INNER JOIN books.address AS T3 ON T2.address_id = T3.address_id INNER JOIN books.country AS T4 ON T3.country_id = T4.country_id GROUP BY T1.dest_address_id"
+  },
+  {
+    "question_id": 2604,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.playerID) FROM professional_basketball.player_allstar AS T1 INNER JOIN professional_basketball.players AS T2 ON T1.playerID = T2.playerID INNER JOIN professional_basketball.awards_players AS T3 ON T1.playerID = T3.playerID WHERE T3.award = 'All-Star' GROUP BY T1.playerID"
+  },
+  {
+    "question_id": 2613,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT mmsi, call_sign FROM ais.vessel_ais_data WHERE vessel_type = 70 AND sog > 15"
+  },
+  {
+    "question_id": 2618,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE nav_status = ( SELECT nav_status FROM ais.vessel_ais_data WHERE mmsi = 412000123 ORDER BY timestamp DESC LIMIT 1 )"
+  },
+  {
+    "question_id": 2621,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, COUNT(mmsi) FROM ais.vessel_ais_data WHERE DATE(timestamp) = CURRENT_DATE GROUP BY mmsi HAVING COUNT(mmsi) < ( SELECT COUNT(mmsi) FROM ais.vessel_ais_data WHERE DATE(timestamp) = CURRENT_DATE AND mmsi = 351000023 )"
+  },
+  {
+    "question_id": 2646,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi FROM ais.vessel_ais_data WHERE vessel_type = 80 AND ST_Distance(geom, (SELECT geom FROM ais.vessel_ais_data WHERE imo = 8765432 ORDER BY timestamp DESC LIMIT 1)) < 15000"
+  },
+  {
+    "question_id": 2651,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, COUNT(mmsi) FROM ais.vessel_ais_data WHERE nav_status = 0 AND ST_DWithin(geom, ST_SetSRID(ST_MakePoint(122.1, 30.0), 4326), 15000) GROUP BY mmsi"
+  },
+  {
+    "question_id": 2655,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, COUNT(mmsi) FROM ais.vessel_ais_data WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326), 20) GROUP BY mmsi HAVING COUNT(mmsi) > 3"
+  },
+  {
+    "question_id": 2659,
+    "db": "POSTGRESQL",
+    "query": "SELECT AVG(sog) AS avg_speed, MAX(sog) AS max_speed FROM ais.vessel_ais_data WHERE ST_DWithin(geom, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326), 8) AND DATE(timestamp) = CURRENT_DATE"
+  },
+  {
+    "question_id": 2672,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, ST_Distance(geom, ST_SetSRID(ST_MakePoint(122.0, 30.0), 4326)) AS distance FROM ais.vessel_ais_data ORDER BY distance LIMIT 10"
+  },
+  {
+    "question_id": 2693,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE heading IS NULL OR heading = 0 AND longitude BETWEEN 113.2 AND 113.4 AND latitude BETWEEN 22.0 AND 22.2 AND timestamp > NOW() - INTERVAL '24 hours' LIMIT 10"
+  },
+  {
+    "question_id": 2695,
+    "db": "POSTGRESQL",
+    "query": "SELECT COUNT(DISTINCT mmsi), vessel_type FROM ais.vessel_ais_data WHERE ST_X(geom) BETWEEN 113.5 AND 114.0 AND ST_Y(geom) BETWEEN 22.0 AND 22.5 AND nav_status = 1 AND timestamp >= CURRENT_DATE - INTERVAL '1 day' AND timestamp < CURRENT_DATE GROUP BY vessel_type"
+  },
+  {
+    "question_id": 2706,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE ST_X(geom) BETWEEN 121.3 AND 121.5 AND ST_Y(geom) BETWEEN 31.0 AND 31.2 AND ST_Y(geom) < 31.2 - (ST_X(geom) - 121.3) * 1 AND ST_Y(geom) > 31.0 AND \"timestamp\" BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 23:59:59'"
+  },
+  {
+    "question_id": 2735,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE ST_X(geom) BETWEEN 121.5 AND 121.6 AND ST_Y(geom) BETWEEN 31.1 AND 31.2 AND nav_status = 1 AND DATE(timestamp) = CURRENT_DATE ORDER BY last_update DESC"
+  },
+  {
+    "question_id": 2736,
+    "db": "POSTGRESQL",
+    "query": "SELECT ST_Distance(geom, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)) * 100000 FROM ais.vessel_ais_data WHERE mmsi = 351000001 AND timestamp = '2024-06-01 10:00:00'"
+  },
+  {
+    "question_id": 2743,
+    "db": "POSTGRESQL",
+    "query": "SELECT AVG(ST_Distance(geom, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326))) FROM ais.vessel_ais_data WHERE mmsi = 412000123 AND timestamp BETWEEN '2023-01-01 15:00:00' AND '2023-01-01 17:00:00' GROUP BY DATE_TRUNC('hour', timestamp)"
+  },
+  {
+    "question_id": 2759,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, ST_Distance(geom, (SELECT geom FROM ais.vessel_ais_data WHERE mmsi = 351000003 AND timestamp >= '2024-06-01' AND timestamp < '2024-06-02' LIMIT 1)) AS distance FROM ais.vessel_ais_data WHERE mmsi != 351000003 AND timestamp >= '2024-06-01' AND timestamp < '2024-06-02' ORDER BY distance LIMIT 1"
+  },
+  {
+    "question_id": 2761,
+    "db": "POSTGRESQL",
+    "query": "SELECT SUM(ST_Distance(geom, LAG(geom) OVER (ORDER BY \"timestamp\"))) FROM ais.vessel_ais_data WHERE mmsi = 351000001 AND \"timestamp\" BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00'"
+  },
+  {
+    "question_id": 2763,
+    "db": "POSTGRESQL",
+    "query": "SELECT SUM(ST_Distance(geom, LAG(geom) OVER (ORDER BY \"timestamp\"))) FROM ais.vessel_ais_data WHERE mmsi = 351000002 AND \"timestamp\" BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 23:59:59'"
+  },
+  {
+    "question_id": 2790,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE timestamp > '2026-02-02 22:22:22'"
+  },
+  {
+    "question_id": 2795,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE rot = 999"
+  },
+  {
+    "question_id": 2804,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi FROM ais.vessel_ais_data WHERE imo > 9000000 AND timestamp > NOW() - INTERVAL '16 hours'"
+  },
+  {
+    "question_id": 2809,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT mmsi FROM ais.vessel_ais_data WHERE longitude BETWEEN 116.0 AND 117.0 AND latitude BETWEEN 21.0 AND 22.0"
+  },
+  {
+    "question_id": 2821,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT mmsi FROM ais.vessel_ais_data WHERE call_sign !~* '[a-z]'"
+  },
+  {
+    "question_id": 2838,
+    "db": "MYSQL",
+    "query": "SELECT T1.stock_id FROM finance_tax.stocks AS T1 INNER JOIN finance_tax.stock_daily_trades AS T2 ON T1.stock_id = T2.stock_id WHERE T2.trade_date = '2025-02-28'"
+  },
+  {
+    "question_id": 2861,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE imo LIKE '%88' AND \"timestamp\" BETWEEN '2024-06-01 00:00:00' AND '2024-06-01 23:59:59'"
+  },
+  {
+    "question_id": 2872,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT mmsi FROM ais.vessel_ais_data WHERE destination = 'SINGAPORE' AND draught > 10 AND timestamp > NOW() - INTERVAL '24 hours'"
+  },
+  {
+    "question_id": 2898,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE timestamp > NOW() - INTERVAL '24 hours' AND longitude BETWEEN 121.5 AND 122.5 AND latitude BETWEEN 30.5 AND 31.5 AND draught < 6"
+  },
+  {
+    "question_id": 2923,
+    "db": "POSTGRESQL",
+    "query": "SELECT COUNT(DISTINCT mmsi) FROM ais.vessel_ais_data WHERE sog > 8 AND ST_Intersects(geom, ST_GeomFromText('LINESTRING(118.05 24.35, 118.05 24.35)', 4326)) AND \"timestamp\" > NOW() - INTERVAL '48 hours'"
+  },
+  {
+    "question_id": 2935,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, MAX(sog) AS max_speed, MIN(sog) AS min_speed, AVG(sog) AS avg_speed FROM ais.vessel_ais_data WHERE sog > 10 AND longitude BETWEEN 118.000000 AND 118.100000 AND latitude BETWEEN 24.300000 AND 24.400000 AND \"timestamp\" >= NOW() - INTERVAL '48 hours' GROUP BY mmsi ORDER BY avg_speed DESC LIMIT 3"
+  },
+  {
+    "question_id": 2938,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id WHERE T2.company_name = '中远海运'",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT * FROM ais.vessel_ais_data WHERE mmsi IN (result) AND timestamp BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00' AND ST_Distance(geom, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)) < 10"
+  },
+  {
+    "question_id": 2952,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.endurance > 30 AND T1.max_load > 50000",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT * FROM ais.vessel_ais_data WHERE mmsi IN (result) AND ST_DWithin(geom, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326), 3) AND timestamp > NOW() - INTERVAL '24 hours' ORDER BY timestamp DESC LIMIT 1"
+  },
+  {
+    "question_id": 2954,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id WHERE T2.company_name = '中国外运' AND T1.max_speed < 15",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT COUNT(T.mmsi) FROM ais.vessel_ais_data AS T WHERE T.mmsi IN (result) AND T.longitude BETWEEN 121.0 AND 121.5 AND T.latitude BETWEEN 31.0 AND 31.5 AND T.timestamp BETWEEN '2023-01-01 00:00:00' AND '2023-01-01 23:59:59'"
+  },
+  {
+    "question_id": 2976,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id WHERE T2.company_name = '长航集团' AND T1.endurance > 60",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT mmsi FROM ais.vessel_ais_data WHERE mmsi IN (result) AND longitude BETWEEN 120.5 AND 121.0 AND latitude BETWEEN 30.6 AND 30.9 AND draught > 9 AND timestamp BETWEEN '2023-01-01 00:00:00' AND '2023-01-01 23:59:59'"
+  },
+  {
+    "question_id": 2987,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT mmsi FROM ais.vessel_ais_data WHERE ST_Distance(geom, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)) < 10000",
+    "db2": "MYSQL",
+    "query2": "SELECT T1.mmsi, T1.max_load FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.mmsi IN (result) ORDER BY T1.max_load DESC LIMIT 10"
+  },
+  {
+    "question_id": 2990,
+    "db1": "MYSQL",
+    "query1": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '李刚'",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT * FROM ais.vessel_ais_data WHERE mmsi IN (result) ORDER BY ST_Distance(geom, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)) LIMIT 1"
+  },
+  {
+    "question_id": 3002,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.max_load < 20000",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT * FROM ais.vessel_ais_data WHERE mmsi IN (result) AND ST_Distance(geom, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326)) < 15000 AND \"timestamp\" BETWEEN '2023-01-01 00:00:00' AND '2023-01-01 23:59:59' ORDER BY draught DESC LIMIT 5"
+  },
+  {
+    "question_id": 3009,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN transportation.employee AS T2 ON T1.company_id = T2.company_id INNER JOIN transportation.shipping_company AS T3 ON T1.company_id = T3.company_id INNER JOIN common.vessel_type_dict AS T4 ON T1.vessel_type = T4.type_code WHERE T2.name = '陈明' AND T1.endurance > 20",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT mmsi, sog FROM ais.vessel_ais_data WHERE mmsi IN (result) AND \"timestamp\" BETWEEN '2024-01-01 00:00:00' AND '2024-01-01 23:59:59' ORDER BY sog DESC LIMIT 1"
+  },
+  {
+    "question_id": 3019,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT T1.mmsi FROM ais.vessel_ais_data AS T1 WHERE ST_Distance(T1.geom, ST_SetSRID(ST_MakePoint(113.5, 22.2), 4326)) < 15 AND T1.sog > 12 AND T1.\"timestamp\" BETWEEN '2024-01-01 00:00:00' AND '2024-01-01 23:59:59'",
+    "db2": "MYSQL",
+    "query2": "SELECT T1.mmsi, T1.max_load FROM transportation.vessel AS T1 WHERE T1.mmsi IN (result) ORDER BY T1.max_load DESC LIMIT 8"
+  },
+  {
+    "question_id": 3030,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN common.vessel_type_dict AS T2 ON T1.vessel_type = T2.type_code WHERE T1.max_load > 75000",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT mmsi, COUNT(mmsi) FROM ais.vessel_ais_data WHERE mmsi IN (result) AND ST_Distance(geom, ST_SetSRID(ST_MakePoint(120.5, 30.6), 4326)) < 10000 GROUP BY mmsi ORDER BY COUNT(mmsi) DESC"
+  },
+  {
+    "question_id": 3033,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT mmsi FROM ais.vessel_ais_data WHERE vessel_type = 70 AND ST_Distance(geom, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)) < 5000",
+    "db2": "MYSQL",
+    "query2": "SELECT T1.mmsi, T1.max_load FROM transportation.vessel AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id INNER JOIN common.vessel_type_dict AS T3 ON T1.vessel_type = T3.type_code WHERE T1.mmsi IN (result) AND T3.type_name = '货船' ORDER BY T1.max_load DESC LIMIT 10"
+  },
+  {
+    "question_id": 3035,
+    "db1": "MYSQL",
+    "query1": "SELECT T1.mmsi FROM transportation.vessel AS T1 INNER JOIN transportation.shipping_company AS T2 ON T1.company_id = T2.company_id WHERE T2.company_name = '中国外运公司' AND T1.max_load > 40000",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT mmsi, longitude, latitude FROM ais.vessel_ais_data WHERE mmsi IN (result) ORDER BY ST_Distance(geom, ST_SetSRID(ST_MakePoint(114.0, 22.5), 4326)) LIMIT 1"
+  },
+  {
+    "question_id": 3039,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM ais.vessel_ais_data WHERE timestamp BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00'"
+  },
+  {
+    "question_id": 3048,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.sales AS T2 ON T1.title_id = T2.title_id INNER JOIN book_publishing_company.stores AS T3 ON T2.stor_id = T3.stor_id INNER JOIN book_publishing_company.discounts AS T4 ON T3.stor_id = T4.stor_id WHERE T3.state = 'CA' AND T2.qty > 20"
+  },
+  {
+    "question_id": 3069,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.publishers AS T2 ON T1.pub_id = T2.pub_id WHERE T1.ytd_sales > ( SELECT AVG(ytd_sales) FROM book_publishing_company.titles ) ORDER BY T2.pub_name"
+  },
+  {
+    "question_id": 3072,
+    "db": "SQLite",
+    "query": "SELECT T2.max_lvl FROM book_publishing_company.employee AS T1 INNER JOIN book_publishing_company.jobs AS T2 ON T1.job_id = T2.job_id ORDER BY T1.hire_date ASC LIMIT 1"
+  },
+  {
+    "question_id": 3078,
+    "db": "SQLite",
+    "query": "SELECT T4.pub_name FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.employee AS T2 ON T1.pub_id = T2.pub_id INNER JOIN book_publishing_company.pub_info AS T3 ON T1.pub_id = T3.pub_id INNER JOIN book_publishing_company.publishers AS T4 ON T1.pub_id = T4.pub_id ORDER BY T1.price DESC LIMIT 1"
+  },
+  {
+    "question_id": 3100,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.job_desc = 'Publisher' THEN 1 ELSE 0 END) AS REAL) * 100 / SUM(CASE WHEN T1.job_desc = 'Designer' THEN 1 ELSE 0 END) FROM book_publishing_company.jobs AS T1 INNER JOIN book_publishing_company.employee AS T2 ON T1.job_id = T2.job_id INNER JOIN book_publishing_company.pub_info AS T3 ON T2.pub_id = T3.pub_id INNER JOIN book_publishing_company.publishers AS T4 ON T3.pub_id = T4.pub_id INNER JOIN books.publisher AS T5 ON T4.pub_name = T5.publisher_name INNER JOIN books.book AS T6 ON T5.publisher_id = T6.publisher_id"
+  },
+  {
+    "question_id": 3126,
+    "db": "SQLite",
+    "query": "SELECT T3.ApiCalls FROM codebase_comments.Repo AS T1 INNER JOIN codebase_comments.Solution AS T2 ON T1.Id = T2.RepoId INNER JOIN codebase_comments.Method AS T3 ON T2.Id = T3.SolutionId WHERE T2.Path = 'mauriciodeamorim_tdd.encontro2\\Tdd.Encontro2.sln'"
+  },
+  {
+    "question_id": 3168,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.Id = 83855 THEN T3.Watchers ELSE 0 END) - SUM(CASE WHEN T1.Id = 1502 THEN T3.Watchers ELSE 0 END) AS REAL) * 100 / SUM(CASE WHEN T1.Id = 1502 THEN T3.Watchers ELSE 0 END) FROM codebase_comments.Solution AS T1 INNER JOIN codebase_comments.Method AS T2 ON T1.Id = T2.SolutionId INNER JOIN codebase_comments.Repo AS T3 ON T1.RepoId = T3.Id"
+  },
+  {
+    "question_id": 3202,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T3.SolutionId) FROM codebase_comments.Repo AS T1 INNER JOIN codebase_comments.Solution AS T2 ON T1.Id = T2.RepoId INNER JOIN codebase_comments.Method AS T3 ON T2.Id = T3.SolutionId WHERE T1.Stars > T1.Forks / 3"
+  },
+  {
+    "question_id": 3245,
+    "db": "SQLite",
+    "query": "SELECT AVG(T1.Win_Margin) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Match_Id = T2.Match_Id INNER JOIN soccer_2016.Player AS T3 ON T2.Player_Id = T3.Player_Id INNER JOIN soccer_2016.Win_By AS T4 ON T1.Win_Type = T4.Win_Id WHERE T3.Player_Name = 'SC Ganguly' AND T4.Win_Type = 'runs'"
+  },
+  {
+    "question_id": 3247,
+    "db": "SQLite",
+    "query": "SELECT T1.Player_Name FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Match AS T3 ON T2.Match_Id = T3.Match_Id INNER JOIN soccer_2016.Rolee AS T4 ON T2.Role_Id = T4.Role_Id INNER JOIN soccer_2016.Season AS T5 ON T3.Season_Id = T5.Season_Id WHERE T4.Role_Desc = 'Batsman' ORDER BY T1.DOB DESC LIMIT 1"
+  },
+  {
+    "question_id": 3261,
+    "db": "SQLite",
+    "query": "SELECT SUM(CASE WHEN T4.Venue_Name = 'M Chinnaswamy Stadium' THEN 1 ELSE 0 END) - SUM(CASE WHEN T4.Venue_Name = 'Maharashtra Cricket Association Stadium' THEN 1 ELSE 0 END) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Ball_by_Ball AS T2 ON T1.Match_Id = T2.Match_Id INNER JOIN soccer_2016.Batsman_Scored AS T3 ON T2.Match_Id = T3.Match_Id AND T2.Over_Id = T3.Over_Id AND T2.Ball_Id = T3.Ball_Id AND T2.Innings_No = T3.Innings_No INNER JOIN soccer_2016.Venue AS T4 ON T1.Venue_Id = T4.Venue_Id"
+  },
+  {
+    "question_id": 3272,
+    "db": "SQLite",
+    "query": "SELECT T2.Season_Year FROM hockey.Teams AS T1 INNER JOIN soccer_2016.Season AS T2 ON T1.year = T2.Season_Year GROUP BY T2.Season_Year ORDER BY COUNT(T2.Season_Year) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3274,
+    "db": "SQLite",
+    "query": "SELECT T1.Venue_Name FROM soccer_2016.Venue AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Venue_Id = T2.Venue_Id INNER JOIN soccer_2016.Team AS T3 ON T2.Team_1 = T3.Team_Id INNER JOIN soccer_2016.Out_Type AS T4 ON T2.Outcome_type = T4.Out_Id WHERE T3.Team_Name = 'Kolkata Knight Riders' GROUP BY T1.Venue_Name ORDER BY COUNT(T1.Venue_Name) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3279,
+    "db": "SQLite",
+    "query": "SELECT T1.Player_Name FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Team AS T3 ON T2.Team_Id = T3.Team_Id INNER JOIN soccer_2016.Rolee AS T4 ON T2.Role_Id = T4.Role_Id INNER JOIN soccer_2016.Match AS T5 ON T2.Match_Id = T5.Match_Id WHERE T3.Team_Name = 'Deccan Chargers' AND T4.Role_Desc = 'Captain' GROUP BY T1.Player_Name ORDER BY COUNT(T1.Player_Name) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3280,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.Batting_hand = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.Player_Id) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Ball_by_Ball AS T3 ON T1.Player_Id = T3.Striker INNER JOIN soccer_2016.Match AS T4 ON T3.Match_Id = T4.Match_Id INNER JOIN soccer_2016.Season AS T5 ON T4.Season_Id = T5.Season_Id INNER JOIN olympics.person AS T6 ON T1.Player_Id = T6.id"
+  },
+  {
+    "question_id": 3281,
+    "db": "SQLite",
+    "query": "SELECT T1.Player_Name FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Bowling_Style AS T3 ON T1.Bowling_skill = T3.Bowling_Id WHERE T1.DOB = '1981-07-07'"
+  },
+  {
+    "question_id": 3288,
+    "db": "SQLite",
+    "query": "SELECT T1.City_Name FROM soccer_2016.City AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Country_id = T2.Country_Id INNER JOIN soccer_2016.Venue AS T3 ON T1.City_Id = T3.City_Id WHERE T2.Country_Name = 'United Arab Emirates'"
+  },
+  {
+    "question_id": 3289,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Match_Id) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Team AS T2 ON T1.Match_Winner = T2.Team_Id WHERE T2.Team_Name = 'Pune Warriors'"
+  },
+  {
+    "question_id": 3302,
+    "db": "SQLite",
+    "query": "SELECT T1.Match_Id FROM soccer_2016.Wicket_Taken AS T1 INNER JOIN soccer_2016.Out_Type AS T2 ON T1.Kind_Out = T2.Out_Id INNER JOIN soccer_2016.Player AS T3 ON T1.Player_Out = T3.Player_Id WHERE T2.Out_Name = 'Hit Wicket'"
+  },
+  {
+    "question_id": 3316,
+    "db": "SQLite",
+    "query": "SELECT T1.Team_1 FROM soccer_2016.`Match` AS T1 INNER JOIN soccer_2016.Toss_Decision AS T2 ON T1.Toss_Decide = T2.Toss_Id INNER JOIN soccer_2016.Ball_by_Ball AS T3 ON T1.Match_Id = T3.Match_Id INNER JOIN soccer_2016.Player AS T4 ON T3.Striker = T4.Player_Id INNER JOIN soccer_2016.Out_Type AS T5 ON T1.Outcome_type = T5.Out_Id INNER JOIN soccer_2016.Win_By AS T6 ON T1.Win_Type = T6.Win_Id WHERE T2.Toss_Name = 'Bat' GROUP BY T1.Team_1"
+  },
+  {
+    "question_id": 3318,
+    "db": "SQLite",
+    "query": "SELECT T1.DOB FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Player_Id = T2.Man_of_the_Match INNER JOIN soccer_2016.Season AS T3 ON T2.Season_Id = T3.Season_Id INNER JOIN soccer_2016.Country AS T4 ON T1.Country_Name = T4.Country_Id INNER JOIN soccer_2016.Batting_Style AS T5 ON T1.Batting_hand = T5.Batting_Id INNER JOIN simpson_episodes.Person AS T6 ON T1.Player_Name = T6.name WHERE T4.Country_Name = 'India'"
+  },
+  {
+    "question_id": 3320,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Match_Id) FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Team AS T2 ON T1.Match_Winner = T2.Team_Id WHERE T2.Team_Name = 'Mumbai Indians'"
+  },
+  {
+    "question_id": 3321,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.Team_Name FROM soccer_2016.Team AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Team_Id = T2.Team_2 INNER JOIN soccer_2016.Player_Match AS T3 ON T2.Match_Id = T3.Match_Id WHERE T3.Team_Id = ( SELECT Team_Id FROM soccer_2016.Team WHERE Team_Name = 'Pune Warriors' )"
+  },
+  {
+    "question_id": 3330,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Venue_Id) FROM soccer_2016.Venue AS T1 INNER JOIN soccer_2016.City AS T2 ON T1.City_Id = T2.City_Id INNER JOIN soccer_2016.Country AS T3 ON T2.Country_id = T3.Country_Id INNER JOIN soccer_2016.Match AS T4 ON T1.Venue_Id = T4.Venue_Id WHERE T2.City_Name = 'Pune'"
+  },
+  {
+    "question_id": 3337,
+    "db": "SQLite",
+    "query": "SELECT T1.Country_Name, COUNT(T2.Umpire_Id) FROM soccer_2016.Country AS T1 INNER JOIN soccer_2016.Umpire AS T2 ON T1.Country_Id = T2.Umpire_Country GROUP BY T1.Country_Name ORDER BY COUNT(T2.Umpire_Id) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3340,
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(T1.Player_Id) AS REAL) / COUNT(DISTINCT T1.Country_Name) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Country AS T3 ON T1.Country_Name = T3.Country_Id INNER JOIN soccer_2016.Ball_by_Ball AS T4 ON T1.Player_Id = T4.Striker INNER JOIN soccer_2016.Batsman_Scored AS T5 ON T4.Match_Id = T5.Match_Id AND T4.Over_Id = T5.Over_Id AND T4.Ball_Id = T5.Ball_Id AND T4.Innings_No = T5.Innings_NO WHERE T2.Batting_hand = 'Right-hand bat'"
+  },
+  {
+    "question_id": 3348,
+    "db": "SQLite",
+    "query": "SELECT T1.Player_Name, T1.Country_Name FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Bowling_Style AS T3 ON T1.Bowling_skill = T3.Bowling_Id WHERE T3.Bowling_skill = 'Breaker' GROUP BY T1.Player_Name, T1.Country_Name HAVING COUNT(T1.Player_Name) > ( SELECT AVG(COUNT(T1.Player_Name)) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Bowling_Style AS T3 ON T1.Bowling_skill = T3.Bowling_Id WHERE T3.Bowling_skill = 'Breaker' GROUP BY T1.Player_Name, T1.Country_Name ) ORDER BY COUNT(T1.Player_Name) ASC"
+  },
+  {
+    "question_id": 3368,
+    "db": "SQLite",
+    "query": "SELECT AVG(T4.Extra_Runs) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Rolee AS T3 ON T2.Role_Id = T3.Role_Id INNER JOIN soccer_2016.Extra_Runs AS T4 ON T2.Match_Id = T4.Match_Id INNER JOIN soccer_2016.Extra_Type AS T5 ON T4.Extra_Type_Id = T5.Extra_Id INNER JOIN soccer_2016.Match AS T6 ON T2.Match_Id = T6.Match_Id WHERE T5.Extra_Name = 'wide' AND T3.Role_Desc = 'Bowler'"
+  },
+  {
+    "question_id": 3375,
+    "db": "SQLite",
+    "query": "SELECT T1.Match_Id, T1.Match_Date FROM soccer_2016.`Match` AS T1 INNER JOIN soccer_2016.Venue AS T2 ON T1.Venue_Id = T2.Venue_Id WHERE T2.Venue_Name = 'Kingsmead'"
+  },
+  {
+    "question_id": 3422,
+    "db": "SQLite",
+    "query": "SELECT T1.Team_Name FROM soccer_2016.Team AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Team_Id = T2.Team_1 INNER JOIN soccer_2016.Player_Match AS T3 ON T2.Match_Id = T3.Match_Id WHERE T2.Outcome_type = 3 AND T2.Match_Date LIKE '2015%'"
+  },
+  {
+    "question_id": 3426,
+    "db": "SQLite",
+    "query": "SELECT T1.country_name FROM books.country AS T1 INNER JOIN movie_3.city AS T2 ON T1.country_id = T2.country_id WHERE T2.city = 'Rajkot'"
+  },
+  {
+    "question_id": 3437,
+    "db": "SQLite",
+    "query": "SELECT T4.Team_Name FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Out_Type AS T2 ON T1.Outcome_type = T2.Out_Id INNER JOIN soccer_2016.Player_Match AS T3 ON T1.Match_Id = T3.Match_Id INNER JOIN soccer_2016.Team AS T4 ON T1.Team_2 = T4.Team_Id WHERE T2.Out_Name = 'normal' ORDER BY T1.Win_Margin LIMIT 1"
+  },
+  {
+    "question_id": 3441,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Player_Id) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Batting_Style AS T2 ON T1.Batting_hand = T2.Batting_Id INNER JOIN soccer_2016.Bowling_Style AS T3 ON T1.Bowling_skill = T3.Bowling_Id WHERE SUBSTR(T1.DOB, 1, 4) = '1970'"
+  },
+  {
+    "question_id": 3443,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Match_Id) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Match AS T3 ON T2.Match_Id = T3.Match_Id INNER JOIN soccer_2016.Out_Type AS T4 ON T3.Outcome_type = T4.Out_Id WHERE T3.Match_Date LIKE '2008-04%'"
+  },
+  {
+    "question_id": 3449,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Player_Id) FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Country AS T2 ON T1.Country_Name = T2.Country_Id INNER JOIN soccer_2016.Player_Match AS T3 ON T1.Player_Id = T3.Player_Id INNER JOIN soccer_2016.Match AS T4 ON T3.Match_Id = T4.Match_Id INNER JOIN soccer_2016.Batting_Style AS T5 ON T1.Batting_hand = T5.Batting_Id WHERE T2.Country_Name = 'India'"
+  },
+  {
+    "question_id": 3464,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.Match_Id) FROM soccer_2016.Player_Match AS T1 INNER JOIN soccer_2016.Match AS T2 ON T1.Match_Id = T2.Match_Id INNER JOIN soccer_2016.Team AS T3 ON T2.Team_1 = T3.Team_Id WHERE T3.Team_Name = 'Kings XI Punjab' AND T2.Match_Date LIKE '2008%'"
+  },
+  {
+    "question_id": 3478,
+    "db": "SQLite",
+    "query": "SELECT T1.Match_Id FROM soccer_2016.Match AS T1 INNER JOIN soccer_2016.Out_Type AS T2 ON T1.Outcome_type = T2.Out_Id INNER JOIN soccer_2016.Team AS T3 ON T1.Match_Winner = T3.Team_Id WHERE T2.Out_Name = 'runs' ORDER BY T1.Win_Margin DESC LIMIT 1"
+  },
+  {
+    "question_id": 3487,
+    "db": "SQLite",
+    "query": "SELECT T2.Expression_Corr FROM genes.Genes AS T1 INNER JOIN genes.Interactions AS T2 ON T1.GeneID = T2.GeneID1 INNER JOIN genes.Classification AS T3 ON T2.GeneID2 = T3.GeneID WHERE T1.Localization = 'nucleus' AND T3.Localization = 'nucleus' ORDER BY T2.Expression_Corr DESC LIMIT 1"
+  },
+  {
+    "question_id": 3512,
+    "db": "SQLite",
+    "query": "SELECT T1.coachID, T3.tmID FROM professional_basketball.coaches AS T1 INNER JOIN professional_basketball.awards_coaches AS T2 ON T1.coachID = T2.coachID INNER JOIN professional_basketball.teams AS T3 ON T1.tmID = T3.tmID WHERE T1.year BETWEEN 1970 AND 1980 GROUP BY T1.coachID ORDER BY COUNT(T1.coachID) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3531,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.coachID FROM professional_basketball.coaches AS T1 INNER JOIN professional_basketball.awards_coaches AS T2 ON T1.coachID = T2.coachID INNER JOIN professional_basketball.teams AS T3 ON T1.tmID = T3.tmID WHERE T3.lgID = 'NBA' GROUP BY T1.coachID HAVING COUNT(DISTINCT T1.tmID) > 2"
+  },
+  {
+    "question_id": 3576,
+    "db": "SQLite",
+    "query": "SELECT AVG(T2.weight / (T2.height * T2.height)) FROM professional_basketball.player_allstar AS T1 INNER JOIN professional_basketball.players AS T2 ON T1.playerID = T2.playerID"
+  },
+  {
+    "question_id": 3581,
+    "db": "SQLite",
+    "query": "SELECT T3.name FROM professional_basketball.coaches AS T1 INNER JOIN professional_basketball.awards_coaches AS T2 ON T1.coachID = T2.coachID INNER JOIN professional_basketball.teams AS T3 ON T1.tmID = T3.tmID WHERE T2.award = 'NBA Coach of the Year' AND T2.year = 1992"
+  },
+  {
+    "question_id": 3582,
+    "db": "SQLite",
+    "query": "SELECT T1.firstName, T1.lastName FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.players_teams AS T2 ON T1.playerID = T2.playerID INNER JOIN professional_basketball.draft AS T3 ON T1.playerID = T3.playerID INNER JOIN professional_basketball.coaches AS T4 ON T3.tmID = T4.tmID INNER JOIN professional_basketball.teams AS T5 ON T4.tmID = T5.tmID WHERE T5.lgID = 'NBA' AND T2.year = 1973 ORDER BY CAST(T2.fgMade AS REAL) / T2.fgAttempted DESC LIMIT 1"
+  },
+  {
+    "question_id": 3590,
+    "db": "SQLite",
+    "query": "SELECT T1.birthState FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.player_allstar AS T2 ON T1.playerID = T2.playerID GROUP BY T1.birthState ORDER BY COUNT(T1.playerID) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3614,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(T1.lost) AS REAL) * 100 / SUM(T1.games) FROM professional_basketball.teams AS T1 WHERE T1.name = 'Houston Mavericks'"
+  },
+  {
+    "question_id": 3674,
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(DISTINCT T3.id) AS REAL) / COUNT(DISTINCT T1.id) FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id INNER JOIN shakespeare.characters AS T4 ON T3.character_id = T4.id"
+  },
+  {
+    "question_id": 3676,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.id) FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id WHERE T1.GenreType = 'Comedy'"
+  },
+  {
+    "question_id": 3684,
+    "db": "SQLite",
+    "query": "SELECT COUNT(year) FROM hockey.TeamSplits WHERE year = 1920"
+  },
+  {
+    "question_id": 3686,
+    "db": "SQLite",
+    "query": "SELECT T2.Description FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id WHERE T1.Title = 'Midsummer Night''s Dream' AND T2.Act = 2 AND T2.Scene = 2"
+  },
+  {
+    "question_id": 3714,
+    "db": "SQLite",
+    "query": "SELECT T1.Date FROM shakespeare.works AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.id = T2.work_id INNER JOIN shakespeare.paragraphs AS T3 ON T2.id = T3.chapter_id WHERE T2.Scene = 154"
+  },
+  {
+    "question_id": 3721,
+    "db": "SQLite",
+    "query": "SELECT T3.CharName, T3.Description FROM shakespeare.paragraphs AS T1 INNER JOIN shakespeare.chapters AS T2 ON T1.chapter_id = T2.id INNER JOIN shakespeare.characters AS T3 ON T1.character_id = T3.id WHERE T2.id = 18710"
+  },
+  {
+    "question_id": 3791,
+    "db": "SQLite",
+    "query": "SELECT T4.publisher_name FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.game_platform AS T3 ON T2.id = T3.game_publisher_id INNER JOIN video_games.publisher AS T4 ON T2.publisher_id = T4.id WHERE T1.id = 10031"
+  },
+  {
+    "question_id": 3801,
+    "db": "SQLite",
+    "query": "SELECT T5.genre_name FROM video_games.game_platform AS T1 INNER JOIN video_games.platform AS T2 ON T1.platform_id = T2.id INNER JOIN video_games.game_publisher AS T3 ON T1.game_publisher_id = T3.id INNER JOIN video_games.game AS T4 ON T3.game_id = T4.id INNER JOIN video_games.genre AS T5 ON T4.genre_id = T5.id INNER JOIN video_games.publisher AS T6 ON T3.publisher_id = T6.id WHERE T4.game_name = 'Advent Rising'"
+  },
+  {
+    "question_id": 3817,
+    "db": "SQLite",
+    "query": "SELECT T1.num_sales FROM video_games.region_sales AS T1 INNER JOIN video_games.game_platform AS T2 ON T1.game_platform_id = T2.id INNER JOIN video_games.platform AS T3 ON T2.platform_id = T3.id INNER JOIN video_games.region AS T4 ON T1.region_id = T4.id INNER JOIN video_games.game_publisher AS T5 ON T2.game_publisher_id = T5.id INNER JOIN video_games.game AS T6 ON T5.game_id = T6.id WHERE T1.region_id = 2 AND T1.game_platform_id = 9615"
+  },
+  {
+    "question_id": 3819,
+    "db": "SQLite",
+    "query": "SELECT T5.release_year FROM video_games.publisher AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.publisher_id INNER JOIN video_games.game AS T3 ON T2.game_id = T3.id INNER JOIN video_games.game_platform AS T4 ON T2.id = T4.game_publisher_id INNER JOIN video_games.platform AS T5 ON T4.platform_id = T5.id WHERE T3.game_name = '3DS Classic Collection'"
+  },
+  {
+    "question_id": 3824,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.region_name FROM video_games.region AS T1 INNER JOIN video_games.region_sales AS T2 ON T1.id = T2.region_id INNER JOIN video_games.game_platform AS T3 ON T2.game_platform_id = T3.id INNER JOIN video_games.game AS T4 ON T3.id = T4.id WHERE T2.num_sales > 300000"
+  },
+  {
+    "question_id": 3873,
+    "db": "SQLite",
+    "query": "SELECT T4.publisher_name FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.game_platform AS T3 ON T2.id = T3.game_publisher_id INNER JOIN video_games.publisher AS T4 ON T2.publisher_id = T4.id INNER JOIN video_games.platform AS T5 ON T3.platform_id = T5.id WHERE T3.release_year = 2007 GROUP BY T4.publisher_name ORDER BY COUNT(T1.id) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3876,
+    "db": "SQLite",
+    "query": "SELECT COUNT(DISTINCT T1.id) FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.publisher AS T3 ON T2.publisher_id = T3.id INNER JOIN video_games.genre AS T4 ON T1.genre_id = T4.id INNER JOIN video_games.game_platform AS T5 ON T2.id = T5.game_publisher_id INNER JOIN video_games.platform AS T6 ON T5.platform_id = T6.id WHERE T3.publisher_name = 'Nintendo' AND T4.genre_name = 'Sports'"
+  },
+  {
+    "question_id": 3902,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T5.publisher_name = 'Brash Entertainment' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.game_platform AS T3 ON T2.id = T3.game_publisher_id INNER JOIN video_games.platform AS T4 ON T3.platform_id = T4.id INNER JOIN video_games.publisher AS T5 ON T2.publisher_id = T5.id INNER JOIN video_games.genre AS T6 ON T1.genre_id = T6.id"
+  },
+  {
+    "question_id": 3913,
+    "db": "SQLite",
+    "query": "SELECT T4.release_year FROM video_games.region AS T1 INNER JOIN video_games.region_sales AS T2 ON T1.id = T2.region_id INNER JOIN video_games.game_platform AS T3 ON T2.game_platform_id = T3.id INNER JOIN video_games.game_publisher AS T4 ON T3.game_publisher_id = T4.id INNER JOIN video_games.game AS T5 ON T4.game_id = T5.id WHERE T1.region_name = 'Japan' AND T2.num_sales > 200000"
+  },
+  {
+    "question_id": 3915,
+    "db": "SQLite",
+    "query": "SELECT T5.publisher_name FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.game_platform AS T3 ON T2.id = T3.game_publisher_id INNER JOIN video_games.region_sales AS T4 ON T3.id = T4.game_platform_id INNER JOIN video_games.publisher AS T5 ON T2.publisher_id = T5.id GROUP BY T5.publisher_name ORDER BY COUNT(DISTINCT T1.id) DESC LIMIT 1"
+  },
+  {
+    "question_id": 3917,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T5.platform_name = 'PS4' THEN T4.num_sales ELSE 0 END) AS REAL) * 100 / SUM(T4.num_sales) FROM video_games.game_publisher AS T1 INNER JOIN video_games.publisher AS T2 ON T1.publisher_id = T2.id INNER JOIN video_games.game_platform AS T3 ON T1.id = T3.game_publisher_id INNER JOIN video_games.region_sales AS T4 ON T3.id = T4.game_platform_id INNER JOIN video_games.platform AS T5 ON T3.platform_id = T5.id INNER JOIN video_games.region AS T6 ON T4.region_id = T6.id WHERE T3.release_year = 2014"
+  },
+  {
+    "question_id": 3931,
+    "db": "SQLite",
+    "query": "SELECT T5.genre_name FROM video_games.game_platform AS T1 INNER JOIN video_games.platform AS T2 ON T1.platform_id = T2.id INNER JOIN video_games.game_publisher AS T3 ON T1.game_publisher_id = T3.id INNER JOIN video_games.game AS T4 ON T3.game_id = T4.id INNER JOIN video_games.genre AS T5 ON T4.genre_id = T5.id INNER JOIN video_games.publisher AS T6 ON T3.publisher_id = T6.id WHERE T4.game_name = 'Grand Theft Auto V' AND T2.platform_name = 'PC'"
+  },
+  {
+    "question_id": 3942,
+    "db": "SQLite",
+    "query": "SELECT T1.game_name FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.publisher AS T3 ON T2.publisher_id = T3.id INNER JOIN video_games.game_platform AS T4 ON T2.id = T4.game_publisher_id INNER JOIN video_games.platform AS T5 ON T4.platform_id = T5.id INNER JOIN video_games.genre AS T6 ON T1.genre_id = T6.id WHERE T1.id = 44"
+  },
+  {
+    "question_id": 3960,
+    "db": "SQLite",
+    "query": "SELECT T4.release_year FROM video_games.game AS T1 INNER JOIN video_games.game_publisher AS T2 ON T1.id = T2.game_id INNER JOIN video_games.publisher AS T3 ON T2.publisher_id = T3.id INNER JOIN video_games.game_platform AS T4 ON T2.id = T4.game_publisher_id INNER JOIN video_games.platform AS T5 ON T4.platform_id = T5.id WHERE T1.id = 156"
+  },
+  {
+    "question_id": 3977,
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(T1.Id) AS REAL) / 4 FROM authors.Paper AS T1 INNER JOIN authors.Journal AS T2 ON T1.JournalId = T2.Id INNER JOIN citeseer.cites AS T3 ON T1.Id = T3.cited_paper_id WHERE T2.FullName = 'Molecular Brain' AND T1.Year BETWEEN 2008 AND 2011"
+  },
+  {
+    "question_id": 3982,
+    "db": "SQLite",
+    "query": "SELECT T1.au_id FROM book_publishing_company.authors AS T1 INNER JOIN book_publishing_company.titleauthor AS T2 ON T1.au_id = T2.au_id WHERE T1.au_fname = 'Peter'"
+  },
+  {
+    "question_id": 4003,
+    "db": "SQLite",
+    "query": "SELECT T1.Id, T1.Year, T1.Keyword FROM authors.Paper AS T1 INNER JOIN authors.PaperAuthor AS T2 ON T1.Id = T2.PaperId INNER JOIN books.book_author AS T3 ON T2.AuthorId = T3.author_id WHERE T2.Affiliation = 'ETH Zurich' AND T3.author_id < 1000"
+  },
+  {
+    "question_id": 4008,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.JournalId, T3.ShortName, T3.FullName FROM authors.Paper AS T1 INNER JOIN citeseer.cites AS T2 ON T1.Id = T2.cited_paper_id INNER JOIN authors.Journal AS T3 ON T1.JournalId = T3.Id WHERE T1.Year = 2013 LIMIT 4"
+  },
+  {
+    "question_id": 4014,
+    "db": "SQLite",
+    "query": "SELECT T1.HomePage FROM authors.Journal AS T1 INNER JOIN authors.Paper AS T2 ON T1.Id = T2.JournalId INNER JOIN citeseer.content AS T3 ON T2.Id = T3.paper_id WHERE T2.Title = '364: Induction of Mixed Chimerism and Transplantation Tolerance in a Non-Human Primate Lung Allograft Model: Early Results'"
+  },
+  {
+    "question_id": 4017,
+    "db": "SQLite",
+    "query": "SELECT T1.Title FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id WHERE T2.HomePage = ''"
+  },
+  {
+    "question_id": 4035,
+    "db": "SQLite",
+    "query": "SELECT T4.FullName FROM citeseer.cites AS T1 INNER JOIN authors.Paper AS T2 ON T1.cited_paper_id = T2.Id INNER JOIN authors.PaperAuthor AS T3 ON T2.Id = T3.PaperId INNER JOIN authors.Conference AS T4 ON T2.ConferenceId = T4.Id WHERE T3.Name = 'Jean-luc Hainaut' LIMIT 1"
+  },
+  {
+    "question_id": 4040,
+    "db": "SQLite",
+    "query": "SELECT T1.author_name FROM books.author AS T1 INNER JOIN books.book_author AS T2 ON T1.author_id = T2.author_id INNER JOIN book_publishing_company.authors AS T3 ON T2.author_id = T3.au_id WHERE T3.city = 'Oxford' ORDER BY T1.author_name"
+  },
+  {
+    "question_id": 4048,
+    "db": "SQLite",
+    "query": "SELECT T1.Title FROM authors.Paper AS T1 INNER JOIN authors.PaperAuthor AS T2 ON T1.Id = T2.PaperId INNER JOIN authors.Conference AS T3 ON T1.ConferenceId = T3.Id WHERE T2.Name = 'Adam Jones' AND T1.Year BETWEEN 2005 AND 2010"
+  },
+  {
+    "question_id": 4058,
+    "db": "SQLite",
+    "query": "SELECT T4.HomePage FROM citeseer.content AS T1 INNER JOIN citeseer.paper AS T2 ON T1.paper_id = T2.paper_id INNER JOIN authors.Paper AS T3 ON T2.paper_id = T3.Id INNER JOIN authors.Conference AS T4 ON T3.ConferenceId = T4.Id WHERE T3.Title = 'Quality evaluation of long duration audiovisual content'"
+  },
+  {
+    "question_id": 4063,
+    "db": "SQLite",
+    "query": "SELECT SUM(CASE WHEN T1.ConferenceId = 1 THEN 1 ELSE 0 END) - SUM(CASE WHEN T1.ConferenceId = 2 THEN 1 ELSE 0 END) AS DIFF FROM authors.Paper AS T1 INNER JOIN authors.Conference AS T2 ON T1.ConferenceId = T2.Id INNER JOIN citeseer.content AS T3 ON T1.Id = T3.paper_id INNER JOIN citeseer.cites AS T4 ON T3.paper_id = T4.cited_paper_id WHERE T1.Year BETWEEN 1991 AND 2000 AND T2.FullName IN ('Informatik & Schule', 'International Conference on Supercomputing')"
+  },
+  {
+    "question_id": 4068,
+    "db": "SQLite",
+    "query": "SELECT T1.Keyword FROM authors.Paper AS T1 INNER JOIN authors.Journal AS T2 ON T1.JournalId = T2.Id INNER JOIN authors.PaperAuthor AS T3 ON T1.Id = T3.PaperId WHERE T2.FullName = 'Modeling Identification and Control' AND T1.Year = 1994"
+  },
+  {
+    "question_id": 4108,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Business_Attributes AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Checkins AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Reviews AS T5 ON T1.business_id = T5.business_id INNER JOIN public_review_platform.Business_Hours AS T6 ON T1.business_id = T6.business_id WHERE T1.active = 'false' AND T1.state = 'AZ'"
+  },
+  {
+    "question_id": 4121,
+    "db": "SQLite",
+    "query": "SELECT T5.category_name FROM public_review_platform.Business_Attributes AS T1 INNER JOIN public_review_platform.Tips AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Business AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Attributes AS T4 ON T1.attribute_id = T4.attribute_id INNER JOIN public_review_platform.Categories AS T5 ON T4.attribute_id = T5.category_id WHERE T2.user_id = 70271"
+  },
+  {
+    "question_id": 4123,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T5.category_name = 'Automotive' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T5 ON T2.category_id = T5.category_id"
+  },
+  {
+    "question_id": 4126,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.user_id) FROM public_review_platform.Users AS T1 INNER JOIN public_review_platform.Users_Compliments AS T2 ON T1.user_id = T2.user_id INNER JOIN public_review_platform.Reviews AS T3 ON T1.user_id = T3.user_id INNER JOIN public_review_platform.Tips AS T4 ON T1.user_id = T4.user_id INNER JOIN public_review_platform.Business AS T5 ON T4.business_id = T5.business_id INNER JOIN public_review_platform.Elite AS T6 ON T1.user_id = T6.user_id WHERE T1.user_yelping_since_year = 2005 AND T1.user_fans = 'None'"
+  },
+  {
+    "question_id": 4127,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Checkins AS T5 ON T1.business_id = T5.business_id INNER JOIN public_review_platform.Business_Hours AS T6 ON T1.business_id = T6.business_id WHERE T1.city LIKE 'Tolleson' AND T1.active LIKE 'TRUE' AND T3.category_name LIKE 'Yelp'"
+  },
+  {
+    "question_id": 4155,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Users AS T3 ON T2.user_id = T3.user_id INNER JOIN public_review_platform.Business_Hours AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Days AS T5 ON T4.day_id = T5.day_id INNER JOIN public_review_platform.Categories AS T6 ON T1.business_id = T6.category_id WHERE T6.category_name = 'Fashion' AND T2.review_stars = 5"
+  },
+  {
+    "question_id": 4180,
+    "db": "SQLite",
+    "query": "SELECT city FROM public_review_platform.Business WHERE city IN ('Scottsdale', 'Anthem') GROUP BY city ORDER BY COUNT(business_id) DESC LIMIT 1"
+  },
+  {
+    "question_id": 4194,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Checkins AS T5 ON T1.business_id = T5.business_id INNER JOIN public_review_platform.Business_Hours AS T6 ON T1.business_id = T6.business_id WHERE T3.category_name = 'Food' AND T1.active = 'true'"
+  },
+  {
+    "question_id": 4207,
+    "db": "SQLite",
+    "query": "SELECT T1.business_id FROM public_review_platform.Business_Hours AS T1 INNER JOIN public_review_platform.Days AS T2 ON T1.day_id = T2.day_id INNER JOIN public_review_platform.Business AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T3.business_id = T4.business_id WHERE T2.day_of_week = 'Sunday' AND T1.closing_time - T1.opening_time > 12"
+  },
+  {
+    "question_id": 4208,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.user_id) FROM public_review_platform.Reviews AS T1 INNER JOIN public_review_platform.Business AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Users AS T3 ON T1.user_id = T3.user_id INNER JOIN public_review_platform.Elite AS T4 ON T3.user_id = T4.user_id INNER JOIN public_review_platform.Years AS T5 ON T4.year_id = T5.year_id WHERE T2.business_id = 1"
+  },
+  {
+    "question_id": 4255,
+    "db": "SQLite",
+    "query": "SELECT T1.review_length FROM public_review_platform.Reviews AS T1 INNER JOIN public_review_platform.Users AS T2 ON T1.user_id = T2.user_id INNER JOIN public_review_platform.Business AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Business_Categories AS T4 ON T3.business_id = T4.business_id INNER JOIN public_review_platform.Business_Attributes AS T5 ON T3.business_id = T5.business_id INNER JOIN public_review_platform.Tips AS T6 ON T3.business_id = T6.business_id WHERE T2.user_id = 60776 AND T3.business_id = 1"
+  },
+  {
+    "question_id": 4266,
+    "db": "SQLite",
+    "query": "SELECT T5.attribute_value FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Reviews AS T3 ON T1.business_id = T3.business_id INNER JOIN public_review_platform.Tips AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Business_Attributes AS T5 ON T1.business_id = T5.business_id INNER JOIN public_review_platform.Attributes AS T6 ON T5.attribute_id = T6.attribute_id WHERE T1.city = 'Phoenix' AND T1.state = 'AZ' AND T1.review_count = 'Medium' AND T1.stars = 3.5 AND T1.active = 'false' GROUP BY T5.attribute_value"
+  },
+  {
+    "question_id": 4268,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.stars < 3 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.stars) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id WHERE T3.category_name = 'Local Services'"
+  },
+  {
+    "question_id": 4279,
+    "db": "SQLite",
+    "query": "SELECT T1.user_fans FROM public_review_platform.Users AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.user_id = T2.user_id INNER JOIN public_review_platform.Business AS T3 ON T2.business_id = T3.business_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T3.business_id = T4.business_id INNER JOIN public_review_platform.Business_Categories AS T5 ON T3.business_id = T5.business_id INNER JOIN public_review_platform.Tips AS T6 ON T3.business_id = T6.business_id GROUP BY T1.user_fans ORDER BY COUNT(T2.review_length) DESC LIMIT 1"
+  },
+  {
+    "question_id": 4324,
+    "db": "SQLite",
+    "query": "SELECT T1.user_id FROM public_review_platform.Users AS T1 INNER JOIN public_review_platform.Elite AS T2 ON T1.user_id = T2.user_id INNER JOIN public_review_platform.Years AS T3 ON T2.year_id = T3.year_id WHERE T3.actual_year = 2012"
+  },
+  {
+    "question_id": 4326,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Users AS T3 ON T2.user_id = T3.user_id INNER JOIN public_review_platform.Business_Hours AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Days AS T5 ON T4.day_id = T5.day_id INNER JOIN public_review_platform.Checkins AS T6 ON T1.business_id = T6.business_id WHERE T5.day_of_week = 'Sunday' AND T6.label_time_10 = 'Low'"
+  },
+  {
+    "question_id": 4335,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Categories AS T3 ON T2.category_id = T3.category_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T1.business_id = T4.business_id INNER JOIN public_review_platform.Business_Hours AS T5 ON T1.business_id = T5.business_id WHERE T1.city = 'Casa Grande' AND T1.active = 'true'"
+  },
+  {
+    "question_id": 4393,
+    "db": "SQLite",
+    "query": "SELECT COUNT(DISTINCT T1.category) FROM music_platform_2.categories AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T2.podcast_id = T1.podcast_id INNER JOIN public_review_platform.Reviews AS T3 ON T3.user_id = T2.author_id INNER JOIN public_review_platform.Users AS T4 ON T4.user_id = T3.user_id INNER JOIN public_review_platform.Elite AS T5 ON T5.user_id = T4.user_id INNER JOIN beer_factory.rootbeerreview AS T6 ON T6.CustomerID = T5.user_id WHERE T3.review_stars > 2 AND T4.user_review_count = 'Low'"
+  },
+  {
+    "question_id": 4424,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.business_id) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Reviews AS T2 ON T1.business_id = T2.business_id INNER JOIN public_review_platform.Users AS T3 ON T2.user_id = T3.user_id INNER JOIN public_review_platform.Tips AS T4 ON T3.user_id = T4.user_id INNER JOIN public_review_platform.Business_Attributes AS T5 ON T1.business_id = T5.business_id WHERE T1.city = 'Phoenix' AND T1.active = 'true' AND T2.review_length = 'Long' AND T4.tip_length = 'Long'"
+  },
+  {
+    "question_id": 4429,
+    "db": "SQLite",
+    "query": "SELECT AVG(T1.stars) FROM public_review_platform.Business AS T1 INNER JOIN public_review_platform.Business_Attributes AS T2 ON T1.business_id = T2.business_id WHERE T2.attribute_value = 'Obstetricians & Gynecologists'"
+  },
+  {
+    "question_id": 4444,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.category_name FROM public_review_platform.Categories AS T1 INNER JOIN public_review_platform.Business_Categories AS T2 ON T1.category_id = T2.category_id INNER JOIN public_review_platform.Business AS T3 ON T2.business_id = T3.business_id INNER JOIN public_review_platform.Business_Attributes AS T4 ON T3.business_id = T4.business_id INNER JOIN public_review_platform.Checkins AS T5 ON T3.business_id = T5.business_id INNER JOIN public_review_platform.Business_Hours AS T6 ON T3.business_id = T6.business_id WHERE T3.city = 'Glendale' AND T3.state = 'AZ' AND T3.active = 'true'"
+  },
+  {
+    "question_id": 4469,
+    "db": "SQLite",
+    "query": "SELECT T1.name FROM simpson_episodes.Person AS T1 INNER JOIN simpson_episodes.Credit AS T2 ON T1.name = T2.person INNER JOIN simpson_episodes.Award AS T3 ON T2.episode_id = T3.episode_id WHERE T3.season = 20 ORDER BY T1.birthdate LIMIT 1"
+  },
+  {
+    "question_id": 4491,
+    "db": "SQLite",
+    "query": "SELECT T1.birth_name FROM simpson_episodes.Person AS T1 INNER JOIN simpson_episodes.Credit AS T2 ON T1.name = T2.person INNER JOIN disney.`voice-actors` AS T3 ON T1.name = T3.`voice-actor` INNER JOIN disney.characters AS T4 ON T3.movie = T4.movie_title INNER JOIN movie_3.film_actor AS T5 ON T3.`voice-actor` = T5.actor_id INNER JOIN movie_3.actor AS T6 ON T5.actor_id = T6.actor_id WHERE T4.hero = 'Helen Lovejoy'"
+  },
+  {
+    "question_id": 4553,
+    "db": "SQLite",
+    "query": "SELECT T2.category, T2.role FROM simpson_episodes.Person AS T1 INNER JOIN simpson_episodes.Credit AS T2 ON T1.name = T2.person WHERE T1.name = 'Bonita Pietila'"
+  },
+  {
+    "question_id": 4592,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.episode_id FROM simpson_episodes.Episode AS T1 INNER JOIN simpson_episodes.Vote AS T2 ON T2.episode_id = T1.episode_id INNER JOIN simpson_episodes.Credit AS T3 ON T3.episode_id = T1.episode_id INNER JOIN simpson_episodes.Award AS T4 ON T4.episode_id = T1.episode_id INNER JOIN public_review_platform.Reviews AS T5 ON T5.business_id = T1.episode_id INNER JOIN public_review_platform.Users AS T6 ON T6.user_id = T5.user_id WHERE T1.rating BETWEEN 4 AND 6 AND T2.stars = 2 AND T2.votes > 20"
+  },
+  {
+    "question_id": 4639,
+    "db": "SQLite",
+    "query": "SELECT COUNT(award_id) FROM simpson_episodes.Award WHERE year = 2009"
+  },
+  {
+    "question_id": 4661,
+    "db": "SQLite",
+    "query": "SELECT T1.category FROM simpson_episodes.Credit AS T1 INNER JOIN simpson_episodes.Episode AS T2 ON T1.episode_id = T2.episode_id INNER JOIN simpson_episodes.Vote AS T3 ON T2.episode_id = T3.episode_id WHERE T1.person = 'Carlton Batten' ORDER BY T3.votes DESC LIMIT 1"
+  },
+  {
+    "question_id": 4682,
+    "db": "SQLite",
+    "query": "SELECT AVG(T1.AnswerText) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid INNER JOIN mental_health_survey.Survey AS T3 ON T1.SurveyID = T3.SurveyID WHERE T2.questiontext LIKE 'What is your age?' AND T3.Description LIKE 'US'"
+  },
+  {
+    "question_id": 4689,
+    "db": "SQLite",
+    "query": "SELECT T3.AnswerText FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.roysched AS T2 ON T1.title_id = T2.title_id INNER JOIN mental_health_survey.Answer AS T3 ON T2.title_id = T3.QuestionID INNER JOIN mental_health_survey.Question AS T4 ON T3.QuestionID = T4.questionid INNER JOIN mental_health_survey.Survey AS T5 ON T3.SurveyID = T5.SurveyID WHERE T4.questiontext = 'Any additional notes or comments' AND T3.AnswerText IS NOT NULL AND T5.SurveyID = 2014"
+  },
+  {
+    "question_id": 4693,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid INNER JOIN mental_health_survey.Survey AS T3 ON T1.SurveyID = T3.SurveyID WHERE T2.questiontext LIKE 'Have you ever been diagnosed with a mental health condition?' AND T1.AnswerText LIKE 'Yes' AND T3.SurveyID = 2016"
+  },
+  {
+    "question_id": 4704,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Survey AS T2 ON T1.SurveyID = T2.SurveyID INNER JOIN mental_health_survey.Question AS T3 ON T1.QuestionID = T3.questionid WHERE T2.SurveyID = 2016"
+  },
+  {
+    "question_id": 4707,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.UserID) FROM mental_health_survey.Answer AS T1 INNER JOIN mental_health_survey.Question AS T2 ON T1.QuestionID = T2.questionid INNER JOIN mental_health_survey.Survey AS T3 ON T1.SurveyID = T3.SurveyID WHERE T2.questiontext = 'What US state or territory do you work in?' AND T1.AnswerText = 'Kansas'"
+  },
+  {
+    "question_id": 4723,
+    "db": "SQLite",
+    "query": "SELECT SUM(CASE WHEN T1.Year = 1998 THEN T1.Total ELSE 0 END) - SUM(CASE WHEN T1.Year = 1997 THEN T1.Total ELSE 0 END) AS diff FROM disney.revenue AS T1 INNER JOIN disney.movies_total_gross AS T2 ON T1.Year = SUBSTR(T2.release_date, LENGTH(T2.release_date) - 3, LENGTH(T2.release_date)) INNER JOIN disney.characters AS T3 ON T2.movie_title = T3.movie_title"
+  },
+  {
+    "question_id": 4757,
+    "db": "SQLite",
+    "query": "SELECT T2.director FROM disney.characters AS T1 INNER JOIN disney.director AS T2 ON T1.movie_title = T2.name WHERE T1.song IS NOT NULL"
+  },
+  {
+    "question_id": 4768,
+    "db": "SQLite",
+    "query": "SELECT T1.movie_title, T1.total_gross, T1.MPAA_rating FROM disney.movies_total_gross AS T1 INNER JOIN disney.characters AS T2 ON T1.movie_title = T2.movie_title INNER JOIN disney.`voice-actors` AS T3 ON T2.hero = T3.character WHERE T3.`voice-actor` = 'Elsa'"
+  },
+  {
+    "question_id": 4772,
+    "db": "SQLite",
+    "query": "SELECT T2.director FROM disney.characters AS T1 INNER JOIN disney.director AS T2 ON T1.movie_title = T2.name WHERE T1.movie_title = 'Wreck-It Ralph'"
+  },
+  {
+    "question_id": 4774,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.movie_title) FROM disney.movies_total_gross AS T1 INNER JOIN disney.characters AS T2 ON T1.movie_title = T2.movie_title INNER JOIN movie_3.film AS T3 ON T1.movie_title = T3.title WHERE T3.release_year BETWEEN 1937 AND 1950"
+  },
+  {
+    "question_id": 4805,
+    "db": "SQLite",
+    "query": "SELECT T1.noc FROM olympics.noc_region AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.region_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id INNER JOIN olympics.games_competitor AS T4 ON T3.id = T4.person_id WHERE T3.gender = 'M' ORDER BY T3.height DESC LIMIT 1"
+  },
+  {
+    "question_id": 4834,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.id) FROM olympics.games AS T1 INNER JOIN olympics.games_city AS T2 ON T1.id = T2.games_id INNER JOIN olympics.city AS T3 ON T2.city_id = T3.id WHERE T3.city_name = 'Stockholm' AND T1.season = 'Summer'"
+  },
+  {
+    "question_id": 4855,
+    "db": "SQLite",
+    "query": "SELECT AVG(T2.age) FROM olympics.games AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.games_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id INNER JOIN olympics.person_region AS T4 ON T3.id = T4.person_id INNER JOIN olympics.noc_region AS T5 ON T4.region_id = T5.id INNER JOIN hockey.Master AS T6 ON T3.full_name = T6.firstName WHERE T1.games_name = '1992 Summer' AND T5.region_name = 'United States'"
+  },
+  {
+    "question_id": 4877,
+    "db": "SQLite",
+    "query": "SELECT T5.City_Name FROM olympics.games AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.games_id INNER JOIN olympics.person AS T3 ON T2.person_id = T3.id INNER JOIN olympics.games_city AS T4 ON T1.id = T4.games_id INNER JOIN soccer_2016.City AS T5 ON T4.city_id = T5.City_Id WHERE T3.full_name = 'Carl Lewis Borack'"
+  },
+  {
+    "question_id": 4903,
+    "db": "SQLite",
+    "query": "SELECT AVG(T5.weight) FROM olympics.games AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.games_id INNER JOIN olympics.competitor_event AS T3 ON T2.id = T3.competitor_id INNER JOIN olympics.event AS T4 ON T3.event_id = T4.id INNER JOIN olympics.person AS T5 ON T2.person_id = T5.id INNER JOIN olympics.sport AS T6 ON T4.sport_id = T6.id WHERE T5.gender = 'M' AND T6.sport_name = 'Tonga'"
+  },
+  {
+    "question_id": 4912,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.person_id) FROM olympics.games_competitor AS T1 INNER JOIN olympics.person AS T2 ON T1.person_id = T2.id INNER JOIN olympics.games AS T3 ON T1.games_id = T3.id INNER JOIN olympics.competitor_event AS T4 ON T1.id = T4.competitor_id INNER JOIN olympics.event AS T5 ON T4.event_id = T5.id WHERE T3.games_name = '2000 Summer' AND T1.age = 31"
+  },
+  {
+    "question_id": 4917,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(CASE WHEN T1.height > 170 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(T1.id) FROM olympics.person AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.person_id INNER JOIN olympics.noc_region AS T3 ON T2.region_id = T3.id INNER JOIN olympics.games_competitor AS T4 ON T1.id = T4.person_id INNER JOIN olympics.games AS T5 ON T4.games_id = T5.id WHERE T5.games_name = '1988 Summer' AND T1.gender = 'F'"
+  },
+  {
+    "question_id": 4934,
+    "db": "SQLite",
+    "query": "SELECT T1.full_name FROM olympics.person AS T1 INNER JOIN olympics.games_competitor AS T2 ON T1.id = T2.person_id INNER JOIN olympics.games AS T3 ON T3.id = T2.games_id INNER JOIN olympics.competitor_event AS T4 ON T4.competitor_id = T2.id INNER JOIN olympics.event AS T5 ON T5.id = T4.event_id INNER JOIN olympics.medal AS T6 ON T6.id = T4.medal_id ORDER BY T2.age DESC LIMIT 1"
+  },
+  {
+    "question_id": 4952,
+    "db": "SQLite",
+    "query": "SELECT T5.city_id FROM olympics.games_competitor AS T1 INNER JOIN olympics.games AS T2 ON T1.games_id = T2.id INNER JOIN olympics.competitor_event AS T3 ON T1.id = T3.competitor_id INNER JOIN olympics.medal AS T4 ON T3.medal_id = T4.id INNER JOIN olympics.games_city AS T5 ON T2.id = T5.games_id ORDER BY T1.age DESC LIMIT 1"
+  },
+  {
+    "question_id": 4976,
+    "db": "SQLite",
+    "query": "SELECT T1.First, T1.Last FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID WHERE SUBSTR(T2.TransactionDate, 1, 7) = '2014-08' GROUP BY T1.First, T1.Last ORDER BY COUNT(T2.TransactionID) DESC LIMIT 1"
+  },
+  {
+    "question_id": 4977,
+    "db": "SQLite",
+    "query": "SELECT T4.BrandName FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID INNER JOIN beer_factory.rootbeer AS T3 ON T2.RootBeerID = T3.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T4 ON T3.BrandID = T4.BrandID INNER JOIN beer_factory.geolocation AS T5 ON T3.LocationID = T5.LocationID WHERE T1.First = 'Frank-Paul' AND T1.Last = 'Santangelo' AND T2.TransactionDate = '2014-07-07'"
+  },
+  {
+    "question_id": 4992,
+    "db": "SQLite",
+    "query": "SELECT T1.PhoneNumber FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID WHERE T2.CreditCardNumber = 6011179359005380"
+  },
+  {
+    "question_id": 5011,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.CustomerID) FROM beer_factory.customers AS T1 INNER JOIN beer_factory.`transaction` AS T2 ON T1.CustomerID = T2.CustomerID INNER JOIN beer_factory.rootbeer AS T3 ON T2.RootBeerID = T3.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T4 ON T3.BrandID = T4.BrandID INNER JOIN beer_factory.geolocation AS T5 ON T3.LocationID = T5.LocationID WHERE T1.First = 'Tom' AND T1.Last = 'Hanks' AND T2.TransactionDate BETWEEN '2015-01-01' AND '2016-12-31'"
+  },
+  {
+    "question_id": 5028,
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(T1.CustomerID) AS REAL) / COUNT(DISTINCT T1.TransactionDate) FROM beer_factory.`transaction` AS T1 INNER JOIN beer_factory.rootbeer AS T2 ON T1.RootBeerID = T2.RootBeerID INNER JOIN beer_factory.rootbeerbrand AS T3 ON T2.BrandID = T3.BrandID INNER JOIN beer_factory.location AS T4 ON T2.LocationID = T4.LocationID INNER JOIN beer_factory.geolocation AS T5 ON T4.LocationID = T5.LocationID WHERE T3.Caffeinated = 'TRUE'"
+  },
+  {
+    "question_id": 5029,
+    "db": "SQLite",
+    "query": "SELECT T1.ContainerType FROM beer_factory.rootbeer AS T1 INNER JOIN beer_factory.rootbeerbrand AS T2 ON T1.BrandID = T2.BrandID INNER JOIN beer_factory.`transaction` AS T3 ON T1.RootBeerID = T3.RootBeerID INNER JOIN beer_factory.location AS T4 ON T3.LocationID = T4.LocationID INNER JOIN beer_factory.geolocation AS T5 ON T4.LocationID = T5.LocationID INNER JOIN beer_factory.rootbeerreview AS T6 ON T1.BrandID = T6.BrandID GROUP BY T1.ContainerType ORDER BY SUM(T3.PurchasePrice - T2.WholesaleCost) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5033,
+    "db": "SQLite",
+    "query": "SELECT T1.BrandName FROM beer_factory.rootbeerbrand AS T1 INNER JOIN beer_factory.rootbeer AS T2 ON T1.BrandID = T2.BrandID INNER JOIN beer_factory.`transaction` AS T3 ON T2.RootBeerID = T3.RootBeerID INNER JOIN beer_factory.rootbeerreview AS T4 ON T1.BrandID = T4.BrandID WHERE T4.StarRating = 5 AND SUBSTR(T3.TransactionDate, 1, 4) = '2012' GROUP BY T1.BrandID ORDER BY COUNT(T1.BrandID) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5041,
+    "db": "SQLite",
+    "query": "SELECT T1.Latitude, T1.Longitude FROM beer_factory.geolocation AS T1 INNER JOIN beer_factory.location AS T2 ON T1.LocationID = T2.LocationID INNER JOIN beer_factory.customers AS T3 ON T2.ZipCode = T3.ZipCode INNER JOIN movie_3.customer AS T4 ON T3.Email = T4.email INNER JOIN books.customer_address AS T5 ON T4.customer_id = T5.customer_id INNER JOIN books.customer AS T6 ON T5.customer_id = T6.customer_id WHERE T5.status_id = 1"
+  },
+  {
+    "question_id": 5099,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM language_corpus.pages AS T1 INNER JOIN language_corpus.langs AS T2 ON T1.lid = T2.lid WHERE T1.revision = 16203226 AND T2.lang = 'ca'"
+  },
+  {
+    "question_id": 5110,
+    "db": "SQLite",
+    "query": "SELECT T2.revision FROM language_corpus.langs AS T1 INNER JOIN language_corpus.pages AS T2 ON T1.lid = T2.lid INNER JOIN language_corpus.pages_words AS T3 ON T2.pid = T3.pid INNER JOIN language_corpus.words AS T4 ON T3.wid = T4.wid WHERE T1.lang = 'ca' AND T2.title = 'Aigua dolça'"
+  },
+  {
+    "question_id": 5112,
+    "db": "SQLite",
+    "query": "SELECT AVG(T1.words) FROM language_corpus.pages AS T1 INNER JOIN language_corpus.langs AS T2 ON T1.lid = T2.lid ORDER BY T1.words LIMIT 10"
+  },
+  {
+    "question_id": 5120,
+    "db": "SQLite",
+    "query": "SELECT T1.word FROM language_corpus.words AS T1 INNER JOIN language_corpus.pages_words AS T2 ON T1.wid = T2.wid INNER JOIN language_corpus.pages AS T3 ON T2.pid = T3.pid INNER JOIN language_corpus.langs AS T4 ON T3.lid = T4.lid ORDER BY T2.occurrences DESC LIMIT 1"
+  },
+  {
+    "question_id": 5145,
+    "db": "SQLite",
+    "query": "SELECT T3.word FROM language_corpus.biwords AS T1 INNER JOIN language_corpus.langs_words AS T2 ON T1.lid = T2.lid INNER JOIN language_corpus.words AS T3 ON T1.w2nd = T3.wid WHERE T1.w1st = 1 AND T1.w2nd = 8968"
+  },
+  {
+    "question_id": 5181,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.wid) FROM language_corpus.words AS T1 INNER JOIN language_corpus.biwords AS T2 ON T1.wid = T2.w2nd INNER JOIN image_and_language.IMG_OBJ AS T3 ON T2.lid = T3.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T4 ON T3.IMG_ID = T4.IMG_ID WHERE T1.word = 'base'"
+  },
+  {
+    "question_id": 5206,
+    "db": "SQLite",
+    "query": "SELECT CAST(SUM(T1.Runs_Scored) AS REAL) / COUNT(T1.Runs_Scored) FROM soccer_2016.Batsman_Scored AS T1 INNER JOIN soccer_2016.Ball_by_Ball AS T2 ON T1.Match_Id = T2.Match_Id AND T1.Over_Id = T2.Over_Id AND T1.Ball_Id = T2.Ball_Id AND T1.Innings_No = T2.Innings_No INNER JOIN soccer_2016.Wicket_Taken AS T3 ON T1.Match_Id = T3.Match_Id AND T1.Over_Id = T3.Over_Id AND T1.Ball_Id = T3.Ball_Id AND T1.Innings_No = T3.Innings_No INNER JOIN soccer_2016.Match AS T4 ON T1.Match_Id = T4.Match_Id WHERE T2.Striker = 45"
+  },
+  {
+    "question_id": 5215,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM book_publishing_company.titles AS T1 INNER JOIN book_publishing_company.sales AS T2 ON T1.title_id = T2.title_id INNER JOIN book_publishing_company.roysched AS T3 ON T1.title_id = T3.title_id INNER JOIN books.book AS T4 ON T1.title = T4.title INNER JOIN books.book_author AS T5 ON T4.book_id = T5.book_id INNER JOIN books.author AS T6 ON T5.author_id = T6.author_id GROUP BY T1.title ORDER BY SUM(T2.qty) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5236,
+    "db": "SQLite",
+    "query": "SELECT COUNT(*) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id INNER JOIN book_publishing_company.titles AS T3 ON T1.title = T3.title INNER JOIN book_publishing_company.employee AS T4 ON T3.title_id = T4.emp_id INNER JOIN book_publishing_company.pub_info AS T5 ON T4.pub_id = T5.pub_id INNER JOIN book_publishing_company.publishers AS T6 ON T5.pub_id = T6.pub_id WHERE T2.publisher_name = 'Penguin Classics' AND T3.title LIKE 'William Shakespeare%'"
+  },
+  {
+    "question_id": 5242,
+    "db": "SQLite",
+    "query": "SELECT T2.language_name FROM movie_3.book AS T1 INNER JOIN movie_3.book_language AS T2 ON T1.language_id = T2.language_id WHERE T1.isbn13 = 23755004321"
+  },
+  {
+    "question_id": 5248,
+    "db": "SQLite",
+    "query": "SELECT T3.author_name FROM books.book AS T1 INNER JOIN books.book_language AS T2 ON T1.language_id = T2.language_id INNER JOIN books.book_author AS T4 ON T1.book_id = T4.book_id INNER JOIN books.author AS T3 ON T4.author_id = T3.author_id ORDER BY T1.num_pages DESC LIMIT 1"
+  },
+  {
+    "question_id": 5254,
+    "db": "SQLite",
+    "query": "SELECT T1.email FROM books.customer AS T1 INNER JOIN books.cust_order AS T2 ON T1.customer_id = T2.customer_id INNER JOIN books.order_line AS T3 ON T2.order_id = T3.order_id INNER JOIN book_publishing_company.authors AS T4 ON T3.book_id = T4.au_id WHERE T4.au_fname = 'Moss' AND T4.au_lname = 'Zarb'"
+  },
+  {
+    "question_id": 5260,
+    "db": "SQLite",
+    "query": "SELECT COUNT(*) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id WHERE T2.publisher_name = 'Ace Hardcover'"
+  },
+  {
+    "question_id": 5265,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.customer_id) FROM books.customer_address AS T1 INNER JOIN books.address AS T2 ON T1.address_id = T2.address_id INNER JOIN books.cust_order AS T3 ON T1.customer_id = T3.customer_id INNER JOIN books.customer AS T4 ON T3.customer_id = T4.customer_id INNER JOIN books.shipping_method AS T5 ON T3.shipping_method_id = T5.method_id WHERE T2.country_id = 1"
+  },
+  {
+    "question_id": 5294,
+    "db": "SQLite",
+    "query": "SELECT COUNT(*) FROM books.cust_order AS T1 INNER JOIN books.shipping_method AS T2 ON T1.shipping_method_id = T2.method_id INNER JOIN books.customer AS T3 ON T1.customer_id = T3.customer_id INNER JOIN books.address AS T4 ON T1.dest_address_id = T4.address_id INNER JOIN books.order_line AS T5 ON T1.order_id = T5.order_id WHERE T2.method_name = 'Priority' AND T3.first_name = 'Marcelia' AND T3.last_name = 'Goering' AND STRFTIME('%Y', T1.order_date) = '2021'"
+  },
+  {
+    "question_id": 5306,
+    "db": "SQLite",
+    "query": "SELECT T1.first_name, T1.last_name, T2.street_number, T2.street_name FROM movie_3.customer AS T1 INNER JOIN movie_3.address AS T2 ON T1.address_id = T2.address_id WHERE T2.city = 'Lazaro Cardenas'"
+  },
+  {
+    "question_id": 5308,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM books.book AS T1 INNER JOIN books.book_author AS T2 ON T1.book_id = T2.book_id INNER JOIN books.author AS T3 ON T2.author_id = T3.author_id ORDER BY T1.publication_date ASC LIMIT 6"
+  },
+  {
+    "question_id": 5311,
+    "db": "SQLite",
+    "query": "SELECT T3.City FROM movie_3.customer AS T1 INNER JOIN books.cust_order AS T2 ON T1.customer_id = T2.customer_id INNER JOIN beer_factory.customers AS T3 ON T1.customer_id = T3.CustomerID WHERE T3.State = 'Costa Rica'"
+  },
+  {
+    "question_id": 5316,
+    "db": "SQLite",
+    "query": "SELECT T1.order_id FROM books.order_history AS T1 INNER JOIN books.order_status AS T2 ON T1.status_id = T2.status_id WHERE T2.status_value = 'Cancelled'"
+  },
+  {
+    "question_id": 5346,
+    "db": "SQLite",
+    "query": "SELECT T1.first_name, T1.last_name FROM movie_3.customer AS T1 INNER JOIN books.customer_address AS T2 ON T1.customer_id = T2.customer_id INNER JOIN beer_factory.customers AS T3 ON T2.customer_id = T3.CustomerID WHERE T3.StreetAddress = '55 Dorton Pass, Huangqiao'"
+  },
+  {
+    "question_id": 5355,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM books.book AS T1 INNER JOIN books.book_language AS T2 ON T1.language_id = T2.language_id INNER JOIN language_corpus.langs AS T3 ON T2.language_name = T3.lang ORDER BY T1.num_pages DESC LIMIT 1"
+  },
+  {
+    "question_id": 5373,
+    "db": "SQLite",
+    "query": "SELECT COUNT(*) FROM books.book AS T1 INNER JOIN books.publisher AS T2 ON T1.publisher_id = T2.publisher_id WHERE T2.publisher_name = 'Birlinn' AND T1.publication_date LIKE '2008%' AND T1.num_pages BETWEEN 600 AND 700"
+  },
+  {
+    "question_id": 5378,
+    "db": "SQLite",
+    "query": "SELECT T1.isbn13, T2.price FROM books.book AS T1 INNER JOIN books.order_line AS T2 ON T1.book_id = T2.book_id WHERE T1.book_id = 7160"
+  },
+  {
+    "question_id": 5400,
+    "db": "SQLite",
+    "query": "SELECT T4.PRED_CLASS FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.IMG_OBJ_ATT AS T2 ON T1.IMG_ID = T2.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T3 ON T2.ATT_CLASS_ID = T3.ATT_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T4 ON T1.IMG_ID = T4.IMG_ID INNER JOIN image_and_language.PRED_CLASSES AS T5 ON T4.PRED_CLASS_ID = T5.PRED_CLASS_ID INNER JOIN image_and_language.OBJ_CLASSES AS T6 ON T1.OBJ_CLASS_ID = T6.OBJ_CLASS_ID WHERE T1.IMG_ID = 1 AND T1.OBJ_SAMPLE_ID = 14 GROUP BY T4.PRED_CLASS_ID"
+  },
+  {
+    "question_id": 5411,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.OBJ_SAMPLE_ID) FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.OBJ_CLASSES AS T2 ON T1.OBJ_CLASS_ID = T2.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_OBJ_ATT AS T3 ON T1.IMG_ID = T3.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T4 ON T3.ATT_CLASS_ID = T4.ATT_CLASS_ID WHERE T1.IMG_ID = 2347915 AND T4.ATT_CLASS = 'white'"
+  },
+  {
+    "question_id": 5412,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.OBJ_SAMPLE_ID) FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.IMG_OBJ_ATT AS T2 ON T1.IMG_ID = T2.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T3 ON T2.ATT_CLASS_ID = T3.ATT_CLASS_ID INNER JOIN image_and_language.OBJ_CLASSES AS T4 ON T1.OBJ_CLASS_ID = T4.OBJ_CLASS_ID WHERE T1.IMG_ID = 2377985 AND T3.ATT_CLASS = 'electrical'"
+  },
+  {
+    "question_id": 5430,
+    "db": "SQLite",
+    "query": "SELECT T1.PRED_CLASS_ID FROM image_and_language.PRED_CLASSES AS T1 INNER JOIN image_and_language.IMG_REL AS T2 ON T1.PRED_CLASS_ID = T2.PRED_CLASS_ID INNER JOIN image_and_language.IMG_OBJ AS T3 ON T2.IMG_ID = T3.IMG_ID INNER JOIN image_and_language.OBJ_CLASSES AS T4 ON T3.OBJ_CLASS_ID = T4.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_OBJ_ATT AS T5 ON T3.IMG_ID = T5.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T6 ON T5.ATT_CLASS_ID = T6.ATT_CLASS_ID WHERE T4.OBJ_CLASS = 'person' AND T6.ATT_CLASS = 'tall' ORDER BY T3.H DESC LIMIT 1"
+  },
+  {
+    "question_id": 5432,
+    "db": "SQLite",
+    "query": "SELECT T1.X, T1.Y FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.IMG_REL AS T2 ON T1.IMG_ID = T2.IMG_ID INNER JOIN image_and_language.PRED_CLASSES AS T3 ON T2.PRED_CLASS_ID = T3.PRED_CLASS_ID WHERE T3.PRED_CLASS_ID = 98"
+  },
+  {
+    "question_id": 5449,
+    "db": "SQLite",
+    "query": "SELECT T5.PRED_CLASS FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.IMG_OBJ_ATT AS T2 ON T1.IMG_ID = T2.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T3 ON T2.ATT_CLASS_ID = T3.ATT_CLASS_ID INNER JOIN image_and_language.OBJ_CLASSES AS T4 ON T1.OBJ_CLASS_ID = T4.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T5 ON T1.IMG_ID = T5.IMG_ID INNER JOIN image_and_language.PRED_CLASSES AS T6 ON T5.PRED_CLASS_ID = T6.PRED_CLASS_ID WHERE T1.IMG_ID = 1 AND T1.OBJ_SAMPLE_ID = 25 AND T5.OBJ1_SAMPLE_ID = 25 AND T5.OBJ2_SAMPLE_ID = 2"
+  },
+  {
+    "question_id": 5450,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.ATT_CLASS_ID) FROM image_and_language.IMG_OBJ_ATT AS T1 INNER JOIN image_and_language.IMG_OBJ AS T2 ON T1.IMG_ID = T2.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T3 ON T1.ATT_CLASS_ID = T3.ATT_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T4 ON T2.IMG_ID = T4.IMG_ID INNER JOIN image_and_language.PRED_CLASSES AS T5 ON T4.PRED_CLASS_ID = T5.PRED_CLASS_ID INNER JOIN image_and_language.OBJ_CLASSES AS T6 ON T2.OBJ_CLASS_ID = T6.OBJ_CLASS_ID WHERE T2.IMG_ID = 4 AND T2.OBJ_SAMPLE_ID = 7"
+  },
+  {
+    "question_id": 5475,
+    "db": "SQLite",
+    "query": "SELECT T1.OBJ_CLASS FROM image_and_language.OBJ_CLASSES AS T1 INNER JOIN image_and_language.IMG_OBJ AS T2 ON T1.OBJ_CLASS_ID = T2.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T3 ON T2.IMG_ID = T3.IMG_ID INNER JOIN image_and_language.IMG_OBJ_ATT AS T4 ON T3.IMG_ID = T4.IMG_ID WHERE T2.X = 634 AND T2.Y = 468 AND T2.IMG_ID = 5"
+  },
+  {
+    "question_id": 5477,
+    "db": "SQLite",
+    "query": "SELECT CAST(COUNT(CASE WHEN T1.IMG_ID = 1 THEN 1 ELSE NULL END) AS REAL) / COUNT(CASE WHEN T1.IMG_ID = 6 THEN 1 ELSE NULL END) FROM image_and_language.IMG_OBJ AS T1 INNER JOIN image_and_language.OBJ_CLASSES AS T2 ON T1.OBJ_CLASS_ID = T2.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_OBJ_ATT AS T3 ON T1.IMG_ID = T3.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T4 ON T3.ATT_CLASS_ID = T4.ATT_CLASS_ID INNER JOIN image_and_language.IMG_REL AS T5 ON T1.IMG_ID = T5.IMG_ID INNER JOIN image_and_language.PRED_CLASSES AS T6 ON T5.PRED_CLASS_ID = T6.PRED_CLASS_ID"
+  },
+  {
+    "question_id": 5517,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.IMG_ID) FROM image_and_language.IMG_REL AS T1 INNER JOIN image_and_language.PRED_CLASSES AS T2 ON T1.PRED_CLASS_ID = T2.PRED_CLASS_ID INNER JOIN image_and_language.IMG_OBJ AS T3 ON T1.IMG_ID = T3.IMG_ID INNER JOIN image_and_language.OBJ_CLASSES AS T4 ON T3.OBJ_CLASS_ID = T4.OBJ_CLASS_ID INNER JOIN image_and_language.IMG_OBJ_ATT AS T5 ON T3.IMG_ID = T5.IMG_ID INNER JOIN image_and_language.ATT_CLASSES AS T6 ON T5.ATT_CLASS_ID = T6.ATT_CLASS_ID WHERE T1.IMG_ID = 107 AND T2.PRED_CLASS = 'has'"
+  },
+  {
+    "question_id": 5545,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.nameGiven, T3.name FROM hockey.Master AS T1 INNER JOIN hockey.Goalies AS T2 ON T1.playerID = T2.playerID INNER JOIN hockey.Teams AS T3 ON T2.tmID = T3.tmID WHERE T1.birthCountry = 'Canada' AND T1.deathYear IS NOT NULL"
+  },
+  {
+    "question_id": 5576,
+    "db": "SQLite",
+    "query": "SELECT T1.nameGiven, T1.lastName FROM hockey.Master AS T1 INNER JOIN hockey.HOF AS T2 ON T1.hofID = T2.hofID WHERE T1.shootCatch = 'B'"
+  },
+  {
+    "question_id": 5584,
+    "db": "SQLite",
+    "query": "SELECT SUBSTR(T1.birthDate, 7, 1) FROM professional_basketball.players AS T1 INNER JOIN professional_basketball.awards_players AS T2 ON T1.playerID = T2.playerID GROUP BY T1.playerID ORDER BY COUNT(T2.award) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5624,
+    "db": "SQLite",
+    "query": "SELECT T1.Player_Name FROM soccer_2016.Player AS T1 INNER JOIN soccer_2016.Player_Match AS T2 ON T1.Player_Id = T2.Player_Id INNER JOIN soccer_2016.Match AS T3 ON T2.Match_Id = T3.Match_Id INNER JOIN soccer_2016.Season AS T4 ON T3.Season_Id = T4.Season_Id WHERE T4.Season_Year = 1986 GROUP BY T1.Player_Name ORDER BY COUNT(T1.Player_Name) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5637,
+    "db": "SQLite",
+    "query": "SELECT T.tmID FROM professional_basketball.teams AS T WHERE T.year = 2005 GROUP BY T.tmID ORDER BY SUM(T.awayWon) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5683,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T2.Team_Name FROM soccer_2016.Player_Match AS T1 INNER JOIN soccer_2016.Team AS T2 ON T1.Team_Id = T2.Team_Id INNER JOIN soccer_2016.Match AS T3 ON T1.Match_Id = T3.Match_Id WHERE T3.Team_1 = 1 OR T3.Team_2 = 1"
+  },
+  {
+    "question_id": 5686,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.year FROM hockey.TeamsSC AS T1 INNER JOIN hockey.Teams AS T2 ON T1.year = T2.year AND T1.tmID = T2.tmID INNER JOIN hockey.Coaches AS T3 ON T1.year = T3.year AND T1.tmID = T3.tmID INNER JOIN professional_basketball.coaches AS T4 ON T3.coachID = T4.coachID AND T3.year = T4.year INNER JOIN professional_basketball.awards_coaches AS T5 ON T4.coachID = T5.coachID AND T4.year = T5.year WHERE T2.name = 'Montreal Canadiens' AND T1.PIM = 49"
+  },
+  {
+    "question_id": 5711,
+    "db": "SQLite",
+    "query": "SELECT T1.full_name FROM olympics.person AS T1 INNER JOIN olympics.person_region AS T2 ON T1.id = T2.person_id INNER JOIN olympics.noc_region AS T3 ON T2.region_id = T3.id INNER JOIN soccer_2016.Player AS T4 ON T1.id = T4.Player_Id INNER JOIN soccer_2016.Player_Match AS T5 ON T4.Player_Id = T5.Player_Id WHERE T3.region_name = 'Finland'"
+  },
+  {
+    "question_id": 5716,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.coachID FROM professional_basketball.coaches AS T1 INNER JOIN professional_basketball.awards_coaches AS T2 ON T1.coachID = T2.coachID WHERE T1.coachID NOT IN ( SELECT DISTINCT coachID FROM professional_basketball.coaches )"
+  },
+  {
+    "question_id": 5718,
+    "db": "SQLite",
+    "query": "SELECT SUM(T2.GP) FROM hockey.Master AS T1 INNER JOIN hockey.Scoring AS T2 ON T1.playerID = T2.playerID INNER JOIN professional_basketball.players_teams AS T3 ON T2.playerID = T3.playerID WHERE T1.birthCountry = 'USA'"
+  },
+  {
+    "question_id": 5732,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T2.author_id FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T1.podcast_id = T2.podcast_id WHERE T1.title = 'Pop Rocket' AND T2.created_at LIKE '2016%' AND T2.rating < 5"
+  },
+  {
+    "question_id": 5739,
+    "db": "SQLite",
+    "query": "SELECT T1.title, T1.itunes_url FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T1.podcast_id = T2.podcast_id WHERE T2.title = 'Long time listener, calling it quits'"
+  },
+  {
+    "question_id": 5751,
+    "db": "SQLite",
+    "query": "SELECT DISTINCT T1.title FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T1.podcast_id = T2.podcast_id INNER JOIN music_platform_2.runs AS T3 ON T2.created_at = T3.run_at WHERE T2.created_at BETWEEN '2018-08-22T11:53:16-07:00' AND '2018-11-20T11:14:20-07:00'"
+  },
+  {
+    "question_id": 5757,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM movie_3.film AS T1 INNER JOIN movie_3.film_category AS T2 ON T1.film_id = T2.film_id INNER JOIN movie_3.category AS T3 ON T2.category_id = T3.category_id WHERE T3.name = 'Art'"
+  },
+  {
+    "question_id": 5775,
+    "db": "SQLite",
+    "query": "SELECT T2.content FROM music_platform_2.podcasts AS T1 INNER JOIN music_platform_2.reviews AS T2 ON T1.podcast_id = T2.podcast_id WHERE T2.title = 'really interesting!' AND T2.created_at = '2018-04-24 12:05:16'"
+  },
+  {
+    "question_id": 5780,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Nutrition AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Quantity AS T3 ON T1.recipe_id = T3.recipe_id INNER JOIN cookbook.Ingredient AS T4 ON T3.ingredient_id = T4.ingredient_id WHERE T4.category = 'Fats and Oils' ORDER BY T2.calories DESC LIMIT 1"
+  },
+  {
+    "question_id": 5783,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Quantity AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Ingredient AS T3 ON T2.ingredient_id = T3.ingredient_id INNER JOIN cookbook.Nutrition AS T4 ON T1.recipe_id = T4.recipe_id WHERE T3.name IN ('constipation', 'nausea', 'stomachache')"
+  },
+  {
+    "question_id": 5791,
+    "db": "SQLite",
+    "query": "SELECT T3.min_qty FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Quantity AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Ingredient AS T3 ON T2.ingredient_id = T3.ingredient_id WHERE T1.title = 'Raspberry Chiffon Pie' AND T3.name = 'graham cracker crumbs' AND T2.unit = 'cup(s)'"
+  },
+  {
+    "question_id": 5798,
+    "db": "SQLite",
+    "query": "SELECT T4.name FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Nutrition AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Quantity AS T3 ON T2.recipe_id = T3.recipe_id INNER JOIN cookbook.Ingredient AS T4 ON T3.ingredient_id = T4.ingredient_id WHERE T1.recipe_id = 1397 AND T3.optional = 'TRUE'"
+  },
+  {
+    "question_id": 5805,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM cookbook.Recipe AS T1 INNER JOIN cookbook.Quantity AS T2 ON T1.recipe_id = T2.recipe_id INNER JOIN cookbook.Ingredient AS T3 ON T2.ingredient_id = T3.ingredient_id GROUP BY T1.title ORDER BY COUNT(DISTINCT T3.ingredient_id) DESC LIMIT 1"
+  },
+  {
+    "question_id": 5855,
+    "db": "SQLite",
+    "query": "SELECT T1.id, T1.start_date FROM bike_share_1.trip AS T1 INNER JOIN bike_share_1.station AS T2 ON T2.id = T1.end_station_id INNER JOIN movie_3.rental AS T3 ON T3.rental_id = T1.id INNER JOIN movie_3.customer AS T4 ON T4.customer_id = T3.customer_id INNER JOIN movie_3.inventory AS T5 ON T5.inventory_id = T3.inventory_id WHERE T2.lat = 37.331415 AND T2.long = -121.8932"
+  },
+  {
+    "question_id": 5893,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.id) FROM bike_share_1.trip AS T1 INNER JOIN bike_share_1.station AS T2 ON T2.name = T1.start_station_name INNER JOIN bike_share_1.status AS T3 ON T3.station_id = T2.id WHERE T1.start_station_name = T1.end_station_name"
+  },
+  {
+    "question_id": 5921,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.id) FROM bike_share_1.trip AS T1 INNER JOIN bike_share_1.station AS T2 ON T1.start_station_id = T2.id INNER JOIN bike_share_1.weather AS T3 ON T3.zip_code = T1.zip_code WHERE T2.city = 'San Jose' AND T3.date LIKE '8/%/2013'"
+  },
+  {
+    "question_id": 5939,
+    "db": "SQLite",
+    "query": "SELECT T1.description FROM movie_3.film_text AS T1 WHERE T1.title = 'ACADEMY DINOSAUR'"
+  },
+  {
+    "question_id": 5973,
+    "db": "SQLite",
+    "query": "SELECT CASE WHEN COUNT(CASE WHEN T5.first_name = 'RUTH' AND T5.last_name = 'MARTINEZ' THEN T1.rental_id ELSE NULL END) > COUNT(CASE WHEN T5.first_name = 'LINDA' AND T5.last_name = 'WILLIAMS' THEN T1.rental_id ELSE NULL END) THEN 'RUTH MARTINEZ' ELSE 'LINDA WILLIAMS' END FROM movie_3.rental AS T1 INNER JOIN movie_3.film_actor AS T2 ON T1.inventory_id = T2.film_id INNER JOIN movie_3.film AS T3 ON T2.film_id = T3.film_id INNER JOIN movie_3.film_text AS T4 ON T3.film_id = T4.film_id INNER JOIN movie_3.customer AS T5 ON T1.customer_id = T5.customer_id INNER JOIN disney.director AS T6 ON T4.title = T6.name"
+  },
+  {
+    "question_id": 5979,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.customer_id) FROM movie_3.customer AS T1 INNER JOIN movie_3.address AS T2 ON T1.address_id = T2.address_id INNER JOIN movie_3.payment AS T3 ON T1.customer_id = T3.customer_id INNER JOIN public_review_platform.Business AS T4 ON T2.city_id = T4.business_id WHERE T4.active = 'false'"
+  },
+  {
+    "question_id": 5982,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.address_id) FROM movie_3.address AS T1 INNER JOIN movie_3.store AS T2 ON T1.address_id = T2.address_id WHERE T1.district = 'Nordrhein-Westfalen'"
+  },
+  {
+    "question_id": 6002,
+    "db": "SQLite",
+    "query": "SELECT T1.movie_title FROM disney.characters AS T1 INNER JOIN disney.`voice-actors` AS T2 ON T1.movie_title = T2.movie INNER JOIN movie_3.inventory AS T3 ON T3.film_id = 3479 INNER JOIN image_and_language.IMG_OBJ_ATT AS T4 ON T4.ATT_CLASS_ID = T3.film_id INNER JOIN image_and_language.ATT_CLASSES AS T5 ON T5.ATT_CLASS_ID = T4.ATT_CLASS_ID"
+  },
+  {
+    "question_id": 6022,
+    "db": "SQLite",
+    "query": "SELECT T1.rental_rate / T1.rental_duration FROM movie_3.film AS T1 INNER JOIN movie_3.film_category AS T2 ON T1.film_id = T2.film_id INNER JOIN movie_3.film_actor AS T3 ON T1.film_id = T3.film_id INNER JOIN movie_3.inventory AS T4 ON T1.film_id = T4.film_id INNER JOIN disney.movies_total_gross AS T5 ON T1.title = T5.movie_title WHERE T5.MPAA_rating = 'G' ORDER BY T1.rental_rate DESC LIMIT 1"
+  },
+  {
+    "question_id": 6026,
+    "db": "SQLite",
+    "query": "SELECT T1.first_name, T1.last_name FROM books.customer AS T1 INNER JOIN books.book_author AS T2 ON T1.customer_id = T2.book_id INNER JOIN books.author AS T3 ON T2.author_id = T3.author_id INNER JOIN soccer_2016.Umpire AS T4 ON T3.author_name = T4.Umpire_Name INNER JOIN soccer_2016.Country AS T5 ON T4.Umpire_Country = T5.Country_Id WHERE T5.Country_Name = 'India'"
+  },
+  {
+    "question_id": 6032,
+    "db": "SQLite",
+    "query": "SELECT T1.actor_id FROM movie_3.film_actor AS T1 INNER JOIN movie_3.actor AS T2 ON T1.actor_id = T2.actor_id WHERE T2.last_name = 'KILMER'"
+  },
+  {
+    "question_id": 6053,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.film_id) FROM movie_3.film AS T1 INNER JOIN movie_3.film_actor AS T2 ON T1.film_id = T2.film_id INNER JOIN movie_3.film_category AS T3 ON T1.film_id = T3.film_id INNER JOIN movie_3.category AS T4 ON T3.category_id = T4.category_id INNER JOIN movie_3.inventory AS T5 ON T1.film_id = T5.film_id INNER JOIN disney.director AS T6 ON T1.title = T6.name WHERE T1.rental_rate = 0.99"
+  },
+  {
+    "question_id": 6080,
+    "db": "SQLite",
+    "query": "SELECT T1.title FROM movie_3.film AS T1 INNER JOIN movie_3.film_text AS T2 ON T1.film_id = T2.film_id INNER JOIN movie_3.film_category AS T3 ON T1.film_id = T3.film_id INNER JOIN movie_3.film_actor AS T4 ON T1.film_id = T4.film_id INNER JOIN movie_3.inventory AS T5 ON T1.film_id = T5.film_id WHERE T1.rating = 'NC-17'"
+  },
+  {
+    "question_id": 6103,
+    "db": "SQLite",
+    "query": "SELECT T1.address_id FROM books.address AS T1 INNER JOIN books.customer_address AS T2 ON T1.address_id = T2.address_id INNER JOIN movie_3.customer AS T3 ON T2.customer_id = T3.customer_id INNER JOIN movie_3.address AS T4 ON T3.address_id = T4.address_id INNER JOIN movie_3.city AS T5 ON T4.city_id = T5.city_id WHERE T5.city = 'Gansu'"
+  },
+  {
+    "question_id": 6119,
+    "db": "SQLite",
+    "query": "SELECT COUNT(T1.actor_id) FROM movie_3.actor AS T1 INNER JOIN movie_3.film_actor AS T2 ON T1.actor_id = T2.actor_id WHERE T1.first_name = 'Dan'"
+  },
+  {
+    "question_id": 6126,
+    "db": "SQLite",
+    "query": "SELECT T1.address FROM movie_3.address AS T1 INNER JOIN movie_3.customer AS T2 ON T1.address_id = T2.address_id INNER JOIN movie_3.payment AS T3 ON T2.customer_id = T3.customer_id WHERE T2.active = 0"
+  }
+]
