@@ -20,12 +20,15 @@ import re
 from pathlib import Path
 from typing import Any
 
+import sqlglot
+from sqlglot import exp
+
 from ..config import settings
 from ..io import get_logger, read_json, write_json, write_jsonl
 from ..models import Catalog, Sample, Table
 from ..retrieval.context import Budget, ContextBuilder
 from ..retrieval.index import RetrievalIndex
-from ..retrieval.sql_parser import SourceResolver
+from ..retrieval.sql_parser import DIALECTS, SourceResolver
 from ..routing.classifier import CharacterTfidfBaseline, label
 from ..submission.finetuned import build_instruction, strip_fences
 
@@ -87,19 +90,18 @@ def _parse_generated(
             if table.engine == engine:
                 by_name.setdefault(table.name.lower(), []).append(table_id)
         prompt = set(prompt_table_ids)
+        alias_columns, all_columns = _sql_columns(sql, engine)
         remaining = []
         for token in unresolved:
             base = re.split(r"\s+as\s+", token, flags=re.I)[0].strip()
             name = base.strip('`"').split(".")[-1].lower()
-            candidates = by_name.get(name, [])
-            if len(candidates) == 1:
-                ids.add(candidates[0])
-                continue
-            preferred = [candidate for candidate in candidates if candidate in prompt]
-            if len(preferred) == 1:
-                ids.add(preferred[0])
-                continue
-            remaining.append(token)
+            alias_match = re.search(r"\s+as\s+(\w+)", token, flags=re.I)
+            alias = alias_match.group(1).lower() if alias_match else name
+            chosen = _choose_table(by_name.get(name, []), alias, alias_columns, all_columns, prompt, tables)
+            if chosen is not None:
+                ids.add(chosen)
+            else:
+                remaining.append(token)
         unresolved = remaining
     status = parsed.get("parse_status")
     if status == "unresolved_tables" and not unresolved:
@@ -112,6 +114,57 @@ def _parse_generated(
         "databases": sorted({tables[key].namespace for key in ids if tables[key].namespace}),
         "tables": sorted({_qualified(tables[key]) for key in ids}),
     }
+
+
+def _sql_columns(sql: str, engine: str) -> tuple[dict[str, set[str]], set[str]]:
+    """收集 SQL 中的列名，用于对未限定表名做无答案泄露的消歧。"""
+    try:
+        tree = sqlglot.parse_one(sql, read=DIALECTS[engine])
+    except Exception:  # noqa: BLE001 - 无法解析时不做列消歧
+        return {}, set()
+    alias_columns: dict[str, set[str]] = {}
+    all_columns: set[str] = set()
+    for column in tree.find_all(exp.Column):
+        all_columns.add(column.name.lower())
+        if column.table:
+            alias_columns.setdefault(column.table.lower(), set()).add(column.name.lower())
+    return alias_columns, all_columns
+
+
+def _choose_table(
+    candidates: list[str],
+    alias: str,
+    alias_columns: dict[str, set[str]],
+    all_columns: set[str],
+    prompt: set[str],
+    tables: dict[str, Table],
+) -> str | None:
+    """在候选表中选定唯一表：引擎内唯一 → 提示词优先 → 限定列覆盖 → 列覆盖最大。"""
+    if not candidates:
+        return None
+    if len(candidates) == 1:
+        return candidates[0]
+    preferred = [candidate for candidate in candidates if candidate in prompt]
+    if len(preferred) == 1:
+        return preferred[0]
+    pool = preferred or candidates
+    qualified = alias_columns.get(alias)
+    if qualified:
+        fits = [c for c in pool if qualified <= {col.name.lower() for col in tables[c].columns}]
+        if len(fits) == 1:
+            return fits[0]
+        if fits:
+            pool = fits
+    if all_columns:
+        scored = sorted(
+            ((len(all_columns & {col.name.lower() for col in tables[c].columns}), c) for c in pool),
+            reverse=True,
+        )
+        best = scored[0][0]
+        top = [c for score, c in scored if score == best]
+        if best > 0 and len(top) == 1:
+            return top[0]
+    return None
 
 
 def _set_metrics(expected: set[str], produced: set[str]) -> dict[str, Any]:
@@ -272,7 +325,8 @@ def run(
                 "question_id": item["row"]["question_id"],
                 "question": item["row"]["question"],
                 "reference_sql": item["row"].get("query", ""),
-                "reference_engines": expected["engines"],                "predicted_engines": item["predicted_engines"],
+                "reference_engines": expected["engines"],
+                "predicted_engines": item["predicted_engines"],
                 "engine_correct": expected["engines"] == item["predicted_engines"],
                 "expected_databases": expected["databases"],
                 "expected_tables": expected["tables"],
@@ -300,6 +354,7 @@ def run(
     write_jsonl(output_dir / "results.jsonl", details)
     write_json(output_dir / "report.json", report)
     logger.info("报告：%s", json.dumps(report["metrics"], ensure_ascii=False))
+    audit_leakage(output_dir)
     return report
 
 
@@ -336,3 +391,114 @@ def _aggregate(details: list[dict[str, Any]], sample_audit: dict[str, Any], mode
         "metrics": metrics,
         "per_question": details,
     }
+
+
+def recompute_report(output_dir: Path | str) -> dict[str, Any]:
+    """在已保存的输出上重算解析与指标，不调用模型。"""
+    from ..data.catalog import load_catalog
+
+    output_dir = Path(output_dir)
+    report = read_json(output_dir / "report.json")
+    tables = load_catalog().by_id()
+    resolver = SourceResolver(tables)
+    updated: list[dict[str, Any]] = []
+    for detail in report["per_question"]:
+        prompt_table_ids = detail["prompt_table_ids"]
+        engines = detail["predicted_engines"]
+        engine = engines[0] if len(engines) == 1 else "SQLite"
+        generated = _parse_generated(detail["generated_sql"], engine, resolver, tables, prompt_table_ids)
+        expected_dbs = set(detail["expected_databases"])
+        expected_tables = set(detail["expected_tables"])
+        prompt_dbs = {tables[key].namespace for key in prompt_table_ids if tables[key].namespace}
+        prompt_tables = {_qualified(tables[key]) for key in prompt_table_ids}
+        updated.append(
+            {
+                **detail,
+                "prompt_databases": sorted(prompt_dbs),
+                "prompt_tables": sorted(prompt_tables),
+                "prompt_db_coverage": _set_metrics(expected_dbs, prompt_dbs),
+                "prompt_table_coverage": _set_metrics(expected_tables, prompt_tables),
+                "generated_parse_status": generated.get("parse_status"),
+                "generated_databases": generated.get("databases", []),
+                "generated_tables": generated.get("tables", []),
+                "generated_db_match": _set_metrics(expected_dbs, set(generated.get("databases", []))),
+                "generated_table_match": _set_metrics(expected_tables, set(generated.get("tables", []))),
+            }
+        )
+    report["per_question"] = updated
+    report["metrics"] = _aggregate(
+        updated, report["sample_audit"], report.get("model"), report.get("endpoint"), report.get("max_tables", 6)
+    )["metrics"]
+    write_json(output_dir / "report.json", report)
+    write_jsonl(output_dir / "results.jsonl", updated)
+    return report
+
+
+def _normalize(text: str) -> str:
+    return re.sub(r"\s+", "", text).lower()
+
+
+def audit_leakage(output_dir: Path | str) -> dict[str, Any]:
+    """检查训练集是否被注入提示词或造成答案泄露（不调用模型）。"""
+    from ..data.catalog import load_catalog
+
+    output_dir = Path(output_dir)
+    report = read_json(output_dir / "report.json")
+    tables = load_catalog().by_id()
+    train = read_json(settings.train_split)
+    validation = read_json(settings.validation_split)
+    train_texts = {row["question"] for row in train}
+    train_normalized = {_normalize(row["question"]) for row in train}
+    sampled = read_json(output_dir / "sample.json")
+    per_question = {item["question_id"]: item for item in report["per_question"]}
+    train_queries = [row.get("query", "") for row in train if row.get("query")]
+
+    select_in_prompt = 0
+    reference_in_prompt = 0
+    train_query_in_prompt = 0
+    train_question_in_prompt = 0
+    for question_id in sampled:
+        item = per_question[question_id]
+        instruction = build_instruction(item["prompt_table_ids"], tables)
+        if re.search(r"\bselect\b", instruction, re.I):
+            select_in_prompt += 1
+        reference = (item.get("reference_sql") or "").strip()
+        if reference and reference in instruction:
+            reference_in_prompt += 1
+        if any(query and len(query) >= 20 and query in instruction for query in train_queries):
+            train_query_in_prompt += 1
+        if any(len(question) >= 10 and question in instruction for question in train_texts):
+            train_question_in_prompt += 1
+
+    # 检索索引：验证训练来源是划分后训练集而非完整 QA_train。
+    index_dir = output_dir / "index_train_split"
+    index_audit: dict[str, Any] = {}
+    if (index_dir / "manifest.json").exists():
+        from ..io import file_sha256
+
+        manifest = read_json(index_dir / "manifest.json")
+        index_audit = {
+            "training_sha256": manifest["sources"].get("training"),
+            "matches_train_split": manifest["sources"].get("training") == file_sha256(settings.train_split),
+            "matches_full_qa_train": manifest["sources"].get("training") == file_sha256(settings.qa_train),
+            "example_documents": manifest.get("audit", {}).get("example"),
+        }
+
+    audit = {
+        "sampled_questions": len(sampled),
+        "sample_exact_text_in_train": sum(
+            per_question[qid]["question"] in train_texts for qid in sampled
+        ),
+        "sample_normalized_text_in_train": sum(
+            _normalize(per_question[qid]["question"]) in train_normalized for qid in sampled
+        ),
+        "full_validation_exact_text_in_train": sum(row["question"] in train_texts for row in validation),
+        "index": index_audit,
+        "prompt_contains_select": select_in_prompt,
+        "prompt_contains_train_query": train_query_in_prompt,
+        "prompt_contains_train_question": train_question_in_prompt,
+        "prompt_contains_reference_sql": reference_in_prompt,
+        "prompt_payload": "table DDL only (CREATE TABLE / ES mapping) + data source and recalled database names",
+    }
+    write_json(output_dir / "leakage_audit.json", audit)
+    return audit
