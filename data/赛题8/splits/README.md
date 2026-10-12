@@ -29,13 +29,15 @@
 在项目根目录运行：
 
 ```bash
-python scripts/split_dataset.py
+text2query split-dataset
 ```
 
-同一输入及随机种子生成相同文件。脚本支持通过 `--input`、`--output-dir`、`--validation-ratio` 和 `--seed` 调整参数。
+划分使用 scikit-learn 的 `train_test_split`（分层、近似最大余数法），同一输入及随机种子生成相同文件。脚本支持 `--input`、`--output-dir`、`--validation-ratio` 和 `--seed` 调整参数。
+
+**注意：** 已提交的划分文件是竞赛基准数据。框架化重写后重新运行会得到**同规模、同分层但成员不同**的划分，因此默认拒绝覆盖已存在的划分文件；确认需要更换基准时显式使用 `--overwrite`。
 
 示例：
 
 ```bash
-python scripts/split_dataset.py --validation-ratio 0.1 --seed 42
+text2query split-dataset --validation-ratio 0.1 --seed 42 --overwrite
 ```

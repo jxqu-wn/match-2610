@@ -1,62 +1,127 @@
 # 2026 全国大数据与计算智能挑战赛 · 赛题 8
 
-赛题：面向多源异构数据源的统一查询指令生成。
+**面向多源异构数据源的统一查询指令生成**（Text-to-Query）。
 
-## 资料
+本仓库基于社区成熟框架重构了赛题解决方案：数据库路由、库表召回、有界 LLM 规划与
+查询指令生成。原始手写实现已由 `src/text2query` 下的框架化实现替换，
+历史实验记录保留在 [`docs/results`](docs/results)。
 
-- [网页资料索引](docs/赛题8/网页资料/README.md)
-- [赛题网页合集](docs/赛题8/网页资料/赛题网页合集.md)
-- [训练集与验证集划分说明](data/赛题8/splits/README.md)
+## 赛题要点
 
-## 数据划分
+- **输入**：用户自然语言问题，不指定数据源或数据库。
+- **输出**：MySQL / SQLite 的 SQL、PostgreSQL 的时空查询、Elasticsearch 的查询 DSL，
+  以及跨数据源联邦查询计划（第二步以 `result` 代替第一步结果）。
+- **评测**：查询语句加权执行准确率；ES 查询按 `0.5 × id_match + 0.5 × order_match` 计分。
+- 模型限制：国产开源基座、总参数量不超过 30B、权重总大小不超过 40GB。
 
-原始训练集为 `data/赛题8/QA_train.json`。按验证集 10%、训练集 90%划分，使用固定随机种子 `42`，按单数据源类型及跨数据源查询方向分层抽样。
+资料索引见 [`docs/赛题8/网页资料/README.md`](docs/赛题8/网页资料/README.md)，
+库表召回设计见 [`docs/赛题8/库表信息召回设计说明.md`](docs/赛题8/库表信息召回设计说明.md)。
 
-在项目根目录运行：
+## 目录结构
 
-```bash
-python scripts/split_dataset.py
+```
+src/text2query/
+  config.py            集中配置（pydantic-settings）
+  models.py            schema/规划协议的数据模型（pydantic）
+  data/
+    split.py           分层数据划分（scikit-learn）
+    catalog.py         schema 目录解析（sqlglot）+ 知识/案例关联
+    enrich.py          LLM 描述校验与补充（openai + tenacity + diskcache）
+    review.py          人工抽查 / 二次复核回放
+  routing/
+    embedding.py       sentence-transformers 语义向量 + 向量缓存
+    classifier.py      路由分类器（scikit-learn）+ 字符 TF-IDF 对照
+  retrieval/
+    sql_parser.py      SQL / DSL 解析（sqlglot）
+    index.py           BM25 + FAISS + RRF 混合召回
+    context.py         配额、一跳外键扩展、预算裁剪
+    evaluate.py        表级召回评估
+  llm/
+    client.py          OpenAI 兼容客户端（重试 / 用量 / 可选缓存）
+    planner.py         有界规划协议与结构校验
+  submission/
+    validate.py        SQL / DSL / 跨源协议静态校验（sqlglot）
+    generate.py        DeepSeek 端到端生成 result.json
+    finetuned.py       微调模型（OpenAI 兼容服务）推理
+  cli.py               typer 命令行入口
+tests/                 pytest 测试
+docs/results/          历史实验结果（旧实现产出）
 ```
 
-脚本仅依赖 Python 标准库，生成训练集 `data/赛题8/splits/train.json`、验证集 `data/赛题8/splits/validation.json` 和划分清单 `data/赛题8/splits/split_manifest.json`。
-
-模型训练和训练样例检索使用划分后的 `train.json`；`validation.json` 用于本地验证。官方 `QA_test.json` 用于竞赛预测。
-
-## 数据库路由基线
+## 安装
 
 ```bash
-python scripts/database_routing/route_question.py '哪个国家培养的冰球运动员最多？请标明哪一年出生的冰球运动员最多。' --question-id 5635
-python -m unittest discover -s scripts/database_routing -p 'test_route_question.py'
+uv venv .venv --python 3.14
+uv pip install -e '.[dev]'
 ```
 
-脚本只依赖标准库，解析三个 schema 文件构建表与数据库系统目录，使用字符二元组 TF-IDF 检索 `splits/train.json` 中的相似问题，再从 `knowledge.json` 提取候选表的知识证据。数据库系统映射依据 `data/数据库说明及行政区划表数据/数据库说明.txt`：BIRD 为 SQLite，通用及其他业务库为 MYSQL，船舶为 POSTGRESQL，医疗为 Elasticsearch。
+语义向量依赖本地 Qwen3-Embedding-0.6B（默认 `models/Qwen3-Embedding-0.6B`）。
+LLM 通过环境变量 `DEEPSEEK_API_KEY` 提供，密钥不写入代码或产物。
 
-输出包含 `query_type`（single/multi/unknown）、`databases`、候选表和字段、知识证据及相似训练问题。检索分数低于 0.45 或未匹配到 schema 表时，返回 unknown；该阈值是初始经验值，分数不是正确率或概率。多类标签按涉及的数据库系统去重计算，同系统多个业务库仍为单类。
+## 框架选型
 
-这是可运行的检索基线，数据库选择主要来自最相似训练样例，尚未实现模型驱动的需求拆解、字段覆盖验证、跨库执行计划或 SQL 生成。候选表也是从相似样例查询提取，可能包含当前问题不需要的表。不会读取验证集和测试集标签；示例原题本身在训练子集中，原题命中不能证明泛化能力。后续应在 validation.json 上评估路由准确率和多类召回率，再接入查询计划模块。
+| 环节 | 框架 | 替代的原手写实现 |
+| --- | --- | --- |
+| 数据划分 | scikit-learn `train_test_split` | 手写最大余数法 + `random.shuffle` |
+| DDL 解析 | sqlglot tokenizer + AST | 手写括号平衡 / 列切分 / 正则 |
+| 语义向量 | sentence-transformers | 手写 transformers 池化与缓存 |
+| 向量检索 | faiss `IndexFlatIP` | numpy 全量点积 |
+| 关键词检索 | rank-bm25 `BM25Okapi` | 手写 BM25 |
+| 分类器 | scikit-learn KNN / LogisticRegression | 手写感知机与 NB |
+| 模型持久化 | joblib | 手写 `npz` 系数 |
+| 数据模型 | pydantic v2 | 裸 dict 校验 |
+| LLM 调用 | openai SDK + tenacity + diskcache | 手写 urllib 重试与缓存 |
+| 配置 | pydantic-settings | argparse + 常量 |
+| 命令行 | typer + rich | argparse |
+| 测试 | pytest | unittest |
 
-## Embedding 分类器
-
-分类代码已统一整理至 [scripts/database_routing](scripts/database_routing/README.md)，包含原检索基线、字符线性分类器和基于本地 Qwen3-Embedding-0.6B 的分类器。
+## 使用
 
 ```bash
-.venv/bin/python scripts/database_routing/embedding_classifier.py evaluate --int8
-.venv/bin/python scripts/database_routing/embedding_classifier.py predict --int8 --question '哪个国家培养的冰球运动员最多？请标明哪一年出生的冰球运动员最多。'
-.venv/bin/python -m unittest discover -s scripts/database_routing -p 'test_*.py'
+# 0) 数据划分（划分文件已冻结，重新划分需显式 --overwrite）
+text2query split-dataset
+
+# 1) schema 目录与描述
+text2query build-catalog
+text2query enrich-descriptions --workers 4        # 需要 DEEPSEEK_API_KEY
+text2query apply-review
+
+# 2) 数据库路由
+text2query route-evaluate --device cuda --dtype float16
+text2query route-predict --question '统计船舶总数' --device cuda
+
+# 3) 库表召回（关键词模式无需模型）
+text2query build-index --device cuda --dtype float16
+text2query retrieve --engines SQLite --question '哪个国家培养的冰球运动员最多？'
+text2query evaluate-retrieval --device cuda
+
+# 4) 有界规划
+text2query plan --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
+
+# 5) 生成提交
+text2query generate-submission --workers 8
+text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/completions
 ```
 
-Embedding 分类器在训练集内部选择近邻或逻辑回归，独立验证时排除训练集中的同文本问题。向量缓存、模型系数、逐题结果和评估指标保存至 `outputs/database_routing/embedding`。详细安装方法及评估边界见分类目录说明。
+未安装包时可用 `PYTHONPATH=src python -m text2query.cli <command>`。
 
-## Git
+## 数据与划分
 
-Schema 结构提取、DeepSeek 描述校验和补充见 [数据预处理脚本](scripts/data_preprocessing/README.md)。产物位于 `data/preprocessed`，人工抽查结论随产物保存。
+原始训练集 `data/赛题8/QA_train.json`（5830 条）按数据源分层划分为训练集 5247 条、
+验证集 583 条（种子 42）。跨源查询按有序 `db1 -> db2` 分层，两个方向分别抽样。
+分层规模与已冻结的 [`split_manifest.json`](data/赛题8/splits/split_manifest.json) 完全一致。
 
-远程仓库：<https://github.com/jxqu-wn/match-2610.git>
+`split-dataset` 使用 scikit-learn 重新划分时会生成**同规模、同分层但成员不同**的划分，
+因此默认拒绝覆盖已冻结文件；确认要更换基准时使用 `--overwrite`。
 
-## 库表信息召回
+Schema 预处理产物位于 `data/preprocessed`。`build-catalog` 用 sqlglot 重新解析
+`bird_schemas.txt` / `commom_schema.txt` / `core_schema.txt`，产出的表、字段、主外键
+与描述与已提交的 `schema_extracted.json` 逐项一致。
 
-数据库分类之后的混合召回和有界库表规划见 [scripts/information_retrieval/README.md](scripts/information_retrieval/README.md)。支持完整 schema、知识与训练案例索引、按系统过滤、GPU embedding、一次补检索、结构校验及预算控制。实测指标与待改进项见 [RESULTS.md](scripts/information_retrieval/RESULTS.md)；DeepSeek 已完成20题真实测试，token消耗与预算建议见 [LIVE20_RESULTS.md](scripts/information_retrieval/LIVE20_RESULTS.md)。
+## 约束与边界
 
-召回优化后的同20题对比、schema保护和token成本说明见 [OPTIMIZATION_RESULTS.md](scripts/information_retrieval/OPTIMIZATION_RESULTS.md)。
-
-全新50题的完全一致率、语义一致率及验证隔离审计见 [LIVE50_RESULTS.md](scripts/information_retrieval/LIVE50_RESULTS.md)。
+- 程序负责可重复的结构化工作与执行边界；LLM 负责业务判断，两者证据分离。
+- 相似度、外键存在、训练案例命中都不构成业务正确性证明。
+- 不根据字段同名建立关联；推断关系必须显式标记为假设。
+- 上下文超限时整条移除低优先级证据，绝不静默截断单表结构。
+- 静态校验只检查语法、库表字段与跨源协议，不代表执行结果正确。
