@@ -1,0 +1,54 @@
+{
+  "base": {
+    "summary": {
+      "predicted": 209,
+      "reference": 270,
+      "true_positive": 177,
+      "false_positive": 32,
+      "false_negative": 93,
+      "precision": 0.84688995215311,
+      "recall": 0.6555555555555556,
+      "f1": 0.7390396659707724,
+      "unrelated_per_effective": 0.1807909604519774,
+      "passes_200_percent_noise_target": true,
+      "zero_effective_with_noise": false
+    },
+    "coverage": {
+      "all_tables": 72,
+      "fully_covered_tables": 50,
+      "all_table_full_coverage_rate": 0.6944444444444444,
+      "nonempty_answer_tables": 44,
+      "fully_covered_nonempty_tables": 22,
+      "nonempty_table_full_coverage_rate": 0.5
+    },
+    "noise_violating_table_count": 5
+  },
+  "with_training": {
+    "summary": {
+      "predicted": 241,
+      "reference": 270,
+      "true_positive": 195,
+      "false_positive": 46,
+      "false_negative": 75,
+      "precision": 0.8091286307053942,
+      "recall": 0.7222222222222222,
+      "f1": 0.7632093933463796,
+      "unrelated_per_effective": 0.2358974358974359,
+      "passes_200_percent_noise_target": true,
+      "zero_effective_with_noise": false
+    },
+    "coverage": {
+      "all_tables": 72,
+      "fully_covered_tables": 50,
+      "all_table_full_coverage_rate": 0.6944444444444444,
+      "nonempty_answer_tables": 44,
+      "fully_covered_nonempty_tables": 22,
+      "nonempty_table_full_coverage_rate": 0.5
+    },
+    "noise_violating_table_count": 3
+  },
+  "same_threshold": true,
+  "same_raw_schema_and_knowledge": true,
+  "base_scores_identical": true,
+  "note": "Development comparison, not held-out generalization. Training annotations are weak evidence."
+}

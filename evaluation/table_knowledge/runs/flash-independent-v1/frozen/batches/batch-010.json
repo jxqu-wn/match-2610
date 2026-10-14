@@ -1,0 +1,337 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "knowledge": [
+        {
+          "knowledge_id": 1575,
+          "knowledge_text": "选课退课规则（示例）：enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+        },
+        {
+          "knowledge_id": 1576,
+          "knowledge_text": "退课率 = 退课去重学生/选课去重学生"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_text": "总评折算总分：同一学生跨多门课把总评相加"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge": [
+        {
+          "knowledge_id": 1572,
+          "knowledge_text": "成绩折算规则（教育教务常用口径示例）：总评 = 平时*0.30 + 期中*0.30 + 期末*0.40。总评四舍五入保留2位。"
+        },
+        {
+          "knowledge_id": 1573,
+          "knowledge_text": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        },
+        {
+          "knowledge_id": 1575,
+          "knowledge_text": "选课退课规则（示例）：enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_text": "总评折算总分：同一学生跨多门课把总评相加"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "knowledge": []
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-010",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563,
+      1564, 1565, 1566, 1567, 1568, 1569, 1570, 1571, 1572, 1573,
+      1574, 1575, 1576, 1577, 1578, 1579, 1580, 1581, 1582, 1583,
+      1584, 1585, 1586, 1587, 1588, 1589, 1590, 1591, 1592, 1593,
+      1594, 1595, 1596, 1597, 1598, 1599, 1600, 1601, 1602, 1603,
+      1604, 1605, 1606, 1607, 1608, 1609, 1610, 1611, 1612, 1613,
+      1614, 1615, 1616, 1617, 1618, 1619, 1620, 1621, 1622, 1623,
+      1624, 1625, 1626, 1627, 1628, 1629, 1630, 1631, 1632, 1633,
+      1634, 1635, 1636, 1637, 1638, 1639, 1640, 1641, 1642, 1643,
+      1644, 1645, 1646, 1647, 1648, 1649, 1650, 1651, 1652, 1653,
+      1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663,
+      1664, 1665, 1666, 1667, 1668, 1669, 1670, 1671, 1672, 1673,
+      1674, 1675, 1676, 1677, 1678, 1679, 1680, 1681, 1682, 1683,
+      1684, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1692, 1693,
+      1694, 1695, 1696, 1697, 1698, 1699, 1700, 1701, 1702, 1703,
+      1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713,
+      1714, 1715, 1716, 1717, 1718, 1719, 1720, 1721, 1722, 1723,
+      1724, 1725, 1726, 1727, 1728, 1729, 1730, 1731, 1732, 1733,
+      1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743,
+      1744, 1745, 1746, 1747, 1748, 1749, 1750, 1751, 1752, 1753,
+      1754, 1755, 1756, 1757, 1758, 1759, 1760, 1761, 1762, 1763,
+      1764, 1765, 1766, 1767, 1768, 1769, 1770, 1771, 1772, 1773,
+      1774, 1775, 1776, 1777, 1778, 1779, 1780, 1781, 1782, 1783,
+      1784, 1785, 1786, 1787, 1788, 1789, 1790, 1791, 1792, 1793,
+      1794, 1795, 1796, 1797, 1798, 1799, 1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:education_2024.enrollment",
+        "accepted": [
+          {
+            "knowledge_id": 1575,
+            "basis": "schema_supported",
+            "fields": ["is_withdraw"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1575,
+                "quote": "enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "is_withdraw       TINYINT(1),"
+              }
+            ],
+            "qualifiers": ["（示例）"],
+            "reason": "知识说明 enrollment.is_withdraw=1 视为退课；Schema 中该表含 is_withdraw 字段。"
+          },
+          {
+            "knowledge_id": 1576,
+            "basis": "schema_supported",
+            "fields": ["student_id", "is_withdraw"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1576,
+                "quote": "退课率 = 退课去重学生/选课去重学生"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "student_id        INT NOT NULL,"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "is_withdraw       TINYINT(1),"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "退课率需要按学生去重并识别退课记录；Schema 中该表含 student_id 与 is_withdraw。"
+          },
+          {
+            "knowledge_id": 1579,
+            "basis": "schema_supported",
+            "fields": ["student_id", "course_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1579,
+                "quote": "同一学生跨多门课把总评相加"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "student_id        INT NOT NULL,"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "course_id         INT NOT NULL,"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按同一学生跨课程汇总总评；Schema 中该表含 student_id 和 course_id，可标识学生选课关系。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [
+          {
+            "knowledge_id": 1575,
+            "kind": "ambiguous_reference",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1575,
+                "quote": "enrollment.is_withdraw=1 的记录视为已退课"
+              }
+            ],
+            "related_knowledge_ids": [],
+            "reason": "知识仅写 enrollment.is_withdraw，完整目录中 education_2024 与 education_2025 均存在同结构 enrollment 表，原文无法唯一定位到本表；主结果按 Schema 支持记录。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:education_2024.exam_score",
+        "accepted": [
+          {
+            "knowledge_id": 1572,
+            "basis": "schema_supported",
+            "fields": ["exam_item", "score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1572,
+                "quote": "总评 = 平时*0.30 + 期中*0.30 + 期末*0.40"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "exam_item         VARCHAR(20),"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "score             DECIMAL(5,2),"
+              }
+            ],
+            "qualifiers": ["（教育教务常用口径示例）"],
+            "reason": "知识按考试项目加权计算总评；Schema 中该表含 exam_item 与 score。"
+          },
+          {
+            "knowledge_id": 1573,
+            "basis": "schema_supported",
+            "fields": ["score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1573,
+                "quote": "当总评成绩 < 60.00 视为不合格（挂科）"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "score             DECIMAL(5,2),"
+              }
+            ],
+            "qualifiers": ["（示例）"],
+            "reason": "知识以总评成绩判定挂科；Schema 中该表含 score 字段。"
+          },
+          {
+            "knowledge_id": 1574,
+            "basis": "schema_supported",
+            "fields": ["score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1574,
+                "quote": "总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "score             DECIMAL(5,2),"
+              }
+            ],
+            "qualifiers": ["示例映射"],
+            "reason": "知识按总评分数映射绩点；Schema 中该表含 score 字段。"
+          },
+          {
+            "knowledge_id": 1575,
+            "basis": "schema_supported",
+            "fields": ["enrollment_id", "score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1575,
+                "quote": "不计入成绩统计与排名"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "enrollment_id     INT NOT NULL,"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "score             DECIMAL(5,2),"
+              }
+            ],
+            "qualifiers": ["（示例）"],
+            "reason": "知识规定退课记录不计入成绩统计与排名；Schema exam_score 通过 enrollment_id 关联选课并以 score 记录成绩。"
+          },
+          {
+            "knowledge_id": 1579,
+            "basis": "schema_supported",
+            "fields": ["enrollment_id", "score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1579,
+                "quote": "同一学生跨多门课把总评相加"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "enrollment_id     INT NOT NULL,"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "score             DECIMAL(5,2),"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按学生跨课程汇总总评；Schema exam_score 含 score，并通过 enrollment_id 关联选课。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1577,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1577,
+                "quote": "中位数：窗口函数按分值排序取中间行"
+              }
+            ],
+            "reason": "知识仅描述通用中位数与窗口函数，未指明分值字段或教育表；无法确认是否直接对应本表 score。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:education_2025.semester",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:education_2025.department",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:education_2025.teacher",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:education_2025.class",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

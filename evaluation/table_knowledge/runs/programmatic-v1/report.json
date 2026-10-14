@@ -1,0 +1,1573 @@
+{
+  "algorithm": "lexical-v1",
+  "threshold": 0.3,
+  "summary": {
+    "predicted": 256,
+    "reference": 270,
+    "true_positive": 200,
+    "false_positive": 56,
+    "false_negative": 70,
+    "precision": 0.78125,
+    "recall": 0.7407407407407407,
+    "f1": 0.7604562737642585
+  },
+  "legacy_primary_catalog": {
+    "predicted": 0,
+    "reference": 270,
+    "true_positive": 0,
+    "false_positive": 0,
+    "false_negative": 270,
+    "precision": null,
+    "recall": 0.0,
+    "f1": 0.0
+  },
+  "per_table": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "predicted": 4,
+      "reference": 16,
+      "true_positive": 4,
+      "false_positive": 0,
+      "false_negative": 12,
+      "precision": 1.0,
+      "recall": 0.25,
+      "f1": 0.4,
+      "matched": [
+        1761,
+        1764,
+        1778,
+        1799
+      ],
+      "missing": [
+        1590,
+        1596,
+        1598,
+        1763,
+        1779,
+        1780,
+        1793,
+        1794,
+        1795,
+        1796,
+        1797,
+        1800
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "predicted": 4,
+      "reference": 2,
+      "true_positive": 2,
+      "false_positive": 2,
+      "false_negative": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1765,
+        1768
+      ],
+      "missing": [],
+      "extra": [
+        1787,
+        1788
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "predicted": 3,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 3,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1728,
+        1737,
+        1787
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "predicted": 2,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1768
+      ],
+      "missing": [],
+      "extra": [
+        1765
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1663
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "predicted": 5,
+      "reference": 2,
+      "true_positive": 2,
+      "false_positive": 3,
+      "false_negative": 0,
+      "precision": 0.4,
+      "recall": 1.0,
+      "f1": 0.5714285714285714,
+      "matched": [
+        1595,
+        1660
+      ],
+      "missing": [],
+      "extra": [
+        1599,
+        1762,
+        1768
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "predicted": 4,
+      "reference": 4,
+      "true_positive": 4,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1648,
+        1649,
+        1650,
+        1651
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1659
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "predicted": 7,
+      "reference": 4,
+      "true_positive": 4,
+      "false_positive": 3,
+      "false_negative": 0,
+      "precision": 0.5714285714285714,
+      "recall": 1.0,
+      "f1": 0.7272727272727273,
+      "matched": [
+        1581,
+        1593,
+        1594,
+        1597
+      ],
+      "missing": [],
+      "extra": [
+        1582,
+        1583,
+        1598
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1589
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "predicted": 2,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1582
+      ],
+      "missing": [],
+      "extra": [
+        1583
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "predicted": 2,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1584
+      ],
+      "missing": [],
+      "extra": [
+        1773
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1571
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.order_status_dict",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1568
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_method_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_status_dict",
+      "predicted": 2,
+      "reference": 2,
+      "true_positive": 2,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1556,
+        1557
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.refund_reason_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.order_channel_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.platform_dict",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "predicted": 1,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1589
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1572
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "predicted": 1,
+      "reference": 2,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 1.0,
+      "recall": 0.5,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1574
+      ],
+      "missing": [
+        1573
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "predicted": 5,
+      "reference": 7,
+      "true_positive": 5,
+      "false_positive": 0,
+      "false_negative": 2,
+      "precision": 1.0,
+      "recall": 0.7142857142857143,
+      "f1": 0.8333333333333334,
+      "matched": [
+        1592,
+        1791,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1761,
+        1787
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "predicted": 9,
+      "reference": 11,
+      "true_positive": 8,
+      "false_positive": 1,
+      "false_negative": 3,
+      "precision": 0.8888888888888888,
+      "recall": 0.7272727272727273,
+      "f1": 0.8,
+      "matched": [
+        1761,
+        1768,
+        1773,
+        1787,
+        1792,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1769,
+        1783,
+        1798
+      ],
+      "extra": [
+        1592
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "predicted": 11,
+      "reference": 12,
+      "true_positive": 8,
+      "false_positive": 3,
+      "false_negative": 4,
+      "precision": 0.7272727272727273,
+      "recall": 0.6666666666666666,
+      "f1": 0.6956521739130435,
+      "matched": [
+        1765,
+        1770,
+        1772,
+        1782,
+        1789,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1761,
+        1775,
+        1781,
+        1788
+      ],
+      "extra": [
+        1762,
+        1785,
+        1797
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "predicted": 5,
+      "reference": 5,
+      "true_positive": 5,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1592,
+        1761,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 1,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [
+        1586
+      ],
+      "extra": [
+        1592
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "predicted": 7,
+      "reference": 8,
+      "true_positive": 6,
+      "false_positive": 1,
+      "false_negative": 2,
+      "precision": 0.8571428571428571,
+      "recall": 0.75,
+      "f1": 0.8,
+      "matched": [
+        1776,
+        1786,
+        1790,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1761,
+        1777
+      ],
+      "extra": [
+        1737
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "predicted": 18,
+      "reference": 14,
+      "true_positive": 12,
+      "false_positive": 6,
+      "false_negative": 2,
+      "precision": 0.6666666666666666,
+      "recall": 0.8571428571428571,
+      "f1": 0.75,
+      "matched": [
+        1616,
+        1618,
+        1619,
+        1620,
+        1621,
+        1652,
+        1656,
+        1659,
+        1660,
+        1661,
+        1662,
+        1663
+      ],
+      "missing": [
+        1630,
+        1664
+      ],
+      "extra": [
+        1595,
+        1599,
+        1639,
+        1641,
+        1647,
+        1712
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "predicted": 13,
+      "reference": 14,
+      "true_positive": 12,
+      "false_positive": 1,
+      "false_negative": 2,
+      "precision": 0.9230769230769231,
+      "recall": 0.8571428571428571,
+      "f1": 0.8888888888888888,
+      "matched": [
+        1604,
+        1605,
+        1624,
+        1632,
+        1633,
+        1635,
+        1644,
+        1646,
+        1648,
+        1649,
+        1650,
+        1651
+      ],
+      "missing": [
+        1625,
+        1627
+      ],
+      "extra": [
+        1638
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "predicted": 4,
+      "reference": 6,
+      "true_positive": 4,
+      "false_positive": 0,
+      "false_negative": 2,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "matched": [
+        1622,
+        1633,
+        1636,
+        1640
+      ],
+      "missing": [
+        1623,
+        1643
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "predicted": 13,
+      "reference": 14,
+      "true_positive": 13,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 1.0,
+      "recall": 0.9285714285714286,
+      "f1": 0.9629629629629629,
+      "matched": [
+        1606,
+        1607,
+        1608,
+        1609,
+        1626,
+        1627,
+        1632,
+        1634,
+        1635,
+        1637,
+        1638,
+        1645,
+        1646
+      ],
+      "missing": [
+        1624
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "predicted": 15,
+      "reference": 16,
+      "true_positive": 15,
+      "false_positive": 0,
+      "false_negative": 1,
+      "precision": 1.0,
+      "recall": 0.9375,
+      "f1": 0.967741935483871,
+      "matched": [
+        1610,
+        1611,
+        1612,
+        1613,
+        1614,
+        1615,
+        1617,
+        1628,
+        1629,
+        1639,
+        1641,
+        1642,
+        1647,
+        1655,
+        1658
+      ],
+      "missing": [
+        1664
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "predicted": 5,
+      "reference": 9,
+      "true_positive": 5,
+      "false_positive": 0,
+      "false_negative": 4,
+      "precision": 1.0,
+      "recall": 0.5555555555555556,
+      "f1": 0.7142857142857143,
+      "matched": [
+        1592,
+        1595,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1580,
+        1587,
+        1593,
+        1761
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "predicted": 4,
+      "reference": 2,
+      "true_positive": 2,
+      "false_positive": 2,
+      "false_negative": 0,
+      "precision": 0.5,
+      "recall": 1.0,
+      "f1": 0.6666666666666666,
+      "matched": [
+        1584,
+        1588
+      ],
+      "missing": [],
+      "extra": [
+        1773,
+        1792
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "predicted": 13,
+      "reference": 16,
+      "true_positive": 13,
+      "false_positive": 0,
+      "false_negative": 3,
+      "precision": 1.0,
+      "recall": 0.8125,
+      "f1": 0.896551724137931,
+      "matched": [
+        1581,
+        1582,
+        1583,
+        1592,
+        1593,
+        1594,
+        1597,
+        1600,
+        1601,
+        1603,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1591,
+        1602,
+        1761
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "predicted": 4,
+      "reference": 6,
+      "true_positive": 4,
+      "false_positive": 0,
+      "false_negative": 2,
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8,
+      "matched": [
+        1585,
+        1793,
+        1799,
+        1800
+      ],
+      "missing": [
+        1599,
+        1761
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "predicted": 2,
+      "reference": 3,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 2,
+      "precision": 0.5,
+      "recall": 0.3333333333333333,
+      "f1": 0.4,
+      "matched": [
+        1589
+      ],
+      "missing": [
+        1580,
+        1586
+      ],
+      "extra": [
+        1592
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "predicted": 1,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "predicted": 1,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "predicted": 2,
+      "reference": 2,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 1,
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "matched": [
+        1576
+      ],
+      "missing": [
+        1579
+      ],
+      "extra": [
+        1575
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "predicted": 0,
+      "reference": 6,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 6,
+      "precision": null,
+      "recall": 0.0,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [
+        1572,
+        1573,
+        1574,
+        1575,
+        1577,
+        1579
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "predicted": 0,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "matched": [],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "predicted": 1,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "predicted": 1,
+      "reference": 0,
+      "true_positive": 0,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [],
+      "extra": [
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "predicted": 2,
+      "reference": 2,
+      "true_positive": 1,
+      "false_positive": 1,
+      "false_negative": 1,
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "matched": [
+        1576
+      ],
+      "missing": [
+        1579
+      ],
+      "extra": [
+        1575
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "predicted": 0,
+      "reference": 5,
+      "true_positive": 0,
+      "false_positive": 0,
+      "false_negative": 5,
+      "precision": null,
+      "recall": 0.0,
+      "f1": 0.0,
+      "matched": [],
+      "missing": [
+        1572,
+        1573,
+        1574,
+        1577,
+        1579
+      ],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.customer",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1564
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.product",
+      "predicted": 4,
+      "reference": 3,
+      "true_positive": 3,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.75,
+      "recall": 1.0,
+      "f1": 0.8571428571428571,
+      "matched": [
+        1563,
+        1565,
+        1571
+      ],
+      "missing": [],
+      "extra": [
+        1781
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "predicted": 1,
+      "reference": 1,
+      "true_positive": 1,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1565
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "predicted": 11,
+      "reference": 11,
+      "true_positive": 11,
+      "false_positive": 0,
+      "false_negative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "matched": [
+        1554,
+        1555,
+        1556,
+        1558,
+        1559,
+        1564,
+        1566,
+        1567,
+        1568,
+        1569,
+        1570
+      ],
+      "missing": [],
+      "extra": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "predicted": 7,
+      "reference": 6,
+      "true_positive": 6,
+      "false_positive": 1,
+      "false_negative": 0,
+      "precision": 0.8571428571428571,
+      "recall": 1.0,
+      "f1": 0.9230769230769231,
+      "matched": [
+        1558,
+        1560,
+        1561,
+        1562,
+        1563,
+        1571
+      ],
+      "missing": [],
+      "extra": [
+        1555
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "predicted": 5,
+      "reference": 3,
+      "true_positive": 3,
+      "false_positive": 2,
+      "false_negative": 0,
+      "precision": 0.6,
+      "recall": 1.0,
+      "f1": 0.75,
+      "matched": [
+        1554,
+        1556,
+        1557
+      ],
+      "missing": [],
+      "extra": [
+        1555,
+        1558
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "predicted": 28,
+      "reference": 28,
+      "true_positive": 15,
+      "false_positive": 13,
+      "false_negative": 13,
+      "precision": 0.5357142857142857,
+      "recall": 0.5357142857142857,
+      "f1": 0.5357142857142857,
+      "matched": [
+        1719,
+        1720,
+        1721,
+        1724,
+        1726,
+        1727,
+        1728,
+        1731,
+        1744,
+        1746,
+        1748,
+        1749,
+        1751,
+        1760,
+        1790
+      ],
+      "missing": [
+        1730,
+        1732,
+        1733,
+        1734,
+        1735,
+        1736,
+        1737,
+        1738,
+        1741,
+        1742,
+        1753,
+        1758,
+        1777
+      ],
+      "extra": [
+        1718,
+        1722,
+        1723,
+        1725,
+        1729,
+        1739,
+        1740,
+        1747,
+        1750,
+        1752,
+        1754,
+        1755,
+        1759
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "predicted": 19,
+      "reference": 17,
+      "true_positive": 17,
+      "false_positive": 2,
+      "false_negative": 0,
+      "precision": 0.8947368421052632,
+      "recall": 1.0,
+      "f1": 0.9444444444444444,
+      "matched": [
+        1696,
+        1697,
+        1698,
+        1699,
+        1700,
+        1701,
+        1702,
+        1703,
+        1704,
+        1705,
+        1706,
+        1707,
+        1708,
+        1709,
+        1710,
+        1711,
+        1712
+      ],
+      "missing": [],
+      "extra": [
+        1668,
+        1672
+      ]
+    }
+  ],
+  "threshold_sweep": [
+    {
+      "threshold": 0.2,
+      "predicted": 351,
+      "reference": 270,
+      "true_positive": 215,
+      "false_positive": 136,
+      "false_negative": 55,
+      "precision": 0.6125356125356125,
+      "recall": 0.7962962962962963,
+      "f1": 0.6924315619967794
+    },
+    {
+      "threshold": 0.25,
+      "predicted": 308,
+      "reference": 270,
+      "true_positive": 203,
+      "false_positive": 105,
+      "false_negative": 67,
+      "precision": 0.6590909090909091,
+      "recall": 0.7518518518518519,
+      "f1": 0.7024221453287197
+    },
+    {
+      "threshold": 0.3,
+      "predicted": 256,
+      "reference": 270,
+      "true_positive": 200,
+      "false_positive": 56,
+      "false_negative": 70,
+      "precision": 0.78125,
+      "recall": 0.7407407407407407,
+      "f1": 0.7604562737642585
+    },
+    {
+      "threshold": 0.35,
+      "predicted": 186,
+      "reference": 270,
+      "true_positive": 152,
+      "false_positive": 34,
+      "false_negative": 118,
+      "precision": 0.8172043010752689,
+      "recall": 0.562962962962963,
+      "f1": 0.6666666666666666
+    },
+    {
+      "threshold": 0.4,
+      "predicted": 163,
+      "reference": 270,
+      "true_positive": 144,
+      "false_positive": 19,
+      "false_negative": 126,
+      "precision": 0.8834355828220859,
+      "recall": 0.5333333333333333,
+      "f1": 0.6651270207852193
+    },
+    {
+      "threshold": 0.5,
+      "predicted": 134,
+      "reference": 270,
+      "true_positive": 121,
+      "false_positive": 13,
+      "false_negative": 149,
+      "precision": 0.9029850746268657,
+      "recall": 0.44814814814814813,
+      "f1": 0.599009900990099
+    },
+    {
+      "threshold": 0.6,
+      "predicted": 120,
+      "reference": 270,
+      "true_positive": 110,
+      "false_positive": 10,
+      "false_negative": 160,
+      "precision": 0.9166666666666666,
+      "recall": 0.4074074074074074,
+      "f1": 0.5641025641025641
+    },
+    {
+      "threshold": 0.7,
+      "predicted": 98,
+      "reference": 270,
+      "true_positive": 95,
+      "false_positive": 3,
+      "false_negative": 175,
+      "precision": 0.9693877551020408,
+      "recall": 0.35185185185185186,
+      "f1": 0.5163043478260869
+    },
+    {
+      "threshold": 0.8,
+      "predicted": 91,
+      "reference": 270,
+      "true_positive": 88,
+      "false_positive": 3,
+      "false_negative": 182,
+      "precision": 0.967032967032967,
+      "recall": 0.32592592592592595,
+      "f1": 0.48753462603878117
+    }
+  ],
+  "training_rows": 2555,
+  "validation_ratio": 0.1,
+  "training_sha256": "9a3af3eb3d4da9df49c975600dccbbfc9d59fd86d2ad9df304f82568acc036f2",
+  "reference_sha256": "6965b40d893b646f54e8c50269d7ecac9b5143e6a233e23896b1291e4afcb5c0",
+  "knowledge_sha256": "92f310bc19420e8b374936c1eac0b35b58489c2764a892976fdfae3268b276c9",
+  "schema_sources": [
+    {
+      "file": "data/赛题8/Schema/commom_schema.txt",
+      "encoding": "utf-8-sig",
+      "sha256": "a6e0b1048576e4d55b66e496aff505047c2aca0a8f87ae0bde87329ca8ed8e94"
+    },
+    {
+      "file": "data/赛题8/Schema/core_schema.txt",
+      "encoding": "gb18030",
+      "sha256": "936e4a96d43515d3570dc213dee83a836cc74d9584a9a1ce875c97dfb8248bad"
+    }
+  ],
+  "algorithm_sha256": "db1fef8900d5d727198b6d255c70a16538d11ddc9319291485b81e981cc03ca7",
+  "limitations": [
+    "Thresholds were selected on this reviewed set; these are development scores, not held-out generalization.",
+    "No reference labels, human decisions or LLM calls are used by the production matcher.",
+    "Lexical links are program hypotheses, not a proof of content correctness."
+  ]
+}

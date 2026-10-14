@@ -1,0 +1,89 @@
+{
+  "mode": "offline keyword-only dry run; no LLM API calls",
+  "cases": [
+    {
+      "question": "统计各公司驾驶员中女性驾驶员的比例",
+      "retrieved_knowledge": 12,
+      "sent_knowledge": 5,
+      "sent_knowledge_ids": [
+        1787,
+        1792,
+        1768,
+        1791,
+        1773
+      ],
+      "raw_text_unchanged": true,
+      "table_knowledge_not_bulk_copied": true,
+      "omitted_source_ids": [
+        "schema:MYSQL:common.license_type_dict",
+        "schema:MYSQL:common.administrative_division",
+        "schema:MYSQL:transportation.employee",
+        "schema:MYSQL:transportation.vehicle",
+        "knowledge:1770",
+        "schema:MYSQL:finance_tax.stocks",
+        "knowledge:1604",
+        "schema:MYSQL:finance_tax.companies",
+        "knowledge:1663",
+        "knowledge:1659",
+        "knowledge:1619",
+        "knowledge:1595",
+        "knowledge:1647"
+      ]
+    },
+    {
+      "question": "统计电商订单的GMV商品交易总额",
+      "retrieved_knowledge": 12,
+      "sent_knowledge": 4,
+      "sent_knowledge_ids": [
+        1563,
+        1633,
+        1571,
+        1640
+      ],
+      "raw_text_unchanged": true,
+      "table_knowledge_not_bulk_copied": true,
+      "omitted_source_ids": [
+        "schema:MYSQL:ecommerce.inventory",
+        "schema:MYSQL:ecommerce.payment",
+        "schema:MYSQL:ecommerce.orders",
+        "knowledge:1554",
+        "knowledge:1566",
+        "knowledge:1568",
+        "knowledge:1567",
+        "knowledge:1556",
+        "schema:MYSQL:ecommerce.order_item",
+        "knowledge:1555",
+        "knowledge:1560",
+        "knowledge:1561"
+      ]
+    },
+    {
+      "question": "计算2024年学生总评成绩与挂科率",
+      "retrieved_knowledge": 12,
+      "sent_knowledge": 7,
+      "sent_knowledge_ids": [
+        1572,
+        1574,
+        1632,
+        1633,
+        1635,
+        1638,
+        1644
+      ],
+      "raw_text_unchanged": true,
+      "table_knowledge_not_bulk_copied": true,
+      "omitted_source_ids": [
+        "schema:MYSQL:common.dict_academic_level",
+        "knowledge:1619",
+        "schema:MYSQL:finance_tax.corporate_income_tax_returns",
+        "knowledge:1642",
+        "knowledge:1639",
+        "knowledge:1641",
+        "schema:MYSQL:common.dict_semester_type",
+        "schema:MYSQL:finance_tax.stock_daily_trades",
+        "knowledge:1622",
+        "example:435"
+      ]
+    }
+  ]
+}

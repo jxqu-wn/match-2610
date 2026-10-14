@@ -13,24 +13,23 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 from rank_bm25 import BM25Okapi
 
 from ..config import settings
+from ..data.association import ASSOCIATION_VERSION, literal_references
 from ..io import file_sha256, get_logger, read_json, write_json, write_jsonl
 from ..models import Catalog, Sample, Table
 from .sql_parser import SourceResolver, engine_set
 
 logger = get_logger(__name__)
 
-INDEX_VERSION = 2
-IDENTIFIER = r"[A-Za-z_][A-Za-z0-9_]*"
+INDEX_VERSION = 3
 _RRF_K = 60
-_KNOWLEDGE_TABLE_MENTION = re.compile(r"数据库([A-Za-z0-9_]+)(?:的表|中，)([^，。]+)")
-_IDENTIFIER_LIKE = re.compile(r"[A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]+")
 
 
 # --------------------------------------------------------------------------- #
@@ -49,58 +48,6 @@ def terms(text: str) -> Counter[str]:
 
 def tokenize(text: str) -> list[str]:
     return list(terms(text).elements())
-
-
-def literal_references(text: str, tables: dict[str, Table]) -> dict[str, list[dict[str, str]]]:
-    """知识原文中可解析的明确库表引用；不使用单独字段名或业务语义推断表。"""
-    links: dict[str, list[dict[str, str]]] = {}
-    counts = Counter(((t.namespace or "").casefold(), t.name.casefold()) for t in tables.values())
-
-    def add(key: str, kind: str, mention: str) -> None:
-        item = {"kind": kind, "mention": mention}
-        if item not in links.setdefault(key, []):
-            links[key].append(item)
-
-    for key, table in tables.items():
-        namespace = table.namespace
-        if not namespace or counts[(namespace.casefold(), table.name.casefold())] != 1:
-            continue
-        pattern = r"(?<![A-Za-z0-9_])" + re.escape(namespace + "." + table.name) + r"(?![A-Za-z0-9_])"
-        for match in re.finditer(pattern, text, re.I):
-            add(key, "qualified_table", match.group())
-
-    scopes = list(re.finditer(r"数据库(" + IDENTIFIER + r")", text))
-    for index, match in enumerate(scopes):
-        end = scopes[index + 1].start() if index + 1 < len(scopes) else len(text)
-        region = text[match.end() : end]
-        for key, table in tables.items():
-            namespace = table.namespace
-            if not namespace or namespace.casefold() != match.group(1).casefold():
-                continue
-            if counts[(namespace.casefold(), table.name.casefold())] != 1:
-                continue
-            name = re.escape(table.name)
-            lists = re.findall(r"表\s*([A-Za-z_][A-Za-z0-9_-]*(?:\s*[和及与、,]\s*[A-Za-z_][A-Za-z0-9_-]*)*)", region)
-            listed = any(re.search(name, value, re.I) for value in lists)
-            suffix = re.search(r"(?<![A-Za-z0-9_.])" + name + r"\s*表", region, re.I)
-            reference = re.search(r"(?:关联到?|映射到)\s*" + name + r"(?![A-Za-z0-9_])", region, re.I)
-            fields = re.findall(r"(?<![A-Za-z0-9_.])" + name + r"\.(" + IDENTIFIER + r")(?![A-Za-z0-9_])", region, re.I)
-            field_reference = any(
-                field.casefold() in {c.name.casefold() for c in table.columns} for field in fields
-            )
-            if listed or suffix or reference or field_reference:
-                add(key, "database_scoped_table_name", match.group() + " … " + table.name)
-
-    for match in re.finditer(r"(?<![A-Za-z0-9_])(" + IDENTIFIER + r")\.(" + IDENTIFIER + r")(?![A-Za-z0-9_])", text):
-        candidates = [
-            key
-            for key, table in tables.items()
-            if table.name.casefold() == match.group(1).casefold()
-            and any(c.name.casefold() == match.group(2).casefold() for c in table.columns)
-        ]
-        if len(candidates) == 1:
-            add(candidates[0], "unique_table_field", match.group())
-    return links
 
 
 # --------------------------------------------------------------------------- #
@@ -137,19 +84,6 @@ def build_documents(
             for table in catalog.tables
             if any(k.knowledge_id == item["knowledge_id"] for k in table.knowledge)
         }
-        # 形如“表Checkins和Days”的句子需要把提到的表全部关联。
-        for match in _KNOWLEDGE_TABLE_MENTION.finditer(text):
-            database, sentence = match.groups()
-            for key, table in tables.items():
-                if table.database == database and re.search(
-                    r"(?<![A-Za-z0-9_])" + re.escape(table.name) + r"(?![A-Za-z0-9_])", sentence
-                ):
-                    related.add(key)
-        if not related:
-            identifiers = set(_IDENTIFIER_LIKE.findall(text))
-            related = {
-                key for key, table in tables.items() if identifiers & {c.name for c in table.columns}
-            }
         if not related:
             unmatched_knowledge.append(item["knowledge_id"])
         documents.append(
@@ -160,7 +94,11 @@ def build_documents(
                 "table_ids": sorted(related),
                 "text": text,
                 "data": item,
-                "association": "source_or_field_reference" if related else "unscoped",
+                "association": (catalog.model_extra or {})
+                .get("association_audit", {})
+                .get("version", ASSOCIATION_VERSION)
+                if related
+                else "unscoped",
             }
         )
 
@@ -211,9 +149,7 @@ def build_documents(
 
 
 class RetrievalIndex:
-    def __init__(
-        self, documents: list[dict[str, Any]], encoder: Any = None, vectors: np.ndarray | None = None
-    ) -> None:
+    def __init__(self, documents: list[dict[str, Any]], encoder: Any = None, vectors: np.ndarray | None = None) -> None:
         self.documents = documents
         self.by_id = {d["source_id"]: d for d in documents}
         self.tables: dict[str, Table] = {
@@ -227,8 +163,21 @@ class RetrievalIndex:
         self._tokenized = tokenized
         self._bm25 = BM25Okapi(tokenized) if any(tokenized) else None
         self._faiss = self._build_faiss(vectors) if vectors is not None else None
+        # The catalog is the sole authority for associations. Literal evidence is
+        # descriptive only and never adds a second set of links here.
+        self.knowledge_links = {
+            d["source_id"]: {
+                key: [{"kind": "catalog_association", "version": d.get("association")}] for key in d["table_ids"]
+            }
+            for d in documents
+            if d["kind"] == "knowledge"
+        }
         self.explicit_knowledge_links = {
-            d["source_id"]: literal_references(d["text"], self.tables)
+            d["source_id"]: {
+                key: evidence
+                for key, evidence in literal_references(d["text"], self.tables).items()
+                if key in d["table_ids"]
+            }
             for d in documents
             if d["kind"] == "knowledge"
         }
@@ -259,11 +208,11 @@ class RetrievalIndex:
                 scores, ids = self._faiss.search(
                     np.ascontiguousarray(query_vector[None, :], dtype=np.float32), len(candidates), params=params
                 )
-                return {int(i): float(s) for i, s in zip(ids[0], scores[0]) if i >= 0}
+                return {int(i): float(s) for i, s in zip(ids[0], scores[0], strict=True) if i >= 0}
             except Exception:  # noqa: BLE001 - 退回精确计算
                 pass
         subset = self.vectors[candidates]
-        return {index: float(value) for index, value in zip(candidates, subset @ query_vector)}
+        return {index: float(value) for index, value in zip(candidates, subset @ query_vector, strict=True)}
 
     # -- 构建/加载 -------------------------------------------------------- #
     @staticmethod
@@ -284,7 +233,7 @@ class RetrievalIndex:
         catalog: Catalog | None = None,
         knowledge: list[dict[str, Any]] | None = None,
         train_rows: list[dict[str, Any]] | None = None,
-    ) -> "RetrievalIndex":
+    ) -> RetrievalIndex:
         from ..data.catalog import load_catalog
 
         path = path or settings.path("outputs/information_retrieval/index")
@@ -330,7 +279,7 @@ class RetrievalIndex:
         encoder: Any = None,
         *,
         training_source: Path | None = None,
-    ) -> "RetrievalIndex":
+    ) -> RetrievalIndex:
         path = path or settings.path("outputs/information_retrieval/index")
         training_source = training_source or settings.train_split
         manifest = read_json(path / "manifest.json")
@@ -369,6 +318,7 @@ class RetrievalIndex:
         exact_engines: bool = False,
         scope_table_ids: Iterable[str] | None = None,
         explicit_only: bool = False,
+        associated_only: bool = False,
     ) -> list[dict[str, Any]]:
         self.stats["lexical_searches"] += 1
         selected = set(engines)
@@ -377,12 +327,14 @@ class RetrievalIndex:
         table_filter = set(table_ids) if table_ids is not None else None
 
         def associated(document: dict[str, Any]) -> list[str]:
+            if associated_only:
+                return list(self.knowledge_links.get(document["source_id"], {}))
             if explicit_only:
                 return list(self.explicit_knowledge_links.get(document["source_id"], {}))
             return document["table_ids"]
 
         def doc_engines(document: dict[str, Any]) -> set[str]:
-            if explicit_only:
+            if explicit_only or associated_only:
                 return {self.tables[key].engine for key in associated(document)}
             return set(document["engines"])
 
@@ -421,8 +373,7 @@ class RetrievalIndex:
             }
 
         fused = {
-            i: sum(1 / (_RRF_K + ranks[i]) for ranks in (keyword_rank, semantic_rank) if i in ranks)
-            for i in candidates
+            i: sum(1 / (_RRF_K + ranks[i]) for ranks in (keyword_rank, semantic_rank) if i in ranks) for i in candidates
         }
         ordered = sorted(
             (i for i in candidates if fused[i] > 0), key=lambda i: (-fused[i], self.documents[i]["source_id"])
@@ -437,9 +388,7 @@ class RetrievalIndex:
                 "semantic_similarity": semantic.get(i),
                 "keyword_rank": keyword_rank.get(i),
                 "keyword_score": lexical.get(i, 0.0),
-                "keyword_hits": sorted(
-                    query_terms & set(self._tokenized[i]), key=lambda t: (-len(t), t)
-                )[:12],
+                "keyword_hits": sorted(query_terms & set(self._tokenized[i]), key=lambda t: (-len(t), t))[:12],
             }
             for i in ordered
         ]
@@ -462,11 +411,9 @@ class RetrievalIndex:
         engines = list(engines)
         base = self.search(query, "schema", engines, len(self.tables), exclude=exclude)
 
-        # 仅保留原文命中问题中低频 token 的知识，且该知识有明确表引用。
+        # 使用目录已确定的关联；不在检索阶段重建或补齐关联。
         explicit_docs = [
-            d
-            for d in self.documents
-            if d["kind"] == "knowledge" and self.explicit_knowledge_links.get(d["source_id"])
+            d for d in self.documents if d["kind"] == "knowledge" and self.knowledge_links.get(d["source_id"])
         ]
         query_terms = {t for t in terms(query) if len(t) >= 2 and not t.isdigit()}
         counts = Counter(t for d in explicit_docs for t in set(terms(d["text"])))
@@ -474,13 +421,13 @@ class RetrievalIndex:
         eligible = {d["source_id"]: sorted(anchors & set(terms(d["text"]))) for d in explicit_docs}
         knowledge = [
             hit
-            for hit in self.search(query, "knowledge", engines, len(explicit_docs), explicit_only=True)
+            for hit in self.search(query, "knowledge", engines, len(explicit_docs), associated_only=True)
             if eligible[hit["source_id"]]
         ][:knowledge_limit]
 
         supported: dict[str, list[dict[str, Any]]] = {}
         for rank, hit in enumerate(knowledge, 1):
-            for key, links in self.explicit_knowledge_links[hit["source_id"]].items():
+            for key, links in self.knowledge_links[hit["source_id"]].items():
                 if self.tables[key].engine not in engines or "schema:" + key in set(exclude):
                     continue
                 supported.setdefault(key, []).append(
@@ -489,7 +436,7 @@ class RetrievalIndex:
                         "knowledge_rank": rank,
                         "knowledge_score": hit["score"],
                         "matched_query_tokens": eligible[hit["source_id"]][:8],
-                        "literal_links": links,
+                        "association_links": links,
                     }
                 )
         order = sorted(supported, key=lambda key: (-max(h["knowledge_score"] for h in supported[key]), key))

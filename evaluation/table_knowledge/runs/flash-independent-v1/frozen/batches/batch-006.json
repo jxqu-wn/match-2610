@@ -1,0 +1,1024 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "knowledge": [
+        {
+          "knowledge_id": 1573,
+          "knowledge_text": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1791,
+          "knowledge_text": "消防公司属于特种运输企业，其经营类型通常为'危化品运输'。在 vehicle_company 表中，消防公司通过 business_type='危化品运输' 进行筛选。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1768,
+          "knowledge_text": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+        },
+        {
+          "knowledge_id": 1769,
+          "knowledge_text": "驾驶员状态“正常”表示驾照有效，可驾驶车辆；“暂扣”表示暂时失去驾驶资格；“吊销”表示永久取消资格；“过期”表示未及时换证。"
+        },
+        {
+          "knowledge_id": 1773,
+          "knowledge_text": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+        },
+        {
+          "knowledge_id": 1783,
+          "knowledge_text": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1792,
+          "knowledge_text": "驾驶员驾照领证年限分段标准：领证超过10年为长期驾龄，5至10年为中期驾龄，5年以下为新手驾龄。领证年限通过当前日期与issue_date的年份差计算。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1798,
+          "knowledge_text": "低龄驾驶员一般指年龄<25岁的驾驶员。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1762,
+          "knowledge_text": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+        },
+        {
+          "knowledge_id": 1770,
+          "knowledge_text": "车辆注册年份提取函数：YEAR(register_date)。例如查询2023年注册的车辆：YEAR(register_date)=2023。"
+        },
+        {
+          "knowledge_id": 1772,
+          "knowledge_text": "车辆保险到期日 insurance_expire 若小于当前日期，表示保险已过期。过保车辆不得上路。"
+        },
+        {
+          "knowledge_id": 1775,
+          "knowledge_text": "黄牌车指载重≥4.5吨的货车，蓝牌车为载重＜4.5的货车。"
+        },
+        {
+          "knowledge_id": 1781,
+          "knowledge_text": "新能源车辆指纯电动车、插电式混合动力车、燃料电池车。品牌名称中含有“电动”关键词时为新能源车辆。"
+        },
+        {
+          "knowledge_id": 1782,
+          "knowledge_text": "车辆使用年限超过15年的货车应当强制报废。当前年份减去 manufacture_year > 15。"
+        },
+        {
+          "knowledge_id": 1785,
+          "knowledge_text": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+        },
+        {
+          "knowledge_id": 1788,
+          "knowledge_text": "节假日高速公路免费时段：春节、清明、劳动节、国庆节，共4个法定节假日，免费对象为7座及以下小型客车。"
+        },
+        {
+          "knowledge_id": 1789,
+          "knowledge_text": "“老旧车辆”指注册日期 register_date 超过10年的车辆（以当前日期计算）。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-006",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554,1555,1556,1557,1558,1559,1560,1561,1562,1563,1564,1565,1566,1567,1568,1569,1570,1571,1572,1573,1574,1575,1576,1577,1578,1579,1580,1581,1582,1583,1584,1585,1586,1587,1588,1589,1590,1591,1592,1593,1594,1595,1596,1597,1598,1599,1600,1601,1602,1603,1604,1605,1606,1607,1608,1609,1610,1611,1612,1613,1614,1615,1616,1617,1618,1619,1620,1621,1622,1623,1624,1625,1626,1627,1628,1629,1630,1631,1632,1633,1634,1635,1636,1637,1638,1639,1640,1641,1642,1643,1644,1645,1646,1647,1648,1649,1650,1651,1652,1653,1654,1655,1656,1657,1658,1659,1660,1661,1662,1663,1664,1665,1666,1667,1668,1669,1670,1671,1672,1673,1674,1675,1676,1677,1678,1679,1680,1681,1682,1683,1684,1685,1686,1687,1688,1689,1690,1691,1692,1693,1694,1695,1696,1697,1698,1699,1700,1701,1702,1703,1704,1705,1706,1707,1708,1709,1710,1711,1712,1713,1714,1715,1716,1717,1718,1719,1720,1721,1722,1723,1724,1725,1726,1727,1728,1729,1730,1731,1732,1733,1734,1735,1736,1737,1738,1739,1740,1741,1742,1743,1744,1745,1746,1747,1748,1749,1750,1751,1752,1753,1754,1755,1756,1757,1758,1759,1760,1761,1762,1763,1764,1765,1766,1767,1768,1769,1770,1771,1772,1773,1774,1775,1776,1777,1778,1779,1780,1781,1782,1783,1784,1785,1786,1787,1788,1789,1790,1791,1792,1793,1794,1795,1796,1797,1798,1799,1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:common.dict_semester_type",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.dict_grade_level",
+        "accepted": [
+          {
+            "knowledge_id": 1573,
+            "basis": "schema_supported",
+            "fields": ["grade_level", "min_score", "max_score"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1573,
+                "quote": "当总评成绩 < 60.00 视为不合格（挂科）"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "min_score INT COMMENT '最低分数'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "max_score INT COMMENT '最高分数'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('F', 0, 59, 0.0);"
+              }
+            ],
+            "qualifiers": ["（示例）"],
+            "reason": "知识给出 <60 不合格阈值；Schema 中 F 等级分数范围为 0-59，直接对应。"
+          },
+          {
+            "knowledge_id": 1574,
+            "basis": "schema_supported",
+            "fields": ["grade_level", "min_score", "max_score", "grade_point"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1574,
+                "quote": "总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "grade_point DECIMAL(3,2) COMMENT '绩点'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('A', 90, 100, 4.0),"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('F', 0, 59, 0.0);"
+              }
+            ],
+            "qualifiers": ["示例映射"],
+            "reason": "知识给出总评分数段与绩点映射；Schema dict_grade_level 含等级、最低分、最高分、绩点及对应数据。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:transportation.vehicle_company",
+        "accepted": [
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "企业 status='注销' 表示企业主体消亡"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识定义企业 status='注销' 的含义；vehicle_company.status 同包含该枚举值。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 area_id 编码与分组规则；vehicle_company.area_id 为 CHAR(6) 区划代码字段。"
+          },
+          {
+            "knowledge_id": 1787,
+            "basis": "schema_supported",
+            "fields": ["business_type"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1787,
+                "quote": "不同类型对应不同的 license_type 和公司 business_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明公司 business_type 与从业类型相关；vehicle_company 含 business_type 字段。"
+          },
+          {
+            "knowledge_id": 1791,
+            "basis": "explicit",
+            "fields": ["business_type"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1791,
+                "quote": "在 vehicle_company 表中，消防公司通过 business_type='危化品运输' 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确写出 vehicle_company 表及 business_type 筛选条件。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle_company.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle_company.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle_company.area_id 为 6 位区划代码字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:transportation.driver",
+        "accepted": [
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 area_id 编码与分组规则；driver.area_id 为 CHAR(6) 行政区划代码字段。"
+          },
+          {
+            "knowledge_id": 1768,
+            "basis": "schema_supported",
+            "fields": ["license_type"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1768,
+                "quote": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明驾照代码准驾车型；driver.license_type 为驾照类型代码字段。"
+          },
+          {
+            "knowledge_id": 1769,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1769,
+                "quote": "驾驶员状态“正常”表示驾照有效，可驾驶车辆；“暂扣”表示暂时失去驾驶资格；“吊销”表示永久取消资格；“过期”表示未及时换证。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识定义驾驶员状态枚举值；driver.status 为同值驾照状态字段。"
+          },
+          {
+            "knowledge_id": 1773,
+            "basis": "schema_supported",
+            "fields": ["issue_date", "valid_years"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1773,
+                "quote": "可通过 issue_date 和 valid_years 计算到期日。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "issue_date DATE NOT NULL COMMENT '发证日期'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "valid_years TINYINT NOT NULL COMMENT '有效期(年)'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明用 issue_date 与 valid_years 计算驾照到期日；driver 表含这两个字段。"
+          },
+          {
+            "knowledge_id": 1783,
+            "basis": "schema_supported",
+            "fields": ["birth_date"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1783,
+                "quote": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "birth_date DATE NOT NULL COMMENT '出生日期'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按驾驶员年龄分组；driver.birth_date 可用于计算年龄。"
+          },
+          {
+            "knowledge_id": 1787,
+            "basis": "schema_supported",
+            "fields": ["license_type"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1787,
+                "quote": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明从业资格类型对应 license_type；driver.license_type 为驾照类型代码字段。"
+          },
+          {
+            "knowledge_id": 1792,
+            "basis": "schema_supported",
+            "fields": ["issue_date"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1792,
+                "quote": "领证年限通过当前日期与issue_date的年份差计算。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "issue_date DATE NOT NULL COMMENT '发证日期'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明领证年限由当前日期与 issue_date 计算；driver.issue_date 为发证日期字段。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；driver.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1798,
+            "basis": "schema_supported",
+            "fields": ["birth_date"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1798,
+                "quote": "低龄驾驶员一般指年龄<25岁的驾驶员。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "birth_date DATE NOT NULL COMMENT '出生日期'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识定义低龄驾驶员年龄阈值；driver.birth_date 可用于计算年龄。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；driver.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；driver.area_id 为 6 位区划代码字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:transportation.vehicle",
+        "accepted": [
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 area_id 编码与分组规则；vehicle.area_id 为 CHAR(6) 区划代码字段。"
+          },
+          {
+            "knowledge_id": 1762,
+            "basis": "schema_supported",
+            "fields": ["load_capacity"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1762,
+                "quote": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "load_capacity DECIMAL(8,2) COMMENT '载重(吨)'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按载重划分车辆类型；vehicle.load_capacity 为载重(吨)字段。"
+          },
+          {
+            "knowledge_id": 1770,
+            "basis": "schema_supported",
+            "fields": ["register_date"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1770,
+                "quote": "车辆注册年份提取函数：YEAR(register_date)。例如查询2023年注册的车辆：YEAR(register_date)=2023。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "register_date DATE NOT NULL COMMENT '注册日期'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识使用 register_date 提取注册年份；vehicle.register_date 为注册日期字段。"
+          },
+          {
+            "knowledge_id": 1772,
+            "basis": "schema_supported",
+            "fields": ["insurance_expire"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1772,
+                "quote": "车辆保险到期日 insurance_expire 若小于当前日期，表示保险已过期。过保车辆不得上路。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "insurance_expire DATE COMMENT '保险到期日'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明保险到期日字段及其过期判断；vehicle.insurance_expire 为保险到期日字段。"
+          },
+          {
+            "knowledge_id": 1775,
+            "basis": "schema_supported",
+            "fields": ["load_capacity"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1775,
+                "quote": "黄牌车指载重≥4.5吨的货车，蓝牌车为载重＜4.5的货车。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "load_capacity DECIMAL(8,2) COMMENT '载重(吨)'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按载重划分黄牌/蓝牌货车；vehicle.load_capacity 为载重(吨)字段。"
+          },
+          {
+            "knowledge_id": 1781,
+            "basis": "schema_supported",
+            "fields": ["brand"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1781,
+                "quote": "新能源车辆指纯电动车、插电式混合动力车、燃料电池车。品牌名称中含有“电动”关键词时为新能源车辆。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "brand VARCHAR(30) NOT NULL COMMENT '品牌'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明品牌名称含“电动”关键词可识别新能源车辆；vehicle.brand 为品牌字段。"
+          },
+          {
+            "knowledge_id": 1782,
+            "basis": "schema_supported",
+            "fields": ["manufacture_year"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1782,
+                "quote": "车辆使用年限超过15年的货车应当强制报废。当前年份减去 manufacture_year > 15。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "manufacture_year YEAR NOT NULL COMMENT '生产年份'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识以 manufacture_year 计算车辆使用年限；vehicle.manufacture_year 为生产年份字段。"
+          },
+          {
+            "knowledge_id": 1785,
+            "basis": "schema_supported",
+            "fields": ["load_capacity"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1785,
+                "quote": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "load_capacity DECIMAL(8,2) COMMENT '载重(吨)'"
+              }
+            ],
+            "qualifiers": ["通常"],
+            "reason": "知识以 load_capacity 判断重型货车；vehicle.load_capacity 为载重(吨)字段。"
+          },
+          {
+            "knowledge_id": 1788,
+            "basis": "schema_supported",
+            "fields": ["seat_count"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1788,
+                "quote": "节假日高速公路免费时段：春节、清明、劳动节、国庆节，共4个法定节假日，免费对象为7座及以下小型客车。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识按7座及以下判定免费小型客车；vehicle.seat_count 为座位数字段。"
+          },
+          {
+            "knowledge_id": 1789,
+            "basis": "schema_supported",
+            "fields": ["register_date"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1789,
+                "quote": "“老旧车辆”指注册日期 register_date 超过10年的车辆（以当前日期计算）。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "register_date DATE NOT NULL COMMENT '注册日期'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识以 register_date 判断老旧车辆；vehicle.register_date 为注册日期字段。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；vehicle.area_id 为 6 位区划代码字段。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1765,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1765,
+                "quote": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+              }
+            ],
+            "reason": "知识定义货车/客车/危化品车同义词，可能用于解释 vehicle 的车辆类型或 vehicle_type_code，但未明确提及 vehicle 表或 vehicle_type_code，需额外映射，不能确认。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1762,
+            "kind": "conflicting_content",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1762,
+                "quote": "重型车：载重 > 15 吨。"
+              },
+              {
+                "knowledge_id": 1785,
+                "quote": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+              }
+            ],
+            "related_knowledge_ids": [1785],
+            "reason": "两条知识均关联 vehicle.load_capacity，但对“重型”载重阈值给出不同限定（>15吨 与 ≥12吨），存在冲突。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:transportation.shipping_company",
+        "accepted": [
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "企业 status='注销' 表示企业主体消亡"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识定义企业 status='注销' 的含义；shipping_company.status 同包含该枚举值。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 area_id 编码与分组规则；shipping_company.area_id 为 CHAR(6) 行政区划代码字段。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；shipping_company.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；shipping_company.area_id 为 6 位区划代码字段。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "area_id CHAR(6) NOT NULL COMMENT '行政区划代码'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出基于 area_id 的地区筛选 SQL；shipping_company.area_id 为 6 位区划代码字段。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1787,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1787,
+                "quote": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+              }
+            ],
+            "reason": "知识提到公司 business_type，但语境为驾驶员从业资格及 license_type；shipping_company 含 business_type 字段但无驾驶员关联，无法确认直接适用。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      }
+    ]
+  }
+}

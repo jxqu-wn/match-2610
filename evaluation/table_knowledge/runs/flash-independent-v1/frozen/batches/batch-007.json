@@ -1,0 +1,1006 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "knowledge": [
+        {
+          "knowledge_id": 1586,
+          "knowledge_text": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1776,
+          "knowledge_text": "船舶最大载重 max_load 超过10000吨的称为“万吨轮”。"
+        },
+        {
+          "knowledge_id": 1777,
+          "knowledge_text": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。高速船舶通常指航速≥25节。"
+        },
+        {
+          "knowledge_id": 1786,
+          "knowledge_text": "船舶自持力 endurance 表示船舶在不补充燃料、淡水、食物的情况下能够连续航行的天数或海里数。"
+        },
+        {
+          "knowledge_id": 1790,
+          "knowledge_text": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "knowledge": [
+        {
+          "knowledge_id": 1616,
+          "knowledge_text": "companies.is_key_high_tech 表示是否为重点扶持高新技术企业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1618,
+          "knowledge_text": "companies.is_tech_advanced_service 表示是否为技术先进型服务企业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1619,
+          "knowledge_text": "companies.established_year 表示公司注册/成立年份，计算成立年限时可用当前年份减该字段。"
+        },
+        {
+          "knowledge_id": 1620,
+          "knowledge_text": "companies.registered_capital 表示注册资本，单位：万元。"
+        },
+        {
+          "knowledge_id": 1621,
+          "knowledge_text": "companies.is_private 表示是否民营企业，TRUE为民营，FALSE为非民营。"
+        },
+        {
+          "knowledge_id": 1652,
+          "knowledge_text": "高新技术企业认定资格由companies.is_key_high_tech字段标识，若为TRUE则适用15%优惠税率，相比普通税率25%可节省10%的应纳税额。"
+        },
+        {
+          "knowledge_id": 1656,
+          "knowledge_text": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"
+        },
+        {
+          "knowledge_id": 1659,
+          "knowledge_text": "上市公司所属行业分类存储在companies.industry_code，对应的行业名称在common.dict_industry表中。"
+        },
+        {
+          "knowledge_id": 1660,
+          "knowledge_text": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code，可通过common.dict_size_category查看名称。"
+        },
+        {
+          "knowledge_id": 1661,
+          "knowledge_text": "企业成立年限 = 当前年份 - companies.established_year。"
+        },
+        {
+          "knowledge_id": 1662,
+          "knowledge_text": "某些税收优惠政策与行业有关，如高新技术企业主要集中在制造业、信息技术等行业，但数据库已有is_key_high_tech字段，无需依赖行业推断。"
+        },
+        {
+          "knowledge_id": 1663,
+          "knowledge_text": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type，常见的类型包括：有限责任公司、股份有限公司、国有独资公司等，国有独资公司也是国有企业。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "knowledge": [
+        {
+          "knowledge_id": 1604,
+          "knowledge_text": "stocks.total_shares 表示股本，即公司发行的所有股票数量，单位：股。"
+        },
+        {
+          "knowledge_id": 1605,
+          "knowledge_text": "stocks.current_price 表示最新股票价格，通常为最近交易日收盘价，单位：元。"
+        },
+        {
+          "knowledge_id": 1624,
+          "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+        },
+        {
+          "knowledge_id": 1625,
+          "knowledge_text": "市净率(P/B)计算公式：股价 / 每股净资产，股价可使用最近收盘价。"
+        },
+        {
+          "knowledge_id": 1627,
+          "knowledge_text": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100，其中股息需由分/股转换为元/股。"
+        },
+        {
+          "knowledge_id": 1632,
+          "knowledge_text": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"
+        },
+        {
+          "knowledge_id": 1633,
+          "knowledge_text": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"
+        },
+        {
+          "knowledge_id": 1635,
+          "knowledge_text": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"
+        },
+        {
+          "knowledge_id": 1644,
+          "knowledge_text": "股票总市值计算公式：current_price × total_shares，单位：元。其中 current_price 为最新股价（元），total_shares 为总股本（股）。"
+        },
+        {
+          "knowledge_id": 1646,
+          "knowledge_text": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。dividend_cash 单位为万元，需转换为元后除以总股本（股），结果单位：元/股。"
+        },
+        {
+          "knowledge_id": 1648,
+          "knowledge_text": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"
+        },
+        {
+          "knowledge_id": 1649,
+          "knowledge_text": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"
+        },
+        {
+          "knowledge_id": 1650,
+          "knowledge_text": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"
+        },
+        {
+          "knowledge_id": 1651,
+          "knowledge_text": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "knowledge": [
+        {
+          "knowledge_id": 1622,
+          "knowledge_text": "日成交总价值近似计算公式：volume * close_price，单位：元。"
+        },
+        {
+          "knowledge_id": 1623,
+          "knowledge_text": "日平均成交价近似计算公式：日成交总价值 / 成交量，可近似使用收盘价代替。"
+        },
+        {
+          "knowledge_id": 1633,
+          "knowledge_text": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"
+        },
+        {
+          "knowledge_id": 1636,
+          "knowledge_text": "日涨跌幅计算公式：(close_price - open_price) / open_price * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1640,
+          "knowledge_text": "年化波动率计算公式：日涨跌幅的标准差 × SQRT(250)，其中日涨跌幅 = (close_price - open_price) / open_price。250为年交易日数近似值。单位：%。"
+        },
+        {
+          "knowledge_id": 1643,
+          "knowledge_text": "股价波动幅度比例（价格波动率）计算公式：(年内最高价 - 年内最低价) / 年内均价，年内均价可用收盘价均值近似。反映股价年度波动程度。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "knowledge": [
+        {
+          "knowledge_id": 1606,
+          "knowledge_text": "company_financials.dividend_cash 表示现金分红总额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1607,
+          "knowledge_text": "company_financials.dividend_stock 表示每股股息，单位：分/股，计算时需除以100转换为元。"
+        },
+        {
+          "knowledge_id": 1608,
+          "knowledge_text": "company_financials.total_assets 表示总资产，单位：万元。"
+        },
+        {
+          "knowledge_id": 1609,
+          "knowledge_text": "company_financials.total_liabilities 表示总负债，单位：万元。"
+        },
+        {
+          "knowledge_id": 1624,
+          "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+        },
+        {
+          "knowledge_id": 1626,
+          "knowledge_text": "净利润近似计算公式：total_assets - total_liabilities（本库特殊定义，实际净利润≠资产-负债）。"
+        },
+        {
+          "knowledge_id": 1627,
+          "knowledge_text": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100，其中股息需由分/股转换为元/股。"
+        },
+        {
+          "knowledge_id": 1632,
+          "knowledge_text": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"
+        },
+        {
+          "knowledge_id": 1634,
+          "knowledge_text": "资产负债率计算公式：(total_liabilities / total_assets) * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1635,
+          "knowledge_text": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"
+        },
+        {
+          "knowledge_id": 1637,
+          "knowledge_text": "红利支付率计算公式：dividend_cash / (total_assets - total_liabilities) * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1638,
+          "knowledge_text": "净资产收益率(ROE)计算公式：(净利润 / 净资产) × 100%。其中净利润 = total_assets - total_liabilities，净资产 = total_assets，本库中以每股收益/每股净资产替代计算。单位：%。"
+        },
+        {
+          "knowledge_id": 1645,
+          "knowledge_text": "总资产收益率(ROA)计算公式：(净利润 / 总资产) × 100%。本库中净利润 = total_assets - total_liabilities，单位：%。"
+        },
+        {
+          "knowledge_id": 1646,
+          "knowledge_text": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。dividend_cash 单位为万元，需转换为元后除以总股本（股），结果单位：元/股。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-007",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1581, 1582, 1583, 1584, 1585, 1586, 1587, 1588, 1589, 1590, 1591, 1592, 1593, 1594, 1595, 1596, 1597, 1598, 1599, 1600, 1601, 1602, 1603, 1604, 1605, 1606, 1607, 1608, 1609, 1610, 1611, 1612, 1613, 1614, 1615, 1616, 1617, 1618, 1619, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1629, 1630, 1631, 1632, 1633, 1634, 1635, 1636, 1637, 1638, 1639, 1640, 1641, 1642, 1643, 1644, 1645, 1646, 1647, 1648, 1649, 1650, 1651, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1671, 1672, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1680, 1681, 1682, 1683, 1684, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1692, 1693, 1694, 1695, 1696, 1697, 1698, 1699, 1700, 1701, 1702, 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713, 1714, 1715, 1716, 1717, 1718, 1719, 1720, 1721, 1722, 1723, 1724, 1725, 1726, 1727, 1728, 1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743, 1744, 1745, 1746, 1747, 1748, 1749, 1750, 1751, 1752, 1753, 1754, 1755, 1756, 1757, 1758, 1759, 1760, 1761, 1762, 1763, 1764, 1765, 1766, 1767, 1768, 1769, 1770, 1771, 1772, 1773, 1774, 1775, 1776, 1777, 1778, 1779, 1780, 1781, 1782, 1783, 1784, 1785, 1786, 1787, 1788, 1789, 1790, 1791, 1792, 1793, 1794, 1795, 1796, 1797, 1798, 1799, 1800],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:transportation.employee",
+        "accepted": [
+          {
+            "knowledge_id": 1586,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1586, "quote": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "status ENUM('在职','离职','退休') DEFAULT '在职' COMMENT '状态'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识定义员工状态取值，Schema 中 transportation.employee.status 枚举含“在职/离职/退休”，直接对应；知识中的“外派”取值不在该表枚举内，不予套用。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:transportation.vessel",
+        "accepted": [
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1761, "quote": "行政区划代码（area_id）为6位数字编码"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 area_id 为6位行政区划代码，vessel.area_id 为 CHAR(6) 注册地区划代码，直接对应。"
+          },
+          {
+            "knowledge_id": 1776,
+            "basis": "schema_supported",
+            "fields": ["max_load"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1776, "quote": "船舶最大载重 max_load 超过10000吨的称为“万吨轮”。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "max_load DECIMAL(10,2) COMMENT '最大荷载量（吨）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以 max_load 定义“万吨轮”，vessel.max_load 为最大荷载量（吨），直接对应。"
+          },
+          {
+            "knowledge_id": 1777,
+            "basis": "schema_supported",
+            "fields": ["max_speed"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1777, "quote": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "max_speed DECIMAL(4,1) COMMENT '最大航速（节）'"}
+            ],
+            "qualifiers": ["高速船舶通常指航速≥25节"],
+            "reason": "知识定义船舶航速单位“节”，vessel.max_speed 注释为最大航速（节），直接对应；阈值部分保留“通常”限定。"
+          },
+          {
+            "knowledge_id": 1786,
+            "basis": "schema_supported",
+            "fields": ["endurance"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1786, "quote": "船舶自持力 endurance 表示船舶在不补充燃料、淡水、食物的情况下能够连续航行的天数或海里数。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "endurance VARCHAR(32) COMMENT '自持力（天/海里）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识直接以 endurance 说明自持力含义，vessel.endurance 注释为“自持力（天/海里）”，一一对应。"
+          },
+          {
+            "knowledge_id": 1790,
+            "basis": "schema_supported",
+            "fields": ["mmsi"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1790, "quote": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "mmsi INT UNSIGNED NOT NULL COMMENT '船舶MMSI，9位唯一标识'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识描述船舶MMSI编码，vessel.mmsi 为船舶MMSI唯一标识，直接对应。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:finance_tax.companies",
+        "accepted": [
+          {
+            "knowledge_id": 1616,
+            "basis": "explicit",
+            "fields": ["is_key_high_tech"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1616, "quote": "companies.is_key_high_tech 表示是否为重点扶持高新技术企业，TRUE表示是，FALSE表示否。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 companies.is_key_high_tech，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1618,
+            "basis": "explicit",
+            "fields": ["is_tech_advanced_service"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1618, "quote": "companies.is_tech_advanced_service 表示是否为技术先进型服务企业，TRUE表示是，FALSE表示否。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 companies.is_tech_advanced_service，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1619,
+            "basis": "explicit",
+            "fields": ["established_year"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1619, "quote": "companies.established_year 表示公司注册/成立年份，计算成立年限时可用当前年份减该字段。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "established_year YEAR COMMENT '注册/成立年份'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 companies.established_year，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1620,
+            "basis": "explicit",
+            "fields": ["registered_capital"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1620, "quote": "companies.registered_capital 表示注册资本，单位：万元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "registered_capital DECIMAL(18,2) COMMENT '注册资本（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 companies.registered_capital，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1621,
+            "basis": "explicit",
+            "fields": ["is_private"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1621, "quote": "companies.is_private 表示是否民营企业，TRUE为民营，FALSE为非民营。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_private BOOLEAN COMMENT '是否民营企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 companies.is_private，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1652,
+            "basis": "explicit",
+            "fields": ["is_key_high_tech"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1652, "quote": "高新技术企业认定资格由companies.is_key_high_tech字段标识"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明 companies.is_key_high_tech 字段，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1656,
+            "basis": "schema_supported",
+            "fields": ["is_tech_advanced_service"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1656, "quote": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_tech_advanced_service BOOLEAN DEFAULT FALSE COMMENT '是否技术先进型服务企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识针对“技术先进型服务企业”的优惠待遇，companies.is_tech_advanced_service 直接标识该企业类型。"
+          },
+          {
+            "knowledge_id": 1659,
+            "basis": "explicit",
+            "fields": ["industry_code"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1659, "quote": "上市公司所属行业分类存储在companies.industry_code"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "industry_code VARCHAR(20) COMMENT '所属行业代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明 companies.industry_code 字段，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1660,
+            "basis": "explicit",
+            "fields": ["size_category_code"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1660, "quote": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "size_category_code VARCHAR(10) COMMENT '规模划型代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明 companies.size_category_code 字段，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1661,
+            "basis": "explicit",
+            "fields": ["established_year"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1661, "quote": "企业成立年限 = 当前年份 - companies.established_year。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "established_year YEAR COMMENT '注册/成立年份'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明 companies.established_year 字段，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1662,
+            "basis": "schema_supported",
+            "fields": ["is_key_high_tech"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1662, "quote": "但数据库已有is_key_high_tech字段，无需依赖行业推断"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_key_high_tech BOOLEAN DEFAULT FALSE COMMENT '是否重点扶持高新技术企业'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识提到数据库已有的 is_key_high_tech 字段，该字段存在于 companies，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1663,
+            "basis": "explicit",
+            "fields": ["registration_type_code"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1663, "quote": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "registration_type_code VARCHAR(20) COMMENT '登记注册类型代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明 companies.registration_type_code 字段，直接对应本表。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1630,
+            "knowledge_evidence": [
+              {"knowledge_id": 1630, "quote": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。"}
+            ],
+            "reason": "该条以“高新技术企业”等企业类型描述税率，未指名表或字段；companies.is_key_high_tech 可标识高新技术企业，但税率计算通常作用于企业所得税申报数据，无法仅凭本表确认归属。"
+          },
+          {
+            "knowledge_id": 1664,
+            "knowledge_evidence": [
+              {"knowledge_id": 1664, "quote": "企业集中度指每个行业收入最高的n个企业占行业总收入的比例"}
+            ],
+            "reason": "该条涉及“行业”和“企业收入”，companies 仅有 industry_code 而无收入字段，需结合其他表才能确定口径，无法确认与本表的直接关联。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:finance_tax.stocks",
+        "accepted": [
+          {
+            "knowledge_id": 1604,
+            "basis": "explicit",
+            "fields": ["total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1604, "quote": "stocks.total_shares 表示股本，即公司发行的所有股票数量，单位：股。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 stocks.total_shares，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1605,
+            "basis": "explicit",
+            "fields": ["current_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1605, "quote": "stocks.current_price 表示最新股票价格，通常为最近交易日收盘价，单位：元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"}
+            ],
+            "qualifiers": ["通常为最近交易日收盘价"],
+            "reason": "知识以表.字段形式指明 stocks.current_price，原文与 Schema 一致；保留“通常”限定。"
+          },
+          {
+            "knowledge_id": 1624,
+            "basis": "schema_supported",
+            "fields": ["total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1624, "quote": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式以 total_shares 为分母，stocks 含 total_shares（总股本），直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1625,
+            "basis": "schema_supported",
+            "fields": ["current_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1625, "quote": "市净率(P/B)计算公式：股价 / 每股净资产，股价可使用最近收盘价。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"}
+            ],
+            "qualifiers": ["股价可使用最近收盘价"],
+            "reason": "公式中的“股价”对应 stocks.current_price（最新股票价格），直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1627,
+            "basis": "schema_supported",
+            "fields": ["current_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1627, "quote": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式中的“股价”对应 stocks.current_price，直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1632,
+            "basis": "schema_supported",
+            "fields": ["current_price", "total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1632, "quote": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": ["近似计算公式"],
+            "reason": "公式显式使用 current_price 和 total_shares，stocks 直接包含这两个字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1633,
+            "basis": "schema_supported",
+            "fields": ["total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1633, "quote": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "换手率公式以 total_shares 为分母，stocks 含 total_shares，直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1635,
+            "basis": "schema_supported",
+            "fields": ["total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1635, "quote": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": ["近似计算公式"],
+            "reason": "公式显式使用 total_shares（总股本），stocks 直接包含该字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1644,
+            "basis": "schema_supported",
+            "fields": ["current_price", "total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1644, "quote": "股票总市值计算公式：current_price × total_shares，单位：元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "current_price DECIMAL(10,2) COMMENT '最新股票价格（元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式显式使用 current_price 和 total_shares，stocks 直接包含这两个字段。"
+          },
+          {
+            "knowledge_id": 1646,
+            "basis": "schema_supported",
+            "fields": ["total_shares"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1646, "quote": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_shares BIGINT NOT NULL COMMENT '股本（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式以 total_shares 为分母，stocks 含 total_shares（总股本），直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1648,
+            "basis": "explicit",
+            "fields": ["share_right_type"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1648, "quote": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "share_right_type VARCHAR(20) DEFAULT 'COMMON' COMMENT '股东权利类型（引用字典）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明字段 stocks.share_right_type，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1649,
+            "basis": "explicit",
+            "fields": ["register_type"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1649, "quote": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "register_type VARCHAR(20) DEFAULT 'REGISTERED' COMMENT '记名方式'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明字段 stocks.register_type，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1650,
+            "basis": "explicit",
+            "fields": ["par_value_type"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1650, "quote": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "par_value_type VARCHAR(20) DEFAULT 'PAR' COMMENT '面额类型'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明字段 stocks.par_value_type，直接对应本表。"
+          },
+          {
+            "knowledge_id": 1651,
+            "basis": "explicit",
+            "fields": ["market_class"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1651, "quote": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "market_class VARCHAR(5) COMMENT '上市地点分类（A/B/H/N等）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识原文点明字段 stocks.market_class，直接对应本表。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:finance_tax.stock_daily_trades",
+        "accepted": [
+          {
+            "knowledge_id": 1622,
+            "basis": "schema_supported",
+            "fields": ["volume", "close_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1622, "quote": "日成交总价值近似计算公式：volume * close_price，单位：元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "volume BIGINT NOT NULL COMMENT '成交量（股）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"}
+            ],
+            "qualifiers": ["近似计算公式"],
+            "reason": "公式显式使用 volume 与 close_price，stock_daily_trades 直接包含这两个字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1623,
+            "basis": "schema_supported",
+            "fields": ["volume", "close_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1623, "quote": "日平均成交价近似计算公式：日成交总价值 / 成交量，可近似使用收盘价代替。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "volume BIGINT NOT NULL COMMENT '成交量（股）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"}
+            ],
+            "qualifiers": ["近似计算公式", "可近似使用收盘价代替"],
+            "reason": "公式以成交量（volume）为分母并提及收盘价（close_price），stock_daily_trades 直接包含这两个字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1633,
+            "basis": "schema_supported",
+            "fields": ["volume"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1633, "quote": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "volume BIGINT NOT NULL COMMENT '成交量（股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "换手率公式使用 volume，stock_daily_trades 含 volume（成交量），直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1636,
+            "basis": "schema_supported",
+            "fields": ["close_price", "open_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1636, "quote": "日涨跌幅计算公式：(close_price - open_price) / open_price * 100%，单位：%。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式显式使用 close_price 与 open_price，stock_daily_trades 直接包含这两个字段。"
+          },
+          {
+            "knowledge_id": 1640,
+            "basis": "schema_supported",
+            "fields": ["close_price", "open_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1640, "quote": "年化波动率计算公式：日涨跌幅的标准差 × SQRT(250)，其中日涨跌幅 = (close_price - open_price) / open_price。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "open_price DECIMAL(10,2) NOT NULL COMMENT '开盘价'"}
+            ],
+            "qualifiers": ["250为年交易日数近似值"],
+            "reason": "公式中的日涨跌幅使用 close_price 与 open_price，stock_daily_trades 直接包含这两个字段，保留“近似值”限定。"
+          },
+          {
+            "knowledge_id": 1643,
+            "basis": "schema_supported",
+            "fields": ["high_price", "low_price", "close_price"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1643, "quote": "股价波动幅度比例（价格波动率）计算公式：(年内最高价 - 年内最低价) / 年内均价，年内均价可用收盘价均值近似。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "high_price DECIMAL(10,2) NOT NULL COMMENT '最高价'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "low_price DECIMAL(10,2) NOT NULL COMMENT '最低价'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "close_price DECIMAL(10,2) NOT NULL COMMENT '收盘价'"}
+            ],
+            "qualifiers": ["年内均价可用收盘价均值近似"],
+            "reason": "公式使用最高价、最低价与收盘价，stock_daily_trades 含 high_price、low_price、close_price，直接对应，保留“近似”限定。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:finance_tax.company_financials",
+        "accepted": [
+          {
+            "knowledge_id": 1606,
+            "basis": "explicit",
+            "fields": ["dividend_cash"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1606, "quote": "company_financials.dividend_cash 表示现金分红总额，单位：万元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 company_financials.dividend_cash，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1607,
+            "basis": "explicit",
+            "fields": ["dividend_stock"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1607, "quote": "company_financials.dividend_stock 表示每股股息，单位：分/股，计算时需除以100转换为元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 company_financials.dividend_stock，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1608,
+            "basis": "explicit",
+            "fields": ["total_assets"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1608, "quote": "company_financials.total_assets 表示总资产，单位：万元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 company_financials.total_assets，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1609,
+            "basis": "explicit",
+            "fields": ["total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1609, "quote": "company_financials.total_liabilities 表示总负债，单位：万元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识以表.字段形式指明 company_financials.total_liabilities，原文与 Schema 一致。"
+          },
+          {
+            "knowledge_id": 1624,
+            "basis": "schema_supported",
+            "fields": ["total_assets"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1624, "quote": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用 total_assets，company_financials 含 total_assets（总资产，万元），直接支持该计算。"
+          },
+          {
+            "knowledge_id": 1626,
+            "basis": "schema_supported",
+            "fields": ["total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1626, "quote": "净利润近似计算公式：total_assets - total_liabilities（本库特殊定义，实际净利润≠资产-负债）。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": ["本库特殊定义，实际净利润≠资产-负债", "近似计算公式"],
+            "reason": "公式显式使用 total_assets 与 total_liabilities，company_financials 直接包含这两个字段；保留“本库特殊定义”限定。"
+          },
+          {
+            "knowledge_id": 1627,
+            "basis": "schema_supported",
+            "fields": ["dividend_stock"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1627, "quote": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100，其中股息需由分/股转换为元/股。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "dividend_stock INT DEFAULT 0 COMMENT '每股股息（分/股）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用 dividend_stock（每股股息，分/股），company_financials 直接包含该字段。"
+          },
+          {
+            "knowledge_id": 1632,
+            "basis": "schema_supported",
+            "fields": ["total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1632, "quote": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": ["近似计算公式"],
+            "reason": "公式显式使用 total_assets 与 total_liabilities，company_financials 直接包含这两个字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1634,
+            "basis": "schema_supported",
+            "fields": ["total_liabilities", "total_assets"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1634, "quote": "资产负债率计算公式：(total_liabilities / total_assets) * 100%，单位：%。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式显式使用 total_liabilities 与 total_assets，company_financials 直接包含这两个字段。"
+          },
+          {
+            "knowledge_id": 1635,
+            "basis": "schema_supported",
+            "fields": ["total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1635, "quote": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": ["近似计算公式"],
+            "reason": "公式显式使用 total_assets 与 total_liabilities，company_financials 直接包含这两个字段，保留“近似”限定。"
+          },
+          {
+            "knowledge_id": 1637,
+            "basis": "schema_supported",
+            "fields": ["dividend_cash", "total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1637, "quote": "红利支付率计算公式：dividend_cash / (total_assets - total_liabilities) * 100%，单位：%。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式显式使用 dividend_cash、total_assets 与 total_liabilities，company_financials 直接包含这些字段。"
+          },
+          {
+            "knowledge_id": 1638,
+            "basis": "schema_supported",
+            "fields": ["total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1638, "quote": "其中净利润 = total_assets - total_liabilities，净资产 = total_assets"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": ["本库中以每股收益/每股净资产替代计算"],
+            "reason": "知识给出的净利润/净资产口径使用 total_assets 与 total_liabilities，company_financials 直接包含这两个字段，保留“本库”限定。"
+          },
+          {
+            "knowledge_id": 1645,
+            "basis": "schema_supported",
+            "fields": ["total_assets", "total_liabilities"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1645, "quote": "本库中净利润 = total_assets - total_liabilities，单位：%。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) NOT NULL COMMENT '总资产（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_liabilities DECIMAL(18,2) NOT NULL COMMENT '总负债（万元）'"}
+            ],
+            "qualifiers": ["本库中净利润 = total_assets - total_liabilities"],
+            "reason": "知识口径使用 total_assets 与 total_liabilities，company_financials 直接包含这两个字段，保留“本库”限定。"
+          },
+          {
+            "knowledge_id": 1646,
+            "basis": "schema_supported",
+            "fields": ["dividend_cash"],
+            "knowledge_evidence": [
+              {"knowledge_id": 1646, "quote": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。"}
+            ],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "dividend_cash DECIMAL(18,2) DEFAULT 0 COMMENT '现金分红总额（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用 dividend_cash，company_financials 含 dividend_cash（现金分红总额，万元），直接支持该计算。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

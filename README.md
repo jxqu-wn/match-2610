@@ -128,8 +128,13 @@ text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/complet
 
 `build-catalog` 解析 `commom_schema.txt` 和 `core_schema.txt`，从本轮训练划分关联案例，
 在 `data/preprocessed/` 生成 `schema_extracted.json`、`schema_catalog.json` 和 `schema_documents.jsonl`。
-这些基础描述仅来自原始 Schema 和知识，后续不得用人工或模型生成的业务解释替换。
+基础结构和知识保留原文；table–knowledge 关联以当前 LLM＋人工审核结果为理想基准，
+规则见[预处理规范](docs/preprocessing_rules.md)，版本化目标见 [reference-v1](evaluation/table_knowledge/runs/reference-v1/README.md)。
+构建算法现使用纯程序显式引用、原始字典值、字段匹配与本地TF-IDF，不读取审核标签或调用模型。
+当前基准上的F1为76.05%，详细差异见[程序评估](evaluation/table_knowledge/runs/programmatic-v2/README.md)。
+另提供可选BM25版本（`build-catalog --association-method bm25`），[效果对照](evaluation/table_knowledge/runs/bm25-v1-default/COMPARISON.md)显示完全覆盖略升但F1下降，因此默认保持TF-IDF。
 当前 table–knowledge 关联的覆盖与误关联风险见[关联审计](docs/knowledge_association_audit.md)。
+训练增强现为[独立可插拔模块](docs/training_support.md)，支持 `--training-support auto|sql|none`，无训练集时可独立运行基础预处理。
 划分、预处理、索引、缓存和提交结果均为本地生成文件，已加入 `.gitignore`。
 
 ## 测试
@@ -146,6 +151,8 @@ python -m pytest -q -p no:cacheprovider
 
 - 程序负责可重复的结构化工作与执行边界；LLM 负责业务判断，两者证据分离。
 - 相似度、外键存在、训练案例命中都不构成业务正确性证明。
-- 不根据字段同名建立关联；推断关系必须显式标记为假设。
+- 关联接受明示引用及已审核的 Schema 支持关系；仅字段同名不构成充分依据，裁定和内容冲突独立留痕。
 - 上下文超限时整条移除低优先级证据，绝不静默截断单表结构。
 - 静态校验只检查语法、库表字段与跨源协议，不代表执行结果正确。
+
+开发约束：优先复用成熟社区库与标准库，避免重复实现通用算法和基础设施；现有实现及适配例外见[社区库复用原则](docs/library_reuse.md)。

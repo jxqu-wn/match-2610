@@ -3,8 +3,7 @@
 本轮先清理数据和旧产物。接下来按顺序确认每个阶段的输入、输出、实现与测试，
 每一步通过后再运行下一步。已有算法和模型策略仍需逐项梳理。
 
-后续修改遵守根目录 `AGENTS.md`：预处理不引入人工或大模型的额外业务理解，
-保留原始资料与明确引用证据，缺失和歧义不通过业务推断补齐。
+后续修改遵守根目录 `AGENTS.md` 与[新预处理规范](preprocessing_rules.md)：table–knowledge 关联以当前 LLM＋人工审核结果为理想基准，允许已审核的 Schema 支持关系与部分适用片段。原始结构和知识原文保留，冲突采用 Schema；缺失内容不凭常识补齐。
 table–knowledge 当前实现及待修复问题见[关联审计](knowledge_association_audit.md)。
 
 ## 当前起点
@@ -21,7 +20,7 @@ table–knowledge 当前实现及待修复问题见[关联审计](knowledge_asso
 | --- | --- | --- | --- |
 | 1 | 数据加载与划分：`models.Sample`、`data/split.py` | `QA_train.json` → 2,555 条训练 / 284 条验证及划分清单 | ID 唯一、字段保真、分层规模、跨源方向、成员互斥、固定种子、覆盖保护 |
 | 2 | Schema 提取：`data/catalog.py` | 两份 Schema + 知识 + 训练划分 → 基础目录与文档 | 72 张表/索引、主外键、字段描述来源、无 SQLite、干净目录可重建 |
-| 3 | 原始描述来源与关联审计 | 原始注释、知识原文及引用 → 可追溯目录 | 禁止模型补写和人工/代理复核回放；遗留 `data/enrich.py`、`data/review.py` 不再纳入流程，后续移除 |
+| 3 | 原始描述来源与关联审计 | 原始注释、知识原文及引用 → 可追溯目录 | 原文与结构保真；用 `evaluation/table_knowledge/runs/reference-v1/` 验收关联，算法仅读原始输入、基准只用于离线评价；不回放无关旧描述与复核 |
 | 4 | 数据库路由：`routing/classifier.py`、`routing/embedding.py` | 训练划分 → 路由模型；问题 → 数据源集合 | 待梳理训练与选参边界、跨源分类、向量缓存失效、验证标签隔离 |
 | 5 | 索引与召回：`retrieval/index.py`、`sql_parser.py` | 目录 + 知识 + 训练划分 → 索引 → 候选证据 | 已检查训练案例集合与验证 ID 隔离；后续补齐召回质量、缓存失效、知识归属测试 |
 | 6 | 上下文与规划：`retrieval/context.py`、`llm/planner.py` | 候选证据 → 有界规划 | 已有来源、预算与协议检查；后续梳理补检索、停止条件、无新增证据、模型异常 |
@@ -40,7 +39,7 @@ text2query build-catalog
 ```
 
 第一步生成 `data/赛题8/splits/` 下的划分 JSON；第二步生成 `data/preprocessed/` 下的基础目录。
-`build-catalog` 会重置基础目录。后续只审核原始描述与显式关联证据，不运行模型描述补充或复核回放。
+`build-catalog` 会重置基础目录。构建命令使用纯程序关联算法；审核基准仅用于独立评估，不进入生产匹配。预处理同时生成 knowledge_association_audit.json。旧模型描述补充和人工复核回放不属于此流程。
 路由、索引、规划和提交在逐步确认后再运行。
 
 ## 测试入口

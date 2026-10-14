@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Annotated, Optional
 
 import typer
 from rich.console import Console
@@ -59,11 +59,28 @@ def split_dataset(
 
 
 @app.command("build-catalog")
-def build_catalog() -> None:
+def build_catalog(
+    association_method: Annotated[str, typer.Option(help="知识关联文本评分：tfidf 或 bm25")] = "tfidf",
+    association_threshold: Annotated[float, typer.Option(help="关联得分阈值")] = 0.3,
+    bm25_k1: Annotated[float, typer.Option()] = 1.5,
+    bm25_b: Annotated[float, typer.Option()] = 0.75,
+    training_support: Annotated[
+        str, typer.Option(help="训练增强：auto（有文件时启用）、sql（必须有文件）、none（禁用）")
+    ] = "auto",
+    training_source: Annotated[Path | None, typer.Option(help="可选训练文件，默认训练划分")] = None,
+) -> None:
     """解析当前范围的 Schema，生成基础目录与检索文档。"""
     from .data.catalog import build_catalog as build
 
-    catalog = build(persist=True)
+    catalog = build(
+        persist=True,
+        association_method=association_method,
+        association_threshold=association_threshold,
+        bm25_k1=bm25_k1,
+        bm25_b=bm25_b,
+        training_support=training_support,
+        training_source=training_source,
+    )
     _echo(catalog.summary)
 
 
@@ -121,9 +138,7 @@ def route_predict(
 
 
 @app.command("route-cross-validate")
-def route_cross_validate(
-    output: Optional[Path] = typer.Option(None), folds: int = typer.Option(5)
-) -> None:
+def route_cross_validate(output: Optional[Path] = typer.Option(None), folds: int = typer.Option(5)) -> None:
     """字符 TF-IDF + 逻辑回归交叉验证对照。"""
     from .routing.classifier import cross_validate
 
@@ -164,7 +179,9 @@ def build_index(
 
     encoder = _encoder(keyword_only, device, dtype, batch_size, max_length)
     built = RetrievalIndex.build(index, encoder, training_source=training_source)
-    _echo({"index": str(index or settings.path("outputs/information_retrieval/index")), "documents": len(built.documents)})
+    _echo(
+        {"index": str(index or settings.path("outputs/information_retrieval/index")), "documents": len(built.documents)}
+    )
 
 
 @app.command("retrieve")
@@ -308,7 +325,9 @@ def experiment_sqlite50(
     endpoint: str = typer.Option("http://192.168.15.119:8000/v1", help="OpenAI 兼容端点"),
     model: str = typer.Option("qwen-track8-text2sql", help="微调模型名"),
     api_key: Optional[str] = typer.Option(None, "--api-key", help="API key；默认读 DEEPSEEK_API_KEY"),
-    thinking: Optional[bool] = typer.Option(None, "--thinking/--no-thinking", help="是否开启 thinking；不传则不发送该字段"),
+    thinking: Optional[bool] = typer.Option(
+        None, "--thinking/--no-thinking", help="是否开启 thinking；不传则不发送该字段"
+    ),
     sample_size: int = typer.Option(50, help="验证集 SQLite 题抽样数"),
     seed: int = typer.Option(42, help="抽样随机种子"),
     max_tables: int = typer.Option(6, help="提示词最多注入的表数"),

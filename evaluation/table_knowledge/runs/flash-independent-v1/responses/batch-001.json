@@ -1,0 +1,243 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_text": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1765,
+          "knowledge_text": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1768,
+          "knowledge_text": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "knowledge": [
+        {
+          "knowledge_id": 1663,
+          "knowledge_text": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type，常见的类型包括：有限责任公司、股份有限公司、国有独资公司等，国有独资公司也是国有企业。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-001",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1581, 1582, 1583, 1584, 1585, 1586, 1587, 1588, 1589, 1590, 1591, 1592, 1593, 1594, 1595, 1596, 1597, 1598, 1599, 1600, 1601, 1602, 1603, 1604, 1605, 1606, 1607, 1608, 1609, 1610, 1611, 1612, 1613, 1614, 1615, 1616, 1617, 1618, 1619, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1629, 1630, 1631, 1632, 1633, 1634, 1635, 1636, 1637, 1638, 1639, 1640, 1641, 1642, 1643, 1644, 1645, 1646, 1647, 1648, 1649, 1650, 1651, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1671, 1672, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1680, 1681, 1682, 1683, 1684, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1692, 1693, 1694, 1695, 1696, 1697, 1698, 1699, 1700, 1701, 1702, 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713, 1714, 1715, 1716, 1717, 1718, 1719, 1720, 1721, 1722, 1723, 1724, 1725, 1726, 1727, 1728, 1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743, 1744, 1745, 1746, 1747, 1748, 1749, 1750, 1751, 1752, 1753, 1754, 1755, 1756, 1757, 1758, 1759, 1760, 1761, 1762, 1763, 1764, 1765, 1766, 1767, 1768, 1769, 1770, 1771, 1772, 1773, 1774, 1775, 1776, 1777, 1778, 1779, 1780, 1781, 1782, 1783, 1784, 1785, 1786, 1787, 1788, 1789, 1790, 1791, 1792, 1793, 1794, 1795, 1796, 1797, 1798, 1799, 1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:common.administrative_division",
+        "accepted": [
+          {
+            "knowledge_id": 1596,
+            "basis": "schema_supported",
+            "fields": ["id", "level"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "id CHAR(6) PRIMARY KEY COMMENT '行政区划代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识描述行政区划代码特征（县级市/地级市/省直管县），Schema 将 id 定义为行政区划代码并含 level 层级，可直接对应同一行政区划字典。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "explicit",
+            "fields": ["id", "level", "province_name", "city_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "id CHAR(6) PRIMARY KEY COMMENT '行政区划代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "province_name VARCHAR(20) NOT NULL COMMENT '省级名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "city_name VARCHAR(20) NOT NULL COMMENT '市级名称'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确引用 administrative_division 表及 level=1/2 记录，Schema 定义 id 为行政区划代码、level 为省市县级别、province_name/city_name 为名称。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.vehicle_type_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1765,
+            "basis": "schema_supported",
+            "fields": ["type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1765,
+                "quote": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称（客车/货车/危化品车等）'"
+              }
+            ],
+            "qualifiers": ["（仅当运输危化品时）", "（座位数≥9）"],
+            "reason": "Schema 注释将 type_name 描述为客车/货车/危化品车等，知识提供这些类别的同义词及限定，属于 schema_supported。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1768,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1768,
+                "quote": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+              }
+            ],
+            "reason": "知识将驾照代码与大型客车/大型货车等车辆类别关联，但未指明 vehicle_type_dict，且其 type_name 为客车/货车等泛类别，缺少大型客车等与字典代码的直接映射，无法确认是否直接解释该表。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:common.vessel_type_dict",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.employee_type_dict",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.license_type_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1768,
+            "basis": "schema_supported",
+            "fields": ["license_code", "license_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1768,
+                "quote": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "license_code VARCHAR(5) PRIMARY KEY COMMENT '驾照代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "license_name VARCHAR(50) NOT NULL COMMENT '驾照名称'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "Schema 将 license_code/license_name 定义为驾照代码/名称，知识按驾照代码给出准驾车辆类别，能直接解释该字典的代码含义。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.dict_registration_type",
+        "accepted": [
+          {
+            "knowledge_id": 1663,
+            "basis": "explicit",
+            "fields": ["type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1663,
+                "quote": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type，常见的类型包括：有限责任公司、股份有限公司、国有独资公司等，国有独资公司也是国有企业。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(20) PRIMARY KEY COMMENT '注册类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(100) NOT NULL COMMENT '注册类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "COMMENT='企业登记注册类型字典'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确写出 common.dict_registration_type 及登记注册类型，Schema 定义 type_code/type_name 为注册类型代码/名称。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

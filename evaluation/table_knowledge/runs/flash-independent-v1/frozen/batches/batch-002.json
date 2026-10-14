@@ -1,0 +1,589 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "knowledge": [
+        {
+          "knowledge_id": 1660,
+          "knowledge_text": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code，可通过common.dict_size_category查看名称。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "knowledge": [
+        {
+          "knowledge_id": 1648,
+          "knowledge_text": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"
+        },
+        {
+          "knowledge_id": 1649,
+          "knowledge_text": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"
+        },
+        {
+          "knowledge_id": 1650,
+          "knowledge_text": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"
+        },
+        {
+          "knowledge_id": 1651,
+          "knowledge_text": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "knowledge": [
+        {
+          "knowledge_id": 1659,
+          "knowledge_text": "上市公司所属行业分类存储在companies.industry_code，对应的行业名称在common.dict_industry表中。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1581,
+          "knowledge_text": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1594,
+          "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1589,
+          "knowledge_text": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-002",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, 1570, 1571, 1572, 1573, 1574, 1575, 1576, 1577, 1578, 1579, 1580, 1581, 1582, 1583, 1584, 1585, 1586, 1587, 1588, 1589, 1590, 1591, 1592, 1593, 1594, 1595, 1596, 1597, 1598, 1599, 1600, 1601, 1602, 1603, 1604, 1605, 1606, 1607, 1608, 1609, 1610, 1611, 1612, 1613, 1614, 1615, 1616, 1617, 1618, 1619, 1620, 1621, 1622, 1623, 1624, 1625, 1626, 1627, 1628, 1629, 1630, 1631, 1632, 1633, 1634, 1635, 1636, 1637, 1638, 1639, 1640, 1641, 1642, 1643, 1644, 1645, 1646, 1647, 1648, 1649, 1650, 1651, 1652, 1653, 1654, 1655, 1656, 1657, 1658, 1659, 1660, 1661, 1662, 1663, 1664, 1665, 1666, 1667, 1668, 1669, 1670, 1671, 1672, 1673, 1674, 1675, 1676, 1677, 1678, 1679, 1680, 1681, 1682, 1683, 1684, 1685, 1686, 1687, 1688, 1689, 1690, 1691, 1692, 1693, 1694, 1695, 1696, 1697, 1698, 1699, 1700, 1701, 1702, 1703, 1704, 1705, 1706, 1707, 1708, 1709, 1710, 1711, 1712, 1713, 1714, 1715, 1716, 1717, 1718, 1719, 1720, 1721, 1722, 1723, 1724, 1725, 1726, 1727, 1728, 1729, 1730, 1731, 1732, 1733, 1734, 1735, 1736, 1737, 1738, 1739, 1740, 1741, 1742, 1743, 1744, 1745, 1746, 1747, 1748, 1749, 1750, 1751, 1752, 1753, 1754, 1755, 1756, 1757, 1758, 1759, 1760, 1761, 1762, 1763, 1764, 1765, 1766, 1767, 1768, 1769, 1770, 1771, 1772, 1773, 1774, 1775, 1776, 1777, 1778, 1779, 1780, 1781, 1782, 1783, 1784, 1785, 1786, 1787, 1788, 1789, 1790, 1791, 1792, 1793, 1794, 1795, 1796, 1797, 1798, 1799, 1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:common.dict_size_category",
+        "accepted": [
+          {
+            "knowledge_id": 1660,
+            "basis": "explicit",
+            "fields": ["size_code", "size_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1660,
+                "quote": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code，可通过common.dict_size_category查看名称。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE dict_size_category ("
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "size_code VARCHAR(10) PRIMARY KEY COMMENT '规模代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "size_name VARCHAR(20) NOT NULL COMMENT '规模名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "COMMENT='企业规模划型字典'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确写出 common.dict_size_category，Schema 定义该表的规模代码与规模名称字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.dict_stock_type",
+        "accepted": [
+          {
+            "knowledge_id": 1648,
+            "basis": "schema_supported",
+            "fields": ["type_category", "type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1648,
+                "quote": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE dict_stock_type ("
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_category VARCHAR(30) COMMENT '分类维度'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(20) COMMENT '类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('SHARE_RIGHT', 'COMMON', '普通股')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('SHARE_RIGHT', 'PREFERRED', '优先股')"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识描述股东权利分类及 COMMON/PREFERRED 取值，Schema 的 dict_stock_type 以 type_category、type_code、type_name 及对应 INSERT 记录支持该分类。"
+          },
+          {
+            "knowledge_id": 1649,
+            "basis": "schema_supported",
+            "fields": ["type_category", "type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1649,
+                "quote": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_category VARCHAR(30) COMMENT '分类维度'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(20) COMMENT '类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('REGISTER', 'REGISTERED', '记名股票')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('REGISTER', 'BEARER', '无记名股票')"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识描述记名/无记名股票及 REGISTERED/BEARER 取值，Schema 的 dict_stock_type 以 REGISTER 分类维度及对应代码支持该分类。"
+          },
+          {
+            "knowledge_id": 1650,
+            "basis": "schema_supported",
+            "fields": ["type_category", "type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1650,
+                "quote": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_category VARCHAR(30) COMMENT '分类维度'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(20) COMMENT '类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('PAR_VALUE', 'PAR', '面额股票')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('PAR_VALUE', 'NO_PAR', '无面额股票')"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识描述面额/无面额股票及 PAR/NO_PAR 取值，Schema 的 dict_stock_type 以 PAR_VALUE 分类维度及对应代码支持该分类。"
+          },
+          {
+            "knowledge_id": 1651,
+            "basis": "schema_supported",
+            "fields": ["type_category", "type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1651,
+                "quote": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_category VARCHAR(30) COMMENT '分类维度'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(20) COMMENT '类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(50) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('MARKET_CLASS', 'A', 'A股')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('MARKET_CLASS', 'B', 'B股')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('MARKET_CLASS', 'H', 'H股')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('MARKET_CLASS', 'N', 'N股')"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识描述上市地点分类及 A/B/H/N 取值，Schema 的 dict_stock_type 以 MARKET_CLASS 分类维度及对应代码支持该分类。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.dict_industry",
+        "accepted": [
+          {
+            "knowledge_id": 1659,
+            "basis": "explicit",
+            "fields": ["industry_code", "industry_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1659,
+                "quote": "上市公司所属行业分类存储在companies.industry_code，对应的行业名称在common.dict_industry表中。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE dict_industry ("
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "industry_code VARCHAR(20) PRIMARY KEY COMMENT '行业代码（国标）'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "industry_name VARCHAR(100) NOT NULL COMMENT '行业名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "COMMENT='行业分类字典'"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确写出 common.dict_industry，Schema 定义该表的行业代码与行业名称字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.energy_type_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1581,
+            "basis": "schema_supported",
+            "fields": ["type_code", "type_name", "category", "is_renewable"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1581,
+                "quote": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。"
+              },
+              {
+                "knowledge_id": 1581,
+                "quote": "清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE energy_type_dict ("
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(30) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "category VARCHAR(20) COMMENT '大类'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "is_renewable TINYINT(1) DEFAULT 0 COMMENT '是否可再生'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('THERMAL', '火电', '传统能源', 0)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('HYDRO', '水电', '清洁能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('WIND', '风电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('SOLAR', '光伏', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('NUCLEAR', '核电', '清洁能源', 0)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('BIOMASS', '生物质发电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('GAS', '天然气发电', '清洁能源', 0)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('PUMPED', '抽水蓄能', '清洁能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('GEOTHERMAL', '地热发电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('HYDROGEN', '氢能', '新能源', 1)"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识列出能源类型代码、名称、清洁/新能源分类和可再生属性，Schema 的 energy_type_dict 以 type_code、type_name、category、is_renewable 及对应 INSERT 记录支持这些取值。"
+          },
+          {
+            "knowledge_id": 1593,
+            "basis": "schema_supported",
+            "fields": ["type_code", "category"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1593,
+                "quote": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "category VARCHAR(20) COMMENT '大类'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('WIND', '风电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('SOLAR', '光伏', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('BIOMASS', '生物质发电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('GEOTHERMAL', '地热发电', '新能源', 1)"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('HYDROGEN', '氢能', '新能源', 1)"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出新能源场站常用的 energy_type_code 集合，Schema 的 energy_type_dict 以对应 type_code 且 category='新能源' 的记录支持该集合。"
+          },
+          {
+            "knowledge_id": 1594,
+            "basis": "schema_supported",
+            "fields": ["type_code", "type_name"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1594,
+                "quote": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_code VARCHAR(10) PRIMARY KEY COMMENT '能源类型代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "type_name VARCHAR(30) NOT NULL COMMENT '类型名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('PUMPED', '抽水蓄能', '清洁能源', 1)"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识以 code PUMPED 指称抽水蓄能，Schema 的 energy_type_dict 存在 PUMPED 及其名称“抽水蓄能”的记录。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1597,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1597,
+                "quote": "“双碳”目标指2030年前实现碳达峰、2060年前实现碳中和。清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"
+              }
+            ],
+            "reason": "知识提到清洁能源、新能源，与 energy_type_dict.category 的取值文字相近，但未给出能源类型代码或表名，无法确认是对该字典的直接描述。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:common.voltage_level_dict",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.energy_position_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1589,
+            "basis": "schema_supported",
+            "fields": ["position_code", "position_name", "category"],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1589,
+                "quote": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE energy_position_dict ("
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "position_name VARCHAR(50) NOT NULL COMMENT '岗位名称'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "category VARCHAR(30) COMMENT '类别'"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('CE', '总工程师', '技术')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('TE', '热控工程师', '技术')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('EE', '电气工程师', '技术')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('SE', '安全工程师', '管理')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('OP', '值班员', '运行')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('MT', '检修工', '检修')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('EL', '电工', '检修')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('GM', '总经理', '管理')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('DM', '副总经理', '管理')"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "('PM', '项目经理', '管理')"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识列举能源岗位代码及其学历对应，Schema 的 energy_position_dict 以 position_code、position_name、category 支持这些代码。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [
+          {
+            "knowledge_id": 1589,
+            "kind": "conflicting_content",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1589,
+                "quote": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+              }
+            ],
+            "related_knowledge_ids": [],
+            "reason": "知识将 SE 列入“技术人员”，而 Schema 的 energy_position_dict 中 ('SE', '安全工程师', '管理') 将 SE 的 category 标为“管理”；此处代码分类不一致，按原文保留不修补。"
+          }
+        ],
+        "needs_human_review": true
+      }
+    ]
+  }
+}

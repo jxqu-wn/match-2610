@@ -12,6 +12,7 @@ from typing import Any
 
 import diskcache
 import openai
+from tenacity import Retrying, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from ..config import settings
 from ..io import canonical_json, get_logger, sha256_text
@@ -59,11 +60,18 @@ class ChatClient:
         key = api_key or settings.api_key
         if not key:
             raise ValueError("需要 DEEPSEEK_API_KEY 环境变量")
+        if retries < 0:
+            raise ValueError("retries 必须非负")
         self.model = model or settings.judge_model
         self.json_mode = json_mode
         self.thinking = thinking
         self.retries = retries
-        self.client = openai.OpenAI(api_key=key, base_url=base_url or settings.base_url, timeout=timeout or settings.llm_timeout)
+        self.client = openai.OpenAI(
+            api_key=key,
+            base_url=base_url or settings.base_url,
+            timeout=timeout or settings.llm_timeout,
+            max_retries=0,
+        )
         self.cache = diskcache.Cache(str(cache_dir)) if cache_dir else None
         self.calls: list[CallRecord] = []
 
@@ -98,30 +106,37 @@ class ChatClient:
                 self.calls.append(record)
                 return cached["content"]
 
-        for attempt in range(self.retries + 1):
-            record = CallRecord(purpose=purpose, attempt=attempt + 1)
-            self.calls.append(record)
-            started = time.monotonic()
-            try:
-                response = self._request(payload)
-            except RETRYABLE as error:
-                record.latency_seconds = time.monotonic() - started
-                record.success = False
-                record.error_type = type(error).__name__
-                if attempt == self.retries:
-                    raise RuntimeError(f"API 传输失败：{type(error).__name__}") from error
-                time.sleep(min(2**attempt, 4))
-                continue
-            record.latency_seconds = time.monotonic() - started
-            record.success = True
-            record.usage = response.pop("usage", {})
-            record.response_model = response.get("model")
-            record.finish_reason = response.get("finish_reason")
-            record.output_token_limit = max_tokens
-            content = response["content"]
-            if self.cache is not None:
-                self.cache.set(self._cache_key(payload), {"content": content, **response})
-            return content
+        retrying = Retrying(
+            stop=stop_after_attempt(self.retries + 1),
+            wait=wait_exponential(multiplier=1, max=4),
+            retry=retry_if_exception_type(RETRYABLE),
+            sleep=time.sleep,
+            reraise=True,
+        )
+        try:
+            for attempt in retrying:
+                with attempt:
+                    record = CallRecord(purpose=purpose, attempt=attempt.retry_state.attempt_number)
+                    self.calls.append(record)
+                    started = time.monotonic()
+                    try:
+                        response = self._request(payload)
+                    except RETRYABLE as error:
+                        record.latency_seconds = time.monotonic() - started
+                        record.error_type = type(error).__name__
+                        raise
+                    record.latency_seconds = time.monotonic() - started
+                    record.success = True
+                    record.usage = response.pop("usage", {})
+                    record.response_model = response.get("model")
+                    record.finish_reason = response.get("finish_reason")
+                    record.output_token_limit = max_tokens
+                    content = response["content"]
+                    if self.cache is not None:
+                        self.cache.set(self._cache_key(payload), {"content": content, **response})
+                    return content
+        except RETRYABLE as error:
+            raise RuntimeError(f"API 传输失败：{type(error).__name__}") from error
         raise RuntimeError("API 重试耗尽")
 
     def _request(self, payload: dict[str, Any]) -> dict[str, Any]:

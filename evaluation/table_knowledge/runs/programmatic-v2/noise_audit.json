@@ -1,0 +1,588 @@
+{
+  "definition": "effective=program pairs accepted by answer; unrelated=program pairs absent from answer; target unrelated<=2*effective; table-level correctness does not establish per-question relevance",
+  "summary": {
+    "effective_pairs": 200,
+    "unrelated_pairs": 56,
+    "noise_ratio": 0.28,
+    "passes_global_target": true,
+    "violating_table_count": 7
+  },
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "effective_pairs": 4,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "effective_pairs": 2,
+      "unrelated_pairs": 2,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 3,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "effective_pairs": 2,
+      "unrelated_pairs": 3,
+      "noise_ratio": 1.5,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "effective_pairs": 4,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "effective_pairs": 4,
+      "unrelated_pairs": 3,
+      "noise_ratio": 0.75,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.order_status_dict",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.payment_method_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.payment_status_dict",
+      "effective_pairs": 2,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.refund_reason_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.order_channel_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.platform_dict",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "effective_pairs": 5,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "effective_pairs": 8,
+      "unrelated_pairs": 1,
+      "noise_ratio": 0.125,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "effective_pairs": 8,
+      "unrelated_pairs": 3,
+      "noise_ratio": 0.375,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "effective_pairs": 5,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "effective_pairs": 6,
+      "unrelated_pairs": 1,
+      "noise_ratio": 0.16666666666666666,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "effective_pairs": 12,
+      "unrelated_pairs": 6,
+      "noise_ratio": 0.5,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "effective_pairs": 12,
+      "unrelated_pairs": 1,
+      "noise_ratio": 0.08333333333333333,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "effective_pairs": 4,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "effective_pairs": 13,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "effective_pairs": 15,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "effective_pairs": 5,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "effective_pairs": 2,
+      "unrelated_pairs": 2,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "effective_pairs": 13,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "effective_pairs": 4,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "effective_pairs": 0,
+      "unrelated_pairs": 1,
+      "noise_ratio": null,
+      "passes_200_percent_target": false,
+      "zero_effective_with_noise": true
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "effective_pairs": 1,
+      "unrelated_pairs": 1,
+      "noise_ratio": 1.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "effective_pairs": 0,
+      "unrelated_pairs": 0,
+      "noise_ratio": null,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.customer",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.product",
+      "effective_pairs": 3,
+      "unrelated_pairs": 1,
+      "noise_ratio": 0.3333333333333333,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "effective_pairs": 1,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "effective_pairs": 11,
+      "unrelated_pairs": 0,
+      "noise_ratio": 0.0,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "effective_pairs": 6,
+      "unrelated_pairs": 1,
+      "noise_ratio": 0.16666666666666666,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "effective_pairs": 3,
+      "unrelated_pairs": 2,
+      "noise_ratio": 0.6666666666666666,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "effective_pairs": 15,
+      "unrelated_pairs": 13,
+      "noise_ratio": 0.8666666666666667,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "effective_pairs": 17,
+      "unrelated_pairs": 2,
+      "noise_ratio": 0.11764705882352941,
+      "passes_200_percent_target": true,
+      "zero_effective_with_noise": false
+    }
+  ]
+}

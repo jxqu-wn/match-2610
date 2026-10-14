@@ -1,0 +1,612 @@
+{
+  "definition": "For each answer table, all answer knowledge IDs must occur in the program table; extra program knowledge is allowed. Empty answer tables are vacuously covered if the program table exists.",
+  "answer_path": "evaluation/table_knowledge/runs/reference-v1/tables.json",
+  "program_path": "data/preprocessed/schema_catalog.json",
+  "summary": {
+    "all_tables": 72,
+    "fully_covered_tables": 51,
+    "nonempty_answer_tables": 44,
+    "fully_covered_nonempty_tables": 23,
+    "empty_answer_tables": 28,
+    "missing_program_tables": [],
+    "all_table_full_coverage_rate": 0.7083333333333334,
+    "nonempty_table_full_coverage_rate": 0.5227272727272727
+  },
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "answer_count": 16,
+      "program_count": 4,
+      "fully_covered": false,
+      "missing": [
+        1590,
+        1596,
+        1598,
+        1763,
+        1779,
+        1780,
+        1793,
+        1794,
+        1795,
+        1796,
+        1797,
+        1800
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "answer_count": 2,
+      "program_count": 4,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "answer_count": 0,
+      "program_count": 3,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "answer_count": 1,
+      "program_count": 2,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "answer_count": 2,
+      "program_count": 5,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "answer_count": 4,
+      "program_count": 4,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "answer_count": 4,
+      "program_count": 7,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "answer_count": 1,
+      "program_count": 2,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "answer_count": 1,
+      "program_count": 2,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.order_status_dict",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_method_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_status_dict",
+      "answer_count": 2,
+      "program_count": 2,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.refund_reason_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.order_channel_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.platform_dict",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "answer_count": 0,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "answer_count": 2,
+      "program_count": 1,
+      "fully_covered": false,
+      "missing": [
+        1573
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "answer_count": 7,
+      "program_count": 5,
+      "fully_covered": false,
+      "missing": [
+        1761,
+        1787
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "answer_count": 11,
+      "program_count": 9,
+      "fully_covered": false,
+      "missing": [
+        1769,
+        1783,
+        1798
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "answer_count": 12,
+      "program_count": 11,
+      "fully_covered": false,
+      "missing": [
+        1761,
+        1775,
+        1781,
+        1788
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "answer_count": 5,
+      "program_count": 5,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": false,
+      "missing": [
+        1586
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "answer_count": 8,
+      "program_count": 7,
+      "fully_covered": false,
+      "missing": [
+        1761,
+        1777
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "answer_count": 14,
+      "program_count": 18,
+      "fully_covered": false,
+      "missing": [
+        1630,
+        1664
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "answer_count": 14,
+      "program_count": 13,
+      "fully_covered": false,
+      "missing": [
+        1625,
+        1627
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "answer_count": 6,
+      "program_count": 4,
+      "fully_covered": false,
+      "missing": [
+        1623,
+        1643
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "answer_count": 14,
+      "program_count": 13,
+      "fully_covered": false,
+      "missing": [
+        1624
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "answer_count": 16,
+      "program_count": 15,
+      "fully_covered": false,
+      "missing": [
+        1664
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "answer_count": 9,
+      "program_count": 5,
+      "fully_covered": false,
+      "missing": [
+        1580,
+        1587,
+        1593,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "answer_count": 2,
+      "program_count": 4,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "answer_count": 16,
+      "program_count": 13,
+      "fully_covered": false,
+      "missing": [
+        1591,
+        1602,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "answer_count": 6,
+      "program_count": 4,
+      "fully_covered": false,
+      "missing": [
+        1599,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "answer_count": 3,
+      "program_count": 2,
+      "fully_covered": false,
+      "missing": [
+        1580,
+        1586
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "answer_count": 0,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "answer_count": 0,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "answer_count": 2,
+      "program_count": 2,
+      "fully_covered": false,
+      "missing": [
+        1579
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "answer_count": 6,
+      "program_count": 0,
+      "fully_covered": false,
+      "missing": [
+        1572,
+        1573,
+        1574,
+        1575,
+        1577,
+        1579
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "answer_count": 0,
+      "program_count": 0,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "answer_count": 0,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "answer_count": 0,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "answer_count": 2,
+      "program_count": 2,
+      "fully_covered": false,
+      "missing": [
+        1579
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "answer_count": 5,
+      "program_count": 0,
+      "fully_covered": false,
+      "missing": [
+        1572,
+        1573,
+        1574,
+        1577,
+        1579
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.customer",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.product",
+      "answer_count": 3,
+      "program_count": 4,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "answer_count": 1,
+      "program_count": 1,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "answer_count": 11,
+      "program_count": 11,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "answer_count": 6,
+      "program_count": 7,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "answer_count": 3,
+      "program_count": 5,
+      "fully_covered": true,
+      "missing": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "answer_count": 28,
+      "program_count": 28,
+      "fully_covered": false,
+      "missing": [
+        1730,
+        1732,
+        1733,
+        1734,
+        1735,
+        1736,
+        1737,
+        1738,
+        1741,
+        1742,
+        1753,
+        1758,
+        1777
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "answer_count": 17,
+      "program_count": 19,
+      "fully_covered": true,
+      "missing": []
+    }
+  ]
+}

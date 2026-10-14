@@ -1,0 +1,1396 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_text": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1765,
+          "knowledge_text": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1768,
+          "knowledge_text": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "knowledge": [
+        {
+          "knowledge_id": 1663,
+          "knowledge_text": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type，常见的类型包括：有限责任公司、股份有限公司、国有独资公司等，国有独资公司也是国有企业。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "knowledge": [
+        {
+          "knowledge_id": 1660,
+          "knowledge_text": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code，可通过common.dict_size_category查看名称。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "knowledge": [
+        {
+          "knowledge_id": 1648,
+          "knowledge_text": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"
+        },
+        {
+          "knowledge_id": 1649,
+          "knowledge_text": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"
+        },
+        {
+          "knowledge_id": 1650,
+          "knowledge_text": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"
+        },
+        {
+          "knowledge_id": 1651,
+          "knowledge_text": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "knowledge": [
+        {
+          "knowledge_id": 1659,
+          "knowledge_text": "上市公司所属行业分类存储在companies.industry_code，对应的行业名称在common.dict_industry表中。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1581,
+          "knowledge_text": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1594,
+          "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1589,
+          "knowledge_text": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1582,
+          "knowledge_text": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1584,
+          "knowledge_text": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "knowledge": [
+        {
+          "knowledge_id": 1571,
+          "knowledge_text": "类目内商品销售排名（类目排名/分类商品排名）：统计每个商品的销售额或销量后，在商品分类内部排序。MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。SQL模式：RANK within category by SUM(order_item.item_amount) or SUM(order_item.quantity)。示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.order_status_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1568,
+          "knowledge_text": "订单转化完成率（完成率/订单完成率）指已完成订单数占全部订单数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.orders.order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*), 4) AS order_complete_rate FROM ecommerce.orders。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.payment_method_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_status_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1556,
+          "knowledge_text": "实付销售额（成交额/实付金额/销售额）指订单应付金额或支付成功金额的汇总。若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。SQL逻辑：SUM(ecommerce.orders.payable_amount)。示例：SELECT ROUND(SUM(o.payable_amount), 2) AS paid_sales FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'。注意：若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+        },
+        {
+          "knowledge_id": 1557,
+          "knowledge_text": "支付成功率（支付转化率/付款成功率）指成功支付订单数占全部支付记录数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.payment.payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*), 4) AS payment_success_rate FROM ecommerce.payment。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.refund_reason_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.order_channel_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.platform_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "knowledge": [
+        {
+          "knowledge_id": 1572,
+          "knowledge_text": "成绩折算规则（教育教务常用口径示例）：总评 = 平时*0.30 + 期中*0.30 + 期末*0.40。总评四舍五入保留2位。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "knowledge": [
+        {
+          "knowledge_id": 1573,
+          "knowledge_text": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1791,
+          "knowledge_text": "消防公司属于特种运输企业，其经营类型通常为'危化品运输'。在 vehicle_company 表中，消防公司通过 business_type='危化品运输' 进行筛选。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1768,
+          "knowledge_text": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+        },
+        {
+          "knowledge_id": 1769,
+          "knowledge_text": "驾驶员状态“正常”表示驾照有效，可驾驶车辆；“暂扣”表示暂时失去驾驶资格；“吊销”表示永久取消资格；“过期”表示未及时换证。"
+        },
+        {
+          "knowledge_id": 1773,
+          "knowledge_text": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+        },
+        {
+          "knowledge_id": 1783,
+          "knowledge_text": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1792,
+          "knowledge_text": "驾驶员驾照领证年限分段标准：领证超过10年为长期驾龄，5至10年为中期驾龄，5年以下为新手驾龄。领证年限通过当前日期与issue_date的年份差计算。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1798,
+          "knowledge_text": "低龄驾驶员一般指年龄<25岁的驾驶员。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1762,
+          "knowledge_text": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+        },
+        {
+          "knowledge_id": 1770,
+          "knowledge_text": "车辆注册年份提取函数：YEAR(register_date)。例如查询2023年注册的车辆：YEAR(register_date)=2023。"
+        },
+        {
+          "knowledge_id": 1772,
+          "knowledge_text": "车辆保险到期日 insurance_expire 若小于当前日期，表示保险已过期。过保车辆不得上路。"
+        },
+        {
+          "knowledge_id": 1775,
+          "knowledge_text": "黄牌车指载重≥4.5吨的货车，蓝牌车为载重＜4.5的货车。"
+        },
+        {
+          "knowledge_id": 1781,
+          "knowledge_text": "新能源车辆指纯电动车、插电式混合动力车、燃料电池车。品牌名称中含有“电动”关键词时为新能源车辆。"
+        },
+        {
+          "knowledge_id": 1782,
+          "knowledge_text": "车辆使用年限超过15年的货车应当强制报废。当前年份减去 manufacture_year > 15。"
+        },
+        {
+          "knowledge_id": 1785,
+          "knowledge_text": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+        },
+        {
+          "knowledge_id": 1788,
+          "knowledge_text": "节假日高速公路免费时段：春节、清明、劳动节、国庆节，共4个法定节假日，免费对象为7座及以下小型客车。"
+        },
+        {
+          "knowledge_id": 1789,
+          "knowledge_text": "“老旧车辆”指注册日期 register_date 超过10年的车辆（以当前日期计算）。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "knowledge": [
+        {
+          "knowledge_id": 1586,
+          "knowledge_text": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1776,
+          "knowledge_text": "船舶最大载重 max_load 超过10000吨的称为“万吨轮”。"
+        },
+        {
+          "knowledge_id": 1777,
+          "knowledge_text": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。高速船舶通常指航速≥25节。"
+        },
+        {
+          "knowledge_id": 1786,
+          "knowledge_text": "船舶自持力 endurance 表示船舶在不补充燃料、淡水、食物的情况下能够连续航行的天数或海里数。"
+        },
+        {
+          "knowledge_id": 1790,
+          "knowledge_text": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "knowledge": [
+        {
+          "knowledge_id": 1616,
+          "knowledge_text": "companies.is_key_high_tech 表示是否为重点扶持高新技术企业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1618,
+          "knowledge_text": "companies.is_tech_advanced_service 表示是否为技术先进型服务企业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1619,
+          "knowledge_text": "companies.established_year 表示公司注册/成立年份，计算成立年限时可用当前年份减该字段。"
+        },
+        {
+          "knowledge_id": 1620,
+          "knowledge_text": "companies.registered_capital 表示注册资本，单位：万元。"
+        },
+        {
+          "knowledge_id": 1621,
+          "knowledge_text": "companies.is_private 表示是否民营企业，TRUE为民营，FALSE为非民营。"
+        },
+        {
+          "knowledge_id": 1652,
+          "knowledge_text": "高新技术企业认定资格由companies.is_key_high_tech字段标识，若为TRUE则适用15%优惠税率，相比普通税率25%可节省10%的应纳税额。"
+        },
+        {
+          "knowledge_id": 1656,
+          "knowledge_text": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"
+        },
+        {
+          "knowledge_id": 1659,
+          "knowledge_text": "上市公司所属行业分类存储在companies.industry_code，对应的行业名称在common.dict_industry表中。"
+        },
+        {
+          "knowledge_id": 1660,
+          "knowledge_text": "企业规模划型分为大型、中型、小型、微型，存储在companies.size_category_code，可通过common.dict_size_category查看名称。"
+        },
+        {
+          "knowledge_id": 1661,
+          "knowledge_text": "企业成立年限 = 当前年份 - companies.established_year。"
+        },
+        {
+          "knowledge_id": 1662,
+          "knowledge_text": "某些税收优惠政策与行业有关，如高新技术企业主要集中在制造业、信息技术等行业，但数据库已有is_key_high_tech字段，无需依赖行业推断。"
+        },
+        {
+          "knowledge_id": 1663,
+          "knowledge_text": "登记注册类型通过companies.registration_type_code引用字典表common.dict_registration_type，常见的类型包括：有限责任公司、股份有限公司、国有独资公司等，国有独资公司也是国有企业。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "knowledge": [
+        {
+          "knowledge_id": 1604,
+          "knowledge_text": "stocks.total_shares 表示股本，即公司发行的所有股票数量，单位：股。"
+        },
+        {
+          "knowledge_id": 1605,
+          "knowledge_text": "stocks.current_price 表示最新股票价格，通常为最近交易日收盘价，单位：元。"
+        },
+        {
+          "knowledge_id": 1624,
+          "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+        },
+        {
+          "knowledge_id": 1625,
+          "knowledge_text": "市净率(P/B)计算公式：股价 / 每股净资产，股价可使用最近收盘价。"
+        },
+        {
+          "knowledge_id": 1627,
+          "knowledge_text": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100，其中股息需由分/股转换为元/股。"
+        },
+        {
+          "knowledge_id": 1632,
+          "knowledge_text": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"
+        },
+        {
+          "knowledge_id": 1633,
+          "knowledge_text": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"
+        },
+        {
+          "knowledge_id": 1635,
+          "knowledge_text": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"
+        },
+        {
+          "knowledge_id": 1644,
+          "knowledge_text": "股票总市值计算公式：current_price × total_shares，单位：元。其中 current_price 为最新股价（元），total_shares 为总股本（股）。"
+        },
+        {
+          "knowledge_id": 1646,
+          "knowledge_text": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。dividend_cash 单位为万元，需转换为元后除以总股本（股），结果单位：元/股。"
+        },
+        {
+          "knowledge_id": 1648,
+          "knowledge_text": "股票按股东权利分类：普通股(COMMON)、优先股(PREFERRED)，字段stocks.share_right_type。"
+        },
+        {
+          "knowledge_id": 1649,
+          "knowledge_text": "股票按是否记名分类：记名股票(REGISTERED)、无记名股票(BEARER)，字段stocks.register_type。"
+        },
+        {
+          "knowledge_id": 1650,
+          "knowledge_text": "股票按面额标示分类：面额股(PAR)、无面额股(NO_PAR)，字段stocks.par_value_type。"
+        },
+        {
+          "knowledge_id": 1651,
+          "knowledge_text": "中国股票按上市地点和投资者分类：A股（境内上市，人民币交易）、B股（境内上市，外币交易）、H股（香港上市）、N股（纽约上市）等，字段stocks.market_class。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "knowledge": [
+        {
+          "knowledge_id": 1622,
+          "knowledge_text": "日成交总价值近似计算公式：volume * close_price，单位：元。"
+        },
+        {
+          "knowledge_id": 1623,
+          "knowledge_text": "日平均成交价近似计算公式：日成交总价值 / 成交量，可近似使用收盘价代替。"
+        },
+        {
+          "knowledge_id": 1633,
+          "knowledge_text": "换手率计算公式：(volume / total_shares) * 100%，反映股票交易活跃程度。"
+        },
+        {
+          "knowledge_id": 1636,
+          "knowledge_text": "日涨跌幅计算公式：(close_price - open_price) / open_price * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1640,
+          "knowledge_text": "年化波动率计算公式：日涨跌幅的标准差 × SQRT(250)，其中日涨跌幅 = (close_price - open_price) / open_price。250为年交易日数近似值。单位：%。"
+        },
+        {
+          "knowledge_id": 1643,
+          "knowledge_text": "股价波动幅度比例（价格波动率）计算公式：(年内最高价 - 年内最低价) / 年内均价，年内均价可用收盘价均值近似。反映股价年度波动程度。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "knowledge": [
+        {
+          "knowledge_id": 1606,
+          "knowledge_text": "company_financials.dividend_cash 表示现金分红总额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1607,
+          "knowledge_text": "company_financials.dividend_stock 表示每股股息，单位：分/股，计算时需除以100转换为元。"
+        },
+        {
+          "knowledge_id": 1608,
+          "knowledge_text": "company_financials.total_assets 表示总资产，单位：万元。"
+        },
+        {
+          "knowledge_id": 1609,
+          "knowledge_text": "company_financials.total_liabilities 表示总负债，单位：万元。"
+        },
+        {
+          "knowledge_id": 1624,
+          "knowledge_text": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+        },
+        {
+          "knowledge_id": 1626,
+          "knowledge_text": "净利润近似计算公式：total_assets - total_liabilities（本库特殊定义，实际净利润≠资产-负债）。"
+        },
+        {
+          "knowledge_id": 1627,
+          "knowledge_text": "股息率(DYR)计算公式：(dividend_stock / 100.0) / 股价 * 100，其中股息需由分/股转换为元/股。"
+        },
+        {
+          "knowledge_id": 1632,
+          "knowledge_text": "市盈率(PE)近似计算公式：股价 / (净利润 / 总股本) = current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"
+        },
+        {
+          "knowledge_id": 1634,
+          "knowledge_text": "资产负债率计算公式：(total_liabilities / total_assets) * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1635,
+          "knowledge_text": "每股收益(EPS)近似计算公式：净利润 / 总股本 = (total_assets - total_liabilities) * 10000 / total_shares。"
+        },
+        {
+          "knowledge_id": 1637,
+          "knowledge_text": "红利支付率计算公式：dividend_cash / (total_assets - total_liabilities) * 100%，单位：%。"
+        },
+        {
+          "knowledge_id": 1638,
+          "knowledge_text": "净资产收益率(ROE)计算公式：(净利润 / 净资产) × 100%。其中净利润 = total_assets - total_liabilities，净资产 = total_assets，本库中以每股收益/每股净资产替代计算。单位：%。"
+        },
+        {
+          "knowledge_id": 1645,
+          "knowledge_text": "总资产收益率(ROA)计算公式：(净利润 / 总资产) × 100%。本库中净利润 = total_assets - total_liabilities，单位：%。"
+        },
+        {
+          "knowledge_id": 1646,
+          "knowledge_text": "每股现金分红(DPS)计算公式：dividend_cash × 10000 / total_shares。dividend_cash 单位为万元，需转换为元后除以总股本（股），结果单位：元/股。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge": [
+        {
+          "knowledge_id": 1610,
+          "knowledge_text": "corporate_income_tax_returns.revenue 表示收入总额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1611,
+          "knowledge_text": "corporate_income_tax_returns.non_taxable_income 表示不征税收入与免税收入合计，单位：万元。"
+        },
+        {
+          "knowledge_id": 1612,
+          "knowledge_text": "corporate_income_tax_returns.deductions 表示扣除金额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1613,
+          "knowledge_text": "corporate_income_tax_returns.prior_year_losses 表示允许弥补的以前年度亏损，单位：万元。"
+        },
+        {
+          "knowledge_id": 1614,
+          "knowledge_text": "corporate_income_tax_returns.employee_count 表示从业人数，为全年季度平均值，单位：人。"
+        },
+        {
+          "knowledge_id": 1615,
+          "knowledge_text": "corporate_income_tax_returns.total_assets 表示资产总额（用于小型微利企业判定），为全年季度平均值，单位：万元。"
+        },
+        {
+          "knowledge_id": 1617,
+          "knowledge_text": "corporate_income_tax_returns.is_restricted_industry 表示是否从事国家限制或禁止行业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1628,
+          "knowledge_text": "应纳税所得额计算公式：revenue - non_taxable_income - deductions - prior_year_losses，单位：万元。"
+        },
+        {
+          "knowledge_id": 1629,
+          "knowledge_text": "小型微利企业判定条件：应纳税所得额≤100万元 且 从业人数≤300人 且 资产总额≤5000万元 且 未从事国家限制或禁止行业。"
+        },
+        {
+          "knowledge_id": 1630,
+          "knowledge_text": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。高新技术企业优先于小型微利判定。"
+        },
+        {
+          "knowledge_id": 1631,
+          "knowledge_text": "企业所得税额计算公式：应纳税所得额 × 适用税率，单位：万元。"
+        },
+        {
+          "knowledge_id": 1639,
+          "knowledge_text": "实际税负率计算公式：(应纳税额 / 收入总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，单位：%。"
+        },
+        {
+          "knowledge_id": 1641,
+          "knowledge_text": "所得税贡献率计算公式：(应纳税额 / 资产总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，资产总额取自申报表中的全年季度平均值。单位：%。"
+        },
+        {
+          "knowledge_id": 1642,
+          "knowledge_text": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"
+        },
+        {
+          "knowledge_id": 1647,
+          "knowledge_text": "收入扣除后利润率计算公式：(revenue - deductions) / revenue × 100%，单位：%。反映扣除后的利润空间。"
+        },
+        {
+          "knowledge_id": 1653,
+          "knowledge_text": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"
+        },
+        {
+          "knowledge_id": 1654,
+          "knowledge_text": "一般企业所得税税率为25%。"
+        },
+        {
+          "knowledge_id": 1655,
+          "knowledge_text": "若corporate_income_tax_returns.is_restricted_industry为TRUE，表示企业从事国家限制或禁止行业，不能享受小型微利企业优惠。"
+        },
+        {
+          "knowledge_id": 1657,
+          "knowledge_text": "符合条件的小型微利企业，年应纳税所得额不超过100万元的部分，减按25%计入应纳税所得额，按20%税率缴纳企业所得税（实际税负5%）。本库按简化规则直接使用20%税率。"
+        },
+        {
+          "knowledge_id": 1658,
+          "knowledge_text": "企业研究开发费用未形成无形资产计入当期损益的，在按照规定据实扣除的基础上，可按研究开发费用的100%在税前加计扣除（制造业企业），其他企业按75%。本库中加计扣除包含在deductions字段内。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1580,
+          "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+        },
+        {
+          "knowledge_id": 1587,
+          "knowledge_text": "“五大发电集团”指：华能国际(EC003)、大唐发电(EC004)、华电集团(EC005)、国家电投(EC006)、国家能源集团(EC009)。“两网”指：国家电网(EC001、EC020-EC022)、南方电网(EC002、EC023)。"
+        },
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1595,
+          "knowledge_text": "企业员工规模等级：大型企业 staff_count≥5000，中型企业 1000≤staff_count<5000，小型企业 staff_count<1000。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "knowledge": [
+        {
+          "knowledge_id": 1584,
+          "knowledge_text": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"
+        },
+        {
+          "knowledge_id": 1588,
+          "knowledge_text": "资质到期判断：expire_date < CURDATE() 表示已过期，expire_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 180 DAY) 表示未来半年内到期。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge": [
+        {
+          "knowledge_id": 1581,
+          "knowledge_text": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+        },
+        {
+          "knowledge_id": 1582,
+          "knowledge_text": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+        },
+        {
+          "knowledge_id": 1583,
+          "knowledge_text": "装机容量单位MW（兆瓦），年发电量单位万kWh。大型火电厂装机容量≥3000MW，大型水电站装机容量≥1000MW，大型风电场装机容量≥500MW，大型光伏电站装机容量≥200MW。"
+        },
+        {
+          "knowledge_id": 1591,
+          "knowledge_text": "场站运行状态：'运行'表示正常发电中，'在建'表示施工中尚未并网，'停机'表示临时停运可恢复，'退役'表示永久关停。"
+        },
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1594,
+          "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+        },
+        {
+          "knowledge_id": 1597,
+          "knowledge_text": "“双碳”目标指2030年前实现碳达峰、2060年前实现碳中和。清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"
+        },
+        {
+          "knowledge_id": 1600,
+          "knowledge_text": "年发电量超过装机容量×5000小时的火电厂为超高效火电厂。火电年平均利用小时数约为4500小时。"
+        },
+        {
+          "knowledge_id": 1601,
+          "knowledge_text": "年利用小时数计算公式：年利用小时数 = 年发电量(万kWh) × 10000 ÷ 装机容量(MW) ÷ 1000，简化后为：年利用小时数 = 年发电量(万kWh) ÷ 装机容量(MW) × 10。"
+        },
+        {
+          "knowledge_id": 1602,
+          "knowledge_text": "年利用小时数用于衡量发电场站利用效率，通用高效判断阈值为年利用小时数大于3000小时。"
+        },
+        {
+          "knowledge_id": 1603,
+          "knowledge_text": "小型发电场站判断标准：装机容量低于100MW。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge": [
+        {
+          "knowledge_id": 1585,
+          "knowledge_text": "供电等级划分：一级供电区域为直辖市、省会城市、计划单列市市区；二级供电区域为地级市市区及经济发达县级市；三级供电区域为普通县级市及农村地区。"
+        },
+        {
+          "knowledge_id": 1599,
+          "knowledge_text": "供电户数超过200万的为特大型供电区域，100万-200万为大型供电区域，50万-100万为中型，低于50万为小型。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "knowledge": [
+        {
+          "knowledge_id": 1580,
+          "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+        },
+        {
+          "knowledge_id": 1586,
+          "knowledge_text": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"
+        },
+        {
+          "knowledge_id": 1589,
+          "knowledge_text": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "knowledge": [
+        {
+          "knowledge_id": 1575,
+          "knowledge_text": "选课退课规则（示例）：enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+        },
+        {
+          "knowledge_id": 1576,
+          "knowledge_text": "退课率 = 退课去重学生/选课去重学生"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_text": "总评折算总分：同一学生跨多门课把总评相加"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge": [
+        {
+          "knowledge_id": 1572,
+          "knowledge_text": "成绩折算规则（教育教务常用口径示例）：总评 = 平时*0.30 + 期中*0.30 + 期末*0.40。总评四舍五入保留2位。"
+        },
+        {
+          "knowledge_id": 1573,
+          "knowledge_text": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        },
+        {
+          "knowledge_id": 1575,
+          "knowledge_text": "选课退课规则（示例）：enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_text": "总评折算总分：同一学生跨多门课把总评相加"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "knowledge": [
+        {
+          "knowledge_id": 1575,
+          "knowledge_text": "选课退课规则（示例）：enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+        },
+        {
+          "knowledge_id": 1576,
+          "knowledge_text": "退课率 = 退课去重学生/选课去重学生"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "knowledge": [
+        {
+          "knowledge_id": 1572,
+          "knowledge_text": "成绩折算规则（教育教务常用口径示例）：总评 = 平时*0.30 + 期中*0.30 + 期末*0.40。总评四舍五入保留2位。"
+        },
+        {
+          "knowledge_id": 1573,
+          "knowledge_text": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_text": "总评折算总分：同一学生跨多门课把总评相加"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.customer",
+      "knowledge": [
+        {
+          "knowledge_id": 1564,
+          "knowledge_text": "高价值用户（核心用户/高消费用户/大客户）通常按用户累计应付金额或累计支付金额排序。SQL逻辑：ORDER BY SUM(ecommerce.orders.payable_amount) DESC。示例：SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_payable FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_payable DESC LIMIT 10。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.product",
+      "knowledge": [
+        {
+          "knowledge_id": 1563,
+          "knowledge_text": "热销商品（TOP商品/畅销商品/销量最高商品）通常按销量从高到低排序；若问题强调销售额，则按 item_amount 汇总排序。SQL逻辑：ORDER BY SUM(ecommerce.order_item.quantity) DESC。示例：SELECT p.product_id, p.product_name, SUM(oi.quantity) AS sales_quantity FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY sales_quantity DESC LIMIT 10。"
+        },
+        {
+          "knowledge_id": 1565,
+          "knowledge_text": "库存告警（低库存/库存不足/安全库存预警）指当前库存数量低于或等于安全库存数量。SQL逻辑：ecommerce.inventory.stock_quantity <= ecommerce.inventory.safety_stock。示例：SELECT i.product_id, p.product_name, i.warehouse_name, i.stock_quantity, i.safety_stock FROM ecommerce.inventory i JOIN ecommerce.product p ON i.product_id = p.product_id WHERE i.stock_quantity <= i.safety_stock。"
+        },
+        {
+          "knowledge_id": 1571,
+          "knowledge_text": "类目内商品销售排名（类目排名/分类商品排名）：统计每个商品的销售额或销量后，在商品分类内部排序。MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。SQL模式：RANK within category by SUM(order_item.item_amount) or SUM(order_item.quantity)。示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "knowledge": [
+        {
+          "knowledge_id": 1565,
+          "knowledge_text": "库存告警（低库存/库存不足/安全库存预警）指当前库存数量低于或等于安全库存数量。SQL逻辑：ecommerce.inventory.stock_quantity <= ecommerce.inventory.safety_stock。示例：SELECT i.product_id, p.product_name, i.warehouse_name, i.stock_quantity, i.safety_stock FROM ecommerce.inventory i JOIN ecommerce.product p ON i.product_id = p.product_id WHERE i.stock_quantity <= i.safety_stock。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "knowledge": [
+        {
+          "knowledge_id": 1554,
+          "knowledge_text": "GMV（商品交易总额/订单总额/交易总额）指订单商品总交易额，通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败；若题目强调实付金额，应使用 payable_amount 或 payment_amount。SQL逻辑：SUM(ecommerce.orders.total_amount)。示例：SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders。注意：如果问题明确要求成交或实付，优先使用 payable_amount。"
+        },
+        {
+          "knowledge_id": 1555,
+          "knowledge_text": "客单价（AOV/平均订单金额/平均客单价）指平均每笔订单的应付金额，按订单应付金额总和除以订单数计算。SQL逻辑：SUM(ecommerce.orders.payable_amount) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(SUM(payable_amount) / COUNT(DISTINCT order_id), 2) AS avg_order_value FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1556,
+          "knowledge_text": "实付销售额（成交额/实付金额/销售额）指订单应付金额或支付成功金额的汇总。若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。SQL逻辑：SUM(ecommerce.orders.payable_amount)。示例：SELECT ROUND(SUM(o.payable_amount), 2) AS paid_sales FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'。注意：若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+        },
+        {
+          "knowledge_id": 1558,
+          "knowledge_text": "退款率（订单退款率/售后退款率）可按退款订单数占订单数计算。订单明细存在 refund_amount 大于 0 时，可认为发生退款。SQL逻辑：COUNT(DISTINCT CASE WHEN ecommerce.order_item.refund_amount > 0 THEN ecommerce.order_item.order_id END) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN oi.order_id END) / COUNT(DISTINCT o.order_id), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id。"
+        },
+        {
+          "knowledge_id": 1559,
+          "knowledge_text": "复购率（重复购买率/用户复购率）指下单次数大于 1 的用户数占下单用户数的比例。SQL逻辑：COUNT(CASE WHEN user_order_count > 1 THEN 1 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN t.order_count > 1 THEN 1 ELSE 0 END) / COUNT(*), 4) AS repurchase_rate FROM (SELECT customer_id, COUNT(DISTINCT order_id) AS order_count FROM ecommerce.orders GROUP BY customer_id) t。"
+        },
+        {
+          "knowledge_id": 1564,
+          "knowledge_text": "高价值用户（核心用户/高消费用户/大客户）通常按用户累计应付金额或累计支付金额排序。SQL逻辑：ORDER BY SUM(ecommerce.orders.payable_amount) DESC。示例：SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_payable FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_payable DESC LIMIT 10。"
+        },
+        {
+          "knowledge_id": 1566,
+          "knowledge_text": "月销售额（按月销售额/每月成交额）按订单时间 order_time 的年月维度汇总订单应付金额。SQL逻辑：GROUP BY DATE_FORMAT(ecommerce.orders.order_time, '%Y-%m')。示例：SELECT DATE_FORMAT(order_time, '%Y-%m') AS month, ROUND(SUM(payable_amount), 2) AS monthly_sales FROM ecommerce.orders GROUP BY DATE_FORMAT(order_time, '%Y-%m') ORDER BY month。"
+        },
+        {
+          "knowledge_id": 1567,
+          "knowledge_text": "下单用户数（购买用户数/成交用户数）指有订单记录的去重用户数。SQL逻辑：COUNT(DISTINCT ecommerce.orders.customer_id)。示例：SELECT COUNT(DISTINCT customer_id) AS order_user_count FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1568,
+          "knowledge_text": "订单转化完成率（完成率/订单完成率）指已完成订单数占全部订单数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.orders.order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*), 4) AS order_complete_rate FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1569,
+          "knowledge_text": "用户最近订单（最近一次下单/最新订单）：需要按 customer_id 分组，并按 order_time 降序取第一条，可使用窗口函数或 MySQL 5.7 兼容的子查询。SQL模式：MAX(order_time) per customer_id。示例：SELECT o.* FROM ecommerce.orders o JOIN (SELECT customer_id, MAX(order_time) AS max_order_time FROM ecommerce.orders GROUP BY customer_id) t ON o.customer_id = t.customer_id AND o.order_time = t.max_order_time。注意：MySQL 5.7 不支持 ROW_NUMBER，可用聚合子查询实现。"
+        },
+        {
+          "knowledge_id": 1570,
+          "knowledge_text": "高于平均客单价用户（超过平均客单价/高客单用户）：先按用户聚合计算用户客单价，再与全局客单价比较。SQL模式：user_avg_order_value > global_avg_order_value。示例：SELECT t.customer_id, ROUND(t.user_aov, 2) AS user_aov FROM (SELECT customer_id, SUM(payable_amount) / COUNT(DISTINCT order_id) AS user_aov FROM ecommerce.orders GROUP BY customer_id) t WHERE t.user_aov > (SELECT SUM(payable_amount) / COUNT(DISTINCT order_id) FROM ecommerce.orders)。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "knowledge": [
+        {
+          "knowledge_id": 1558,
+          "knowledge_text": "退款率（订单退款率/售后退款率）可按退款订单数占订单数计算。订单明细存在 refund_amount 大于 0 时，可认为发生退款。SQL逻辑：COUNT(DISTINCT CASE WHEN ecommerce.order_item.refund_amount > 0 THEN ecommerce.order_item.order_id END) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN oi.order_id END) / COUNT(DISTINCT o.order_id), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id。"
+        },
+        {
+          "knowledge_id": 1560,
+          "knowledge_text": "毛利额（利润额/商品毛利）指订单明细应付金额减去明细成本金额后的差额汇总。SQL逻辑：SUM(ecommerce.order_item.item_amount - ecommerce.order_item.item_cost_amount)。示例：SELECT ROUND(SUM(item_amount - item_cost_amount), 2) AS gross_profit FROM ecommerce.order_item。"
+        },
+        {
+          "knowledge_id": 1561,
+          "knowledge_text": "毛利率（销售毛利率/利润率）指毛利额占销售额的比例，按订单明细的 item_amount 和 item_cost_amount 计算。SQL逻辑：SUM(item_amount - item_cost_amount) / SUM(item_amount)。示例：SELECT ROUND(SUM(item_amount - item_cost_amount) / SUM(item_amount), 4) AS gross_margin_rate FROM ecommerce.order_item。"
+        },
+        {
+          "knowledge_id": 1562,
+          "knowledge_text": "销量（销售数量/售出件数）指订单明细里的购买数量汇总，一般使用 order_item.quantity。SQL逻辑：SUM(ecommerce.order_item.quantity)。示例：SELECT product_id, SUM(quantity) AS sales_quantity FROM ecommerce.order_item GROUP BY product_id。"
+        },
+        {
+          "knowledge_id": 1563,
+          "knowledge_text": "热销商品（TOP商品/畅销商品/销量最高商品）通常按销量从高到低排序；若问题强调销售额，则按 item_amount 汇总排序。SQL逻辑：ORDER BY SUM(ecommerce.order_item.quantity) DESC。示例：SELECT p.product_id, p.product_name, SUM(oi.quantity) AS sales_quantity FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY sales_quantity DESC LIMIT 10。"
+        },
+        {
+          "knowledge_id": 1571,
+          "knowledge_text": "类目内商品销售排名（类目排名/分类商品排名）：统计每个商品的销售额或销量后，在商品分类内部排序。MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。SQL模式：RANK within category by SUM(order_item.item_amount) or SUM(order_item.quantity)。示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "knowledge": [
+        {
+          "knowledge_id": 1554,
+          "knowledge_text": "GMV（商品交易总额/订单总额/交易总额）指订单商品总交易额，通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败；若题目强调实付金额，应使用 payable_amount 或 payment_amount。SQL逻辑：SUM(ecommerce.orders.total_amount)。示例：SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders。注意：如果问题明确要求成交或实付，优先使用 payable_amount。"
+        },
+        {
+          "knowledge_id": 1556,
+          "knowledge_text": "实付销售额（成交额/实付金额/销售额）指订单应付金额或支付成功金额的汇总。若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。SQL逻辑：SUM(ecommerce.orders.payable_amount)。示例：SELECT ROUND(SUM(o.payable_amount), 2) AS paid_sales FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'。注意：若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+        },
+        {
+          "knowledge_id": 1557,
+          "knowledge_text": "支付成功率（支付转化率/付款成功率）指成功支付订单数占全部支付记录数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.payment.payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*), 4) AS payment_success_rate FROM ecommerce.payment。"
+        }
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge": [
+        {
+          "knowledge_id": 1713,
+          "knowledge_text": "上海青草沙水源地禁航区四边形水域，四个顶点坐标分别为：A(31°26′08.329″N,121°34′18.678″E)、B(31°26′42.713″N,121°33′39.136″E)、C(31°27′10.312″N,121°33′58.456″E)、D(31°26′36.982″N,121°34′35.287″E)，转换为十进制度约为A(121.5719,31.4356)、B(121.5609,31.4452)、C(121.5663,31.4529)、D(121.5765,31.4414)，按A-B-C-D-A顺序围成闭合多边形"
+        },
+        {
+          "knowledge_id": 1714,
+          "knowledge_text": "长江口禁捕管理区范围为东经122°15′（122.25°）以东至124.0°、北纬30°54′（30.90°）至31°41′36″（31.6933°）之间的矩形水域，向西以水陆交界线为界"
+        },
+        {
+          "knowledge_id": 1715,
+          "knowledge_text": "黄浦江核心管制区为川杨河口下游100米处（约31°10′12″N,121°29′00″E）至南浦大桥（约31°12′30″N,121°30′30″E）之间的水域"
+        },
+        {
+          "knowledge_id": 1716,
+          "knowledge_text": "珠江口水上交通安全特别监管区，东至114°30′08.8″E（114.5024°）经度线，南至21°45′00.0″N（21.75°）纬度线，西至112°59′30″E（112.9917°）经度线，北至广州港黄埔大桥附近（约23.5°以覆盖整个监管区）"
+        },
+        {
+          "knowledge_id": 1717,
+          "knowledge_text": "杭州湾水域某次实弹训练禁航区范围为北纬30°19′（30.317°）至30°35′（30.583°），东经121°02′（121.033°）至121°12′（121.20°）的矩形水域"
+        },
+        {
+          "knowledge_id": 1718,
+          "knowledge_text": "天津港地处渤海西部海岸海河入海口处，中心位置东经117°42′05″（117.7014°），北纬38°59′08″（38.9856°）。海河水域新港船闸维修禁航区：以38-59.5N 117-42.8E（38.9917°N,117.7133°E）为圆心，半径250米的水域。海河下游二道闸至轮驳公司码头段为通航管制区"
+        },
+        {
+          "knowledge_id": 1719,
+          "knowledge_text": "渤海海峡老铁山水道禁航区（军事任务）。禁航区范围为以下四点连线围成的水域：A(38°36.0′N,121°15.0′E)、B(38°36.0′N,121°30.0′E)、C(38°18.0′N,121°30.0′E)、D(38°18.0′N,121°15.0′E)。该区域为军事演习或武器试验临时禁航区，禁止所有船舶驶入。禁航时段通常由海事部门通过航行警告提前发布，船舶应保持VHF16频道守听，并重新规划航线绕行。"
+        },
+        {
+          "knowledge_id": 1720,
+          "knowledge_text": "青岛港主航道（第一分道通航制）。分道通航制位于大公岛和小公岛连线以西的青岛港主航道内侧，进港船舶通航分道和出港船舶通航分道之间由分隔带分隔。进港主交通流向282°（真航向），出港主交通流向103°。定线制水域范围约为：北纬35°59′30″至36°01′00″，东经120°27′00″至120°30′00″。该区域为进出青岛港的大型船舶主要通道，船舶应严格按分道通航制航行，禁止逆向行驶。"
+        },
+        {
+          "knowledge_id": 1721,
+          "knowledge_text": "烟台港西港区航道及警戒区。烟台港西港区航道坐标为：入口点A(37°46.5′N,121°11.8′E)至防波堤口B(37°44.0′N,121°12.0′E)，航道长度约2.5海里，宽度300米，水深-20米。航道入口处设警戒区，以点(37°46.5′N,121°11.8′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向烟台VTS中心报告，航道内限速12节，禁止追越和锚泊。"
+        },
+        {
+          "knowledge_id": 1722,
+          "knowledge_text": "舟山虾峙门深水航道（进港航道）。虾峙门航道是宁波舟山港核心港区最重要的深水进港航道，地理范围：自虾峙门东口（29°45.0′N,122°25.0′E）至螺头角（29°54.0′N,122°01.0′E），全长约24海里，航道宽度约0.3海里，水深22米以上，可满足30万吨级船舶通航。航道两侧设有分道通航制，中间由分隔带分隔。船舶在航道内应保持VHF08频道守听，按照潮汐时段单向通航，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1723,
+          "knowledge_text": "珠江口桂山锚地。桂山锚地位于珠江口桂山岛附近，是进出广州港、深圳港、珠海港的大型船舶候泊、引航、联检锚地。锚地范围由以下四点围成：A(22°10.0′N,113°48.0′E)、B(22°10.0′N,113°52.0′E)、C(22°07.0′N,113°52.0′E)、D(22°07.0′N,113°48.0′E)。锚地水深12-18米，底质泥沙，可锚泊10万吨级以下船舶。锚地内船舶应按规定显示锚泊信号，保持VHF16频道守听，不得排放污染物。"
+        },
+        {
+          "knowledge_id": 1724,
+          "knowledge_text": "长江口南槽航道（A-N槽）。南槽航道是长江口主要辅助航道，供吃水较浅的船舶进出长江。航道范围：自南槽灯船（31°02.0′N,122°32.0′E）沿自然水深向上游至浏河口（31°30.0′N,121°17.0′E），全长约60海里，航道宽度250-500米，维护水深5.5-6.5米。航道两侧设有浮筒，船舶应沿浮筒标示的航槽行驶，禁止在航道内锚泊或捕捞。船舶须遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》，向吴淞VTS中心报告。"
+        },
+        {
+          "knowledge_id": 1725,
+          "knowledge_text": "厦门港东渡港区航道及锚地。东渡港区航道自青屿水域（24°26.0′N,118°06.0′E）至东渡码头前沿，全长约8海里，航道宽度200米，水深-12米。港区锚地位于猴屿西侧，范围为：A(24°28.0′N,118°04.0′E)、B(24°28.0′N,118°06.0′E)、C(24°26.0′N,118°06.0′E)、D(24°26.0′N,118°04.0′E)，水深10-14米。该区域为船舶进出厦门港西航道的主要通道，船舶应遵守《厦门水域船舶定线制》和《厦门船舶交通管理系统（VTS）用户指南》。"
+        },
+        {
+          "knowledge_id": 1726,
+          "knowledge_text": "大连大窑湾港区航道及警戒区。大窑湾航道自大窑湾口（39°00.0′N,121°55.0′E）至集装箱码头（38°59.5′N,121°46.5′E），全长约7海里，宽度280米，水深-14米。大窑湾口设警戒区，以点(39°00.0′N,121°55.0′E)为中心、半径0.6海里。船舶进入警戒区前应向大窑湾VTS中心报告（VHF11频道），航道内限速10节，大型船舶需申请引航。该水域船舶交通密集，进出船应加强瞭望。"
+        },
+        {
+          "knowledge_id": 1727,
+          "knowledge_text": "北部湾涠洲岛警戒区。涠洲岛警戒区以涠洲岛西角码头西侧点为圆心、半径3海里的扇形水域，具体范围：以W点(21°02′02″N,109°06′43″E)为中心，半径3海里（5556米），方位240°至360°的扇形区域。该警戒区位于北部湾海上石油平台密集区和旅游航线交汇处，船舶交通流量大。船舶进入警戒区应减速谨慎驾驶，加强与过往船舶通信，避免碰撞。禁止在警戒区内抛锚或进行捕鱼作业。"
+        },
+        {
+          "knowledge_id": 1728,
+          "knowledge_text": "上海洋山深水港区航道。洋山港航道自黄泽洋灯船（30°31.0′N,122°15.0′E）至洋山港主航道口（30°35.0′N,122°03.0′E），全长约20海里，航道宽度400米，水深-16米。航道两侧设有大型灯浮，实行分道通航制：西行船舶（进港）走北侧分道，东行船舶（出港）走南侧分道。该航道可通航15万吨级集装箱船。船舶进入航道前应向洋山VTS中心（VHF13频道）报告，大型船舶须引航。"
+        },
+        {
+          "knowledge_id": 1729,
+          "knowledge_text": "渤海湾曹妃甸港区航道及锚地。曹妃甸港区主航道自20万吨级矿石码头（38°55.0′N,118°30.0′E）向外海延伸至38°51.0′N,118°35.0′E，全长约11海里，宽度350米，水深-21米。港区设有1#和2#锚地：1#锚地位于38°54.0′N-38°56.0′N,118°35.0′E-118°40.0′E，2#锚地位于38°51.0′N-38°53.0′N,118°35.0′E-118°40.0′E。锚地底质为泥沙，可锚泊15万吨级以下船舶。船舶进出港需遵守《曹妃甸船舶交通管理系统（VTS）安全管理规定》。"
+        },
+        {
+          "knowledge_id": 1730,
+          "knowledge_text": "渤海海峡长山水道（禁航区）。长山水道为渤海海峡三大水道之一，位于长山列岛之间，是大型船舶进出渤海的重要通道。禁航区范围为以下四点连线所围水域：A(38°20.0′N,120°45.0′E)、B(38°20.0′N,121°00.0′E)、C(38°10.0′N,121°00.0′E)、D(38°10.0′N,120°45.0′E)。该区域为军事训练禁航区，定期发布航行警告禁止船舶进入。船舶应通过VHF16频道获取最新禁航信息，并改用老铁山水道或登州水道绕行。"
+        },
+        {
+          "knowledge_id": 1731,
+          "knowledge_text": "香港水域东博寮海峡分道航行制。东博寮海峡是香港主要南向航道，分道通航制范围为：北起(22°15.0′N,114°15.0′E)，南至(22°10.0′N,114°13.0′E)。实行分隔制，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道。两侧分道各宽0.2海里，中间分隔带宽0.05海里。船舶在该水域航行必须遵守《香港水域船舶交通管制条例》，使用VHF12频道与香港海事处交管中心联系，海峡内禁止锚泊和捕鱼。"
+        },
+        {
+          "knowledge_id": 1732,
+          "knowledge_text": "汕尾遮浪角海域军事禁航区。遮浪角位于汕尾红海湾东侧，军事禁航区范围为以下四点围成的水域：A(22°45.0′N,115°35.0′E)、B(22°45.0′N,115°45.0′E)、C(22°30.0′N,115°45.0′E)、D(22°30.0′N,115°35.0′E)。该区域经常进行实弹射击和军事演习，航行通告会提前发布禁航时段。禁航期间任何船舶不得驶入，否则将面临军事处罚。过往船舶应绕行外海，保持VHF16频道守听。"
+        },
+        {
+          "knowledge_id": 1733,
+          "knowledge_text": "温州港状元岙港区航道。状元岙港区航道自大门岛东侧（27°58.0′N,121°10.0′E）至状元岙码头前沿（27°55.0′N,121°07.0′E），全长约5海里，航道宽度180米，水深-10米。航道两侧设有灯浮标示，航道内设有2处转向点。船舶进出港需向温州VTS中心（VHF14频道）报告，航道内限速8节，禁止追越。该水域受潮汐影响较大，吃水超过9米的船舶应乘高潮通过。"
+        },
+        {
+          "knowledge_id": 1734,
+          "knowledge_text": "台州港头门港区航道及警戒区。头门港区航道自点(28°40.0′N,121°40.0′E)至点(28°38.0′N,121°36.0′E)，全长约8海里，航道宽度200米，水深-9米。港外警戒区位于航道口门处，以点(28°40.0′N,121°40.0′E)为中心、半径0.4海里。警戒区外东侧设有候潮锚地（28°40.5′N-28°42.0′N,121°42.0′E-121°44.0′E）。船舶进入警戒区前应向台州VTS中心（VHF16频道）报告，航道内禁止锚泊，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1735,
+          "knowledge_text": "福建福清湾水域船舶定线制。福清湾船舶定线制范围为：北起(25°35.0′N,119°35.0′E)，南至(25°25.0′N,119°30.0′E)。实行分道通航，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道，分隔带为虚拟线段。该定线制连接福清湾内各码头，船舶须遵守《福建船舶交通管理系统（VTS）服务指南》，使用VHF10频道与福州VTS中心报告。湾内航道水深变化较大，船舶应参照最新海图航行。"
+        },
+        {
+          "knowledge_id": 1736,
+          "knowledge_text": "汕头港广澳港区航道及锚地。广澳港区航道自广澳湾口（23°15.0′N,116°50.0′E）至广澳码头（23°13.0′N,116°46.0′E），全长约5.5海里，航道宽度150米，水深-11米。港区锚地位于航道西侧，范围为：A(23°14.0′N,116°48.0′E)、B(23°14.0′N,116°50.0′E)、C(23°12.0′N,116°50.0′E)、D(23°12.0′N,116°48.0′E)。锚地水深9-12米。船舶进出港需向汕头VTS中心报告（VHF08频道），航道内限速10节，禁止在航道内追越。"
+        },
+        {
+          "knowledge_id": 1737,
+          "knowledge_text": "海南清澜港航道及禁航区。清澜港航道自七洲列岛附近（19°45.0′N,111°10.0′E）至清澜港码头（19°35.0′N,110°50.0′E），全长约22海里，航道宽度150米，水深-7米。港区南侧设有军事禁航区，范围为以(19°30.0′N,111°00.0′E)为中心、半径5海里的圆形水域，为某部海军训练区，全年禁航。民用船舶应保持与禁航区边界至少2海里的安全距离，不得进入。清澜港航道内常有渔船作业，进出港船舶应加强瞭望。"
+        },
+        {
+          "knowledge_id": 1738,
+          "knowledge_text": "北部湾防城港东湾航道及锚地。东湾航道自东湾口（21°35.0′N,108°25.0′E）至防城港码头前沿（21°38.0′N,108°21.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道南侧，范围为：A(21°32.0′N,108°24.0′E)、B(21°32.0′N,108°27.0′E)、C(21°30.0′N,108°27.0′E)、D(21°30.0′N,108°24.0′E)，水深8-12米。船舶进出港需向防城港VTS中心（VHF11频道）报告，航道内限速8节，锚地内船舶应保持安全间距，避免锚泊碰撞。"
+        },
+        {
+          "knowledge_id": 1739,
+          "knowledge_text": "异常航行记录：指航行状态nav_status=1（航行中）sog15或sog0.5"
+        },
+        {
+          "knowledge_id": 1740,
+          "knowledge_text": "停泊：包括nav_status=1锚泊和nav_status=5系泊"
+        },
+        {
+          "knowledge_id": 1741,
+          "knowledge_text": "青岛朝连岛附近水域禁航区（军事任务）。朝连岛位于青岛东南海域，禁航区范围为以下四点连线围成的水域：A(35°50.0′N,121°10.0′E)、B(35°50.0′N,121°30.0′E)、C(35°35.0′N,121°30.0′E)、D(35°35.0′N,121°10.0′E)。该区域经常用于海军实弹射击和军事演习，航行警告会提前发布禁航时段。禁航期间任何船舶不得驶入，过往船舶应绕行外海，保持VHF16频道守听。"
+        },
+        {
+          "knowledge_id": 1742,
+          "knowledge_text": "日照港石臼港区航道及警戒区。石臼港区航道自航道入口（35°20.0′N,119°35.0′E）至煤炭码头前沿（35°18.5′N,119°32.0′E），全长约6海里，航道宽度250米，水深-18米。航道入口处设警戒区，以点(35°20.0′N,119°35.0′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向日照VTS中心报告（VHF14频道），航道内限速10节，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1743,
+          "knowledge_text": "连云港港主航道及锚地。连云港主航道自外海引航点（34°45.0′N,119°50.0′E）至庙岭集装箱码头（34°45.0′N,119°20.0′E），全长约25海里，航道宽度220米，水深-14米。港区设有2号锚地，范围为：A(34°48.0′N,119°40.0′E)、B(34°48.0′N,119°45.0′E)、C(34°45.0′N,119°45.0′E)、D(34°45.0′N,119°40.0′E)，水深12-15米。船舶进出港需向连云港VTS中心报告，航道内禁止追越。"
+        },
+        {
+          "knowledge_id": 1744,
+          "knowledge_text": "南通港天生港区航道及警戒区。天生港区航道自通州沙西水道入口（32°02.0′N,120°45.0′E）至天生港码头（32°00.0′N,120°43.0′E），全长约4海里，航道宽度150米，水深-8米。航道口门处设警戒区，以点(32°02.0′N,120°45.0′E)为中心、半径0.3海里。该水道水流湍急，船舶应谨慎驾驶，禁止在航道内锚泊。"
+        },
+        {
+          "knowledge_id": 1745,
+          "knowledge_text": "镇江港大港港区航道及锚地。大港港区航道自和畅洲北汊入口（32°12.0′N,119°40.0′E）至大港码头前沿（32°11.0′N,119°37.0′E），全长约5海里，航道宽度200米，水深-10米。港区锚地位于和畅洲南侧，范围为：A(32°10.0′N,119°38.0′E)、B(32°10.0′N,119°42.0′E)、C(32°08.0′N,119°42.0′E)、D(32°08.0′N,119°38.0′E)。船舶进出港需遵守《长江江苏段船舶定线制规定》，向镇江VTS中心报告。"
+        },
+        {
+          "knowledge_id": 1746,
+          "knowledge_text": "江阴港夏港港区航道及警戒区。夏港港区航道自江阴长江大桥下游（31°57.0′N,120°15.0′E）至夏港码头（31°56.0′N,120°12.0′E），全长约4.5海里，航道宽度180米，水深-9米。航道入口处设警戒区，以点(31°57.0′N,120°15.0′E)为中心、半径0.4海里。该水域船舶交通密集，港内限速8节，禁止追越。"
+        },
+        {
+          "knowledge_id": 1747,
+          "knowledge_text": "张家港港务局码头前沿水域（通航密集区）。张家港港务局码头前沿水域范围为：自(31°56.0′N,120°28.0′E)至(31°53.0′N,120°24.0′E)沿江岸线外300米水域。该区域码头泊位密集，常有多艘船舶同时靠离泊作业。过往船舶应保持安全航速，加强与码头调度通信，避免进入靠离泊作业区。"
+        },
+        {
+          "knowledge_id": 1748,
+          "knowledge_text": "常熟港兴华港区航道。兴华港区航道自白茆沙北水道入口（31°45.0′N,121°00.0′E）至兴华码头（31°43.0′N,120°55.0′E），全长约8海里，航道宽度160米，水深-8.5米。航道两侧设有浮筒，船舶应沿浮筒标示航行。该航道受潮汐影响明显，吃水超过7米的船舶应乘高潮通过。"
+        },
+        {
+          "knowledge_id": 1749,
+          "knowledge_text": "太仓港集装箱港区航道及警戒区。太仓港航道自长江#10浮（31°38.0′N,121°15.0′E）至集装箱码头前沿（31°36.0′N,121°12.0′E），全长约5海里，航道宽度200米，水深-12米。港区警戒区位于航道入口，以点(31°38.0′N,121°15.0′E)为中心、半径0.5海里。船舶进入警戒区前应向太仓VTS中心报告，航道内限速10节。"
+        },
+        {
+          "knowledge_id": 1750,
+          "knowledge_text": "上海港外高桥港区航道（长江口段）。外高桥港区航道自长江口圆圆沙灯船（31°22.0′N,121°38.0′E）至外高桥码头（31°20.0′N,121°33.0′E），全长约7海里，航道宽度300米，水深-12.5米。该航道为进出上海港的主要通道之一，实行分道通航制，船舶应保持VHF14频道守听，遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》。"
+        },
+        {
+          "knowledge_id": 1751,
+          "knowledge_text": "杭州湾嘉兴港区航道。嘉兴港区航道自杭州湾入口（30°33.0′N,121°05.0′E）至独山码头（30°35.0′N,121°00.0′E），全长约10海里，航道宽度200米，水深-9米。航道两侧设有灯浮，航道内设有2处转向点。该水域潮流强劲，船舶应选择高平潮时段进出港，禁止在航道内锚泊。"
+        },
+        {
+          "knowledge_id": 1752,
+          "knowledge_text": "宁波舟山港穿山港区航道及警戒区。穿山港区航道自虾峙门航道东口（29°52.0′N,122°10.0′E）至穿山码头前沿（29°55.0′N,122°00.0′E），全长约12海里，航道宽度350米，水深-18米。港区警戒区位于航道入口，以点(29°52.0′N,122°10.0′E)为中心、半径0.6海里。船舶进入警戒区前应向穿山VTS中心报告，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1753,
+          "knowledge_text": "台州港大麦屿港区航道及锚地。大麦屿港区航道自乐清湾口（28°05.0′N,121°05.0′E）至大麦屿码头（28°08.0′N,121°00.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道东侧，范围为：A(28°06.0′N,121°06.0′E)、B(28°06.0′N,121°08.0′E)、C(28°04.0′N,121°08.0′E)、D(28°04.0′N,121°06.0′E)，水深10-13米。船舶进出港需向台州VTS中心报告，航道内限速8节。"
+        },
+        {
+          "knowledge_id": 1754,
+          "knowledge_text": "温州港乐清湾港区航道。乐清湾港区航道自大门岛东侧（27°58.0′N,121°12.0′E）至乐清湾码头（27°55.0′N,121°05.0′E），全长约12海里，航道宽度200米，水深-10米。航道两侧设有浮筒，航道内设有3处转向点。该水域渔船较多，进出港船舶应加强瞭望，保持安全航速。"
+        },
+        {
+          "knowledge_id": 1755,
+          "knowledge_text": "福州港江阴港区航道及警戒区。江阴港区航道自兴化湾口（25°20.0′N,119°40.0′E）至江阴码头（25°25.0′N,119°20.0′E），全长约15海里，航道宽度250米，水深-15米。港区警戒区位于航道入口，以点(25°20.0′N,119°40.0′E)为中心、半径0.5海里。船舶进入警戒区前应向福州VTS中心报告（VHF10频道），大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1756,
+          "knowledge_text": "泉州港石湖港区航道及锚地。石湖港区航道自泉州湾口（24°45.0′N,118°50.0′E）至石湖码头（24°48.0′N,118°42.0′E），全长约10海里，航道宽度200米，水深-12米。港区锚地位于航道东侧，范围为：A(24°46.0′N,118°52.0′E)、B(24°46.0′N,118°55.0′E)、C(24°44.0′N,118°55.0′E)、D(24°44.0′N,118°52.0′E)，水深11-14米。船舶进出港需向泉州VTS中心报告，航道内禁止追越。"
+        },
+        {
+          "knowledge_id": 1757,
+          "knowledge_text": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。"
+        },
+        {
+          "knowledge_id": 1758,
+          "knowledge_text": "汕头港珠池港区航道及警戒区。珠池港区航道自鹿屿附近（23°20.0′N,116°45.0′E）至珠池码头（23°22.0′N,116°43.0′E），全长约5海里，航道宽度150米，水深-10米。港区警戒区位于航道入口，以点(23°20.0′N,116°45.0′E)为中心、半径0.4海里。船舶进入警戒区前应向汕头VTS中心报告（VHF08频道），航道内限速8节。"
+        },
+        {
+          "knowledge_id": 1759,
+          "knowledge_text": "惠州港荃湾港区航道及锚地。荃湾港区航道自大亚湾口（22°38.0′N,114°38.0′E）至荃湾码头（22°42.0′N,114°35.0′E），全长约8海里，航道宽度200米，水深-14米。港区锚地位于航道南侧，范围为：A(22°40.0′N,114°36.0′E)、B(22°40.0′N,114°39.0′E)、C(22°38.0′N,114°39.0′E)、D(22°38.0′N,114°36.0′E)，水深12-15米。船舶进出港需向惠州VTS中心报告，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1760,
+          "knowledge_text": "深圳港盐田港区航道及警戒区。盐田港区航道自大鹏湾口（22°32.0′N,114°25.0′E）至盐田码头（22°35.0′N,114°15.0′E），全长约12海里，航道宽度300米，水深-16米。港区警戒区位于航道入口，以点(22°32.0′N,114°25.0′E)为中心、半径0.5海里。船舶进入警戒区前应向盐田VTS中心报告（VHF14频道），航道内实行分道通航，禁止锚泊。"
+        },
+        {
+          "knowledge_id": 1777,
+          "knowledge_text": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。高速船舶通常指航速≥25节。"
+        },
+        {
+          "knowledge_id": 1790,
+          "knowledge_text": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "knowledge": [
+        {
+          "knowledge_id": 1696,
+          "knowledge_text": "复旦大学附属华山医院的经纬度坐标为 (lat: 31.2230, lon: 121.4428)"
+        },
+        {
+          "knowledge_id": 1697,
+          "knowledge_text": "上海交通大学医学院附属瑞金医院的经纬度坐标为 (lat: 31.2125, lon: 121.4682)"
+        },
+        {
+          "knowledge_id": 1698,
+          "knowledge_text": "北京协和医院的经纬度坐标为 (lat: 39.9087, lon: 116.4135)"
+        },
+        {
+          "knowledge_id": 1699,
+          "knowledge_text": "四川大学华西医院的经纬度坐标为 (lat: 30.6460, lon: 104.0610)"
+        },
+        {
+          "knowledge_id": 1700,
+          "knowledge_text": "中山大学附属第一医院的经纬度坐标为 (lat: 23.1310, lon: 113.2895)"
+        },
+        {
+          "knowledge_id": 1701,
+          "knowledge_text": "深圳市人民医院的经纬度坐标为 (lat: 22.5565, lon: 114.1158)"
+        },
+        {
+          "knowledge_id": 1702,
+          "knowledge_text": "浙江大学医学院附属第一医院的经纬度坐标为 (lat: 30.2630, lon: 120.1650)"
+        },
+        {
+          "knowledge_id": 1703,
+          "knowledge_text": "大型医院的定义：床位数(bed_count) >= 1500 且 医生数(doctor_count) >= 1500。"
+        },
+        {
+          "knowledge_id": 1704,
+          "knowledge_text": "顶尖三甲医院的标准：拥有ICU(has_icu=true) 且 救护车数量(ambulance_count) >= 20 且 患者评分(rating) >= 4.8。"
+        },
+        {
+          "knowledge_id": 1705,
+          "knowledge_text": "医师力量强的医院定义：医生数(doctor_count) >= 2000 或 年门诊量(annual_outpatient) >= 4000000。"
+        },
+        {
+          "knowledge_id": 1706,
+          "knowledge_text": "高负荷医院的定义：年门诊量(annual_outpatient) >= 5000000。"
+        },
+        {
+          "knowledge_id": 1707,
+          "knowledge_text": "急诊能力充足的医院定义：24小时急诊(emergency_24h=true) 且 救护车数量(ambulance_count) >= 10。"
+        },
+        {
+          "knowledge_id": 1708,
+          "knowledge_text": "教学医院的定义：is_teaching_hospital = true。"
+        },
+        {
+          "knowledge_id": 1709,
+          "knowledge_text": "超大规模医院的定义：床位数(bed_count) >= 2000 且 年门诊量(annual_outpatient) >= 6000000。"
+        },
+        {
+          "knowledge_id": 1710,
+          "knowledge_text": "优秀护理医院的判断标准：护士数(nurse_count) >= 2000 且 床位数/护士数比值 <= 1.2。"
+        },
+        {
+          "knowledge_id": 1711,
+          "knowledge_text": "现代化医院的定义：拥有ICU(has_icu=true) 且 科室数量(department_count) >= 40。"
+        },
+        {
+          "knowledge_id": 1712,
+          "knowledge_text": "老牌知名医院的定义：成立年份(founded_year) <= 1950 且 评分(rating) >= 4.6。"
+        }
+      ]
+    }
+  ]
+}

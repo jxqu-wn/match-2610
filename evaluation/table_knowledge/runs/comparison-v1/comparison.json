@@ -1,0 +1,877 @@
+{
+  "left_annotator": "Codex",
+  "right_annotator": "Deepseek Flash via pi coding agent",
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "left_only": [
+        1590,
+        1598,
+        1763,
+        1764,
+        1778,
+        1779,
+        1780,
+        1793,
+        1794,
+        1795,
+        1796,
+        1797,
+        1799,
+        1800
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1596,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1765
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.employee_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1768
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_registration_type",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1663
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_size_category",
+      "left_only": [
+        1595
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1660
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_stock_type",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1648,
+        1649,
+        1650,
+        1651
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_industry",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1659
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1581,
+        1593,
+        1594
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.voltage_level_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_position_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1589
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1582
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1584
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1571
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.order_status_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1568
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.payment_method_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.payment_status_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1556,
+        1557
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.refund_reason_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.order_channel_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.platform_dict",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1572
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "left_only": [],
+      "right_only": [
+        1573
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1574
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1592,
+        1761,
+        1787,
+        1791,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1761,
+        1768,
+        1769,
+        1773,
+        1783,
+        1787,
+        1792,
+        1793,
+        1798,
+        1799,
+        1800
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "left_only": [
+        1765
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1761,
+        1762,
+        1770,
+        1772,
+        1775,
+        1781,
+        1782,
+        1785,
+        1788,
+        1789,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1592,
+        1761,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.employee",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1586
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "left_only": [
+        1793,
+        1799,
+        1800
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1761,
+        1776,
+        1777,
+        1786,
+        1790
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.companies",
+      "left_only": [
+        1630,
+        1664
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1616,
+        1618,
+        1619,
+        1620,
+        1621,
+        1652,
+        1656,
+        1659,
+        1660,
+        1661,
+        1662,
+        1663
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1604,
+        1605,
+        1624,
+        1625,
+        1627,
+        1632,
+        1633,
+        1635,
+        1644,
+        1646,
+        1648,
+        1649,
+        1650,
+        1651
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stock_daily_trades",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1622,
+        1623,
+        1633,
+        1636,
+        1640,
+        1643
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1606,
+        1607,
+        1608,
+        1609,
+        1624,
+        1626,
+        1627,
+        1632,
+        1634,
+        1635,
+        1637,
+        1638,
+        1645,
+        1646
+      ]
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "left_only": [
+        1664
+      ],
+      "right_only": [
+        1630,
+        1631,
+        1654,
+        1657
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1610,
+        1611,
+        1612,
+        1613,
+        1614,
+        1615,
+        1617,
+        1628,
+        1629,
+        1639,
+        1641,
+        1642,
+        1647,
+        1653,
+        1655,
+        1658
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "left_only": [
+        1793,
+        1799,
+        1800
+      ],
+      "right_only": [
+        1587
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1580,
+        1592,
+        1593,
+        1595,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1584,
+        1588
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "left_only": [
+        1793,
+        1799,
+        1800
+      ],
+      "right_only": [
+        1602
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1581,
+        1582,
+        1583,
+        1591,
+        1592,
+        1593,
+        1594,
+        1597,
+        1600,
+        1601,
+        1603,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "left_only": [
+        1793,
+        1799,
+        1800
+      ],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1585,
+        1599,
+        1761
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1580,
+        1586,
+        1589
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "left_only": [],
+      "right_only": [
+        1579
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1575,
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "left_only": [],
+      "right_only": [
+        1573,
+        1574,
+        1575,
+        1579
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1572
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1575,
+        1576
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "left_only": [],
+      "right_only": [
+        1573,
+        1574,
+        1579
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1572
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.customer",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1564
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.product",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1563,
+        1565,
+        1571
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1565
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1554,
+        1555,
+        1556,
+        1558,
+        1559,
+        1564,
+        1566,
+        1567,
+        1568,
+        1569,
+        1570
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1558,
+        1560,
+        1561,
+        1562,
+        1563,
+        1571
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1554,
+        1556,
+        1557
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "left_only": [],
+      "right_only": [
+        1713,
+        1714,
+        1715,
+        1716,
+        1717,
+        1718,
+        1722,
+        1723,
+        1725,
+        1729,
+        1743,
+        1745,
+        1747,
+        1750,
+        1752,
+        1754,
+        1755,
+        1756,
+        1757,
+        1759
+      ],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1719,
+        1720,
+        1721,
+        1724,
+        1726,
+        1727,
+        1728,
+        1730,
+        1731,
+        1732,
+        1733,
+        1734,
+        1735,
+        1736,
+        1737,
+        1738,
+        1739,
+        1740,
+        1741,
+        1742,
+        1744,
+        1746,
+        1748,
+        1749,
+        1751,
+        1753,
+        1758,
+        1760,
+        1777,
+        1790
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "left_only": [],
+      "right_only": [],
+      "basis_disagreements": [],
+      "accepted_by_both": [
+        1696,
+        1697,
+        1698,
+        1699,
+        1700,
+        1701,
+        1702,
+        1703,
+        1704,
+        1705,
+        1706,
+        1707,
+        1708,
+        1709,
+        1710,
+        1711,
+        1712
+      ]
+    }
+  ],
+  "summary": {
+    "table_count": 72,
+    "left_only_pairs": 31,
+    "right_only_pairs": 35,
+    "basis_disagreements": 0,
+    "accepted_by_both_pairs": 230,
+    "both_empty_table_count": 28,
+    "human_review_reports": 156
+  },
+  "status": "compared_not_adjudicated"
+}

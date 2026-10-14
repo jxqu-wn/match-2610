@@ -1,7 +1,7 @@
 """Schema 目录构建：用 sqlglot 解析 DDL，用 json 解析 Elasticsearch mapping。
 
 替换原先手写的括号平衡与列切分逻辑。解析只做结构提取，不猜测主键、
-不根据字段同名建立关联；知识关联只使用原文中可解析的明确引用。
+知识关联由纯程序字符、正则及本地TF-IDF完成，不读取审核标签或调用模型。
 """
 
 from __future__ import annotations
@@ -18,17 +18,14 @@ from sqlglot.tokens import TokenType
 
 from ..config import settings
 from ..io import file_sha256, read_json, write_json, write_jsonl
-from ..models import Column, Catalog, ForeignKey, ForeignKeyReference, KnowledgeRef, Table, TrainingExampleRef
+from ..models import Catalog, Column, ForeignKey, ForeignKeyReference, Table, TrainingExampleRef
+from .association import associate
 
 ENCODINGS = ("utf-8-sig", "gb18030")
 SQL_DIALECTS = {"MYSQL": "mysql", "POSTGRESQL": "postgres", "SQLite": "sqlite"}
 _HEADER_DB = re.compile(r"数据库[:：]\s*(\w+)")
 _HEADER_USE = re.compile(r"USE\s+(\w+)\s*;")
 _ES_BLOCK = re.compile(r"PUT\s+/(\w+)\s*\n\s*\{")
-_KNOWLEDGE_TABLE = re.compile(r"数据库([A-Za-z0-9_]+)的表([A-Za-z0-9_]+)")
-_FIELD_TEMPLATE = re.compile(r"字段{field}，.*?表示(.+?)(?:，取值为|。|$)")
-_FIELD_INLINE = re.compile(r"(?<![A-Za-z0-9_]){field}(?:字段)?表示([^，；。：]+)")
-_QUALIFIED_IDENTIFIER = re.compile(r"[A-Za-z][A-Za-z0-9]*_[A-Za-z0-9_]+")
 
 
 def read_source(path: Path) -> tuple[str, str]:
@@ -49,18 +46,8 @@ def read_source(path: Path) -> tuple[str, str]:
 def _strip_es_blocks(text: str) -> str:
     """把 Elasticsearch 的 ``PUT /index {json}`` 块替换为等长空白，保持偏移不变。"""
     chars = list(text)
-    for match in _ES_BLOCK.finditer(text):
-        start = match.end() - 1
-        depth, index = 0, start
-        while index < len(chars):
-            if chars[index] == "{":
-                depth += 1
-            elif chars[index] == "}":
-                depth -= 1
-                if depth == 0:
-                    break
-            index += 1
-        for position in range(match.start(), min(index + 1, len(chars))):
+    for match, _, end, _, _ in _es_blocks(text):
+        for position in range(match.start(), end):
             if chars[position] != "\n":
                 chars[position] = " "
     return "".join(chars)
@@ -207,8 +194,7 @@ def _parse_create_table(
             is_primary = any(isinstance(c.kind, exp.PrimaryKeyColumnConstraint) for c in item.constraints)
             comment = _column_comment(item)
             nullable = not (
-                declared_not_null
-                or (is_primary and (engine != "SQLite" or data_type.upper() == "INTEGER"))
+                declared_not_null or (is_primary and (engine != "SQLite" or data_type.upper() == "INTEGER"))
             )
             columns.append(
                 Column(
@@ -267,6 +253,25 @@ def _parse_create_table(
     )
 
 
+def _preceding_table_comment(text: str, start: int, table: Table) -> dict[str, Any] | None:
+    """Use the closest standalone comment, crossing only this table's DROP statement."""
+    lines = text[:start].splitlines()
+    drop = re.compile(
+        r"DROP\s+TABLE\s+(?:IF\s+EXISTS\s+)?(?:`?\w+`?\.)?`?" + re.escape(table.name) + r"`?\s*;\s*$",
+        re.I,
+    )
+    for index in range(len(lines) - 1, -1, -1):
+        line = lines[index].strip()
+        if not line or drop.fullmatch(line):
+            continue
+        if line.startswith("--"):
+            value = line[2:].strip()
+            if value and not re.fullmatch(r"[=*_\-\s]+", value):
+                return {"text": value, "line": index + 1, "quote": lines[index]}
+        break
+    return None
+
+
 def parse_sql(text: str, filename: str, encoding: str) -> list[Table]:
     masked = _strip_es_blocks(text)
     dialect = "sqlite" if filename.endswith("bird_schemas.txt") else "mysql"
@@ -291,15 +296,55 @@ def parse_sql(text: str, filename: str, encoding: str) -> list[Table]:
             )
         )
     _apply_postgres_comments(text, tables)
+    for table in tables:
+        if table.description:
+            continue
+        start = sum(len(line) for line in text.splitlines(keepends=True)[: table.source.start_line - 1])
+        comment = _preceding_table_comment(text, start, table)
+        if comment:
+            table.description = comment["text"]
+            table.description_origin = "schema_comment"
+            table.description_source = {
+                "kind": "sql_line_comment",
+                "file": filename,
+                "line": comment["line"],
+                "quote": comment["quote"],
+            }
+    # Schema-provided dictionary rows are raw evidence, not hand-written synonyms.
+    for match in re.finditer(r"INSERT\s+INTO\s+([`\w.]+)\s*(?:\([^;]*?\))?\s*VALUES\s*[^;]+;", masked, re.I):
+        target = match.group(1).replace("`", "")
+        prefix = masked[: match.start()]
+        scopes = list(re.finditer(r"(?:数据库[:：]\s*|USE\s+)(\w+)", prefix, re.I))
+        namespace = scopes[-1].group(1) if scopes else None
+        parts = target.split(".")
+        candidates = [
+            t
+            for t in tables
+            if t.name.casefold() == parts[-1].casefold()
+            and (t.namespace or "").casefold() == (parts[-2] if len(parts) > 1 else namespace or "").casefold()
+        ]
+        if len(candidates) != 1:
+            continue
+        try:
+            insert = sqlglot.parse_one(match.group(), read=dialect)
+        except sqlglot.errors.SqlglotError:
+            continue
+        values = insert.expression
+        if not isinstance(values, exp.Values):
+            continue
+        table = candidates[0]
+        table.source_values = list((table.model_extra or {}).get("source_values", []))
+        for row in values.expressions:
+            row_values = [str(v.this) for v in row.expressions if isinstance(v, exp.Literal) and v.is_string]
+            if row_values:
+                table.source_values.append(" ".join(row_values))
     return tables
 
 
 def _apply_postgres_comments(text: str, tables: list[Table]) -> None:
     """应用 PostgreSQL 的 ``COMMENT ON TABLE/COLUMN`` 语句。"""
     by_id = {table.table_id: table for table in tables}
-    for match in re.finditer(
-        r"COMMENT\s+ON\s+(TABLE|COLUMN)\s+([^\s]+)\s+IS\s+'((?:''|[^'])*)'", text, re.I
-    ):
+    for match in re.finditer(r"COMMENT\s+ON\s+(TABLE|COLUMN)\s+([^\s]+)\s+IS\s+'((?:''|[^'])*)'", text, re.I):
         kind, target, value = match.group(1).upper(), match.group(2).strip('"'), match.group(3).replace("''", "'")
         parts = [p.strip('"') for p in target.split(".")]
         if len(parts) < 2:
@@ -307,7 +352,11 @@ def _apply_postgres_comments(text: str, tables: list[Table]) -> None:
         schema_name, rest = parts[0], parts[1:]
         table_name = rest[0]
         table = next(
-            (t for t in by_id.values() if t.engine == "POSTGRESQL" and t.name == table_name and t.schema_ == schema_name),
+            (
+                t
+                for t in by_id.values()
+                if t.engine == "POSTGRESQL" and t.name == table_name and t.schema_ == schema_name
+            ),
             None,
         )
         if table is None:
@@ -322,27 +371,55 @@ def _apply_postgres_comments(text: str, tables: list[Table]) -> None:
                     column.description_origin = "schema_comment"
 
 
-def parse_es(text: str, filename: str, encoding: str) -> list[Table]:
-    tables: list[Table] = []
+def _json_line_comments(raw: str) -> tuple[str, list[tuple[int, str]]]:
+    """Mask // comments while preserving offsets and // inside JSON strings."""
+    chars = list(raw)
+    comments = []
+    quoted = escaped = False
+    index = 0
+    while index < len(raw):
+        char = raw[index]
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+        elif char == '"':
+            quoted = True
+        elif raw.startswith("//", index):
+            end = raw.find("\n", index)
+            if end < 0:
+                end = len(raw)
+            comments.append((index, raw[index:end].removesuffix("\r")))
+            chars[index:end] = " " * (end - index)
+            index = end
+            continue
+        index += 1
+    return "".join(chars), comments
+
+
+def _es_blocks(text: str):
+    """Let the standard JSON decoder find object boundaries, including quoted braces."""
+    decoder = json.JSONDecoder()
     for match in _ES_BLOCK.finditer(text):
         start = match.end() - 1
-        depth, index = 0, start
-        while index < len(text):
-            if text[index] == "{":
-                depth += 1
-            elif text[index] == "}":
-                depth -= 1
-                if depth == 0:
-                    break
-            index += 1
-        raw = text[start : index + 1]
-        mapping = json.loads(re.sub(r"//[^\n]*", "", raw))
+        cleaned, comments = _json_line_comments(text[start:])
+        mapping, length = decoder.raw_decode(cleaned)
+        yield match, start, start + length, mapping, [(offset, quote) for offset, quote in comments if offset < length]
+
+
+def parse_es(text: str, filename: str, encoding: str) -> list[Table]:
+    tables: list[Table] = []
+    for match, start, end, mapping, comments in _es_blocks(text):
+        raw = text[start:end]
         columns: list[Column] = []
 
         def visit(properties: dict[str, Any], prefix: str = "") -> None:
             for name, definition in properties.items():
                 full = prefix + name
-                columns.append(
+                columns.append(  # noqa: B023 -- visit finishes before the next index
                     Column(
                         name=full,
                         data_type=definition.get("type", "object"),
@@ -354,6 +431,26 @@ def parse_es(text: str, filename: str, encoding: str) -> list[Table]:
                 visit(definition.get("fields", {}), full + ".")
 
         visit(mapping["mappings"]["properties"])
+        for offset, quote in comments:
+            line_start = raw.rfind("\n", 0, offset) + 1
+            # Only attach complete one-line property definitions. Ambiguous or
+            # multi-line comments remain in raw_definition instead of guessing.
+            prop = re.fullmatch(r'\s*("(?:[^"\\]|\\.)*")\s*:\s*(\{.*\})\s*,?\s*', raw[line_start:offset])
+            if not prop or not quote[2:].strip():
+                continue
+            name, definition = json.loads(prop[1]), json.loads(prop[2])
+            targets = [c for c in columns if c.name.rsplit(".", 1)[-1] == name and c.mapping == definition]
+            if len(targets) != 1 or targets[0].description:
+                continue
+            column = targets[0]
+            column.description = quote[2:].strip()
+            column.description_origin = "schema_comment"
+            column.description_source = {
+                "kind": "es_line_comment",
+                "file": filename,
+                "line": text.count("\n", 0, start + offset) + 1,
+                "quote": quote,
+            }
         tables.append(
             Table(
                 table_id=f"Elasticsearch:{match.group(1)}",
@@ -363,7 +460,7 @@ def parse_es(text: str, filename: str, encoding: str) -> list[Table]:
                 object_type="index",
                 name=match.group(1),
                 columns=columns,
-                raw_definition=text[match.start() : index + 1],
+                raw_definition=text[match.start() : end],
                 source={"file": filename, "encoding": encoding, "start_line": text.count("\n", 0, match.start()) + 1},
             )
         )
@@ -375,59 +472,33 @@ def parse_es(text: str, filename: str, encoding: str) -> list[Table]:
 # --------------------------------------------------------------------------- #
 
 
-def link_knowledge(catalog: Catalog, knowledge: list[dict[str, Any]], train_rows: list[dict[str, Any]]) -> None:
-    index = {(t.database, t.name): t for t in catalog.tables if t.database}
-    for item in knowledge:
-        match = _KNOWLEDGE_TABLE.search(item["knowledge_text"])
-        table = index.get((match.group(1), match.group(2))) if match else None
-        if table is None:
-            continue
-        table.knowledge.append(KnowledgeRef(knowledge_id=item["knowledge_id"], knowledge_text=item["knowledge_text"]))
-        for column in table.columns:
-            field = re.search(
-                _FIELD_TEMPLATE.pattern.format(field=re.escape(column.name)), item["knowledge_text"]
-            )
-            if field:
-                column.knowledge_ids.append(item["knowledge_id"])
-                if not column.description:
-                    column.description = field.group(1)
-                    column.description_origin = "knowledge"
+def link_knowledge(
+    catalog: Catalog,
+    knowledge: list[dict[str, Any]],
+    train_rows: list[dict[str, Any]] | None = None,
+    *,
+    association_method: str = "tfidf",
+    association_threshold: float = 0.3,
+    bm25_k1: float = 1.5,
+    bm25_b: float = 0.75,
+) -> None:
+    provider = None
+    if train_rows:
+        from .training_support import TrainingSQLSupport
 
+        provider = TrainingSQLSupport(catalog, train_rows)
     for table in catalog.tables:
-        # 一条知识可能同时描述多个字段，使用较宽松的“字段…表示…”句式。
-        for column in table.columns:
-            if column.description:
-                continue
-            for item in table.knowledge:
-                match = re.search(
-                    _FIELD_INLINE.pattern.format(field=re.escape(column.name)), item.knowledge_text or ""
-                )
-                if match:
-                    column.description = re.split(r"[（(]", match.group(1), maxsplit=1)[0].strip()
-                    column.description_origin = "knowledge"
-                    column.knowledge_ids.append(item.knowledge_id)
-                    break
-
-        qualified = (
-            table.name
-            if table.engine == "POSTGRESQL"
-            else (f"{table.namespace}.{table.name}" if table.namespace else table.name)
-        )
-        pattern = re.compile(r"(?<!\w)" + re.escape(qualified) + r"(?!\w)", re.I)
-        for row in train_rows:
-            for db_key, query_key in [("db", "query")] + [(f"db{i}", f"query{i}") for i in range(1, 4)]:
-                if row.get(db_key) != table.engine or not row.get(query_key):
-                    continue
-                if pattern.search(row[query_key]):
-                    table.training_examples.append(
-                        TrainingExampleRef(
-                            question_id=row["question_id"],
-                            question=row["question"],
-                            query=row[query_key],
-                            step=query_key,
-                        )
-                    )
-        table.training_examples = table.training_examples[:4]
+        examples = provider.examples.get(table.table_id, []) if provider is not None else []
+        table.training_examples = [TrainingExampleRef(**r) for r in examples[:4]]
+    catalog.association_audit = associate(
+        catalog,
+        knowledge,
+        support=provider,
+        method=association_method,
+        threshold=association_threshold,
+        bm25_k1=bm25_k1,
+        bm25_b=bm25_b,
+    )
 
 
 def resolve_implicit_foreign_keys(catalog: Catalog) -> None:
@@ -455,9 +526,7 @@ def document_text(table: Table) -> str:
         f"描述：{table.description or '未确认'}",
     ]
     lines += [f"字段：{c.name} ({c.data_type})：{c.description or '未确认'}" for c in table.columns]
-    lines += [
-        f"外键：{','.join(fk.columns)} → {fk.references.table_id}" for fk in table.foreign_keys
-    ]
+    lines += [f"外键：{','.join(fk.columns)} → {fk.references.table_id}" for fk in table.foreign_keys]
     lines += [f"二次复核注意：{issue['resolution']}" for issue in table.secondary_issues]
     return "\n".join(lines)
 
@@ -468,9 +537,7 @@ def schema_documents(catalog: Catalog) -> list[dict[str, Any]]:
             "table_id": table.table_id,
             "engine": table.engine,
             "database": table.database,
-            "inferred_fields": [
-                c.name for c in table.columns if c.review_status == "inferred"
-            ],
+            "inferred_fields": [c.name for c in table.columns if c.review_status == "inferred"],
             "unresolved_fields": [c.name for c in table.columns if c.description is None],
             "text": document_text(table),
         }
@@ -483,7 +550,20 @@ def schema_documents(catalog: Catalog) -> list[dict[str, Any]]:
 # --------------------------------------------------------------------------- #
 
 
-def build_catalog(data_dir: Path | None = None, *, persist: bool = False) -> Catalog:
+def build_catalog(
+    data_dir: Path | None = None,
+    *,
+    persist: bool = False,
+    association_method: str = "tfidf",
+    association_threshold: float = 0.3,
+    bm25_k1: float = 1.5,
+    bm25_b: float = 0.75,
+    training_support: str = "auto",
+    training_source: Path | None = None,
+) -> Catalog:
+    if training_support not in ("auto", "none", "sql"):
+        raise ValueError("training_support must be auto, none or sql")
+    use_default_data = data_dir is None
     data_dir = data_dir or settings.path("data")
     competition = data_dir / "赛题8"
     tables: list[Table] = []
@@ -493,7 +573,9 @@ def build_catalog(data_dir: Path | None = None, *, persist: bool = False) -> Cat
         text, encoding = read_source(path)
         tables.extend(parse_sql(text, filename, encoding))
         tables.extend(parse_es(text, filename, encoding))
-        sources.append({"file": str(path.relative_to(data_dir.parent)), "encoding": encoding, "sha256": file_sha256(path)})
+        sources.append(
+            {"file": str(path.relative_to(data_dir.parent)), "encoding": encoding, "sha256": file_sha256(path)}
+        )
 
     ids = [t.table_id for t in tables]
     if len(ids) != len(set(ids)):
@@ -506,18 +588,43 @@ def build_catalog(data_dir: Path | None = None, *, persist: bool = False) -> Cat
     catalog = Catalog(format_version=1, sources=sources, tables=tables)
     resolve_implicit_foreign_keys(catalog)
     knowledge = read_json(competition / "knowledge.json")
-    train_rows = read_json(settings.train_split)
-    link_knowledge(catalog, knowledge, train_rows)
+    train_rows = None
+    train_path = training_source or (settings.train_split if use_default_data else competition / "splits/train.json")
+    if training_support != "none":
+        if train_path.is_file():
+            train_rows = read_json(train_path)
+        elif training_support == "sql":
+            raise FileNotFoundError(f"training-support sql requires a training file: {train_path}")
+    link_knowledge(
+        catalog,
+        knowledge,
+        train_rows,
+        association_method=association_method,
+        association_threshold=association_threshold,
+        bm25_k1=bm25_k1,
+        bm25_b=bm25_b,
+    )
+    catalog.association_audit["training_input"] = {
+        "mode": training_support,
+        "used": train_rows is not None and bool(train_rows),
+        "source": str(train_path) if train_rows is not None else None,
+        "sha256": file_sha256(train_path) if train_rows is not None else None,
+    }
     catalog.summary = {
         "tables": len(tables),
         "by_engine": dict(Counter(t.engine for t in tables)),
         "columns": sum(len(t.columns) for t in tables),
         "described_columns": sum(bool(c.description) for t in tables for c in t.columns),
+        "knowledge_association_version": catalog.association_audit["version"],
+        "knowledge_pairs": sum(len(t.knowledge) for t in tables),
+        "training_support_provider": catalog.association_audit["support"]["provider"],
     }
     if persist:
         output = settings.path(settings.preprocessed_dir)
         write_json(output / "schema_extracted.json", catalog.model_dump(by_alias=True))
         write_json(output / "schema_catalog.json", catalog.model_dump(by_alias=True))
+        write_json(output / "knowledge_association_audit.json", catalog.association_audit)
+        write_json(output / "training_support_audit.json", catalog.association_audit["support"])
         write_documents(catalog, output / "schema_documents.jsonl")
     return catalog
 

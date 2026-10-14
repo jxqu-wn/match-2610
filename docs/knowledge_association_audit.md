@@ -1,5 +1,7 @@
 # table 与 knowledge 关联审计
 
+> 本文记录旧实现及旧验收口径。用户已指定 LLM＋人工审核结果为理想基准，现行规则见[预处理规范](preprocessing_rules.md)。下文“仅原文明示引用”等限制不再是当前关联目标；实现缺陷描述仍供改造参考。
+
 ## 范围与结论
 
 本次审核 `data/catalog.py` 的预处理关联，以及 `retrieval/index.py` 中后续使用的两套关联。

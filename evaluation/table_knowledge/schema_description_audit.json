@@ -1,0 +1,1329 @@
+{
+  "summary": {
+    "missing_tables": 25,
+    "table_reasons": {
+      "uncollected_table_line_comment": 16,
+      "no_direct_source_description": 8,
+      "uncollected_section_heading": 1
+    },
+    "missing_columns": 126,
+    "column_reasons": {
+      "no_direct_source_description": 119,
+      "discarded_es_inline_comment": 7
+    },
+    "mysql_formal_comments": 366,
+    "pg_formal_comments": 11,
+    "formal_comment_text_multisets_match": true
+  },
+  "missing_tables": [
+    {
+      "table_id": "MYSQL:common.dict_gender",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 452,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 449,
+          "text": "-- 教育"
+        },
+        {
+          "line": 450,
+          "text": "-- 1. 性别字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_academic_level",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 459,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 457,
+          "text": "-- 2. 学历层次字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_student_status",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 466,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 464,
+          "text": "-- 3. 学生状态字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_course_type",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 473,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 471,
+          "text": "-- 4. 课程类型字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 480,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 478,
+          "text": "-- 5. 考试项目字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_take_mode",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 488,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 486,
+          "text": "-- 6. 选课方式字典"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 495,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 493,
+          "text": "-- 7. 学期字典（与业务库中的 semester 表互补，用于描述学期性质）"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "source_file": "commom_schema.txt",
+      "source_start_line": 504,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 502,
+          "text": "-- 8. 成绩等级参考表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 289,
+          "text": "-- 学期表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "source_file": "core_schema.txt",
+      "source_start_line": 299,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 298,
+          "text": "-- 院系表（真实院系名称）"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 305,
+          "text": "-- 教师表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 317,
+          "text": "-- 班级表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 327,
+          "text": "-- 学生表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 343,
+          "text": "-- 课程表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 357,
+          "text": "-- 选课表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "uncollected_table_line_comment",
+      "evidence": [
+        {
+          "line": 371,
+          "text": "-- 成绩表"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "source_file": "core_schema.txt",
+      "source_start_line": 398,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "uncollected_section_heading",
+      "evidence": [
+        {
+          "line": 605,
+          "text": "-- 医院库（ES）"
+        }
+      ]
+    }
+  ],
+  "missing_columns": [
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "semester_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "academic_year",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "semester_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "start_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.semester",
+      "field": "end_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 290,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 299,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 299,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.department",
+      "field": "department_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 299,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_no",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "teacher_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "gender_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "phone",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.teacher",
+      "field": "region_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 306,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "class_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.class",
+      "field": "grade_year",
+      "source_file": "core_schema.txt",
+      "source_start_line": 318,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_no",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "gender_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "academic_level_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "class_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "home_region_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "student_status_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "field": "admit_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 328,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "teacher_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "credit",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "course_type",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "field": "max_score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 344,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "enrollment_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "student_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "course_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "semester_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "enroll_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "take_mode",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "field": "is_withdraw",
+      "source_file": "core_schema.txt",
+      "source_start_line": 358,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "exam_score_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "enrollment_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "exam_item",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "field": "score_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 372,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "semester_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "academic_year",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "semester_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "start_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.semester",
+      "field": "end_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 390,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 398,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 398,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.department",
+      "field": "department_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 398,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_no",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "teacher_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "gender_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "phone",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.teacher",
+      "field": "region_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 404,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "class_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.class",
+      "field": "grade_year",
+      "source_file": "core_schema.txt",
+      "source_start_line": 415,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_no",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "gender_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "academic_level_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "class_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "home_region_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "student_status_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "field": "admit_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 424,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_code",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "department_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "teacher_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "credit",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "course_type",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "field": "max_score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 439,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "enrollment_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "student_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "course_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "semester_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "enroll_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "take_mode",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "field": "is_withdraw",
+      "source_file": "core_schema.txt",
+      "source_start_line": 452,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "exam_score_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "enrollment_id",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "exam_item",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "score",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "field": "score_date_key",
+      "source_file": "core_schema.txt",
+      "source_start_line": 465,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "rot",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "destination",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "draught",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "vessel_type",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "imo",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "call_sign",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "eta",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "field": "last_update",
+      "source_file": "core_schema.txt",
+      "source_start_line": 633,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "name",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "name.keyword",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "city",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "district",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "address",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "location",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "level",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 615,
+          "text": "      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "bed_count",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "doctor_count",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "nurse_count",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "ambulance_count",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 619,
+          "text": "      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "department_count",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 620,
+          "text": "      \"department_count\": { \"type\": \"integer\" },  // 科室数量"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "annual_outpatient",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 621,
+          "text": "      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "has_icu",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 622,
+          "text": "      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "is_teaching_hospital",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 623,
+          "text": "      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "emergency_24h",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "rating",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "no_direct_source_description",
+      "evidence": []
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "field": "founded_year",
+      "source_file": "core_schema.txt",
+      "source_start_line": 606,
+      "reason": "discarded_es_inline_comment",
+      "evidence": [
+        {
+          "line": 626,
+          "text": "      \"founded_year\": { \"type\": \"integer\" }       // 成立年份"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,2550 @@
+{
+  "status": "adjudicated",
+  "source": "human_review.json",
+  "report_numbering": "1-based items index",
+  "items": [
+    {
+      "review_id": "R001",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1590,
+      "source_report_numbers": [
+        1
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R002",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1598,
+      "source_report_numbers": [
+        2
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R003",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1763,
+      "source_report_numbers": [
+        3
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R004",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1764,
+      "source_report_numbers": [
+        4
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R005",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1778,
+      "source_report_numbers": [
+        5
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R006",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1779,
+      "source_report_numbers": [
+        6
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R007",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1780,
+      "source_report_numbers": [
+        7
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R008",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1793,
+      "source_report_numbers": [
+        8
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R009",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1794,
+      "source_report_numbers": [
+        9
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R010",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1795,
+      "source_report_numbers": [
+        10
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R011",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1796,
+      "source_report_numbers": [
+        11
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R012",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1797,
+      "source_report_numbers": [
+        12
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R013",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1799,
+      "source_report_numbers": [
+        13
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R014",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1800,
+      "source_report_numbers": [
+        14
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex：相关字段在训练集中未出现，放宽关联以覆盖测试未见情况；字段含义支持该解释。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R015",
+      "table_id": "MYSQL:common.administrative_division",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        15
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": null,
+      "accepted_basis": null,
+      "content_decision": "采用原始 Schema；1596 中冲突的地级市编码规则不作为可执行依据。知识原文保留，不作改写。",
+      "reason": "用户指定 Schema 优先，否定知识中与 Schema 示例冲突的区划编码断言。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R016",
+      "table_id": "MYSQL:common.vehicle_type_dict",
+      "knowledge_id": 1768,
+      "source_report_numbers": [
+        16
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": "按用户指定的后缀口径解释类别，不新增字典代码。",
+      "reason": "用户指定按类别后缀对应：大型客车对应 type_name=客车，准驾牵引车对应牵引车。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R017",
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "knowledge_id": 1777,
+      "source_report_numbers": [
+        17
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "用户指出训练集没有高速判定问题；类型名称中的高速不等于该知识中的航速阈值。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R018",
+      "table_id": "MYSQL:common.license_type_dict",
+      "knowledge_id": 1787,
+      "source_report_numbers": [
+        18
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "用户认为无对应映射或关联信息支持。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R019",
+      "table_id": "MYSQL:common.dict_size_category",
+      "knowledge_id": 1595,
+      "source_report_numbers": [
+        19
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户采纳 Codex 对企业规模名称定义的关联。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R020",
+      "table_id": "MYSQL:common.energy_type_dict",
+      "knowledge_id": 1597,
+      "source_report_numbers": [
+        20,
+        21
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户指出训练问题语境涉及装机，清洁能源装机知识应关联能源类别字典。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R021",
+      "table_id": "MYSQL:common.energy_position_dict",
+      "knowledge_id": 1589,
+      "source_report_numbers": [
+        22
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": null,
+      "accepted_basis": null,
+      "content_decision": "SE 的 category 采用 Schema 中的管理；不采用知识中将其归为技术人员的冲突分类。",
+      "reason": "用户指定 Schema 与知识冲突时以 Schema 为准。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R022",
+      "table_id": "MYSQL:common.customer_level_dict",
+      "knowledge_id": 1564,
+      "source_report_numbers": [
+        23
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "用户指定以 Schema 为准；字典按成长值定义会员等级，知识按支付金额排序，不能当作同一映射。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R023",
+      "table_id": "MYSQL:common.dict_academic_level",
+      "knowledge_id": 1589,
+      "source_report_numbers": [
+        24
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "用户指出该知识属于工业能源员工学历语境，缺少教育字典的直接关联。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R024",
+      "table_id": "MYSQL:common.dict_exam_item",
+      "knowledge_id": 1572,
+      "source_report_numbers": [
+        25,
+        26
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": null,
+      "accepted_basis": null,
+      "content_decision": "默认权重采用原始 Schema；不使用知识1572的示例权重覆盖 Schema。",
+      "reason": "用户指定 Schema 优先。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R025",
+      "table_id": "MYSQL:common.dict_grade_level",
+      "knowledge_id": 1573,
+      "source_report_numbers": [
+        27,
+        28
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户确认 F 等级与挂科同义，接受分数段关联。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R026",
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        29
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 7 条其他关联。",
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "用户标记为略，未给出接受或拒绝结论，保留待审。",
+      "other_association_knowledge_ids": [
+        1592,
+        1761,
+        1787,
+        1791,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R027",
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        30
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 11 条其他关联。",
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "用户标记为略，未给出接受或拒绝结论，保留待审。",
+      "other_association_knowledge_ids": [
+        1761,
+        1768,
+        1769,
+        1773,
+        1783,
+        1787,
+        1792,
+        1793,
+        1798,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R028",
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge_id": 1773,
+      "source_report_numbers": [
+        31
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": "6年与10年规则可关联；长期有效在 valid_years 中的表示仍未指定，不补造编码。",
+      "reason": "用户确认存在部分明确关联，接受已明示的领证日期、有效期片段。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R029",
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge_id": 1783,
+      "source_report_numbers": [
+        32
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": "按用户裁定：青年 age<30，中年 30<=age<45，老年 age>=45；此规则仅用于评测裁定，不改写原文。",
+      "reason": "用户指定模糊区间默认左闭右开。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R030",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1765,
+      "source_report_numbers": [
+        33,
+        38
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "用户确认训练集含此问题，采纳 Codex；后续同类 Codex 肯定、Flash 未肯定时亦采纳 Codex。",
+      "decision_source": "user_explicit"
+    },
+    {
+      "review_id": "R031",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        34
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 12 条其他关联。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 13,
+        "union": 14
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1761,
+        1765,
+        1770,
+        1772,
+        1775,
+        1781,
+        1782,
+        1788,
+        1789,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R032",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1771,
+      "source_report_numbers": [
+        35
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "车辆表已有14条参考关联，采用较严格口径；缺少押运员及其资格属性，无法将配备与持证要求直接用于该表。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 13,
+        "union": 14
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R033",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1784,
+      "source_report_numbers": [
+        36
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "车辆表已有较多关联，采用较严格口径；Schema 无罐体检测、合格标志或备注字段，不能把若有的存储说明确认到此表。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 13,
+        "union": 14
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R034",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1785,
+      "source_report_numbers": [
+        37
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 12 条其他关联。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 13,
+        "union": 14
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1762与1785的重型载重阈值冲突，尚无 Schema 明确阈值可优先。",
+      "other_association_knowledge_ids": [
+        1761,
+        1765,
+        1770,
+        1772,
+        1775,
+        1781,
+        1782,
+        1788,
+        1789,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R035",
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge_id": 1762,
+      "source_report_numbers": [
+        39
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 12 条其他关联。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 13,
+        "union": 14
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "与R034同一载重阈值冲突，无法从现有依据选择12吨或15吨。",
+      "other_association_knowledge_ids": [
+        1761,
+        1765,
+        1770,
+        1772,
+        1775,
+        1781,
+        1782,
+        1788,
+        1789,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R036",
+      "table_id": "MYSQL:transportation.shipping_company",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        40
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 5 条其他关联。",
+      "table_association_counts": {
+        "codex": 5,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1592,
+        1761,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R037",
+      "table_id": "MYSQL:transportation.shipping_company",
+      "knowledge_id": 1787,
+      "source_report_numbers": [
+        41
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "驾驶员资格与道路运输业务语境不能仅因 business_type 同名传播到航运公司；缺少相应驾驶员关系。",
+      "table_association_counts": {
+        "codex": 5,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R038",
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge_id": 1793,
+      "source_report_numbers": [
+        42
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 5,
+        "union": 8
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R039",
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge_id": 1799,
+      "source_report_numbers": [
+        43
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 5,
+        "union": 8
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R040",
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge_id": 1800,
+      "source_report_numbers": [
+        44
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 5,
+        "union": 8
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R041",
+      "table_id": "MYSQL:transportation.vessel",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        45
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 8 条其他关联。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 5,
+        "union": 8
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1761,
+        1776,
+        1777,
+        1786,
+        1790,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R042",
+      "table_id": "MYSQL:finance_tax.companies",
+      "knowledge_id": 1630,
+      "source_report_numbers": [
+        46,
+        48
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条高新技术企业的税率条件对应公司表的重点扶持高新技术企业标志；仅据该企业属性部分建立关联。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 12,
+        "union": 14
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R043",
+      "table_id": "MYSQL:finance_tax.companies",
+      "knowledge_id": 1664,
+      "source_report_numbers": [
+        47,
+        49
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条按企业所属行业计算集中度，公司主表直接记录企业标识及所属行业；依据限于行业分组对象。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 12,
+        "union": 14
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R044",
+      "table_id": "MYSQL:finance_tax.stocks",
+      "knowledge_id": 1638,
+      "source_report_numbers": [
+        50
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "股票表已有14条关联；Schema 无每股收益与每股净资产，知识亦未提供由股票字段得到两指标的规则。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 14,
+        "union": 14
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R045",
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "knowledge_id": 1625,
+      "source_report_numbers": [
+        51
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "财务表已有14条关联；只有总资产，没有股价、每股净资产或股本，知识未指定本表为来源，不沿未明示关系传播。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 14,
+        "union": 14
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R046",
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "knowledge_id": 1642,
+      "source_report_numbers": [
+        52
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "财务表已有14条关联；没有收入总额，知识未指定总资产来源，不仅凭单个总资产字段确认。",
+      "table_association_counts": {
+        "codex": 14,
+        "flash": 14,
+        "union": 14
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R047",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1630,
+      "source_report_numbers": [
+        53,
+        59
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表已有较多关联；无企业资格和税率字段，该知识未提供本表可直接判断资格的规则，采用严格口径。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R048",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1631,
+      "source_report_numbers": [
+        54,
+        60
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表已有较多关联；知识公式的应纳税所得额与税率均非直接字段，未给出换算步骤，不以所得税主题相同确认关联。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R049",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1654,
+      "source_report_numbers": [
+        55,
+        62
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表已有较多关联；没有一般企业类别及税率字段，知识仅给出通用税率，缺少直接适用依据。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R050",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1657,
+      "source_report_numbers": [
+        56,
+        64
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表已有较多关联；知识涉及资格、应纳税所得额和税率，Schema 缺少直接字段或该条所需的判定步骤。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R051",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1664,
+      "source_report_numbers": [
+        57,
+        68
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条企业行业集中度以企业收入排序及汇总，申报表直接记录公司标识与收入总额；关联依据为企业收入部分。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R052",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1624,
+      "source_report_numbers": [
+        58
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表的资产是全年季度平均值，不能视为知识BPS公式所需资产来源；以 Schema 口径为准。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R053",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1652,
+      "source_report_numbers": [
+        61,
+        66
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "知识明确引用 companies.is_key_high_tech，归属公司表；申报表无该属性，不沿外键传播。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R054",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1656,
+      "source_report_numbers": [
+        63,
+        67
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "申报表没有技术先进型服务企业资格与税率属性，不能把行业税率知识直接传播到该表。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R055",
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge_id": 1653,
+      "source_report_numbers": [
+        65,
+        69
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 16 条其他关联。",
+      "table_association_counts": {
+        "codex": 17,
+        "flash": 20,
+        "union": 21
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "知识108缺失，Schema优先不能补足被引用的判定条件。",
+      "other_association_knowledge_ids": [
+        1610,
+        1611,
+        1612,
+        1613,
+        1614,
+        1615,
+        1617,
+        1628,
+        1629,
+        1639,
+        1641,
+        1642,
+        1647,
+        1655,
+        1658,
+        1664
+      ]
+    },
+    {
+      "review_id": "R056",
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge_id": 1587,
+      "source_report_numbers": [
+        70,
+        74
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "能源公司表关联相对有限，采用较宽口径；知识明确列举能源企业名称和EC编号，对应公司名称与公司ID含义。仅认可名称及编号筛选，不声称 Schema 存在这些实例。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 6,
+        "union": 9
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R057",
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge_id": 1793,
+      "source_report_numbers": [
+        71
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 6,
+        "union": 9
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R058",
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge_id": 1799,
+      "source_report_numbers": [
+        72
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 6,
+        "union": 9
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R059",
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge_id": 1800,
+      "source_report_numbers": [
+        73
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 6,
+        "union": 9
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R060",
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        75
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 9 条其他关联。",
+      "table_association_counts": {
+        "codex": 8,
+        "flash": 6,
+        "union": 9
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1580,
+        1587,
+        1592,
+        1593,
+        1595,
+        1761,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R061",
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge_id": 1602,
+      "source_report_numbers": [
+        76,
+        81
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "能源场站知识直接说明该类场站的效率指标；接受年利用小时数阈值的适用关系，不将年发电量当成年利用小时数，不补写换算公式。",
+      "table_association_counts": {
+        "codex": 15,
+        "flash": 13,
+        "union": 16
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R062",
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge_id": 1793,
+      "source_report_numbers": [
+        77
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 15,
+        "flash": 13,
+        "union": 16
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R063",
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge_id": 1799,
+      "source_report_numbers": [
+        78
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 15,
+        "flash": 13,
+        "union": 16
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R064",
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge_id": 1800,
+      "source_report_numbers": [
+        79
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 15,
+        "flash": 13,
+        "union": 16
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R065",
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        80
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 16 条其他关联。",
+      "table_association_counts": {
+        "codex": 15,
+        "flash": 13,
+        "union": 16
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1581,
+        1582,
+        1583,
+        1591,
+        1592,
+        1593,
+        1594,
+        1597,
+        1600,
+        1601,
+        1602,
+        1603,
+        1761,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R066",
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge_id": 1793,
+      "source_report_numbers": [
+        82
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 6,
+        "flash": 3,
+        "union": 6
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R067",
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge_id": 1799,
+      "source_report_numbers": [
+        83
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 6,
+        "flash": 3,
+        "union": 6
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R068",
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge_id": 1800,
+      "source_report_numbers": [
+        84
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "按用户后续规则：Codex 接受而 Flash 未输出肯定关联，采纳 Codex。依据：本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。",
+      "table_association_counts": {
+        "codex": 6,
+        "flash": 3,
+        "union": 6
+      },
+      "decision_source": "user_rule"
+    },
+    {
+      "review_id": "R069",
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge_id": 1596,
+      "source_report_numbers": [
+        85
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "冲突规则服从 Schema；不传播被否定的编码断言。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 6 条其他关联。",
+      "table_association_counts": {
+        "codex": 6,
+        "flash": 3,
+        "union": 6
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "1596 的编码断言已由用户裁定与 Schema 冲突；该表是否仅关联未冲突片段仍未明确，且用户对同类26–27项选择略，保留待审。",
+      "other_association_knowledge_ids": [
+        1585,
+        1599,
+        1761,
+        1793,
+        1799,
+        1800
+      ]
+    },
+    {
+      "review_id": "R070",
+      "table_id": "MYSQL:education_2024.student",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        86
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "学生表虽无肯定关联，放宽仍需字段意义支持；跨课程总评求和不是学生属性，Schema 没有成绩，不仅凭学生二字关联。",
+      "table_association_counts": {
+        "codex": 0,
+        "flash": 0,
+        "union": 0
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R071",
+      "table_id": "MYSQL:education_2024.course",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        87
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "课程表虽无肯定关联，仍没有总评字段或该知识直接解释的课程属性，不仅凭课程二字传播。",
+      "table_association_counts": {
+        "codex": 0,
+        "flash": 0,
+        "union": 0
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R072",
+      "table_id": "MYSQL:education_2024.enrollment",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        88,
+        89
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "选课表关联较少，按宽口径接受 student_id、course_id 提供跨课程按学生汇总的粒度关系；不声称该表存储总评。",
+      "table_association_counts": {
+        "codex": 2,
+        "flash": 3,
+        "union": 3
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R073",
+      "table_id": "MYSQL:education_2024.enrollment",
+      "knowledge_id": 1575,
+      "source_report_numbers": [
+        90,
+        91
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 2 条其他关联。",
+      "table_association_counts": {
+        "codex": 2,
+        "flash": 3,
+        "union": 3
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "同名 enrollment 在两个教育库存在，Schema 无法确定原文唯一归属；是否双库适用仍需裁定。",
+      "other_association_knowledge_ids": [
+        1576,
+        1579
+      ]
+    },
+    {
+      "review_id": "R074",
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge_id": 1573,
+      "source_report_numbers": [
+        92,
+        96
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "成绩表关联较少，按宽口径接受挂科阈值对成绩业务的适用关系；score 为考试项目明细，不能逐行直接等同总评。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R075",
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge_id": 1574,
+      "source_report_numbers": [
+        93,
+        97
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "成绩表关联较少，接受绩点映射对成绩业务的适用关系；仅在取得总评后应用，不把明细score直接当总评。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R076",
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge_id": 1575,
+      "source_report_numbers": [
+        94
+      ],
+      "report_kinds": [
+        "association_disagreement"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "知识直接规定成绩统计排除退课记录；exam_score 通过 enrollment_id 关联选课，支持明确的统计过滤关系。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R077",
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        95,
+        98
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "成绩表关联较少，接受跨课程总评求和与成绩来源的部分明确关联；总评口径不得自行补写，亦不直接对所有考试明细求和。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R078",
+      "table_id": "MYSQL:education_2024.exam_score",
+      "knowledge_id": 1577,
+      "source_report_numbers": [
+        99
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "成绩表关联较少，知识按分值排序取中位数与 score 数值含义相符；接受可应用的统计方法，不声称该知识专属于此表。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 5,
+        "union": 5
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R079",
+      "table_id": "MYSQL:education_2025.student",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        100
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "与2024学生表同口径：缺少总评或成绩属性，零关联不构成自动接受理由。",
+      "table_association_counts": {
+        "codex": 0,
+        "flash": 0,
+        "union": 0
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R080",
+      "table_id": "MYSQL:education_2025.course",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        101
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "与2024课程表同口径：缺少总评属性，零关联不构成自动接受理由。",
+      "table_association_counts": {
+        "codex": 0,
+        "flash": 0,
+        "union": 0
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R081",
+      "table_id": "MYSQL:education_2025.enrollment",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        102
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "与2024选课表同口径：宽松接受学生与课程分组粒度的部分关联，不声称总评存在于选课表。",
+      "table_association_counts": {
+        "codex": 2,
+        "flash": 2,
+        "union": 2
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R082",
+      "table_id": "MYSQL:education_2025.enrollment",
+      "knowledge_id": 1575,
+      "source_report_numbers": [
+        103,
+        104
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 2 条其他关联。",
+      "table_association_counts": {
+        "codex": 2,
+        "flash": 2,
+        "union": 2
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "与R073同理，不能把短引用声称为唯一表引用。",
+      "other_association_knowledge_ids": [
+        1576,
+        1579
+      ]
+    },
+    {
+      "review_id": "R083",
+      "table_id": "MYSQL:education_2025.exam_score",
+      "knowledge_id": 1573,
+      "source_report_numbers": [
+        105,
+        108
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "与2024成绩表同口径：接受挂科规则适用关系，score 明细不能直接当作总评。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 4,
+        "union": 4
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R084",
+      "table_id": "MYSQL:education_2025.exam_score",
+      "knowledge_id": 1574,
+      "source_report_numbers": [
+        106,
+        109
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "与2024成绩表同口径：接受总评到绩点映射的适用关系，不补写总评计算步骤。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 4,
+        "union": 4
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R085",
+      "table_id": "MYSQL:education_2025.exam_score",
+      "knowledge_id": 1579,
+      "source_report_numbers": [
+        107,
+        110
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "与2024成绩表同口径：接受跨课程总评求和的成绩来源关系，不直接对考试明细求和。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 4,
+        "union": 4
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R086",
+      "table_id": "MYSQL:education_2025.exam_score",
+      "knowledge_id": 1577,
+      "source_report_numbers": [
+        111
+      ],
+      "report_kinds": [
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "accept",
+      "accepted_basis": "schema_supported",
+      "content_decision": null,
+      "reason": "与2024成绩表同口径：按宽口径接受中位数方法与分值字段的适用关系，不声称专属。",
+      "table_association_counts": {
+        "codex": 1,
+        "flash": 4,
+        "union": 4
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R087",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1713,
+      "source_report_numbers": [
+        112,
+        132
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目仅定义禁航水域多边形，未明确船舶记录或本表查询条件；AIS表保存船舶点位置，不保存禁航区对象。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R088",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1714,
+      "source_report_numbers": [
+        113,
+        133
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目仅定义禁捕管理区域，缺少该区域与AIS船舶记录查询或操作约束的直接说明，不能仅凭空间字段确认。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R089",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1715,
+      "source_report_numbers": [
+        114,
+        134
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目仅描述管制区起止水域，未给出直接针对AIS记录属性的条件或明确表对象。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R090",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1716,
+      "source_report_numbers": [
+        115,
+        135
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提供监管区地理边界，未说明船舶记录的具体条件；不能只因AIS含经纬度而确认关联。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R091",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1717,
+      "source_report_numbers": [
+        116,
+        136
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提供某次实弹训练禁航区边界，未说明船舶记录的具体适用时段或直接查询条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R092",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1718,
+      "source_report_numbers": [
+        117,
+        137
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提供天津港及禁航、管制水域位置，未明确本表对象或对船舶记录属性的直接条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R093",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1722,
+      "source_report_numbers": [
+        118,
+        138
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目主要定义航道并要求守听、按潮汐通航和引航；Schema没有通信、潮汐或引航属性，不能从区域坐标推定关联。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R094",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1723,
+      "source_report_numbers": [
+        119,
+        139
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目定义锚地并要求锚泊信号、守听及排污约束；AIS结构没有这些属性，也没有载重字段支持十万吨级条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R095",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1725,
+      "source_report_numbers": [
+        120,
+        140
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提供航道、锚地坐标并要求遵守外部制度，未给出可直接对应AIS字段的船舶条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R096",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1729,
+      "source_report_numbers": [
+        121,
+        141
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目给出航道、锚地和载重适用范围及外部规定；AIS没有最大载重字段，地理边界本身不足以确认。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R097",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1743,
+      "source_report_numbers": [
+        122,
+        142
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：航道内禁止追越有潜在线索，但原文未给出由AIS记录判定追越的规则；不能自行补充轨迹或相对运动算法。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R098",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1745,
+      "source_report_numbers": [
+        123,
+        143
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目定义航道、锚地并要求遵守外部制度和报告，Schema未记录这些制度或报告属性。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R099",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1747,
+      "source_report_numbers": [
+        124,
+        144
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：安全航速、靠离泊作业区等要求有船舶线索，但安全阈值、沿岸边界和作业区均未提供，不能补成AIS条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R100",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1750,
+      "source_report_numbers": [
+        125,
+        145
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目描述航道及分道制、守听和法规要求，未给出分道方向或位置条件；Schema不记录通信和法规遵守情况。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R101",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1752,
+      "source_report_numbers": [
+        126,
+        146
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目主要给出航道警戒区与VTS、引航要求；AIS没有引航属性，且大型船舶条件未定义。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R102",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1754,
+      "source_report_numbers": [
+        127,
+        147
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提出安全航速和加强瞭望的一般要求，未定义安全阈值，Schema也没有瞭望属性，具体AIS条件无法确认。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R103",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1755,
+      "source_report_numbers": [
+        128,
+        148
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目给出航道、报告和大型船舶引航要求，AIS没有报告或引航属性，大型条件也未定义。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R104",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1756,
+      "source_report_numbers": [
+        129,
+        149
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目禁止航道内追越，但未提供从AIS字段判断追越的口径；其余主要是区域坐标和报告要求。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R105",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1757,
+      "source_report_numbers": [
+        130,
+        150
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目主要定义航道并要求遵守定线制与VTS报告，没有给出直接对应AIS字段的方向、速度或状态条件。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R106",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1759,
+      "source_report_numbers": [
+        131,
+        151
+      ],
+      "report_kinds": [
+        "association_disagreement",
+        "candidates"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": null,
+      "reason": "AIS表已有30条Codex关联、50条Flash关联，采用严格口径；逐项核对意见：条目提供区域边界并要求大型船舶引航，AIS不含引航属性，且大型条件未定义，不能仅据空间字段确认。 不把同表已有空间字段作为充分依据。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "agent_under_user_rules"
+    },
+    {
+      "review_id": "R107",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1739,
+      "source_report_numbers": [
+        152,
+        153,
+        155,
+        156
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 28 条其他关联。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "Schema仅说明航行状态及数值范围，没有状态码语义；原文还缺少航速比较符，左闭右开规则不足以补全。",
+      "other_association_knowledge_ids": [
+        1719,
+        1720,
+        1721,
+        1724,
+        1726,
+        1727,
+        1728,
+        1730,
+        1731,
+        1732,
+        1733,
+        1734,
+        1735,
+        1736,
+        1737,
+        1738,
+        1741,
+        1742,
+        1744,
+        1746,
+        1748,
+        1749,
+        1751,
+        1753,
+        1758,
+        1760,
+        1777,
+        1790
+      ]
+    },
+    {
+      "review_id": "R108",
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge_id": 1740,
+      "source_report_numbers": [
+        154
+      ],
+      "report_kinds": [
+        "content_issues"
+      ],
+      "decision": "resolved",
+      "association_decision": "reject",
+      "accepted_basis": null,
+      "content_decision": "用户裁定不关联本知识；原报告中的内容冲突、缺失或歧义继续保留，不代表这些内容已被修正或补全。",
+      "reason": "按用户最终规则：该表已有其他关联知识，因此本待审项不关联。排除本轮全部待审项后仍有 28 条其他关联。",
+      "table_association_counts": {
+        "codex": 30,
+        "flash": 50,
+        "union": 50
+      },
+      "decision_source": "user_rule_remaining_coverage",
+      "previous_defer_reason": "知识1739与1740对nav_status=1含义冲突，Schema无明确映射，仍需用户指定。",
+      "other_association_knowledge_ids": [
+        1719,
+        1720,
+        1721,
+        1724,
+        1726,
+        1727,
+        1728,
+        1730,
+        1731,
+        1732,
+        1733,
+        1734,
+        1735,
+        1736,
+        1737,
+        1738,
+        1741,
+        1742,
+        1744,
+        1746,
+        1748,
+        1749,
+        1751,
+        1753,
+        1758,
+        1760,
+        1777,
+        1790
+      ]
+    }
+  ],
+  "numbering_note": "用户15–30对应R015–R030；0–14解释为首批R001–R014，无R000。",
+  "policies": {
+    "schema_precedence": "Schema与knowledge冲突时以Schema为准；保留原文，在裁定层记录不采用片段。",
+    "codex_precedence": "R030及后续Codex接受、Flash未肯定的关联分歧采纳Codex；不将候选当作接受。",
+    "density": "不设数量门槛；逐项判断，较多关联表偏严格，较少或无关联表偏宽松，仍需可解释依据。",
+    "boundary": "模糊区间默认左闭右开；不覆盖已明确比较符。",
+    "scope": "仅用于evaluation参考裁定，不修改原始Schema、knowledge或正式预处理。",
+    "remaining_coverage": "用户最终规则：剩余待裁定项若表存在其他关联知识则拒绝，否则接受。本轮按原始双方关联并集应用已有明确接受/拒绝裁定，并排除本轮全部待审项后检查，避免顺序依赖。"
+  },
+  "summary": {
+    "resolved": 108
+  }
+}

@@ -1,0 +1,631 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge": [
+        {"knowledge_id": 1610, "knowledge_text": "corporate_income_tax_returns.revenue 表示收入总额，单位：万元。"},
+        {"knowledge_id": 1611, "knowledge_text": "corporate_income_tax_returns.non_taxable_income 表示不征税收入与免税收入合计，单位：万元。"},
+        {"knowledge_id": 1612, "knowledge_text": "corporate_income_tax_returns.deductions 表示扣除金额，单位：万元。"},
+        {"knowledge_id": 1613, "knowledge_text": "corporate_income_tax_returns.prior_year_losses 表示允许弥补的以前年度亏损，单位：万元。"},
+        {"knowledge_id": 1614, "knowledge_text": "corporate_income_tax_returns.employee_count 表示从业人数，为全年季度平均值，单位：人。"},
+        {"knowledge_id": 1615, "knowledge_text": "corporate_income_tax_returns.total_assets 表示资产总额（用于小型微利企业判定），为全年季度平均值，单位：万元。"},
+        {"knowledge_id": 1617, "knowledge_text": "corporate_income_tax_returns.is_restricted_industry 表示是否从事国家限制或禁止行业，TRUE表示是，FALSE表示否。"},
+        {"knowledge_id": 1628, "knowledge_text": "应纳税所得额计算公式：revenue - non_taxable_income - deductions - prior_year_losses，单位：万元。"},
+        {"knowledge_id": 1629, "knowledge_text": "小型微利企业判定条件：应纳税所得额≤100万元 且 从业人数≤300人 且 资产总额≤5000万元 且 未从事国家限制或禁止行业。"},
+        {"knowledge_id": 1630, "knowledge_text": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。高新技术企业优先于小型微利判定。"},
+        {"knowledge_id": 1631, "knowledge_text": "企业所得税额计算公式：应纳税所得额 × 适用税率，单位：万元。"},
+        {"knowledge_id": 1639, "knowledge_text": "实际税负率计算公式：(应纳税额 / 收入总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，单位：%。"},
+        {"knowledge_id": 1641, "knowledge_text": "所得税贡献率计算公式：(应纳税额 / 资产总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，资产总额取自申报表中的全年季度平均值。单位：%。"},
+        {"knowledge_id": 1642, "knowledge_text": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"},
+        {"knowledge_id": 1647, "knowledge_text": "收入扣除后利润率计算公式：(revenue - deductions) / revenue × 100%，单位：%。反映扣除后的利润空间。"},
+        {"knowledge_id": 1653, "knowledge_text": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"},
+        {"knowledge_id": 1654, "knowledge_text": "一般企业所得税税率为25%。"},
+        {"knowledge_id": 1655, "knowledge_text": "若corporate_income_tax_returns.is_restricted_industry为TRUE，表示企业从事国家限制或禁止行业，不能享受小型微利企业优惠。"},
+        {"knowledge_id": 1657, "knowledge_text": "符合条件的小型微利企业，年应纳税所得额不超过100万元的部分，减按25%计入应纳税所得额，按20%税率缴纳企业所得税（实际税负5%）。本库按简化规则直接使用20%税率。"},
+        {"knowledge_id": 1658, "knowledge_text": "企业研究开发费用未形成无形资产计入当期损益的，在按照规定据实扣除的基础上，可按研究开发费用的100%在税前加计扣除（制造业企业），其他企业按75%。本库中加计扣除包含在deductions字段内。"}
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge": [
+        {"knowledge_id": 1580, "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"},
+        {"knowledge_id": 1587, "knowledge_text": "“五大发电集团”指：华能国际(EC003)、大唐发电(EC004)、华电集团(EC005)、国家电投(EC006)、国家能源集团(EC009)。“两网”指：国家电网(EC001、EC020-EC022)、南方电网(EC002、EC023)。"},
+        {"knowledge_id": 1592, "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"},
+        {"knowledge_id": 1593, "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"},
+        {"knowledge_id": 1595, "knowledge_text": "企业员工规模等级：大型企业 staff_count≥5000，中型企业 1000≤staff_count<5000，小型企业 staff_count<1000。"},
+        {"knowledge_id": 1761, "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "knowledge": [
+        {"knowledge_id": 1584, "knowledge_text": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"},
+        {"knowledge_id": 1588, "knowledge_text": "资质到期判断：expire_date < CURDATE() 表示已过期，expire_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 180 DAY) 表示未来半年内到期。"}
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge": [
+        {"knowledge_id": 1581, "knowledge_text": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"},
+        {"knowledge_id": 1582, "knowledge_text": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"},
+        {"knowledge_id": 1583, "knowledge_text": "装机容量单位MW（兆瓦），年发电量单位万kWh。大型火电厂装机容量≥3000MW，大型水电站装机容量≥1000MW，大型风电场装机容量≥500MW，大型光伏电站装机容量≥200MW。"},
+        {"knowledge_id": 1591, "knowledge_text": "场站运行状态：'运行'表示正常发电中，'在建'表示施工中尚未并网，'停机'表示临时停运可恢复，'退役'表示永久关停。"},
+        {"knowledge_id": 1592, "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"},
+        {"knowledge_id": 1593, "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"},
+        {"knowledge_id": 1594, "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"},
+        {"knowledge_id": 1597, "knowledge_text": "“双碳”目标指2030年前实现碳达峰、2060年前实现碳中和。清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"},
+        {"knowledge_id": 1600, "knowledge_text": "年发电量超过装机容量×5000小时的火电厂为超高效火电厂。火电年平均利用小时数约为4500小时。"},
+        {"knowledge_id": 1601, "knowledge_text": "年利用小时数计算公式：年利用小时数 = 年发电量(万kWh) × 10000 ÷ 装机容量(MW) ÷ 1000，简化后为：年利用小时数 = 年发电量(万kWh) ÷ 装机容量(MW) × 10。"},
+        {"knowledge_id": 1602, "knowledge_text": "年利用小时数用于衡量发电场站利用效率，通用高效判断阈值为年利用小时数大于3000小时。"},
+        {"knowledge_id": 1603, "knowledge_text": "小型发电场站判断标准：装机容量低于100MW。"},
+        {"knowledge_id": 1761, "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge": [
+        {"knowledge_id": 1585, "knowledge_text": "供电等级划分：一级供电区域为直辖市、省会城市、计划单列市市区；二级供电区域为地级市市区及经济发达县级市；三级供电区域为普通县级市及农村地区。"},
+        {"knowledge_id": 1599, "knowledge_text": "供电户数超过200万的为特大型供电区域，100万-200万为大型供电区域，50万-100万为中型，低于50万为小型。"},
+        {"knowledge_id": 1761, "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "knowledge": [
+        {"knowledge_id": 1580, "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"},
+        {"knowledge_id": 1586, "knowledge_text": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"},
+        {"knowledge_id": 1589, "knowledge_text": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"}
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-008",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [1554,1555,1556,1557,1558,1559,1560,1561,1562,1563,1564,1565,1566,1567,1568,1569,1570,1571,1572,1573,1574,1575,1576,1577,1578,1579,1580,1581,1582,1583,1584,1585,1586,1587,1588,1589,1590,1591,1592,1593,1594,1595,1596,1597,1598,1599,1600,1601,1602,1603,1604,1605,1606,1607,1608,1609,1610,1611,1612,1613,1614,1615,1616,1617,1618,1619,1620,1621,1622,1623,1624,1625,1626,1627,1628,1629,1630,1631,1632,1633,1634,1635,1636,1637,1638,1639,1640,1641,1642,1643,1644,1645,1646,1647,1648,1649,1650,1651,1652,1653,1654,1655,1656,1657,1658,1659,1660,1661,1662,1663,1664,1665,1666,1667,1668,1669,1670,1671,1672,1673,1674,1675,1676,1677,1678,1679,1680,1681,1682,1683,1684,1685,1686,1687,1688,1689,1690,1691,1692,1693,1694,1695,1696,1697,1698,1699,1700,1701,1702,1703,1704,1705,1706,1707,1708,1709,1710,1711,1712,1713,1714,1715,1716,1717,1718,1719,1720,1721,1722,1723,1724,1725,1726,1727,1728,1729,1730,1731,1732,1733,1734,1735,1736,1737,1738,1739,1740,1741,1742,1743,1744,1745,1746,1747,1748,1749,1750,1751,1752,1753,1754,1755,1756,1757,1758,1759,1760,1761,1762,1763,1764,1765,1766,1767,1768,1769,1770,1771,1772,1773,1774,1775,1776,1777,1778,1779,1780,1781,1782,1783,1784,1785,1786,1787,1788,1789,1790,1791,1792,1793,1794,1795,1796,1797,1798,1799,1800],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+        "accepted": [
+          {
+            "knowledge_id": 1610,
+            "basis": "explicit",
+            "fields": ["revenue"],
+            "knowledge_evidence": [{"knowledge_id": 1610, "quote": "corporate_income_tax_returns.revenue 表示收入总额，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 revenue 及其单位，本表含该字段。"
+          },
+          {
+            "knowledge_id": 1611,
+            "basis": "explicit",
+            "fields": ["non_taxable_income"],
+            "knowledge_evidence": [{"knowledge_id": 1611, "quote": "corporate_income_tax_returns.non_taxable_income 表示不征税收入与免税收入合计，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 non_taxable_income 及其口径。"
+          },
+          {
+            "knowledge_id": 1612,
+            "basis": "explicit",
+            "fields": ["deductions"],
+            "knowledge_evidence": [{"knowledge_id": 1612, "quote": "corporate_income_tax_returns.deductions 表示扣除金额，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 deductions 及其单位。"
+          },
+          {
+            "knowledge_id": 1613,
+            "basis": "explicit",
+            "fields": ["prior_year_losses"],
+            "knowledge_evidence": [{"knowledge_id": 1613, "quote": "corporate_income_tax_returns.prior_year_losses 表示允许弥补的以前年度亏损，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 prior_year_losses 及其单位。"
+          },
+          {
+            "knowledge_id": 1614,
+            "basis": "explicit",
+            "fields": ["employee_count"],
+            "knowledge_evidence": [{"knowledge_id": 1614, "quote": "corporate_income_tax_returns.employee_count 表示从业人数，为全年季度平均值，单位：人。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "employee_count INT COMMENT '从业人数（全年季度平均值）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 employee_count 及其口径。"
+          },
+          {
+            "knowledge_id": 1615,
+            "basis": "explicit",
+            "fields": ["total_assets"],
+            "knowledge_evidence": [{"knowledge_id": 1615, "quote": "corporate_income_tax_returns.total_assets 表示资产总额（用于小型微利企业判定），为全年季度平均值，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 total_assets 及其口径。"
+          },
+          {
+            "knowledge_id": 1617,
+            "basis": "explicit",
+            "fields": ["is_restricted_industry"],
+            "knowledge_evidence": [{"knowledge_id": 1617, "quote": "corporate_income_tax_returns.is_restricted_industry 表示是否从事国家限制或禁止行业，TRUE表示是，FALSE表示否。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业'"}],
+            "qualifiers": [],
+            "reason": "知识明确写出表名字段 is_restricted_industry 及布尔含义。"
+          },
+          {
+            "knowledge_id": 1628,
+            "basis": "schema_supported",
+            "fields": ["revenue", "non_taxable_income", "deductions", "prior_year_losses"],
+            "knowledge_evidence": [{"knowledge_id": 1628, "quote": "应纳税所得额计算公式：revenue - non_taxable_income - deductions - prior_year_losses，单位：万元。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用的四个字段均在本表，且字段注释与知识口径一致。"
+          },
+          {
+            "knowledge_id": 1629,
+            "basis": "schema_supported",
+            "fields": ["employee_count", "total_assets", "is_restricted_industry"],
+            "knowledge_evidence": [{"knowledge_id": 1629, "quote": "小型微利企业判定条件：应纳税所得额≤100万元 且 从业人数≤300人 且 资产总额≤5000万元 且 未从事国家限制或禁止行业。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "employee_count INT COMMENT '从业人数（全年季度平均值）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业'"}
+            ],
+            "qualifiers": [],
+            "reason": "小型微利企业判定条件与本表的从业人数、资产总额、限制行业字段直接对应。"
+          },
+          {
+            "knowledge_id": 1630,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [{"knowledge_id": 1630, "quote": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。高新技术企业优先于小型微利判定。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "COMMENT='企业所得税年度申报信息表'"}],
+            "qualifiers": ["高新技术企业优先于小型微利判定"],
+            "reason": "本表为企业所得税年度申报信息表，税率规则用于其企业所得税计算。"
+          },
+          {
+            "knowledge_id": 1631,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [{"knowledge_id": 1631, "quote": "企业所得税额计算公式：应纳税所得额 × 适用税率，单位：万元。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "COMMENT='企业所得税年度申报信息表'"}],
+            "qualifiers": [],
+            "reason": "本表为企业所得税年度申报信息表，税额计算规则直接适用于申报数据。"
+          },
+          {
+            "knowledge_id": 1639,
+            "basis": "schema_supported",
+            "fields": ["revenue"],
+            "knowledge_evidence": [{"knowledge_id": 1639, "quote": "实际税负率计算公式：(应纳税额 / 收入总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，单位：%。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"}],
+            "qualifiers": [],
+            "reason": "公式使用收入总额，对应本表 revenue 字段。"
+          },
+          {
+            "knowledge_id": 1641,
+            "basis": "schema_supported",
+            "fields": ["total_assets"],
+            "knowledge_evidence": [{"knowledge_id": 1641, "quote": "所得税贡献率计算公式：(应纳税额 / 资产总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，资产总额取自申报表中的全年季度平均值。单位：%。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）'"}],
+            "qualifiers": ["资产总额取自申报表中的全年季度平均值"],
+            "reason": "公式使用资产总额并注明取自申报表全年季度平均值，对应本表 total_assets。"
+          },
+          {
+            "knowledge_id": 1642,
+            "basis": "schema_supported",
+            "fields": ["revenue", "total_assets"],
+            "knowledge_evidence": [{"knowledge_id": 1642, "quote": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用收入总额与资产总额，二者均为本表字段。"
+          },
+          {
+            "knowledge_id": 1647,
+            "basis": "schema_supported",
+            "fields": ["revenue", "deductions"],
+            "knowledge_evidence": [{"knowledge_id": 1647, "quote": "收入扣除后利润率计算公式：(revenue - deductions) / revenue × 100%，单位：%。反映扣除后的利润空间。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）'"}
+            ],
+            "qualifiers": [],
+            "reason": "公式使用 revenue 和 deductions，直接对应本表字段。"
+          },
+          {
+            "knowledge_id": 1653,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [{"knowledge_id": 1653, "quote": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "COMMENT='企业所得税年度申报信息表'"}],
+            "qualifiers": [],
+            "reason": "知识说明小型微利企业判定基于年度申报数据，本表即企业所得税年度申报信息表。"
+          },
+          {
+            "knowledge_id": 1654,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [{"knowledge_id": 1654, "quote": "一般企业所得税税率为25%。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "COMMENT='企业所得税年度申报信息表'"}],
+            "qualifiers": [],
+            "reason": "一般企业所得税税率用于本表企业所得税计算。"
+          },
+          {
+            "knowledge_id": 1655,
+            "basis": "explicit",
+            "fields": ["is_restricted_industry"],
+            "knowledge_evidence": [{"knowledge_id": 1655, "quote": "若corporate_income_tax_returns.is_restricted_industry为TRUE，表示企业从事国家限制或禁止行业，不能享受小型微利企业优惠。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业'"}],
+            "qualifiers": ["若corporate_income_tax_returns.is_restricted_industry为TRUE"],
+            "reason": "知识明确写出表名字段 is_restricted_industry 及其对优惠的影响。"
+          },
+          {
+            "knowledge_id": 1657,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [{"knowledge_id": 1657, "quote": "符合条件的小型微利企业，年应纳税所得额不超过100万元的部分，减按25%计入应纳税所得额，按20%税率缴纳企业所得税（实际税负5%）。本库按简化规则直接使用20%税率。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "COMMENT='企业所得税年度申报信息表'"}],
+            "qualifiers": ["年应纳税所得额不超过100万元的部分", "本库按简化规则直接使用20%税率"],
+            "reason": "小型微利企业税率规则适用于本表年度申报数据。"
+          },
+          {
+            "knowledge_id": 1658,
+            "basis": "schema_supported",
+            "fields": ["deductions"],
+            "knowledge_evidence": [{"knowledge_id": 1658, "quote": "企业研究开发费用未形成无形资产计入当期损益的，在按照规定据实扣除的基础上，可按研究开发费用的100%在税前加计扣除（制造业企业），其他企业按75%。本库中加计扣除包含在deductions字段内。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）'"}],
+            "qualifiers": ["制造业企业", "其他企业按75%"],
+            "reason": "知识说明加计扣除包含在 deductions 字段内，本表含该字段。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1652,
+            "knowledge_evidence": [{"knowledge_id": 1652, "quote": "高新技术企业认定资格由companies.is_key_high_tech字段标识"}],
+            "reason": "涉及企业所得税税率判定所需的高新技术企业资格，但资格字段在companies表，本表没有该字段，无法确认直接适用。"
+          },
+          {
+            "knowledge_id": 1656,
+            "knowledge_evidence": [{"knowledge_id": 1656, "quote": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"}],
+            "reason": "涉及企业所得税优惠税率，但目标表没有技术先进型服务企业标识字段，需依赖其他表，无法确认直接适用。"
+          },
+          {
+            "knowledge_id": 1664,
+            "knowledge_evidence": [{"knowledge_id": 1664, "quote": "企业集中度指每个行业收入最高的n个企业占行业总收入的比例，CRn指数通过计算前n位企业数据总和与行业总数据的比值。"}],
+            "reason": "使用收入数据但还依赖行业字段，本表只有revenue，行业信息在companies表，无法仅凭本表确认直接适用。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1653,
+            "kind": "missing_reference",
+            "knowledge_evidence": [{"knowledge_id": 1653, "quote": "判定条件见知识108。"}],
+            "related_knowledge_ids": [],
+            "reason": "引用的知识108不在本输入的知识ID范围内，无法核对具体判定条件。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:energy.energy_company",
+        "accepted": [
+          {
+            "knowledge_id": 1580,
+            "basis": "schema_supported",
+            "fields": ["staff_count", "area_id"],
+            "knowledge_evidence": [{"knowledge_id": 1580, "quote": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "staff_count INT COMMENT '员工总数'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识说明能源企业员工数量按注册地统计，本表含员工总数和注册地区划代码字段。"
+          },
+          {
+            "knowledge_id": 1587,
+            "basis": "schema_supported",
+            "fields": ["company_id"],
+            "knowledge_evidence": [{"knowledge_id": 1587, "quote": "“五大发电集团”指：华能国际(EC003)、大唐发电(EC004)、华电集团(EC005)、国家电投(EC006)、国家能源集团(EC009)。“两网”指：国家电网(EC001、EC020-EC022)、南方电网(EC002、EC023)。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号'"}],
+            "qualifiers": [],
+            "reason": "知识用企业编号列举能源集团，本表 company_id 可对应这些编号。"
+          },
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [{"knowledge_id": 1592, "quote": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态'"}],
+            "qualifiers": ["企业 status='注销' 表示企业主体消亡"],
+            "reason": "知识区分企业注销与场站退役，本表 status 含注销枚举。"
+          },
+          {
+            "knowledge_id": 1593,
+            "basis": "schema_supported",
+            "fields": ["business_type"],
+            "knowledge_evidence": [{"knowledge_id": 1593, "quote": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "business_type VARCHAR(50) NOT NULL COMMENT '经营类型'"}],
+            "qualifiers": ["通常"],
+            "reason": "知识定义新能源企业按 business_type 识别，本表含该字段。"
+          },
+          {
+            "knowledge_id": 1595,
+            "basis": "schema_supported",
+            "fields": ["staff_count"],
+            "knowledge_evidence": [{"knowledge_id": 1595, "quote": "企业员工规模等级：大型企业 staff_count≥5000，中型企业 1000≤staff_count<5000，小型企业 staff_count<1000。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "staff_count INT COMMENT '员工总数'"}],
+            "qualifiers": [],
+            "reason": "知识给出企业员工规模阈值，本表含 staff_count 字段。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [{"knowledge_id": 1761, "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "area_id CHAR(6) NOT NULL COMMENT '注册地区划代码'"}],
+            "qualifiers": [],
+            "reason": "知识定义 area_id 编码与分组方式，本表 area_id 为注册地区划代码。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:energy.company_certification",
+        "accepted": [
+          {
+            "knowledge_id": 1584,
+            "basis": "schema_supported",
+            "fields": ["cert_type", "expire_date"],
+            "knowledge_evidence": [{"knowledge_id": 1584, "quote": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "cert_type VARCHAR(50) NOT NULL COMMENT '资质类型'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "expire_date DATE COMMENT '到期日期'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识描述企业资质类型和过期判断，本表含 cert_type 与 expire_date 字段。"
+          },
+          {
+            "knowledge_id": 1588,
+            "basis": "schema_supported",
+            "fields": ["expire_date"],
+            "knowledge_evidence": [{"knowledge_id": 1588, "quote": "资质到期判断：expire_date < CURDATE() 表示已过期，expire_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 180 DAY) 表示未来半年内到期。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "expire_date DATE COMMENT '到期日期'"}],
+            "qualifiers": [],
+            "reason": "知识给出资质到期判断，本表含 expire_date 字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:energy.energy_station",
+        "accepted": [
+          {
+            "knowledge_id": 1581,
+            "basis": "schema_supported",
+            "fields": ["energy_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1581, "quote": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"}],
+            "qualifiers": [],
+            "reason": "知识定义能源类型代码，对应本表 energy_type_code。"
+          },
+          {
+            "knowledge_id": 1582,
+            "basis": "schema_supported",
+            "fields": ["station_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1582, "quote": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码'"}],
+            "qualifiers": [],
+            "reason": "知识定义场站类型代码映射，对应本表 station_type_code。"
+          },
+          {
+            "knowledge_id": 1583,
+            "basis": "schema_supported",
+            "fields": ["installed_capacity", "annual_generation"],
+            "knowledge_evidence": [{"knowledge_id": 1583, "quote": "装机容量单位MW（兆瓦），年发电量单位万kWh。大型火电厂装机容量≥3000MW，大型水电站装机容量≥1000MW，大型风电场装机容量≥500MW，大型光伏电站装机容量≥200MW。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识说明装机容量和年发电量单位及规模阈值，对应本表字段。"
+          },
+          {
+            "knowledge_id": 1591,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [{"knowledge_id": 1591, "quote": "场站运行状态：'运行'表示正常发电中，'在建'表示施工中尚未并网，'停机'表示临时停运可恢复，'退役'表示永久关停。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态'"}],
+            "qualifiers": [],
+            "reason": "知识定义场站运行状态，对应本表 status 枚举。"
+          },
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [{"knowledge_id": 1592, "quote": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态'"}],
+            "qualifiers": ["场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营"],
+            "reason": "知识区分企业注销与场站退役，本表 status 含退役枚举。"
+          },
+          {
+            "knowledge_id": 1593,
+            "basis": "schema_supported",
+            "fields": ["energy_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1593, "quote": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"}],
+            "qualifiers": ["通常"],
+            "reason": "知识说明新能源企业场站能源类型，本表 energy_type_code 对应。"
+          },
+          {
+            "knowledge_id": 1594,
+            "basis": "schema_supported",
+            "fields": ["annual_generation", "energy_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1594, "quote": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识说明 PUMPED 场站年发电量为0并应排除，对应本表字段。"
+          },
+          {
+            "knowledge_id": 1597,
+            "basis": "schema_supported",
+            "fields": ["installed_capacity", "energy_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1597, "quote": "“双碳”目标指2030年前实现碳达峰、2060年前实现碳中和。清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"}
+            ],
+            "qualifiers": [],
+            "reason": "清洁能源装机占比计算依赖本表装机容量和能源类型。"
+          },
+          {
+            "knowledge_id": 1600,
+            "basis": "schema_supported",
+            "fields": ["annual_generation", "installed_capacity", "energy_type_code"],
+            "knowledge_evidence": [{"knowledge_id": 1600, "quote": "年发电量超过装机容量×5000小时的火电厂为超高效火电厂。火电年平均利用小时数约为4500小时。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码'"}
+            ],
+            "qualifiers": ["火电年平均利用小时数约为4500小时"],
+            "reason": "知识定义火电厂超高效判断，涉及本表年发电量、装机容量和能源类型。"
+          },
+          {
+            "knowledge_id": 1601,
+            "basis": "schema_supported",
+            "fields": ["annual_generation", "installed_capacity"],
+            "knowledge_evidence": [{"knowledge_id": 1601, "quote": "年利用小时数计算公式：年利用小时数 = 年发电量(万kWh) × 10000 ÷ 装机容量(MW) ÷ 1000，简化后为：年利用小时数 = 年发电量(万kWh) ÷ 装机容量(MW) × 10。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"}
+            ],
+            "qualifiers": [],
+            "reason": "年利用小时数公式直接使用本表年发电量和装机容量。"
+          },
+          {
+            "knowledge_id": 1602,
+            "basis": "schema_supported",
+            "fields": ["annual_generation", "installed_capacity"],
+            "knowledge_evidence": [{"knowledge_id": 1602, "quote": "年利用小时数用于衡量发电场站利用效率，通用高效判断阈值为年利用小时数大于3000小时。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"}
+            ],
+            "qualifiers": ["通用高效判断阈值为年利用小时数大于3000小时"],
+            "reason": "知识说明年利用小时数用于衡量发电场站效率，本表含计算字段。"
+          },
+          {
+            "knowledge_id": 1603,
+            "basis": "schema_supported",
+            "fields": ["installed_capacity"],
+            "knowledge_evidence": [{"knowledge_id": 1603, "quote": "小型发电场站判断标准：装机容量低于100MW。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)'"}],
+            "qualifiers": [],
+            "reason": "小型发电场站按装机容量判断，本表含 installed_capacity。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [{"knowledge_id": 1761, "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "area_id CHAR(6) NOT NULL COMMENT '所在地区划代码'"}],
+            "qualifiers": [],
+            "reason": "知识定义 area_id 编码与分组方式，本表 area_id 为所在地区划代码。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:energy.supply_area",
+        "accepted": [
+          {
+            "knowledge_id": 1585,
+            "basis": "schema_supported",
+            "fields": ["supply_level"],
+            "knowledge_evidence": [{"knowledge_id": 1585, "quote": "供电等级划分：一级供电区域为直辖市、省会城市、计划单列市市区；二级供电区域为地级市市区及经济发达县级市；三级供电区域为普通县级市及农村地区。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "supply_level VARCHAR(10) COMMENT '供电等级'"}],
+            "qualifiers": [],
+            "reason": "知识定义供电等级划分，对应本表 supply_level。"
+          },
+          {
+            "knowledge_id": 1599,
+            "basis": "schema_supported",
+            "fields": ["household_count"],
+            "knowledge_evidence": [{"knowledge_id": 1599, "quote": "供电户数超过200万的为特大型供电区域，100万-200万为大型供电区域，50万-100万为中型，低于50万为小型。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "household_count INT COMMENT '供电户数'"}],
+            "qualifiers": [],
+            "reason": "知识定义供电户数规模等级，对应本表 household_count。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": ["area_id"],
+            "knowledge_evidence": [{"knowledge_id": 1761, "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "area_id CHAR(6) NOT NULL COMMENT '供电区域代码'"}],
+            "qualifiers": [],
+            "reason": "知识定义 area_id 编码与分组方式，本表 area_id 为供电区域代码。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:energy.employee",
+        "accepted": [
+          {
+            "knowledge_id": 1580,
+            "basis": "schema_supported",
+            "fields": ["company_id", "station_id"],
+            "knowledge_evidence": [{"knowledge_id": 1580, "quote": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "station_id VARCHAR(20) COMMENT '所属场站编号'"}
+            ],
+            "qualifiers": [],
+            "reason": "知识说明统计能源企业员工数量时不考虑场站位置，本表含 company_id 和 station_id。"
+          },
+          {
+            "knowledge_id": 1586,
+            "basis": "schema_supported",
+            "fields": ["status"],
+            "knowledge_evidence": [{"knowledge_id": 1586, "quote": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"}],
+            "schema_evidence": [{"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态'"}],
+            "qualifiers": [],
+            "reason": "知识定义员工状态含义，对应本表 status 枚举。"
+          },
+          {
+            "knowledge_id": 1589,
+            "basis": "schema_supported",
+            "fields": ["position_code", "education"],
+            "knowledge_evidence": [{"knowledge_id": 1589, "quote": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"}],
+            "schema_evidence": [
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "position_code VARCHAR(20) NOT NULL COMMENT '岗位代码'"},
+              {"source_file": "data/赛题8/Schema/core_schema.txt", "quote": "education VARCHAR(20) COMMENT '学历'"}
+            ],
+            "qualifiers": ["通常"],
+            "reason": "知识说明岗位与学历对应关系，对应本表 position_code 和 education 字段。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

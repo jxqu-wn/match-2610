@@ -1,0 +1,35 @@
+{
+  "reference_version": "reference-v1",
+  "status": "llm_and_user_reviewed_target",
+  "statistics": {
+    "table_count": 72,
+    "knowledge_count": 247,
+    "accepted_pairs": 270,
+    "nonempty_tables": 44,
+    "basis_counts": {
+      "schema_supported": 212,
+      "explicit": 58
+    },
+    "review_units": 108,
+    "pending_units": 0
+  },
+  "input_files": {
+    "input_context.json": "a7786431311a932919bf440a581a27b02dbd382f521ea234d8e21096ed62dbff",
+    "batches.json": "694769187de039d1053ed68db7e77aafc45843b5bf46d76ea144931a16b48334",
+    "system_prompt.md": "c539a8c3035b7a47c0fc078ed7640acfccc42686d900811ec57d457eb10fd7aa",
+    "user_prompt.template.md": "d24db216b78300db2838edb5d55fe7a88a09e2617f0836fc77741a7efad8e3c4"
+  },
+  "source_files": {
+    "runs/codex-independent-v1/frozen/manifest.json": "bf22f5ee8f57371624357a3e70f22c66c062e041085e6ea8dc8fd0ae9304afb8",
+    "runs/flash-independent-v1/frozen/manifest.json": "52a494073917c569298a2883e959d447efbf7f1530738b2f867e23d1a2b73ca6",
+    "runs/comparison-v1/decisions.json": "54797359d174646e6f3098357d65ade37131993c3301a9ed9e6b85e9a2c0169a",
+    "runs/comparison-v1/comparison.json": "0616a47b887582a7fade3b643e84e68f0c1eee2118e95f59c6a76ba67e7d110e",
+    "runs/comparison-v1/human_review.json": "e8bfb28e2c88c3ebcddad58484eb60d62c1a55ef2d3e6445eb40e186af80d43a",
+    "input_context.json": "a7786431311a932919bf440a581a27b02dbd382f521ea234d8e21096ed62dbff"
+  },
+  "files": {
+    "tables.json": "6965b40d893b646f54e8c50269d7ecac9b5143e6a233e23896b1291e4afcb5c0",
+    "audit.json": "8e6c903d0b78e2d099a9b976e79415881d4ce4834ef289b366f6dfb34f5d835b"
+  },
+  "builder_sha256": "172e38215a8192e573d63f2b9c112811444c790be6df46c443b489c284c2d567"
+}

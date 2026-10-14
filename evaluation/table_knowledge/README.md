@@ -74,9 +74,9 @@ reviewed_knowledge_ids 是模型的覆盖声明，不是对其实际逐条审阅
 
 ## 本次执行与校验
 
-Deepseek Flash 由用户通过 pi coding agent 独立运行；本目录的工具不发起模型调用。
-Codex 侧由三个 subagents 分别完成001–004、005–008、009–012批，每人负责24张表，
-每张表检查全部247条知识。初次标注只使用上述输入，不查看 Flash 输出。
+Deepseek Flash 通过 pi coding agent 逐批独立运行（每批独立提示词调用，无工具、无会话残留）；
+本目录的校验工具本身不发起模型调用。Codex 侧由三个 subagents 分别完成001–004、005–008、009–012批，
+每人负责24张表，每张表检查全部247条知识。两方初次标注只使用上述输入，互不查看对方结果。
 输入及提示词的校验值保存在 `runs/codex-independent-v1/input_lock.json`。
 
 每方保留12批响应，分别命名为 `batch-001.json` 至 `batch-012.json`。
@@ -93,7 +93,10 @@ python -B evaluation/table_knowledge/manage.py freeze evaluation/table_knowledge
 冻结目录保存主结果 `tables.json`、独立审计 `audit.json`、12批原始响应、校验报告和带校验值的清单。
 已存在的冻结目录不能覆盖，修订必须使用新版本。正式预处理不会读取这些文件。
 
-Flash 完成后，将其12批响应放到独立目录，使用同一工具校验和冻结；随后比较两个冻结目录：
+Flash 的12批响应已放入 `runs/flash-independent-v1/responses/`，并使用同一工具校验和冻结；
+随后比较两个冻结目录。两方统计与比对结果见 `runs/flash-independent-v1/README.md` 和 `runs/comparison-v1/comparison.json`：
+完备冻结（Codex 261 对 / Flash 265 对，依据分类分歧 0 对，双方一致 230 对，双方均为空 28 张表，
+待人类裁定 156 项）。以下命令可复现该流程：
 
 ```bash
 python -B evaluation/table_knowledge/manage.py freeze evaluation/table_knowledge/runs/flash-independent-v1/responses --annotator 'Deepseek Flash via pi coding agent' --output-dir evaluation/table_knowledge/runs/flash-independent-v1/frozen
@@ -110,3 +113,39 @@ python -B evaluation/table_knowledge/manage.py compare evaluation/table_knowledg
 ```bash
 python -B -m unittest discover -s evaluation/table_knowledge -p 'test_*.py' -v
 ```
+
+## 当前审核基准与新预处理规则
+
+108个裁定单元已全部处理；最终关联目标见 `runs/reference-v1/tables.json`，完整裁定与内容处理见同目录 `audit.json`。该版本为72张表、270对关联（58 explicit、212 schema_supported），44张表非空。当前预处理关联规则见[新规范](../../docs/preprocessing_rules.md)。以上各独立标注README和comparison-v1原始报告记录的是初次比对状态，不代表当前仍有未决项。
+
+基准由双方冻结关联并集应用全部裁定形成；reject覆盖初始接受，accept加入，内容裁定单独保存。双方一致沿用与用户逐项裁定不混同。它是预处理的理想目标；生产算法不读取标签，也不提供加载审核结果的预处理模式。
+
+```bash
+python -B evaluation/table_knowledge/build_reference.py --output-dir evaluation/table_knowledge/runs/reference-v2
+```
+
+导出前重新验证冻结文件和比对结果，检查裁定覆盖与优先级；输出目录必须不存在。输入或裁定变化后保留旧版本，创建新版本。
+
+## 纯程序预处理评估
+
+最新结果见 `runs/programmatic-v2/`：256对程序关联，命中200对、多关联56对、漏关联70对，precision 78.125%、recall 74.074%、F1 76.046%。`programmatic-v1/`保留上一代码快照的同规模开发结果。
+
+生产算法仅读原始Schema、知识及训练划分，不读取参考标注、不调用LLM或嵌入模型。审核参考仅由以下独立评价入口读取：
+
+```bash
+.venv/bin/python -B evaluation/table_knowledge/evaluate_preprocessing.py --output-dir /tmp/table-knowledge-programmatic-eval
+```
+
+该入口在临时目录生成固定训练划分，运行生产关联器后再进行集合比对；输出逐表知识列表、得分证据、原始输入哈希、阈值扫描和差异报告。全局阈值在当前审核集上选择，成绩属于同集开发评估。
+
+## BM25预处理对照
+
+`runs/bm25-v1-default/COMPARISON.md` 保存相同原始输入、训练划分、分词和非文本规则下的BM25/TF-IDF对照及阈值扫描。BM25默认参数k1=1.5、b=0.75、阈值0.30，非空答案表完全覆盖率56.82%，F1=64.70%。默认算法仍为TF-IDF。
+
+```bash
+.venv/bin/python -B evaluation/table_knowledge/evaluate_preprocessing.py --method bm25 --output-dir /tmp/table-knowledge-bm25-eval
+```
+
+## 可插拔训练增强对照
+
+同一修复后Schema、阈值0.30下，none模式命中177对、F1 73.90%；sql模式命中195对、F1 76.32%，非空表完全覆盖均为22/44。逐表噪声目标未达标表从5张降为3张，仍未全面达标。两组结果保存于 `runs/training-support-none-v1/` 与 `runs/training-support-sql-v1/`。独立模块与开关见[模块说明](../../docs/training_support.md)。

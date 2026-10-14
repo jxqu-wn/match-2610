@@ -1,0 +1,115 @@
+{
+  "scope": "Restore direct original comments only; existing knowledge associations and audit retained. A future full build may rescore links using the added descriptions.",
+  "results": [
+    {
+      "directory": "/home/jxqu/Temp/match-2610/data/preprocessed",
+      "restored_tables": [
+        "MYSQL:common.dict_gender",
+        "MYSQL:common.dict_academic_level",
+        "MYSQL:common.dict_student_status",
+        "MYSQL:common.dict_course_type",
+        "MYSQL:common.dict_exam_item",
+        "MYSQL:common.dict_take_mode",
+        "MYSQL:common.dict_semester_type",
+        "MYSQL:common.dict_grade_level",
+        "MYSQL:education_2024.semester",
+        "MYSQL:education_2024.department",
+        "MYSQL:education_2024.teacher",
+        "MYSQL:education_2024.class",
+        "MYSQL:education_2024.student",
+        "MYSQL:education_2024.course",
+        "MYSQL:education_2024.enrollment",
+        "MYSQL:education_2024.exam_score"
+      ],
+      "restored_fields": [
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "level"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "ambulance_count"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "department_count"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "annual_outpatient"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "has_icu"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "is_teaching_hospital"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "founded_year"
+        }
+      ],
+      "described_tables": 63,
+      "described_columns": 337,
+      "all_other_catalog_values_unchanged": true,
+      "knowledge_associations_recomputed": false
+    },
+    {
+      "directory": "/home/jxqu/Temp/match-2610/data/preprocessed/bm25-v1",
+      "restored_tables": [
+        "MYSQL:common.dict_gender",
+        "MYSQL:common.dict_academic_level",
+        "MYSQL:common.dict_student_status",
+        "MYSQL:common.dict_course_type",
+        "MYSQL:common.dict_exam_item",
+        "MYSQL:common.dict_take_mode",
+        "MYSQL:common.dict_semester_type",
+        "MYSQL:common.dict_grade_level",
+        "MYSQL:education_2024.semester",
+        "MYSQL:education_2024.department",
+        "MYSQL:education_2024.teacher",
+        "MYSQL:education_2024.class",
+        "MYSQL:education_2024.student",
+        "MYSQL:education_2024.course",
+        "MYSQL:education_2024.enrollment",
+        "MYSQL:education_2024.exam_score"
+      ],
+      "restored_fields": [
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "level"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "ambulance_count"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "department_count"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "annual_outpatient"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "has_icu"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "is_teaching_hospital"
+        },
+        {
+          "table_id": "Elasticsearch:medical_institutions",
+          "field": "founded_year"
+        }
+      ],
+      "described_tables": 63,
+      "described_columns": 337,
+      "all_other_catalog_values_unchanged": true,
+      "knowledge_associations_recomputed": false
+    }
+  ]
+}
