@@ -15,7 +15,7 @@ from .io import read_json, setup_logging, write_json
 app = typer.Typer(add_completion=False, help="统一查询指令生成：路由、召回、生成")
 console = Console()
 
-ENGINE = ["SQLite", "MYSQL", "POSTGRESQL", "Elasticsearch"]
+ENGINE = ["MYSQL", "POSTGRESQL", "Elasticsearch"]
 
 
 def _echo(value: object) -> None:
@@ -60,7 +60,7 @@ def split_dataset(
 
 @app.command("build-catalog")
 def build_catalog() -> None:
-    """用 sqlglot 解析三个 schema 文件，生成 schema_extracted.json。"""
+    """解析当前范围的 Schema，生成基础目录与检索文档。"""
     from .data.catalog import build_catalog as build
 
     catalog = build(persist=True)

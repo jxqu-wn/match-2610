@@ -2,20 +2,23 @@
 
 **面向多源异构数据源的统一查询指令生成**（Text-to-Query）。
 
-本仓库基于社区成熟框架重构了赛题解决方案：数据库路由、库表召回、有界 LLM 规划与
-查询指令生成。原始手写实现已由 `src/text2query` 下的框架化实现替换，
-历史实验记录保留在 [`docs/results`](docs/results)。
+V5 基于 `rewrite/framework-based`，当前工作分支为 `rewrite/v5`。
+保留社区框架实现，准备逐步梳理数据库路由、库表召回、LLM 规划与查询生成。
+旧实验中间文件、结果及报告已清空，后续按[流程与测试清单](docs/workflow.md)重新运行。
+预处理禁止添加人工或大模型提供的额外业务理解，具体约束见 [AGENTS.md](AGENTS.md)。
 
 ## 赛题要点
 
 - **输入**：用户自然语言问题，不指定数据源或数据库。
-- **输出**：MySQL / SQLite 的 SQL、PostgreSQL 的时空查询、Elasticsearch 的查询 DSL，
+- **当前数据范围**：MySQL、PostgreSQL、Elasticsearch；已移除 SQLite 样本、Schema 和相关知识。
+- **输出**：MySQL 的 SQL、PostgreSQL 的时空查询、Elasticsearch 的查询 DSL，
   以及跨数据源联邦查询计划（第二步以 `result` 代替第一步结果）。
 - **评测**：查询语句加权执行准确率；ES 查询按 `0.5 × id_match + 0.5 × order_match` 计分。
 - 模型限制：国产开源基座、总参数量不超过 30B、权重总大小不超过 40GB。
 
 资料索引见 [`docs/赛题8/网页资料/README.md`](docs/赛题8/网页资料/README.md)，
 库表召回设计见 [`docs/赛题8/库表信息召回设计说明.md`](docs/赛题8/库表信息召回设计说明.md)。
+官方资料描述原始完整赛题，当前子集的范围以本文和数据清单为准。
 
 ## 目录结构
 
@@ -44,8 +47,8 @@ src/text2query/
     generate.py        DeepSeek 端到端生成 result.json
     finetuned.py       微调模型（OpenAI 兼容服务）推理
   cli.py               typer 命令行入口
-tests/                 pytest 测试
-docs/results/          历史实验结果（旧实现产出）
+tests/                 pytest 测试（从原始输入在临时目录构建所需产物）
+docs/workflow.md       从头梳理流程的顺序、输入输出与测试边界
 ```
 
 ## 安装
@@ -78,13 +81,13 @@ LLM 通过环境变量 `DEEPSEEK_API_KEY` 提供，密钥不写入代码或产�
 ## 使用
 
 ```bash
-# 0) 数据划分（划分文件已冻结，重新划分需显式 --overwrite）
+# 0) 从过滤后的原始训练集重新划分
 text2query split-dataset
 
-# 1) schema 目录与描述
+# 1) 解析原始 Schema，生成基础目录和检索文档
 text2query build-catalog
-text2query enrich-descriptions --workers 4        # 需要 DEEPSEEK_API_KEY
-text2query apply-review
+
+# 预处理仅保留原始资料与可验证引用，不运行模型补写或复核回放
 
 # 2) 数据库路由
 text2query route-evaluate --device cuda --dtype float16
@@ -92,7 +95,7 @@ text2query route-predict --question '统计船舶总数' --device cuda
 
 # 3) 库表召回（关键词模式无需模型）
 text2query build-index --device cuda --dtype float16
-text2query retrieve --engines SQLite --question '哪个国家培养的冰球运动员最多？'
+text2query retrieve --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
 text2query evaluate-retrieval --device cuda
 
 # 4) 有界规划
@@ -107,16 +110,37 @@ text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/complet
 
 ## 数据与划分
 
-原始训练集 `data/赛题8/QA_train.json`（5830 条）按数据源分层划分为训练集 5247 条、
-验证集 583 条（种子 42）。跨源查询按有序 `db1 -> db2` 分层，两个方向分别抽样。
-分层规模与已冻结的 [`split_manifest.json`](data/赛题8/splits/split_manifest.json) 完全一致。
+| 输入 | 当前规模 | 本轮移除 |
+| --- | ---: | ---: |
+| `data/赛题8/QA_train.json` | 2,839 | 2,991 条 SQLite 样本 |
+| `data/赛题8/QA_test.json` | 200 | 200 条 SQLite 问题 |
+| `data/赛题8/knowledge.json` | 247 | 1,553 条引用 BIRD 数据库的知识 |
+| 原始 Schema | 72 张表/索引 | 23 个 BIRD 数据库的 193 张表 |
 
-`split-dataset` 使用 scikit-learn 重新划分时会生成**同规模、同分层但成员不同**的划分，
-因此默认拒绝覆盖已冻结文件；确认要更换基准时使用 `--overwrite`。
+保留记录的 ID、顺序、问题、查询及其余字段不变。清理依据、删除 ID 和文件 SHA-256
+记录在 [`dataset_manifest.json`](data/赛题8/dataset_manifest.json)。
+测试集本身无数据源标签：按原始编号区间 3040–6230 识别 SQLite 题，并与已有 SQLite 子集交叉核对。
+该规则仅用于本次固定数据清理，不作为模型推理或未来数据分类规则。
 
-Schema 预处理产物位于 `data/preprocessed`。`build-catalog` 用 sqlglot 重新解析
-`bird_schemas.txt` / `commom_schema.txt` / `core_schema.txt`，产出的表、字段、主外键
-与描述与已提交的 `schema_extracted.json` 逐项一致。
+旧 `splits/*.json` 已删除。重新运行 `split-dataset` 将使用种子 42、按数据源分层，
+生成训练集 2,555 条和验证集 284 条；跨源查询按有序 `db1 -> db2` 分层。
+新划分由 scikit-learn 生成，成员与旧划分可能不同；已有文件默认拒绝覆盖，需显式 `--overwrite`。
+
+`build-catalog` 解析 `commom_schema.txt` 和 `core_schema.txt`，从本轮训练划分关联案例，
+在 `data/preprocessed/` 生成 `schema_extracted.json`、`schema_catalog.json` 和 `schema_documents.jsonl`。
+这些基础描述仅来自原始 Schema 和知识，后续不得用人工或模型生成的业务解释替换。
+当前 table–knowledge 关联的覆盖与误关联风险见[关联审计](docs/knowledge_association_audit.md)。
+划分、预处理、索引、缓存和提交结果均为本地生成文件，已加入 `.gitignore`。
+
+## 测试
+
+```bash
+python -m pytest -q -p no:cacheprovider
+```
+
+测试自动在临时目录重建划分、Schema 目录和关键词索引，不依赖旧产物，
+不调用模型服务。当前覆盖输入范围与哈希、数据划分、Schema 提取、检索隔离、
+上下文预算、规划协议和提交静态校验；后续流程梳理中逐步补充测试。
 
 ## 约束与边界
 

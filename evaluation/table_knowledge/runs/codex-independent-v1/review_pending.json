@@ -1,0 +1,976 @@
+{
+  "status": "codex_reference_only_not_adjudicated",
+  "tables": [
+    {
+      "table_id": "MYSQL:common.administrative_division",
+      "candidates": [],
+      "content_issues": [
+        {
+          "knowledge_id": 1596,
+          "kind": "conflicting_content",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "地级市代码特征：前4位以00结尾。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "知识称地级市代码前4位以00结尾，原始Schema却列苏州市320500和南京市320100为level=2；两例前4位分别为3205、3201，与该断言冲突，未修改任何代码规则。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.vessel_type_dict",
+      "candidates": [
+        {
+          "knowledge_id": 1777,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1777,
+              "quote": "高速船舶通常指航速≥25节。"
+            }
+          ],
+          "reason": "字典有高速客船名称，但本条定义的是高速船舶的一般航速阈值，未说明是否界定字典中的高速客船类型，字典也没有航速属性，不能确认直接适用范围。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:common.license_type_dict",
+      "candidates": [
+        {
+          "knowledge_id": 1787,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1787,
+              "quote": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+            }
+          ],
+          "reason": "本条提及license_type并列出从业资格类型，但未给出这些资格与字典驾照代码的对应关系，无法确认它是否直接解释本字典取值。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:common.energy_type_dict",
+      "candidates": [
+        {
+          "knowledge_id": 1597,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1597,
+              "quote": "清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"
+            }
+          ],
+          "reason": "清洁能源、新能源与字典大类名称相符，但本条核心为双碳目标和装机占比，字典不含装机容量，也未明确指定字典作为分类来源，无法确认该计算对字典的直接适用范围。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "candidates": [
+        {
+          "knowledge_id": 1564,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1564,
+              "quote": "高价值用户（核心用户/高消费用户/大客户）通常按用户累计应付金额或累计支付金额排序。"
+            }
+          ],
+          "reason": "字典说明中有高价值用户和核心高价值用户，但字典等级依据最低成长值，本条依据累计应付或支付金额排序，未说明排序结果与会员等级的映射，不能确认同一口径。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_exam_item",
+      "candidates": [],
+      "content_issues": [
+        {
+          "knowledge_id": 1572,
+          "kind": "conflicting_content",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1572,
+              "quote": "成绩折算规则（教育教务常用口径示例）：总评 = 平时*0.30 + 期中*0.30 + 期末*0.40。总评四舍五入保留2位。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "知识示例权重为平时0.30、期中0.30、期末0.40；原始Schema的本表初始化默认权重分别为0.35、0.45、0.75，不能混为同一默认口径。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "candidates": [
+        {
+          "knowledge_id": 1573,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1573,
+              "quote": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+            }
+          ],
+          "reason": "本表有分数段、等级与绩点，但原始Schema未明示哪个等级代表不合格或挂科，且没有总评字段；仅凭F或低绩点不能确认此挂科规则适用于本表。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1773,
+          "kind": "incomplete_rule",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1773,
+              "quote": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "本条提到第三次换证为长期，并称可用issue_date和valid_years计算到期日，但没有说明长期有效在valid_years中的表示及其到期处理。"
+        },
+        {
+          "knowledge_id": 1783,
+          "kind": "incomplete_rule",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1783,
+              "quote": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "中年写作30-45岁，老年写作45岁以上；45岁处的区间边界未明确是否重叠，不能自行选择比较符。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        },
+        {
+          "knowledge_id": 1771,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1771,
+              "quote": "危化品车辆必须配备押运员，且押运员需持有道路危险货物运输从业资格证。"
+            }
+          ],
+          "reason": "车辆类型可涉及危化品车，但Schema没有押运员或从业资格证属性，无法核实本条要求的配备和持证约束。"
+        },
+        {
+          "knowledge_id": 1784,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1784,
+              "quote": "危险品运输车辆需每年进行一次罐体检测，检测合格标志存储在备注字段（若有）。"
+            }
+          ],
+          "reason": "本表能表达危险品车辆类型，但无罐体检测、合格标志或备注字段；本条若有的存储说明不能确认对应本表。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1785,
+          "kind": "conflicting_content",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1785,
+              "quote": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+            },
+            {
+              "knowledge_id": 1762,
+              "quote": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+            }
+          ],
+          "related_knowledge_ids": [
+            1762
+          ],
+          "reason": "知识1762把重型车阈值写为载重>15吨，本条通常把重型货车写为load_capacity≥12吨；货车在12至15吨区间的重型口径不同，需保留两条限定交由人审。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:transportation.vessel",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:finance_tax.stocks",
+      "candidates": [
+        {
+          "knowledge_id": 1638,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1638,
+              "quote": "净资产收益率(ROE)计算公式：(净利润 / 净资产) × 100%。其中净利润 = total_assets - total_liabilities，净资产 = total_assets，本库中以每股收益/每股净资产替代计算。单位：%。"
+            }
+          ],
+          "reason": "本条提及以每股收益/每股净资产替代ROE，但股票表没有这两个指标；本条未给出从股票表股本、价格推导二者的规则，不能借用相邻知识补全。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:finance_tax.company_financials",
+      "candidates": [
+        {
+          "knowledge_id": 1625,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1625,
+              "quote": "市净率(P/B)计算公式：股价 / 每股净资产，股价可使用最近收盘价。"
+            }
+          ],
+          "reason": "本条市净率需要每股净资产，但本表只有总资产且没有每股净资产或总股本；本条未给出换算规则，不能使用未被显式引用的知识1624补全。"
+        },
+        {
+          "knowledge_id": 1642,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1642,
+              "quote": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"
+            }
+          ],
+          "reason": "本表有财务总资产，但没有收入总额；条目也未指定资产来源。另有年度申报表同时记录收入与季度平均资产，不能仅凭总资产词语把本表作为已确认来源。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "candidates": [
+        {
+          "knowledge_id": 1624,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1624,
+              "quote": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+            }
+          ],
+          "reason": "本表也有万元资产总额，但其口径为全年季度平均；每股净资产条目没有指定资产来源，另有财务总资产表，不能仅凭total_assets同名确认使用申报平均资产。"
+        },
+        {
+          "knowledge_id": 1630,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1630,
+              "quote": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。高新技术企业优先于小型微利判定。"
+            }
+          ],
+          "reason": "条目给出高新技术、小型微利和其他企业的税率；本表没有这些企业类别或税率字段，本条也未提供由本表现有字段判定小型微利的条件，需补充明确适用依据。"
+        },
+        {
+          "knowledge_id": 1631,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1631,
+              "quote": "企业所得税额计算公式：应纳税所得额 × 适用税率，单位：万元。"
+            }
+          ],
+          "reason": "条目公式的应纳税所得额与适用税率都不是本表字段，本条未解释如何由申报属性取得二者；不能借用邻近但未显式引用的知识补全。"
+        },
+        {
+          "knowledge_id": 1652,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1652,
+              "quote": "高新技术企业认定资格由companies.is_key_high_tech字段标识，若为TRUE则适用15%优惠税率，相比普通税率25%可节省10%的应纳税额。"
+            }
+          ],
+          "reason": "本条明确引用companies.is_key_high_tech解释资格和税率，但本表没有该资格或税率属性；仅可通过公司外键连接不足以确认归属。"
+        },
+        {
+          "knowledge_id": 1654,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1654,
+              "quote": "一般企业所得税税率为25%。"
+            }
+          ],
+          "reason": "条目仅给出一般企业税率，没有指定申报表或可核对的税率字段；Schema也没有一般企业判定属性，保留其对本表计算适用性待核。"
+        },
+        {
+          "knowledge_id": 1656,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1656,
+              "quote": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"
+            }
+          ],
+          "reason": "本条优惠税率依赖技术先进型服务企业资格，本表没有该资格或税率属性，不能仅沿公司外键传播。"
+        },
+        {
+          "knowledge_id": 1657,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1657,
+              "quote": "符合条件的小型微利企业，年应纳税所得额不超过100万元的部分，减按25%计入应纳税所得额，按20%税率缴纳企业所得税（实际税负5%）。本库按简化规则直接使用20%税率。"
+            }
+          ],
+          "reason": "条目描述小型微利企业应纳税所得额与税率，但未指明本表、未提供由本表字段判定资格或计算应纳税所得额的规则；本表无这些直接属性。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1653,
+          "kind": "missing_reference",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1653,
+              "quote": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"
+            }
+          ],
+          "related_knowledge_ids": [
+            108
+          ],
+          "reason": "本条指向知识108，但完整247条输入没有该ID，无法核对其所称判定条件；不能用内容相似的其他知识替换。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "candidates": [
+        {
+          "knowledge_id": 1587,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1587,
+              "quote": "“五大发电集团”指：华能国际(EC003)、大唐发电(EC004)、华电集团(EC005)、国家电投(EC006)、国家能源集团(EC009)。“两网”指：国家电网(EC001、EC020-EC022)、南方电网(EC002、EC023)。"
+            }
+          ],
+          "reason": "本条列出发电集团和电网企业名称及EC代码，但未明确表或字段；原始Schema没有这些企业实例、代码约定或集团归属属性，不能仅以能源行业推定对应记录。"
+        },
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        },
+        {
+          "knowledge_id": 1602,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1602,
+              "quote": "年利用小时数用于衡量发电场站利用效率，通用高效判断阈值为年利用小时数大于3000小时。"
+            }
+          ],
+          "reason": "本条以年利用小时数判定高效，但Schema没有该指标字段；本条未给出由年发电量和装机容量取得年利用小时数的公式，不能使用未显式引用的相邻条目补全。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "candidates": [
+        {
+          "knowledge_id": 1596,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1596,
+              "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+            }
+          ],
+          "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.student",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "条目涉及同一学生的跨课程总评，但学生表没有总评或成绩属性；不能仅沿选课、成绩关系把计算规则归入学生表。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.course",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "条目涉及多门课程的总评求和，但课程表没有总评属性；尚缺该规则直接解释课程表字段或操作的证据。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2024.enrollment",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "选课表提供学生与课程的粒度线索，但没有总评；本条未说明总评来源，也未显式引用其他总评计算知识。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1575,
+          "kind": "ambiguous_reference",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1575,
+              "quote": "enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "enrollment.is_withdraw 未注明数据库，完整目录中 education_2024、education_2025 均有该表字段；关联按各自结构支持记录，不能声称短引用唯一指定了当前库。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2024.exam_score",
+      "candidates": [
+        {
+          "knowledge_id": 1573,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1573,
+              "quote": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+            }
+          ],
+          "reason": "条目针对总评成绩判定挂科，而原始表保存 exam_item、score 明细，未注明 score 为总评；本条未明确引用总评折算规则。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1574,
+              "quote": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+            }
+          ],
+          "reason": "条目把总评映射为绩点，成绩表未存储总评或绩点，也未说明哪一考试项目代表总评；不能自行补入折算步骤。"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "成绩明细具有分数及选课关联，但本条未定义总评来源和跨课程聚合的直接口径；不能从未显式引用的其他知识补齐。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.student",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "条目涉及同一学生的跨课程总评，但学生表没有总评或成绩属性；不能仅沿选课、成绩关系把计算规则归入学生表。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.course",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "条目涉及多门课程的总评求和，但课程表没有总评属性；尚缺该规则直接解释课程表字段或操作的证据。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "MYSQL:education_2025.enrollment",
+      "candidates": [
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "选课表提供学生与课程的粒度线索，但没有总评；本条未说明总评来源，也未显式引用其他总评计算知识。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1575,
+          "kind": "ambiguous_reference",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1575,
+              "quote": "enrollment.is_withdraw=1 的记录视为已退课，不计入成绩统计与排名。"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "enrollment.is_withdraw 未注明数据库，完整目录中 education_2024、education_2025 均有该表字段；关联按各自结构支持记录，不能声称短引用唯一指定了当前库。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:education_2025.exam_score",
+      "candidates": [
+        {
+          "knowledge_id": 1573,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1573,
+              "quote": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+            }
+          ],
+          "reason": "条目针对总评成绩判定挂科，而原始表保存 exam_item、score 明细，未注明 score 为总评；本条未明确引用总评折算规则。"
+        },
+        {
+          "knowledge_id": 1574,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1574,
+              "quote": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+            }
+          ],
+          "reason": "条目把总评映射为绩点，成绩表未存储总评或绩点，也未说明哪一考试项目代表总评；不能自行补入折算步骤。"
+        },
+        {
+          "knowledge_id": 1579,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1579,
+              "quote": "总评折算总分：同一学生跨多门课把总评相加"
+            }
+          ],
+          "reason": "成绩明细具有分数及选课关联，但本条未定义总评来源和跨课程聚合的直接口径；不能从未显式引用的其他知识补齐。"
+        }
+      ],
+      "content_issues": []
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "candidates": [
+        {
+          "knowledge_id": 1713,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1713,
+              "quote": "上海青草沙水源地禁航区四边形水域，四个顶点坐标分别为：A(31°26′08.329″N,121°34′18.678″E)、B(31°26′42.713″N,121°33′39.136″E)、C(31°27′10.312″N,121°33′58.456″E)、D(31°26′36.982″N,121°34′35.287″E)，转换为十进制度约为A(121.5719,31.4356)、B(121.5609,31.4452)、C(121.5663,31.4529)、D(121.5765,31.4414)，按A-B-C-D-A顺序围成闭合多边形"
+            }
+          ],
+          "reason": "条目仅定义禁航水域多边形，未明确船舶记录或本表查询条件；AIS表保存船舶点位置，不保存禁航区对象。"
+        },
+        {
+          "knowledge_id": 1714,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1714,
+              "quote": "长江口禁捕管理区范围为东经122°15′（122.25°）以东至124.0°、北纬30°54′（30.90°）至31°41′36″（31.6933°）之间的矩形水域，向西以水陆交界线为界"
+            }
+          ],
+          "reason": "条目仅定义禁捕管理区域，缺少该区域与AIS船舶记录查询或操作约束的直接说明，不能仅凭空间字段确认。"
+        },
+        {
+          "knowledge_id": 1715,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1715,
+              "quote": "黄浦江核心管制区为川杨河口下游100米处（约31°10′12″N,121°29′00″E）至南浦大桥（约31°12′30″N,121°30′30″E）之间的水域"
+            }
+          ],
+          "reason": "条目仅描述管制区起止水域，未给出直接针对AIS记录属性的条件或明确表对象。"
+        },
+        {
+          "knowledge_id": 1716,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1716,
+              "quote": "珠江口水上交通安全特别监管区，东至114°30′08.8″E（114.5024°）经度线，南至21°45′00.0″N（21.75°）纬度线，西至112°59′30″E（112.9917°）经度线，北至广州港黄埔大桥附近（约23.5°以覆盖整个监管区）"
+            }
+          ],
+          "reason": "条目提供监管区地理边界，未说明船舶记录的具体条件；不能只因AIS含经纬度而确认关联。"
+        },
+        {
+          "knowledge_id": 1717,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1717,
+              "quote": "杭州湾水域某次实弹训练禁航区范围为北纬30°19′（30.317°）至30°35′（30.583°），东经121°02′（121.033°）至121°12′（121.20°）的矩形水域"
+            }
+          ],
+          "reason": "条目提供某次实弹训练禁航区边界，未说明船舶记录的具体适用时段或直接查询条件。"
+        },
+        {
+          "knowledge_id": 1718,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1718,
+              "quote": "天津港地处渤海西部海岸海河入海口处，中心位置东经117°42′05″（117.7014°），北纬38°59′08″（38.9856°）。海河水域新港船闸维修禁航区：以38-59.5N 117-42.8E（38.9917°N,117.7133°E）为圆心，半径250米的水域。海河下游二道闸至轮驳公司码头段为通航管制区"
+            }
+          ],
+          "reason": "条目提供天津港及禁航、管制水域位置，未明确本表对象或对船舶记录属性的直接条件。"
+        },
+        {
+          "knowledge_id": 1722,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1722,
+              "quote": "舟山虾峙门深水航道（进港航道）。虾峙门航道是宁波舟山港核心港区最重要的深水进港航道，地理范围：自虾峙门东口（29°45.0′N,122°25.0′E）至螺头角（29°54.0′N,122°01.0′E），全长约24海里，航道宽度约0.3海里，水深22米以上，可满足30万吨级船舶通航。航道两侧设有分道通航制，中间由分隔带分隔。船舶在航道内应保持VHF08频道守听，按照潮汐时段单向通航，大型船舶需引航。"
+            }
+          ],
+          "reason": "条目主要定义航道并要求守听、按潮汐通航和引航；Schema没有通信、潮汐或引航属性，不能从区域坐标推定关联。"
+        },
+        {
+          "knowledge_id": 1723,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1723,
+              "quote": "珠江口桂山锚地。桂山锚地位于珠江口桂山岛附近，是进出广州港、深圳港、珠海港的大型船舶候泊、引航、联检锚地。锚地范围由以下四点围成：A(22°10.0′N,113°48.0′E)、B(22°10.0′N,113°52.0′E)、C(22°07.0′N,113°52.0′E)、D(22°07.0′N,113°48.0′E)。锚地水深12-18米，底质泥沙，可锚泊10万吨级以下船舶。锚地内船舶应按规定显示锚泊信号，保持VHF16频道守听，不得排放污染物。"
+            }
+          ],
+          "reason": "条目定义锚地并要求锚泊信号、守听及排污约束；AIS结构没有这些属性，也没有载重字段支持十万吨级条件。"
+        },
+        {
+          "knowledge_id": 1725,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1725,
+              "quote": "厦门港东渡港区航道及锚地。东渡港区航道自青屿水域（24°26.0′N,118°06.0′E）至东渡码头前沿，全长约8海里，航道宽度200米，水深-12米。港区锚地位于猴屿西侧，范围为：A(24°28.0′N,118°04.0′E)、B(24°28.0′N,118°06.0′E)、C(24°26.0′N,118°06.0′E)、D(24°26.0′N,118°04.0′E)，水深10-14米。该区域为船舶进出厦门港西航道的主要通道，船舶应遵守《厦门水域船舶定线制》和《厦门船舶交通管理系统（VTS）用户指南》。"
+            }
+          ],
+          "reason": "条目提供航道、锚地坐标并要求遵守外部制度，未给出可直接对应AIS字段的船舶条件。"
+        },
+        {
+          "knowledge_id": 1729,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1729,
+              "quote": "渤海湾曹妃甸港区航道及锚地。曹妃甸港区主航道自20万吨级矿石码头（38°55.0′N,118°30.0′E）向外海延伸至38°51.0′N,118°35.0′E，全长约11海里，宽度350米，水深-21米。港区设有1#和2#锚地：1#锚地位于38°54.0′N-38°56.0′N,118°35.0′E-118°40.0′E，2#锚地位于38°51.0′N-38°53.0′N,118°35.0′E-118°40.0′E。锚地底质为泥沙，可锚泊15万吨级以下船舶。船舶进出港需遵守《曹妃甸船舶交通管理系统（VTS）安全管理规定》。"
+            }
+          ],
+          "reason": "条目给出航道、锚地和载重适用范围及外部规定；AIS没有最大载重字段，地理边界本身不足以确认。"
+        },
+        {
+          "knowledge_id": 1743,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1743,
+              "quote": "连云港港主航道及锚地。连云港主航道自外海引航点（34°45.0′N,119°50.0′E）至庙岭集装箱码头（34°45.0′N,119°20.0′E），全长约25海里，航道宽度220米，水深-14米。港区设有2号锚地，范围为：A(34°48.0′N,119°40.0′E)、B(34°48.0′N,119°45.0′E)、C(34°45.0′N,119°45.0′E)、D(34°45.0′N,119°40.0′E)，水深12-15米。船舶进出港需向连云港VTS中心报告，航道内禁止追越。"
+            }
+          ],
+          "reason": "航道内禁止追越有潜在线索，但原文未给出由AIS记录判定追越的规则；不能自行补充轨迹或相对运动算法。"
+        },
+        {
+          "knowledge_id": 1745,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1745,
+              "quote": "镇江港大港港区航道及锚地。大港港区航道自和畅洲北汊入口（32°12.0′N,119°40.0′E）至大港码头前沿（32°11.0′N,119°37.0′E），全长约5海里，航道宽度200米，水深-10米。港区锚地位于和畅洲南侧，范围为：A(32°10.0′N,119°38.0′E)、B(32°10.0′N,119°42.0′E)、C(32°08.0′N,119°42.0′E)、D(32°08.0′N,119°38.0′E)。船舶进出港需遵守《长江江苏段船舶定线制规定》，向镇江VTS中心报告。"
+            }
+          ],
+          "reason": "条目定义航道、锚地并要求遵守外部制度和报告，Schema未记录这些制度或报告属性。"
+        },
+        {
+          "knowledge_id": 1747,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1747,
+              "quote": "张家港港务局码头前沿水域（通航密集区）。张家港港务局码头前沿水域范围为：自(31°56.0′N,120°28.0′E)至(31°53.0′N,120°24.0′E)沿江岸线外300米水域。该区域码头泊位密集，常有多艘船舶同时靠离泊作业。过往船舶应保持安全航速，加强与码头调度通信，避免进入靠离泊作业区。"
+            }
+          ],
+          "reason": "安全航速、靠离泊作业区等要求有船舶线索，但安全阈值、沿岸边界和作业区均未提供，不能补成AIS条件。"
+        },
+        {
+          "knowledge_id": 1750,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1750,
+              "quote": "上海港外高桥港区航道（长江口段）。外高桥港区航道自长江口圆圆沙灯船（31°22.0′N,121°38.0′E）至外高桥码头（31°20.0′N,121°33.0′E），全长约7海里，航道宽度300米，水深-12.5米。该航道为进出上海港的主要通道之一，实行分道通航制，船舶应保持VHF14频道守听，遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》。"
+            }
+          ],
+          "reason": "条目描述航道及分道制、守听和法规要求，未给出分道方向或位置条件；Schema不记录通信和法规遵守情况。"
+        },
+        {
+          "knowledge_id": 1752,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1752,
+              "quote": "宁波舟山港穿山港区航道及警戒区。穿山港区航道自虾峙门航道东口（29°52.0′N,122°10.0′E）至穿山码头前沿（29°55.0′N,122°00.0′E），全长约12海里，航道宽度350米，水深-18米。港区警戒区位于航道入口，以点(29°52.0′N,122°10.0′E)为中心、半径0.6海里。船舶进入警戒区前应向穿山VTS中心报告，大型船舶需引航。"
+            }
+          ],
+          "reason": "条目主要给出航道警戒区与VTS、引航要求；AIS没有引航属性，且大型船舶条件未定义。"
+        },
+        {
+          "knowledge_id": 1754,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1754,
+              "quote": "温州港乐清湾港区航道。乐清湾港区航道自大门岛东侧（27°58.0′N,121°12.0′E）至乐清湾码头（27°55.0′N,121°05.0′E），全长约12海里，航道宽度200米，水深-10米。航道两侧设有浮筒，航道内设有3处转向点。该水域渔船较多，进出港船舶应加强瞭望，保持安全航速。"
+            }
+          ],
+          "reason": "条目提出安全航速和加强瞭望的一般要求，未定义安全阈值，Schema也没有瞭望属性，具体AIS条件无法确认。"
+        },
+        {
+          "knowledge_id": 1755,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1755,
+              "quote": "福州港江阴港区航道及警戒区。江阴港区航道自兴化湾口（25°20.0′N,119°40.0′E）至江阴码头（25°25.0′N,119°20.0′E），全长约15海里，航道宽度250米，水深-15米。港区警戒区位于航道入口，以点(25°20.0′N,119°40.0′E)为中心、半径0.5海里。船舶进入警戒区前应向福州VTS中心报告（VHF10频道），大型船舶需引航。"
+            }
+          ],
+          "reason": "条目给出航道、报告和大型船舶引航要求，AIS没有报告或引航属性，大型条件也未定义。"
+        },
+        {
+          "knowledge_id": 1756,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1756,
+              "quote": "泉州港石湖港区航道及锚地。石湖港区航道自泉州湾口（24°45.0′N,118°50.0′E）至石湖码头（24°48.0′N,118°42.0′E），全长约10海里，航道宽度200米，水深-12米。港区锚地位于航道东侧，范围为：A(24°46.0′N,118°52.0′E)、B(24°46.0′N,118°55.0′E)、C(24°44.0′N,118°55.0′E)、D(24°44.0′N,118°52.0′E)，水深11-14米。船舶进出港需向泉州VTS中心报告，航道内禁止追越。"
+            }
+          ],
+          "reason": "条目禁止航道内追越，但未提供从AIS字段判断追越的口径；其余主要是区域坐标和报告要求。"
+        },
+        {
+          "knowledge_id": 1757,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1757,
+              "quote": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。"
+            }
+          ],
+          "reason": "条目主要定义航道并要求遵守定线制与VTS报告，没有给出直接对应AIS字段的方向、速度或状态条件。"
+        },
+        {
+          "knowledge_id": 1759,
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1759,
+              "quote": "惠州港荃湾港区航道及锚地。荃湾港区航道自大亚湾口（22°38.0′N,114°38.0′E）至荃湾码头（22°42.0′N,114°35.0′E），全长约8海里，航道宽度200米，水深-14米。港区锚地位于航道南侧，范围为：A(22°40.0′N,114°36.0′E)、B(22°40.0′N,114°39.0′E)、C(22°38.0′N,114°39.0′E)、D(22°38.0′N,114°36.0′E)，水深12-15米。船舶进出港需向惠州VTS中心报告，大型船舶需引航。"
+            }
+          ],
+          "reason": "条目提供区域边界并要求大型船舶引航，AIS不含引航属性，且大型条件未定义，不能仅据空间字段确认。"
+        }
+      ],
+      "content_issues": [
+        {
+          "knowledge_id": 1739,
+          "kind": "incomplete_rule",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1739,
+              "quote": "nav_status=1（航行中）sog15或sog0.5"
+            }
+          ],
+          "related_knowledge_ids": [],
+          "reason": "sog15、sog0.5 缺失比较符，状态条件与航速条件的连接范围也未完整写出；不补写阈值方向。"
+        },
+        {
+          "knowledge_id": 1739,
+          "kind": "conflicting_content",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1739,
+              "quote": "nav_status=1（航行中）"
+            },
+            {
+              "knowledge_id": 1740,
+              "quote": "nav_status=1锚泊"
+            }
+          ],
+          "related_knowledge_ids": [
+            1740
+          ],
+          "reason": "同一 nav_status=1 在1739被标为航行中，在1740被标为锚泊；不选定其中一方。"
+        },
+        {
+          "knowledge_id": 1740,
+          "kind": "conflicting_content",
+          "knowledge_evidence": [
+            {
+              "knowledge_id": 1740,
+              "quote": "nav_status=1锚泊"
+            },
+            {
+              "knowledge_id": 1739,
+              "quote": "nav_status=1（航行中）"
+            }
+          ],
+          "related_knowledge_ids": [
+            1739
+          ],
+          "reason": "同一 nav_status=1 在1740被标为锚泊，在1739被标为航行中；不选定其中一方。"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "tables_needing_review": 27,
+    "candidate_pairs": 59,
+    "candidate_knowledge_ids": [
+      1564,
+      1573,
+      1574,
+      1579,
+      1587,
+      1596,
+      1597,
+      1602,
+      1624,
+      1625,
+      1630,
+      1631,
+      1638,
+      1642,
+      1652,
+      1654,
+      1656,
+      1657,
+      1713,
+      1714,
+      1715,
+      1716,
+      1717,
+      1718,
+      1722,
+      1723,
+      1725,
+      1729,
+      1743,
+      1745,
+      1747,
+      1750,
+      1752,
+      1754,
+      1755,
+      1756,
+      1757,
+      1759,
+      1771,
+      1777,
+      1784,
+      1787
+    ],
+    "content_issue_reports": 11,
+    "content_issue_knowledge_ids": [
+      1572,
+      1575,
+      1596,
+      1653,
+      1739,
+      1740,
+      1773,
+      1783,
+      1785
+    ]
+  },
+  "note": "Flash output has not been read; two-party disagreements will be added only after comparison."
+}

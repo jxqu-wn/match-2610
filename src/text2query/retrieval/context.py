@@ -365,8 +365,8 @@ class ContextBuilder:
         from ..io import read_json
 
         extracted = read_json(settings.schema_extracted)
-        secondary = read_json(settings.secondary_review)
-        manual = read_json(settings.manual_review)
+        secondary = read_json(settings.secondary_review) if settings.secondary_review.exists() else {}
+        manual = read_json(settings.manual_review) if settings.manual_review.exists() else {}
         requested_keys = {key for gap in requests for key in gap["checked_tables"]}
         existing = {item["source_id"] for item in comparisons}
         for table in extracted["tables"]:
@@ -380,9 +380,9 @@ class ContextBuilder:
                     "source": table["source"],
                     "raw_definition": table["raw_definition"],
                     "original_descriptions": {c["name"]: c["description"] for c in table["columns"]},
-                    "manual_corrections": [r for r in manual["corrections"] if r.get("table_id") == key],
-                    "secondary_field_reviews": [r for r in secondary["field_reviews"] if r.get("table_id") == key],
-                    "special_cases": [r for r in secondary["special_cases"] if r.get("table_id") == key],
+                    "manual_corrections": [r for r in manual.get("corrections", []) if r.get("table_id") == key],
+                    "secondary_field_reviews": [r for r in secondary.get("field_reviews", []) if r.get("table_id") == key],
+                    "special_cases": [r for r in secondary.get("special_cases", []) if r.get("table_id") == key],
                 }
             )
         return comparisons

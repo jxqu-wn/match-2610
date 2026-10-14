@@ -1,0 +1,17 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "knowledge": [
+        {
+          "knowledge_id": 1554,
+          "knowledge_text": "GMV（商品交易总额/订单总额/交易总额）指订单商品总交易额，通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败；若题目强调实付金额，应使用 payable_amount 或 payment_amount。SQL逻辑：SUM(ecommerce.orders.total_amount)。示例：SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders。注意：如果问题明确要求成交或实付，优先使用 payable_amount。"
+        },
+        {
+          "knowledge_id": 1555,
+          "knowledge_text": "客单价（AOV/平均订单金额/平均客单价）指平均每笔订单的应付金额，按订单应付金额总和除以订单数计算。SQL逻辑：SUM(ecommerce.orders.payable_amount) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(SUM(payable_amount) / COUNT(DISTINCT order_id), 2) AS avg_order_value FROM ecommerce.orders。"
+        }
+      ]
+    }
+  ]
+}

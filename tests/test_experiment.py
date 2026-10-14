@@ -1,4 +1,4 @@
-"""SQLite 50 题实验的解析与指标辅助函数。"""
+"""实验指标辅助函数在当前 MySQL 数据范围下的回归检查。"""
 
 from __future__ import annotations
 
@@ -8,23 +8,23 @@ from text2query.retrieval.sql_parser import SourceResolver
 
 
 def test_set_metrics_reports_missing_extra_recall_precision():
-    result = _set_metrics({"hockey.Master", "hockey.AwardsPlayers"}, {"hockey.Master"})
+    result = _set_metrics({"transportation.vehicle", "transportation.driver"}, {"transportation.vehicle"})
     assert result["exact"] is False
     assert result["recall"] == 0.5
     assert result["precision"] == 1.0
-    assert result["missing"] == ["hockey.AwardsPlayers"]
+    assert result["missing"] == ["transportation.driver"]
     assert result["extra"] == []
 
 
-def test_expected_targets_from_sqlite_reference():
+def test_expected_targets_from_mysql_reference():
     resolver = SourceResolver(load_catalog().by_id())
     row = {
         "question_id": 1,
         "question": "q",
-        "db": "SQLite",
-        "query": "SELECT * FROM hockey.Master m JOIN hockey.AwardsPlayers a ON m.playerID = a.playerID",
+        "db": "MYSQL",
+        "query": "SELECT * FROM transportation.vehicle v JOIN transportation.driver d ON v.driver_id = d.driver_id",
     }
     targets = expected_targets(row, resolver)
-    assert targets["engines"] == ["SQLite"]
-    assert targets["databases"] == ["hockey"]
-    assert set(targets["tables"]) == {"hockey.Master", "hockey.AwardsPlayers"}
+    assert targets["engines"] == ["MYSQL"]
+    assert targets["databases"] == ["transportation"]
+    assert set(targets["tables"]) == {"transportation.vehicle", "transportation.driver"}

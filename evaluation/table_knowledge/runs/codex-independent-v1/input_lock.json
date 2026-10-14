@@ -1,0 +1,32 @@
+{
+  "run_id": "codex-independent-v1",
+  "annotator": "Codex via three independent table partitions",
+  "rubric_version": "table-knowledge-reference-v2",
+  "independence": "Initial Codex annotation uses only the shared original input; Flash is run separately by the user and is not consulted.",
+  "files": {
+    "system_prompt.md": "c539a8c3035b7a47c0fc078ed7640acfccc42686d900811ec57d457eb10fd7aa",
+    "user_prompt.template.md": "d24db216b78300db2838edb5d55fe7a88a09e2617f0836fc77741a7efad8e3c4",
+    "input_context.json": "a7786431311a932919bf440a581a27b02dbd382f521ea234d8e21096ed62dbff",
+    "batches.json": "694769187de039d1053ed68db7e77aafc45843b5bf46d76ea144931a16b48334"
+  },
+  "partitions": {
+    "codex_tables_001_004": [
+      "batch-001",
+      "batch-002",
+      "batch-003",
+      "batch-004"
+    ],
+    "codex_tables_005_008": [
+      "batch-005",
+      "batch-006",
+      "batch-007",
+      "batch-008"
+    ],
+    "codex_tables_009_012": [
+      "batch-009",
+      "batch-010",
+      "batch-011",
+      "batch-012"
+    ]
+  }
+}

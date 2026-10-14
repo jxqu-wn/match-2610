@@ -1,0 +1,2722 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:ecommerce.inventory",
+      "knowledge": [
+        {
+          "knowledge_id": 1565,
+          "knowledge_text": "库存告警（低库存/库存不足/安全库存预警）指当前库存数量低于或等于安全库存数量。SQL逻辑：ecommerce.inventory.stock_quantity <= ecommerce.inventory.safety_stock。示例：SELECT i.product_id, p.product_name, i.warehouse_name, i.stock_quantity, i.safety_stock FROM ecommerce.inventory i JOIN ecommerce.product p ON i.product_id = p.product_id WHERE i.stock_quantity <= i.safety_stock。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.orders",
+      "knowledge": [
+        {
+          "knowledge_id": 1554,
+          "knowledge_text": "GMV（商品交易总额/订单总额/交易总额）指订单商品总交易额，通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败；若题目强调实付金额，应使用 payable_amount 或 payment_amount。SQL逻辑：SUM(ecommerce.orders.total_amount)。示例：SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders。注意：如果问题明确要求成交或实付，优先使用 payable_amount。"
+        },
+        {
+          "knowledge_id": 1555,
+          "knowledge_text": "客单价（AOV/平均订单金额/平均客单价）指平均每笔订单的应付金额，按订单应付金额总和除以订单数计算。SQL逻辑：SUM(ecommerce.orders.payable_amount) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(SUM(payable_amount) / COUNT(DISTINCT order_id), 2) AS avg_order_value FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1556,
+          "knowledge_text": "实付销售额（成交额/实付金额/销售额）指订单应付金额或支付成功金额的汇总。若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。SQL逻辑：SUM(ecommerce.orders.payable_amount)。示例：SELECT ROUND(SUM(o.payable_amount), 2) AS paid_sales FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'。注意：若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+        },
+        {
+          "knowledge_id": 1558,
+          "knowledge_text": "退款率（订单退款率/售后退款率）可按退款订单数占订单数计算。订单明细存在 refund_amount 大于 0 时，可认为发生退款。SQL逻辑：COUNT(DISTINCT CASE WHEN ecommerce.order_item.refund_amount > 0 THEN ecommerce.order_item.order_id END) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN oi.order_id END) / COUNT(DISTINCT o.order_id), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id。"
+        },
+        {
+          "knowledge_id": 1559,
+          "knowledge_text": "复购率（重复购买率/用户复购率）指下单次数大于 1 的用户数占下单用户数的比例。SQL逻辑：COUNT(CASE WHEN user_order_count > 1 THEN 1 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN t.order_count > 1 THEN 1 ELSE 0 END) / COUNT(*), 4) AS repurchase_rate FROM (SELECT customer_id, COUNT(DISTINCT order_id) AS order_count FROM ecommerce.orders GROUP BY customer_id) t。"
+        },
+        {
+          "knowledge_id": 1564,
+          "knowledge_text": "高价值用户（核心用户/高消费用户/大客户）通常按用户累计应付金额或累计支付金额排序。SQL逻辑：ORDER BY SUM(ecommerce.orders.payable_amount) DESC。示例：SELECT c.customer_id, c.customer_name, ROUND(SUM(o.payable_amount), 2) AS total_payable FROM ecommerce.customer c JOIN ecommerce.orders o ON c.customer_id = o.customer_id GROUP BY c.customer_id, c.customer_name ORDER BY total_payable DESC LIMIT 10。"
+        },
+        {
+          "knowledge_id": 1566,
+          "knowledge_text": "月销售额（按月销售额/每月成交额）按订单时间 order_time 的年月维度汇总订单应付金额。SQL逻辑：GROUP BY DATE_FORMAT(ecommerce.orders.order_time, '%Y-%m')。示例：SELECT DATE_FORMAT(order_time, '%Y-%m') AS month, ROUND(SUM(payable_amount), 2) AS monthly_sales FROM ecommerce.orders GROUP BY DATE_FORMAT(order_time, '%Y-%m') ORDER BY month。"
+        },
+        {
+          "knowledge_id": 1567,
+          "knowledge_text": "下单用户数（购买用户数/成交用户数）指有订单记录的去重用户数。SQL逻辑：COUNT(DISTINCT ecommerce.orders.customer_id)。示例：SELECT COUNT(DISTINCT customer_id) AS order_user_count FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1568,
+          "knowledge_text": "订单转化完成率（完成率/订单完成率）指已完成订单数占全部订单数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.orders.order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN order_status_code = 'COMPLETED' THEN 1 ELSE 0 END) / COUNT(*), 4) AS order_complete_rate FROM ecommerce.orders。"
+        },
+        {
+          "knowledge_id": 1569,
+          "knowledge_text": "用户最近订单（最近一次下单/最新订单）：需要按 customer_id 分组，并按 order_time 降序取第一条，可使用窗口函数或 MySQL 5.7 兼容的子查询。SQL模式：MAX(order_time) per customer_id。示例：SELECT o.* FROM ecommerce.orders o JOIN (SELECT customer_id, MAX(order_time) AS max_order_time FROM ecommerce.orders GROUP BY customer_id) t ON o.customer_id = t.customer_id AND o.order_time = t.max_order_time。注意：MySQL 5.7 不支持 ROW_NUMBER，可用聚合子查询实现。"
+        },
+        {
+          "knowledge_id": 1570,
+          "knowledge_text": "高于平均客单价用户（超过平均客单价/高客单用户）：先按用户聚合计算用户客单价，再与全局客单价比较。SQL模式：user_avg_order_value > global_avg_order_value。示例：SELECT t.customer_id, ROUND(t.user_aov, 2) AS user_aov FROM (SELECT customer_id, SUM(payable_amount) / COUNT(DISTINCT order_id) AS user_aov FROM ecommerce.orders GROUP BY customer_id) t WHERE t.user_aov > (SELECT SUM(payable_amount) / COUNT(DISTINCT order_id) FROM ecommerce.orders)。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.order_item",
+      "knowledge": [
+        {
+          "knowledge_id": 1558,
+          "knowledge_text": "退款率（订单退款率/售后退款率）可按退款订单数占订单数计算。订单明细存在 refund_amount 大于 0 时，可认为发生退款。SQL逻辑：COUNT(DISTINCT CASE WHEN ecommerce.order_item.refund_amount > 0 THEN ecommerce.order_item.order_id END) / COUNT(DISTINCT ecommerce.orders.order_id)。示例：SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN oi.order_id END) / COUNT(DISTINCT o.order_id), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id。"
+        },
+        {
+          "knowledge_id": 1560,
+          "knowledge_text": "毛利额（利润额/商品毛利）指订单明细应付金额减去明细成本金额后的差额汇总。SQL逻辑：SUM(ecommerce.order_item.item_amount - ecommerce.order_item.item_cost_amount)。示例：SELECT ROUND(SUM(item_amount - item_cost_amount), 2) AS gross_profit FROM ecommerce.order_item。"
+        },
+        {
+          "knowledge_id": 1561,
+          "knowledge_text": "毛利率（销售毛利率/利润率）指毛利额占销售额的比例，按订单明细的 item_amount 和 item_cost_amount 计算。SQL逻辑：SUM(item_amount - item_cost_amount) / SUM(item_amount)。示例：SELECT ROUND(SUM(item_amount - item_cost_amount) / SUM(item_amount), 4) AS gross_margin_rate FROM ecommerce.order_item。"
+        },
+        {
+          "knowledge_id": 1562,
+          "knowledge_text": "销量（销售数量/售出件数）指订单明细里的购买数量汇总，一般使用 order_item.quantity。SQL逻辑：SUM(ecommerce.order_item.quantity)。示例：SELECT product_id, SUM(quantity) AS sales_quantity FROM ecommerce.order_item GROUP BY product_id。"
+        },
+        {
+          "knowledge_id": 1563,
+          "knowledge_text": "热销商品（TOP商品/畅销商品/销量最高商品）通常按销量从高到低排序；若问题强调销售额，则按 item_amount 汇总排序。SQL逻辑：ORDER BY SUM(ecommerce.order_item.quantity) DESC。示例：SELECT p.product_id, p.product_name, SUM(oi.quantity) AS sales_quantity FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id GROUP BY p.product_id, p.product_name ORDER BY sales_quantity DESC LIMIT 10。"
+        },
+        {
+          "knowledge_id": 1571,
+          "knowledge_text": "类目内商品销售排名（类目排名/分类商品排名）：统计每个商品的销售额或销量后，在商品分类内部排序。MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。SQL模式：RANK within category by SUM(order_item.item_amount) or SUM(order_item.quantity)。示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:ecommerce.payment",
+      "knowledge": [
+        {
+          "knowledge_id": 1554,
+          "knowledge_text": "GMV（商品交易总额/订单总额/交易总额）指订单商品总交易额，通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败；若题目强调实付金额，应使用 payable_amount 或 payment_amount。SQL逻辑：SUM(ecommerce.orders.total_amount)。示例：SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders。注意：如果问题明确要求成交或实付，优先使用 payable_amount。"
+        },
+        {
+          "knowledge_id": 1556,
+          "knowledge_text": "实付销售额（成交额/实付金额/销售额）指订单应付金额或支付成功金额的汇总。若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。SQL逻辑：SUM(ecommerce.orders.payable_amount)。示例：SELECT ROUND(SUM(o.payable_amount), 2) AS paid_sales FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'。注意：若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+        },
+        {
+          "knowledge_id": 1557,
+          "knowledge_text": "支付成功率（支付转化率/付款成功率）指成功支付订单数占全部支付记录数的比例。SQL逻辑：SUM(CASE WHEN ecommerce.payment.payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*)。示例：SELECT ROUND(SUM(CASE WHEN payment_status_code = 'SUCCESS' THEN 1 ELSE 0 END) / COUNT(*), 4) AS payment_success_rate FROM ecommerce.payment。"
+        }
+      ]
+    },
+    {
+      "table_id": "POSTGRESQL:public.vessel_ais_data",
+      "knowledge": [
+        {
+          "knowledge_id": 1719,
+          "knowledge_text": "渤海海峡老铁山水道禁航区（军事任务）。禁航区范围为以下四点连线围成的水域：A(38°36.0′N,121°15.0′E)、B(38°36.0′N,121°30.0′E)、C(38°18.0′N,121°30.0′E)、D(38°18.0′N,121°15.0′E)。该区域为军事演习或武器试验临时禁航区，禁止所有船舶驶入。禁航时段通常由海事部门通过航行警告提前发布，船舶应保持VHF16频道守听，并重新规划航线绕行。"
+        },
+        {
+          "knowledge_id": 1720,
+          "knowledge_text": "青岛港主航道（第一分道通航制）。分道通航制位于大公岛和小公岛连线以西的青岛港主航道内侧，进港船舶通航分道和出港船舶通航分道之间由分隔带分隔。进港主交通流向282°（真航向），出港主交通流向103°。定线制水域范围约为：北纬35°59′30″至36°01′00″，东经120°27′00″至120°30′00″。该区域为进出青岛港的大型船舶主要通道，船舶应严格按分道通航制航行，禁止逆向行驶。"
+        },
+        {
+          "knowledge_id": 1721,
+          "knowledge_text": "烟台港西港区航道及警戒区。烟台港西港区航道坐标为：入口点A(37°46.5′N,121°11.8′E)至防波堤口B(37°44.0′N,121°12.0′E)，航道长度约2.5海里，宽度300米，水深-20米。航道入口处设警戒区，以点(37°46.5′N,121°11.8′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向烟台VTS中心报告，航道内限速12节，禁止追越和锚泊。"
+        },
+        {
+          "knowledge_id": 1724,
+          "knowledge_text": "长江口南槽航道（A-N槽）。南槽航道是长江口主要辅助航道，供吃水较浅的船舶进出长江。航道范围：自南槽灯船（31°02.0′N,122°32.0′E）沿自然水深向上游至浏河口（31°30.0′N,121°17.0′E），全长约60海里，航道宽度250-500米，维护水深5.5-6.5米。航道两侧设有浮筒，船舶应沿浮筒标示的航槽行驶，禁止在航道内锚泊或捕捞。船舶须遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》，向吴淞VTS中心报告。"
+        },
+        {
+          "knowledge_id": 1726,
+          "knowledge_text": "大连大窑湾港区航道及警戒区。大窑湾航道自大窑湾口（39°00.0′N,121°55.0′E）至集装箱码头（38°59.5′N,121°46.5′E），全长约7海里，宽度280米，水深-14米。大窑湾口设警戒区，以点(39°00.0′N,121°55.0′E)为中心、半径0.6海里。船舶进入警戒区前应向大窑湾VTS中心报告（VHF11频道），航道内限速10节，大型船舶需申请引航。该水域船舶交通密集，进出船应加强瞭望。"
+        },
+        {
+          "knowledge_id": 1727,
+          "knowledge_text": "北部湾涠洲岛警戒区。涠洲岛警戒区以涠洲岛西角码头西侧点为圆心、半径3海里的扇形水域，具体范围：以W点(21°02′02″N,109°06′43″E)为中心，半径3海里（5556米），方位240°至360°的扇形区域。该警戒区位于北部湾海上石油平台密集区和旅游航线交汇处，船舶交通流量大。船舶进入警戒区应减速谨慎驾驶，加强与过往船舶通信，避免碰撞。禁止在警戒区内抛锚或进行捕鱼作业。"
+        },
+        {
+          "knowledge_id": 1728,
+          "knowledge_text": "上海洋山深水港区航道。洋山港航道自黄泽洋灯船（30°31.0′N,122°15.0′E）至洋山港主航道口（30°35.0′N,122°03.0′E），全长约20海里，航道宽度400米，水深-16米。航道两侧设有大型灯浮，实行分道通航制：西行船舶（进港）走北侧分道，东行船舶（出港）走南侧分道。该航道可通航15万吨级集装箱船。船舶进入航道前应向洋山VTS中心（VHF13频道）报告，大型船舶须引航。"
+        },
+        {
+          "knowledge_id": 1730,
+          "knowledge_text": "渤海海峡长山水道（禁航区）。长山水道为渤海海峡三大水道之一，位于长山列岛之间，是大型船舶进出渤海的重要通道。禁航区范围为以下四点连线所围水域：A(38°20.0′N,120°45.0′E)、B(38°20.0′N,121°00.0′E)、C(38°10.0′N,121°00.0′E)、D(38°10.0′N,120°45.0′E)。该区域为军事训练禁航区，定期发布航行警告禁止船舶进入。船舶应通过VHF16频道获取最新禁航信息，并改用老铁山水道或登州水道绕行。"
+        },
+        {
+          "knowledge_id": 1731,
+          "knowledge_text": "香港水域东博寮海峡分道航行制。东博寮海峡是香港主要南向航道，分道通航制范围为：北起(22°15.0′N,114°15.0′E)，南至(22°10.0′N,114°13.0′E)。实行分隔制，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道。两侧分道各宽0.2海里，中间分隔带宽0.05海里。船舶在该水域航行必须遵守《香港水域船舶交通管制条例》，使用VHF12频道与香港海事处交管中心联系，海峡内禁止锚泊和捕鱼。"
+        },
+        {
+          "knowledge_id": 1732,
+          "knowledge_text": "汕尾遮浪角海域军事禁航区。遮浪角位于汕尾红海湾东侧，军事禁航区范围为以下四点围成的水域：A(22°45.0′N,115°35.0′E)、B(22°45.0′N,115°45.0′E)、C(22°30.0′N,115°45.0′E)、D(22°30.0′N,115°35.0′E)。该区域经常进行实弹射击和军事演习，航行通告会提前发布禁航时段。禁航期间任何船舶不得驶入，否则将面临军事处罚。过往船舶应绕行外海，保持VHF16频道守听。"
+        },
+        {
+          "knowledge_id": 1733,
+          "knowledge_text": "温州港状元岙港区航道。状元岙港区航道自大门岛东侧（27°58.0′N,121°10.0′E）至状元岙码头前沿（27°55.0′N,121°07.0′E），全长约5海里，航道宽度180米，水深-10米。航道两侧设有灯浮标示，航道内设有2处转向点。船舶进出港需向温州VTS中心（VHF14频道）报告，航道内限速8节，禁止追越。该水域受潮汐影响较大，吃水超过9米的船舶应乘高潮通过。"
+        },
+        {
+          "knowledge_id": 1734,
+          "knowledge_text": "台州港头门港区航道及警戒区。头门港区航道自点(28°40.0′N,121°40.0′E)至点(28°38.0′N,121°36.0′E)，全长约8海里，航道宽度200米，水深-9米。港外警戒区位于航道口门处，以点(28°40.0′N,121°40.0′E)为中心、半径0.4海里。警戒区外东侧设有候潮锚地（28°40.5′N-28°42.0′N,121°42.0′E-121°44.0′E）。船舶进入警戒区前应向台州VTS中心（VHF16频道）报告，航道内禁止锚泊，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1735,
+          "knowledge_text": "福建福清湾水域船舶定线制。福清湾船舶定线制范围为：北起(25°35.0′N,119°35.0′E)，南至(25°25.0′N,119°30.0′E)。实行分道通航，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道，分隔带为虚拟线段。该定线制连接福清湾内各码头，船舶须遵守《福建船舶交通管理系统（VTS）服务指南》，使用VHF10频道与福州VTS中心报告。湾内航道水深变化较大，船舶应参照最新海图航行。"
+        },
+        {
+          "knowledge_id": 1736,
+          "knowledge_text": "汕头港广澳港区航道及锚地。广澳港区航道自广澳湾口（23°15.0′N,116°50.0′E）至广澳码头（23°13.0′N,116°46.0′E），全长约5.5海里，航道宽度150米，水深-11米。港区锚地位于航道西侧，范围为：A(23°14.0′N,116°48.0′E)、B(23°14.0′N,116°50.0′E)、C(23°12.0′N,116°50.0′E)、D(23°12.0′N,116°48.0′E)。锚地水深9-12米。船舶进出港需向汕头VTS中心报告（VHF08频道），航道内限速10节，禁止在航道内追越。"
+        },
+        {
+          "knowledge_id": 1737,
+          "knowledge_text": "海南清澜港航道及禁航区。清澜港航道自七洲列岛附近（19°45.0′N,111°10.0′E）至清澜港码头（19°35.0′N,110°50.0′E），全长约22海里，航道宽度150米，水深-7米。港区南侧设有军事禁航区，范围为以(19°30.0′N,111°00.0′E)为中心、半径5海里的圆形水域，为某部海军训练区，全年禁航。民用船舶应保持与禁航区边界至少2海里的安全距离，不得进入。清澜港航道内常有渔船作业，进出港船舶应加强瞭望。"
+        },
+        {
+          "knowledge_id": 1738,
+          "knowledge_text": "北部湾防城港东湾航道及锚地。东湾航道自东湾口（21°35.0′N,108°25.0′E）至防城港码头前沿（21°38.0′N,108°21.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道南侧，范围为：A(21°32.0′N,108°24.0′E)、B(21°32.0′N,108°27.0′E)、C(21°30.0′N,108°27.0′E)、D(21°30.0′N,108°24.0′E)，水深8-12米。船舶进出港需向防城港VTS中心（VHF11频道）报告，航道内限速8节，锚地内船舶应保持安全间距，避免锚泊碰撞。"
+        },
+        {
+          "knowledge_id": 1739,
+          "knowledge_text": "异常航行记录：指航行状态nav_status=1（航行中）sog15或sog0.5"
+        },
+        {
+          "knowledge_id": 1740,
+          "knowledge_text": "停泊：包括nav_status=1锚泊和nav_status=5系泊"
+        },
+        {
+          "knowledge_id": 1741,
+          "knowledge_text": "青岛朝连岛附近水域禁航区（军事任务）。朝连岛位于青岛东南海域，禁航区范围为以下四点连线围成的水域：A(35°50.0′N,121°10.0′E)、B(35°50.0′N,121°30.0′E)、C(35°35.0′N,121°30.0′E)、D(35°35.0′N,121°10.0′E)。该区域经常用于海军实弹射击和军事演习，航行警告会提前发布禁航时段。禁航期间任何船舶不得驶入，过往船舶应绕行外海，保持VHF16频道守听。"
+        },
+        {
+          "knowledge_id": 1742,
+          "knowledge_text": "日照港石臼港区航道及警戒区。石臼港区航道自航道入口（35°20.0′N,119°35.0′E）至煤炭码头前沿（35°18.5′N,119°32.0′E），全长约6海里，航道宽度250米，水深-18米。航道入口处设警戒区，以点(35°20.0′N,119°35.0′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向日照VTS中心报告（VHF14频道），航道内限速10节，大型船舶需引航。"
+        },
+        {
+          "knowledge_id": 1744,
+          "knowledge_text": "南通港天生港区航道及警戒区。天生港区航道自通州沙西水道入口（32°02.0′N,120°45.0′E）至天生港码头（32°00.0′N,120°43.0′E），全长约4海里，航道宽度150米，水深-8米。航道口门处设警戒区，以点(32°02.0′N,120°45.0′E)为中心、半径0.3海里。该水道水流湍急，船舶应谨慎驾驶，禁止在航道内锚泊。"
+        },
+        {
+          "knowledge_id": 1746,
+          "knowledge_text": "江阴港夏港港区航道及警戒区。夏港港区航道自江阴长江大桥下游（31°57.0′N,120°15.0′E）至夏港码头（31°56.0′N,120°12.0′E），全长约4.5海里，航道宽度180米，水深-9米。航道入口处设警戒区，以点(31°57.0′N,120°15.0′E)为中心、半径0.4海里。该水域船舶交通密集，港内限速8节，禁止追越。"
+        },
+        {
+          "knowledge_id": 1748,
+          "knowledge_text": "常熟港兴华港区航道。兴华港区航道自白茆沙北水道入口（31°45.0′N,121°00.0′E）至兴华码头（31°43.0′N,120°55.0′E），全长约8海里，航道宽度160米，水深-8.5米。航道两侧设有浮筒，船舶应沿浮筒标示航行。该航道受潮汐影响明显，吃水超过7米的船舶应乘高潮通过。"
+        },
+        {
+          "knowledge_id": 1749,
+          "knowledge_text": "太仓港集装箱港区航道及警戒区。太仓港航道自长江#10浮（31°38.0′N,121°15.0′E）至集装箱码头前沿（31°36.0′N,121°12.0′E），全长约5海里，航道宽度200米，水深-12米。港区警戒区位于航道入口，以点(31°38.0′N,121°15.0′E)为中心、半径0.5海里。船舶进入警戒区前应向太仓VTS中心报告，航道内限速10节。"
+        },
+        {
+          "knowledge_id": 1751,
+          "knowledge_text": "杭州湾嘉兴港区航道。嘉兴港区航道自杭州湾入口（30°33.0′N,121°05.0′E）至独山码头（30°35.0′N,121°00.0′E），全长约10海里，航道宽度200米，水深-9米。航道两侧设有灯浮，航道内设有2处转向点。该水域潮流强劲，船舶应选择高平潮时段进出港，禁止在航道内锚泊。"
+        },
+        {
+          "knowledge_id": 1753,
+          "knowledge_text": "台州港大麦屿港区航道及锚地。大麦屿港区航道自乐清湾口（28°05.0′N,121°05.0′E）至大麦屿码头（28°08.0′N,121°00.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道东侧，范围为：A(28°06.0′N,121°06.0′E)、B(28°06.0′N,121°08.0′E)、C(28°04.0′N,121°08.0′E)、D(28°04.0′N,121°06.0′E)，水深10-13米。船舶进出港需向台州VTS中心报告，航道内限速8节。"
+        },
+        {
+          "knowledge_id": 1758,
+          "knowledge_text": "汕头港珠池港区航道及警戒区。珠池港区航道自鹿屿附近（23°20.0′N,116°45.0′E）至珠池码头（23°22.0′N,116°43.0′E），全长约5海里，航道宽度150米，水深-10米。港区警戒区位于航道入口，以点(23°20.0′N,116°45.0′E)为中心、半径0.4海里。船舶进入警戒区前应向汕头VTS中心报告（VHF08频道），航道内限速8节。"
+        },
+        {
+          "knowledge_id": 1760,
+          "knowledge_text": "深圳港盐田港区航道及警戒区。盐田港区航道自大鹏湾口（22°32.0′N,114°25.0′E）至盐田码头（22°35.0′N,114°15.0′E），全长约12海里，航道宽度300米，水深-16米。港区警戒区位于航道入口，以点(22°32.0′N,114°25.0′E)为中心、半径0.5海里。船舶进入警戒区前应向盐田VTS中心报告（VHF14频道），航道内实行分道通航，禁止锚泊。"
+        },
+        {
+          "knowledge_id": 1777,
+          "knowledge_text": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。高速船舶通常指航速≥25节。"
+        },
+        {
+          "knowledge_id": 1790,
+          "knowledge_text": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"
+        }
+      ]
+    },
+    {
+      "table_id": "Elasticsearch:medical_institutions",
+      "knowledge": [
+        {
+          "knowledge_id": 1696,
+          "knowledge_text": "复旦大学附属华山医院的经纬度坐标为 (lat: 31.2230, lon: 121.4428)"
+        },
+        {
+          "knowledge_id": 1697,
+          "knowledge_text": "上海交通大学医学院附属瑞金医院的经纬度坐标为 (lat: 31.2125, lon: 121.4682)"
+        },
+        {
+          "knowledge_id": 1698,
+          "knowledge_text": "北京协和医院的经纬度坐标为 (lat: 39.9087, lon: 116.4135)"
+        },
+        {
+          "knowledge_id": 1699,
+          "knowledge_text": "四川大学华西医院的经纬度坐标为 (lat: 30.6460, lon: 104.0610)"
+        },
+        {
+          "knowledge_id": 1700,
+          "knowledge_text": "中山大学附属第一医院的经纬度坐标为 (lat: 23.1310, lon: 113.2895)"
+        },
+        {
+          "knowledge_id": 1701,
+          "knowledge_text": "深圳市人民医院的经纬度坐标为 (lat: 22.5565, lon: 114.1158)"
+        },
+        {
+          "knowledge_id": 1702,
+          "knowledge_text": "浙江大学医学院附属第一医院的经纬度坐标为 (lat: 30.2630, lon: 120.1650)"
+        },
+        {
+          "knowledge_id": 1703,
+          "knowledge_text": "大型医院的定义：床位数(bed_count) >= 1500 且 医生数(doctor_count) >= 1500。"
+        },
+        {
+          "knowledge_id": 1704,
+          "knowledge_text": "顶尖三甲医院的标准：拥有ICU(has_icu=true) 且 救护车数量(ambulance_count) >= 20 且 患者评分(rating) >= 4.8。"
+        },
+        {
+          "knowledge_id": 1705,
+          "knowledge_text": "医师力量强的医院定义：医生数(doctor_count) >= 2000 或 年门诊量(annual_outpatient) >= 4000000。"
+        },
+        {
+          "knowledge_id": 1706,
+          "knowledge_text": "高负荷医院的定义：年门诊量(annual_outpatient) >= 5000000。"
+        },
+        {
+          "knowledge_id": 1707,
+          "knowledge_text": "急诊能力充足的医院定义：24小时急诊(emergency_24h=true) 且 救护车数量(ambulance_count) >= 10。"
+        },
+        {
+          "knowledge_id": 1708,
+          "knowledge_text": "教学医院的定义：is_teaching_hospital = true。"
+        },
+        {
+          "knowledge_id": 1709,
+          "knowledge_text": "超大规模医院的定义：床位数(bed_count) >= 2000 且 年门诊量(annual_outpatient) >= 6000000。"
+        },
+        {
+          "knowledge_id": 1710,
+          "knowledge_text": "优秀护理医院的判断标准：护士数(nurse_count) >= 2000 且 床位数/护士数比值 <= 1.2。"
+        },
+        {
+          "knowledge_id": 1711,
+          "knowledge_text": "现代化医院的定义：拥有ICU(has_icu=true) 且 科室数量(department_count) >= 40。"
+        },
+        {
+          "knowledge_id": 1712,
+          "knowledge_text": "老牌知名医院的定义：成立年份(founded_year) <= 1950 且 评分(rating) >= 4.6。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-012",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554,
+      1555,
+      1556,
+      1557,
+      1558,
+      1559,
+      1560,
+      1561,
+      1562,
+      1563,
+      1564,
+      1565,
+      1566,
+      1567,
+      1568,
+      1569,
+      1570,
+      1571,
+      1572,
+      1573,
+      1574,
+      1575,
+      1576,
+      1577,
+      1578,
+      1579,
+      1580,
+      1581,
+      1582,
+      1583,
+      1584,
+      1585,
+      1586,
+      1587,
+      1588,
+      1589,
+      1590,
+      1591,
+      1592,
+      1593,
+      1594,
+      1595,
+      1596,
+      1597,
+      1598,
+      1599,
+      1600,
+      1601,
+      1602,
+      1603,
+      1604,
+      1605,
+      1606,
+      1607,
+      1608,
+      1609,
+      1610,
+      1611,
+      1612,
+      1613,
+      1614,
+      1615,
+      1616,
+      1617,
+      1618,
+      1619,
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625,
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631,
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637,
+      1638,
+      1639,
+      1640,
+      1641,
+      1642,
+      1643,
+      1644,
+      1645,
+      1646,
+      1647,
+      1648,
+      1649,
+      1650,
+      1651,
+      1652,
+      1653,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1662,
+      1663,
+      1664,
+      1665,
+      1666,
+      1667,
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696,
+      1697,
+      1698,
+      1699,
+      1700,
+      1701,
+      1702,
+      1703,
+      1704,
+      1705,
+      1706,
+      1707,
+      1708,
+      1709,
+      1710,
+      1711,
+      1712,
+      1713,
+      1714,
+      1715,
+      1716,
+      1717,
+      1718,
+      1719,
+      1720,
+      1721,
+      1722,
+      1723,
+      1724,
+      1725,
+      1726,
+      1727,
+      1728,
+      1729,
+      1730,
+      1731,
+      1732,
+      1733,
+      1734,
+      1735,
+      1736,
+      1737,
+      1738,
+      1739,
+      1740,
+      1741,
+      1742,
+      1743,
+      1744,
+      1745,
+      1746,
+      1747,
+      1748,
+      1749,
+      1750,
+      1751,
+      1752,
+      1753,
+      1754,
+      1755,
+      1756,
+      1757,
+      1758,
+      1759,
+      1760,
+      1761,
+      1762,
+      1763,
+      1764,
+      1765,
+      1766,
+      1767,
+      1768,
+      1769,
+      1770,
+      1771,
+      1772,
+      1773,
+      1774,
+      1775,
+      1776,
+      1777,
+      1778,
+      1779,
+      1780,
+      1781,
+      1782,
+      1783,
+      1784,
+      1785,
+      1786,
+      1787,
+      1788,
+      1789,
+      1790,
+      1791,
+      1792,
+      1793,
+      1794,
+      1795,
+      1796,
+      1797,
+      1798,
+      1799,
+      1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:ecommerce.inventory",
+        "accepted": [
+          {
+            "knowledge_id": 1565,
+            "basis": "explicit",
+            "fields": [
+              "product_id",
+              "warehouse_name",
+              "stock_quantity",
+              "safety_stock"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1565,
+                "quote": "ecommerce.inventory.stock_quantity <= ecommerce.inventory.safety_stock"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE inventory (\r\n  inventory_id BIGINT NOT NULL COMMENT '库存ID',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  warehouse_code VARCHAR(32) NOT NULL COMMENT '仓库编码',\r\n  warehouse_name VARCHAR(100) NOT NULL COMMENT '仓库名称',\r\n  province_code VARCHAR(12) NOT NULL COMMENT '仓库所在省份编码，关联common.administrative_division.division_code',\r\n  city_code VARCHAR(12) NOT NULL COMMENT '仓库所在城市编码，关联common.administrative_division.division_code',\r\n  stock_quantity INT NOT NULL DEFAULT 0 COMMENT '当前库存数量',\r\n  locked_quantity INT NOT NULL DEFAULT 0 COMMENT '锁定库存数量',\r\n  safety_stock INT NOT NULL DEFAULT 0 COMMENT '安全库存数量',\r\n  updated_time DATETIME NOT NULL COMMENT '库存更新时间',\r\n  PRIMARY KEY (inventory_id),\r\n  UNIQUE KEY uk_inventory_product_warehouse (product_id, warehouse_code),\r\n  KEY idx_inventory_product (product_id),\r\n  KEY idx_inventory_region (province_code, city_code),\r\n  CONSTRAINT fk_inventory_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='库存表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "条目明示库存表的当前库存、安全库存比较，示例直接读取该物理表。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:ecommerce.orders",
+        "accepted": [
+          {
+            "knowledge_id": 1554,
+            "basis": "explicit",
+            "fields": [
+              "total_amount",
+              "payable_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1554,
+                "quote": "SQL逻辑：SUM(ecommerce.orders.total_amount)。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [
+              "通常按订单表 total_amount 汇总，不扣除优惠、退款或支付失败",
+              "若题目强调实付金额，应使用 payable_amount 或 payment_amount。",
+              "如果问题明确要求成交或实付，优先使用 payable_amount。"
+            ],
+            "reason": "知识明示订单表商品总额汇总并给出读取 ecommerce.orders 的示例；实付要求保留原文限定。"
+          },
+          {
+            "knowledge_id": 1555,
+            "basis": "explicit",
+            "fields": [
+              "payable_amount",
+              "order_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1555,
+                "quote": "SUM(ecommerce.orders.payable_amount) / COUNT(DISTINCT ecommerce.orders.order_id)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示 ecommerce.orders 的订单应付金额和去重订单数用于客单价。"
+          },
+          {
+            "knowledge_id": 1556,
+            "basis": "explicit",
+            "fields": [
+              "order_id",
+              "payable_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1556,
+                "quote": "FROM ecommerce.orders o JOIN ecommerce.payment p ON o.order_id = p.order_id"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [
+              "若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。",
+              "若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+            ],
+            "reason": "知识明示订单应付金额汇总，支付事实要求由示例 JOIN 的支付表承担。"
+          },
+          {
+            "knowledge_id": 1558,
+            "basis": "explicit",
+            "fields": [
+              "order_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1558,
+                "quote": "FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [
+              "可按退款订单数占订单数计算。",
+              "订单明细存在 refund_amount 大于 0 时，可认为发生退款。"
+            ],
+            "reason": "退款率示例明确读取订单表作为订单总数分母，退款判断来自订单明细。"
+          },
+          {
+            "knowledge_id": 1559,
+            "basis": "explicit",
+            "fields": [
+              "customer_id",
+              "order_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1559,
+                "quote": "FROM (SELECT customer_id, COUNT(DISTINCT order_id) AS order_count FROM ecommerce.orders GROUP BY customer_id) t"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "复购率示例的内层查询明确按订单表用户分组统计订单数，外层 t 是子查询别名。"
+          },
+          {
+            "knowledge_id": 1564,
+            "basis": "explicit",
+            "fields": [
+              "customer_id",
+              "payable_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1564,
+                "quote": "ORDER BY SUM(ecommerce.orders.payable_amount) DESC"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [
+              "通常按用户累计应付金额或累计支付金额排序。"
+            ],
+            "reason": "高价值用户知识明示按订单应付金额排序，示例直接 JOIN 订单表进行用户累计。"
+          },
+          {
+            "knowledge_id": 1566,
+            "basis": "explicit",
+            "fields": [
+              "order_time",
+              "payable_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1566,
+                "quote": "GROUP BY DATE_FORMAT(ecommerce.orders.order_time, '%Y-%m')"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示用订单表下单时间的年月维度汇总应付金额。"
+          },
+          {
+            "knowledge_id": 1567,
+            "basis": "explicit",
+            "fields": [
+              "customer_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1567,
+                "quote": "COUNT(DISTINCT ecommerce.orders.customer_id)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示对 ecommerce.orders.customer_id 去重统计下单用户。"
+          },
+          {
+            "knowledge_id": 1568,
+            "basis": "explicit",
+            "fields": [
+              "order_status_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1568,
+                "quote": "ecommerce.orders.order_status_code = 'COMPLETED'"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示订单表完成状态的条件及完成率计算。"
+          },
+          {
+            "knowledge_id": 1569,
+            "basis": "explicit",
+            "fields": [
+              "customer_id",
+              "order_time"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1569,
+                "quote": "FROM ecommerce.orders o JOIN (SELECT customer_id, MAX(order_time) AS max_order_time FROM ecommerce.orders GROUP BY customer_id) t"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [
+              "可使用窗口函数或 MySQL 5.7 兼容的子查询。",
+              "MySQL 5.7 不支持 ROW_NUMBER，可用聚合子查询实现。"
+            ],
+            "reason": "最近订单示例在外层和聚合子查询中均读取真实订单表，t 是子查询别名。"
+          },
+          {
+            "knowledge_id": 1570,
+            "basis": "explicit",
+            "fields": [
+              "customer_id",
+              "payable_amount",
+              "order_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1570,
+                "quote": "FROM (SELECT customer_id, SUM(payable_amount) / COUNT(DISTINCT order_id) AS user_aov FROM ecommerce.orders GROUP BY customer_id) t"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE orders (\r\n  order_id BIGINT NOT NULL COMMENT '订单ID',\r\n  order_no VARCHAR(64) NOT NULL COMMENT '订单编号',\r\n  customer_id BIGINT NOT NULL COMMENT '用户ID，关联ecommerce.customer.customer_id',\r\n  order_status_code VARCHAR(32) NOT NULL COMMENT '订单状态编码，关联common.order_status_dict.status_code',\r\n  order_channel_code VARCHAR(32) NOT NULL COMMENT '下单渠道编码，关联common.order_channel_dict.channel_code',\r\n  platform_code VARCHAR(32) NOT NULL COMMENT '销售平台编码，关联common.platform_dict.platform_code',\r\n  order_time DATETIME NOT NULL COMMENT '下单时间',\r\n  pay_time DATETIME DEFAULT NULL COMMENT '支付时间',\r\n  finish_time DATETIME DEFAULT NULL COMMENT '完成时间',\r\n  total_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单商品总金额',\r\n  discount_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单优惠金额',\r\n  freight_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '运费金额',\r\n  payable_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '订单应付金额',\r\n  receiver_province_code VARCHAR(12) NOT NULL COMMENT '收货省份编码，关联common.administrative_division.division_code',\r\n  receiver_city_code VARCHAR(12) NOT NULL COMMENT '收货城市编码，关联common.administrative_division.division_code',\r\n  PRIMARY KEY (order_id),\r\n  UNIQUE KEY uk_orders_order_no (order_no),\r\n  KEY idx_orders_customer (customer_id),\r\n  KEY idx_orders_status (order_status_code),\r\n  KEY idx_orders_time (order_time),\r\n  KEY idx_orders_channel_platform (order_channel_code, platform_code),\r\n  KEY idx_orders_receiver_region (receiver_province_code, receiver_city_code),\r\n  CONSTRAINT fk_orders_customer FOREIGN KEY (customer_id) REFERENCES customer(customer_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "用户客单价与全局客单价的示例子查询均明确读取订单表。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:ecommerce.order_item",
+        "accepted": [
+          {
+            "knowledge_id": 1558,
+            "basis": "explicit",
+            "fields": [
+              "order_id",
+              "refund_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1558,
+                "quote": "CASE WHEN ecommerce.order_item.refund_amount > 0 THEN ecommerce.order_item.order_id END"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [
+              "可按退款订单数占订单数计算。",
+              "订单明细存在 refund_amount 大于 0 时，可认为发生退款。"
+            ],
+            "reason": "知识明示订单明细退款金额条件，示例将退款订单与订单总数分别统计。"
+          },
+          {
+            "knowledge_id": 1560,
+            "basis": "explicit",
+            "fields": [
+              "item_amount",
+              "item_cost_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1560,
+                "quote": "SUM(ecommerce.order_item.item_amount - ecommerce.order_item.item_cost_amount)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示订单明细应付金额减成本金额的毛利汇总。"
+          },
+          {
+            "knowledge_id": 1561,
+            "basis": "explicit",
+            "fields": [
+              "item_amount",
+              "item_cost_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1561,
+                "quote": "FROM ecommerce.order_item"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "毛利率示例明确读取 ecommerce.order_item，使用该表金额和成本计算。"
+          },
+          {
+            "knowledge_id": 1562,
+            "basis": "explicit",
+            "fields": [
+              "quantity",
+              "product_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1562,
+                "quote": "SUM(ecommerce.order_item.quantity)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [
+              "一般使用 order_item.quantity。"
+            ],
+            "reason": "知识明示订单明细购买数量汇总，示例按商品标识分组。"
+          },
+          {
+            "knowledge_id": 1563,
+            "basis": "explicit",
+            "fields": [
+              "product_id",
+              "quantity",
+              "item_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1563,
+                "quote": "ORDER BY SUM(ecommerce.order_item.quantity) DESC"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [
+              "通常按销量从高到低排序；若问题强调销售额，则按 item_amount 汇总排序。"
+            ],
+            "reason": "热销商品知识明示按订单明细数量排序，并保留强调销售额时改按金额的条件。"
+          },
+          {
+            "knowledge_id": 1571,
+            "basis": "explicit",
+            "fields": [
+              "product_id",
+              "item_amount",
+              "quantity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1571,
+                "quote": "FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE order_item (\r\n  order_item_id BIGINT NOT NULL COMMENT '订单明细ID',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  product_id BIGINT NOT NULL COMMENT '商品ID，关联ecommerce.product.product_id',\r\n  quantity INT NOT NULL COMMENT '购买数量',\r\n  unit_price DECIMAL(12,2) NOT NULL COMMENT '成交单价',\r\n  discount_amount DECIMAL(12,2) NOT NULL DEFAULT 0.00 COMMENT '明细优惠金额',\r\n  item_amount DECIMAL(14,2) NOT NULL COMMENT '明细应付金额',\r\n  item_cost_amount DECIMAL(14,2) NOT NULL COMMENT '明细成本金额',\r\n  refund_quantity INT NOT NULL DEFAULT 0 COMMENT '退款数量',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  refund_reason_code VARCHAR(32) DEFAULT NULL COMMENT '退款原因编码，关联common.refund_reason_dict.reason_code',\r\n  PRIMARY KEY (order_item_id),\r\n  KEY idx_order_item_order (order_id),\r\n  KEY idx_order_item_product (product_id),\r\n  KEY idx_order_item_refund_reason (refund_reason_code),\r\n  CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(order_id),\r\n  CONSTRAINT fk_order_item_product FOREIGN KEY (product_id) REFERENCES product(product_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单明细表';"
+              }
+            ],
+            "qualifiers": [
+              "MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。"
+            ],
+            "reason": "类目内排名示例明确从订单明细汇总商品销售额；原文也列出按购买数量排序的口径。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:ecommerce.payment",
+        "accepted": [
+          {
+            "knowledge_id": 1554,
+            "basis": "schema_supported",
+            "fields": [
+              "payment_amount"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1554,
+                "quote": "若题目强调实付金额，应使用 payable_amount 或 payment_amount。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';"
+              }
+            ],
+            "qualifiers": [
+              "若题目强调实付金额，应使用 payable_amount 或 payment_amount。"
+            ],
+            "reason": "条目在强调实付时明示 payment_amount；支付表原始字段注释直接标识为支付金额，按该限定记录关联。"
+          },
+          {
+            "knowledge_id": 1556,
+            "basis": "explicit",
+            "fields": [
+              "order_id",
+              "payment_status_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1556,
+                "quote": "JOIN ecommerce.payment p ON o.order_id = p.order_id WHERE p.payment_status_code = 'SUCCESS'"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';"
+              }
+            ],
+            "qualifiers": [
+              "若需要以支付事实为准，应关联 payment 并筛选 SUCCESS。",
+              "若题目出现支付成功，必须关联 payment 并筛选 payment_status_code = 'SUCCESS'。"
+            ],
+            "reason": "知识的支付事实示例明确 JOIN ecommerce.payment 并筛选支付成功状态。"
+          },
+          {
+            "knowledge_id": 1557,
+            "basis": "explicit",
+            "fields": [
+              "payment_status_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1557,
+                "quote": "ecommerce.payment.payment_status_code = 'SUCCESS'"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "USE ecommerce;"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE payment (\r\n  payment_id BIGINT NOT NULL COMMENT '支付ID',\r\n  payment_no VARCHAR(64) NOT NULL COMMENT '支付流水号',\r\n  order_id BIGINT NOT NULL COMMENT '订单ID，关联ecommerce.orders.order_id',\r\n  payment_method_code VARCHAR(32) NOT NULL COMMENT '支付方式编码，关联common.payment_method_dict.method_code',\r\n  payment_status_code VARCHAR(32) NOT NULL COMMENT '支付状态编码，关联common.payment_status_dict.status_code',\r\n  payment_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '支付金额',\r\n  refund_amount DECIMAL(14,2) NOT NULL DEFAULT 0.00 COMMENT '退款金额',\r\n  paid_time DATETIME DEFAULT NULL COMMENT '支付成功时间',\r\n  created_time DATETIME NOT NULL COMMENT '支付记录创建时间',\r\n  PRIMARY KEY (payment_id),\r\n  UNIQUE KEY uk_payment_no (payment_no),\r\n  UNIQUE KEY uk_payment_order (order_id),\r\n  KEY idx_payment_method (payment_method_code),\r\n  KEY idx_payment_status (payment_status_code),\r\n  KEY idx_payment_paid_time (paid_time),\r\n  CONSTRAINT fk_payment_order FOREIGN KEY (order_id) REFERENCES orders(order_id)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='支付表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明示支付表成功状态占全部支付记录的比例。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "POSTGRESQL:public.vessel_ais_data",
+        "accepted": [
+          {
+            "knowledge_id": 1719,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1719,
+                "quote": "渤海海峡老铁山水道禁航区（军事任务）。禁航区范围为以下四点连线围成的水域：A(38°36.0′N,121°15.0′E)、B(38°36.0′N,121°30.0′E)、C(38°18.0′N,121°30.0′E)、D(38°18.0′N,121°15.0′E)。该区域为军事演习或武器试验临时禁航区，禁止所有船舶驶入。禁航时段通常由海事部门通过航行警告提前发布，船舶应保持VHF16频道守听，并重新规划航线绕行。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "该区域为军事演习或武器试验临时禁航区",
+              "禁航时段通常由海事部门通过航行警告提前发布"
+            ],
+            "reason": "禁航规则明确约束所有船舶驶入所列水域，船舶AIS表的位置字段直接支持该空间操作约束；保留临时禁航限定。"
+          },
+          {
+            "knowledge_id": 1720,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "cog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1720,
+                "quote": "青岛港主航道（第一分道通航制）。分道通航制位于大公岛和小公岛连线以西的青岛港主航道内侧，进港船舶通航分道和出港船舶通航分道之间由分隔带分隔。进港主交通流向282°（真航向），出港主交通流向103°。定线制水域范围约为：北纬35°59′30″至36°01′00″，东经120°27′00″至120°30′00″。该区域为进出青岛港的大型船舶主要通道，船舶应严格按分道通航制航行，禁止逆向行驶。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确给出该水域进出港船舶的真航向与逆向禁令，直接对应AIS位置与航向属性。"
+          },
+          {
+            "knowledge_id": 1721,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1721,
+                "quote": "烟台港西港区航道及警戒区。烟台港西港区航道坐标为：入口点A(37°46.5′N,121°11.8′E)至防波堤口B(37°44.0′N,121°12.0′E)，航道长度约2.5海里，宽度300米，水深-20米。航道入口处设警戒区，以点(37°46.5′N,121°11.8′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向烟台VTS中心报告，航道内限速12节，禁止追越和锚泊。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "航道内船舶限速和禁止锚泊直接解释AIS航速、航行状态在给定水域的条件。"
+          },
+          {
+            "knowledge_id": 1724,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1724,
+                "quote": "长江口南槽航道（A-N槽）。南槽航道是长江口主要辅助航道，供吃水较浅的船舶进出长江。航道范围：自南槽灯船（31°02.0′N,122°32.0′E）沿自然水深向上游至浏河口（31°30.0′N,121°17.0′E），全长约60海里，航道宽度250-500米，维护水深5.5-6.5米。航道两侧设有浮筒，船舶应沿浮筒标示的航槽行驶，禁止在航道内锚泊或捕捞。船舶须遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》，向吴淞VTS中心报告。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确禁止船舶在所列航道内锚泊，AIS位置与航行状态直接对应这一约束；不补写状态代码。"
+          },
+          {
+            "knowledge_id": 1726,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1726,
+                "quote": "大连大窑湾港区航道及警戒区。大窑湾航道自大窑湾口（39°00.0′N,121°55.0′E）至集装箱码头（38°59.5′N,121°46.5′E），全长约7海里，宽度280米，水深-14米。大窑湾口设警戒区，以点(39°00.0′N,121°55.0′E)为中心、半径0.6海里。船舶进入警戒区前应向大窑湾VTS中心报告（VHF11频道），航道内限速10节，大型船舶需申请引航。该水域船舶交通密集，进出船应加强瞭望。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "所列航道的船舶限速直接对应AIS位置和航速；VTS通信和引航信息不扩充为本表字段。"
+          },
+          {
+            "knowledge_id": 1727,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1727,
+                "quote": "北部湾涠洲岛警戒区。涠洲岛警戒区以涠洲岛西角码头西侧点为圆心、半径3海里的扇形水域，具体范围：以W点(21°02′02″N,109°06′43″E)为中心，半径3海里（5556米），方位240°至360°的扇形区域。该警戒区位于北部湾海上石油平台密集区和旅游航线交汇处，船舶交通流量大。船舶进入警戒区应减速谨慎驾驶，加强与过往船舶通信，避免碰撞。禁止在警戒区内抛锚或进行捕鱼作业。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "警戒区内禁止船舶抛锚的规则直接对应位置与航行状态；不自行指定锚泊状态数值。"
+          },
+          {
+            "knowledge_id": 1728,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "cog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1728,
+                "quote": "上海洋山深水港区航道。洋山港航道自黄泽洋灯船（30°31.0′N,122°15.0′E）至洋山港主航道口（30°35.0′N,122°03.0′E），全长约20海里，航道宽度400米，水深-16米。航道两侧设有大型灯浮，实行分道通航制：西行船舶（进港）走北侧分道，东行船舶（出港）走南侧分道。该航道可通航15万吨级集装箱船。船舶进入航道前应向洋山VTS中心（VHF13频道）报告，大型船舶须引航。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识对进出港船舶方向和使用分道作出空间航向约束，直接对应船舶位置与航向属性。"
+          },
+          {
+            "knowledge_id": 1730,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1730,
+                "quote": "渤海海峡长山水道（禁航区）。长山水道为渤海海峡三大水道之一，位于长山列岛之间，是大型船舶进出渤海的重要通道。禁航区范围为以下四点连线所围水域：A(38°20.0′N,120°45.0′E)、B(38°20.0′N,121°00.0′E)、C(38°10.0′N,121°00.0′E)、D(38°10.0′N,120°45.0′E)。该区域为军事训练禁航区，定期发布航行警告禁止船舶进入。船舶应通过VHF16频道获取最新禁航信息，并改用老铁山水道或登州水道绕行。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "该区域为军事训练禁航区，定期发布航行警告禁止船舶进入。"
+            ],
+            "reason": "知识明确禁止船舶在军事训练禁航期间进入给定多边形水域，直接约束船舶AIS位置。"
+          },
+          {
+            "knowledge_id": 1731,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "cog",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1731,
+                "quote": "香港水域东博寮海峡分道航行制。东博寮海峡是香港主要南向航道，分道通航制范围为：北起(22°15.0′N,114°15.0′E)，南至(22°10.0′N,114°13.0′E)。实行分隔制，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道。两侧分道各宽0.2海里，中间分隔带宽0.05海里。船舶在该水域航行必须遵守《香港水域船舶交通管制条例》，使用VHF12频道与香港海事处交管中心联系，海峡内禁止锚泊和捕鱼。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "分道方向与海峡内禁止锚泊直接对应AIS位置、航向和航行状态；不新增分道边界或状态代码。"
+          },
+          {
+            "knowledge_id": 1732,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1732,
+                "quote": "汕尾遮浪角海域军事禁航区。遮浪角位于汕尾红海湾东侧，军事禁航区范围为以下四点围成的水域：A(22°45.0′N,115°35.0′E)、B(22°45.0′N,115°45.0′E)、C(22°30.0′N,115°45.0′E)、D(22°30.0′N,115°35.0′E)。该区域经常进行实弹射击和军事演习，航行通告会提前发布禁航时段。禁航期间任何船舶不得驶入，否则将面临军事处罚。过往船舶应绕行外海，保持VHF16频道守听。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "禁航期间任何船舶不得驶入"
+            ],
+            "reason": "禁航期间任何船舶不得驶入所列四点水域，直接约束AIS船舶空间位置。"
+          },
+          {
+            "knowledge_id": 1733,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog",
+              "draught"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1733,
+                "quote": "温州港状元岙港区航道。状元岙港区航道自大门岛东侧（27°58.0′N,121°10.0′E）至状元岙码头前沿（27°55.0′N,121°07.0′E），全长约5海里，航道宽度180米，水深-10米。航道两侧设有灯浮标示，航道内设有2处转向点。船舶进出港需向温州VTS中心（VHF14频道）报告，航道内限速8节，禁止追越。该水域受潮汐影响较大，吃水超过9米的船舶应乘高潮通过。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "吃水超过9米的船舶应乘高潮通过。"
+            ],
+            "reason": "航道限速与吃水条件直接涉及AIS航速、吃水及位置属性；高潮通过仍作为原文条件保留。"
+          },
+          {
+            "knowledge_id": 1734,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1734,
+                "quote": "台州港头门港区航道及警戒区。头门港区航道自点(28°40.0′N,121°40.0′E)至点(28°38.0′N,121°36.0′E)，全长约8海里，航道宽度200米，水深-9米。港外警戒区位于航道口门处，以点(28°40.0′N,121°40.0′E)为中心、半径0.4海里。警戒区外东侧设有候潮锚地（28°40.5′N-28°42.0′N,121°42.0′E-121°44.0′E）。船舶进入警戒区前应向台州VTS中心（VHF16频道）报告，航道内禁止锚泊，大型船舶需引航。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "航道内禁止船舶锚泊直接对应位置和航行状态；引航、报告等内容不推定为本表可记录事实。"
+          },
+          {
+            "knowledge_id": 1735,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "cog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1735,
+                "quote": "福建福清湾水域船舶定线制。福清湾船舶定线制范围为：北起(25°35.0′N,119°35.0′E)，南至(25°25.0′N,119°30.0′E)。实行分道通航，进港船舶（向北）使用东侧分道，出港船舶（向南）使用西侧分道，分隔带为虚拟线段。该定线制连接福清湾内各码头，船舶须遵守《福建船舶交通管理系统（VTS）服务指南》，使用VHF10频道与福州VTS中心报告。湾内航道水深变化较大，船舶应参照最新海图航行。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "进出港船舶按南北方向使用东西分道的规则直接约束AIS航向与位置属性。"
+          },
+          {
+            "knowledge_id": 1736,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1736,
+                "quote": "汕头港广澳港区航道及锚地。广澳港区航道自广澳湾口（23°15.0′N,116°50.0′E）至广澳码头（23°13.0′N,116°46.0′E），全长约5.5海里，航道宽度150米，水深-11米。港区锚地位于航道西侧，范围为：A(23°14.0′N,116°48.0′E)、B(23°14.0′N,116°50.0′E)、C(23°12.0′N,116°50.0′E)、D(23°12.0′N,116°48.0′E)。锚地水深9-12米。船舶进出港需向汕头VTS中心报告（VHF08频道），航道内限速10节，禁止在航道内追越。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "给定航道内的船舶限速直接对应AIS航速和空间位置。"
+          },
+          {
+            "knowledge_id": 1737,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1737,
+                "quote": "海南清澜港航道及禁航区。清澜港航道自七洲列岛附近（19°45.0′N,111°10.0′E）至清澜港码头（19°35.0′N,110°50.0′E），全长约22海里，航道宽度150米，水深-7米。港区南侧设有军事禁航区，范围为以(19°30.0′N,111°00.0′E)为中心、半径5海里的圆形水域，为某部海军训练区，全年禁航。民用船舶应保持与禁航区边界至少2海里的安全距离，不得进入。清澜港航道内常有渔船作业，进出港船舶应加强瞭望。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "为某部海军训练区，全年禁航。",
+              "民用船舶应保持与禁航区边界至少2海里的安全距离，不得进入。"
+            ],
+            "reason": "知识明确民用船舶应避开给定圆形禁航区并保持距离，直接约束AIS船舶位置。"
+          },
+          {
+            "knowledge_id": 1738,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1738,
+                "quote": "北部湾防城港东湾航道及锚地。东湾航道自东湾口（21°35.0′N,108°25.0′E）至防城港码头前沿（21°38.0′N,108°21.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道南侧，范围为：A(21°32.0′N,108°24.0′E)、B(21°32.0′N,108°27.0′E)、C(21°30.0′N,108°27.0′E)、D(21°30.0′N,108°24.0′E)，水深8-12米。船舶进出港需向防城港VTS中心（VHF11频道）报告，航道内限速8节，锚地内船舶应保持安全间距，避免锚泊碰撞。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "所列航道船舶限速直接对应AIS位置与航速；锚地安全间距仍保留为原文一般要求。"
+          },
+          {
+            "knowledge_id": 1739,
+            "basis": "schema_supported",
+            "fields": [
+              "nav_status",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1739,
+                "quote": "异常航行记录：指航行状态nav_status=1（航行中）sog15或sog0.5"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识定义异常航行记录并明示航行状态、航速字段，原始AIS字段注释直接对应；规则残缺与状态解释冲突另行记录。"
+          },
+          {
+            "knowledge_id": 1740,
+            "basis": "schema_supported",
+            "fields": [
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1740,
+                "quote": "停泊：包括nav_status=1锚泊和nav_status=5系泊"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识解释停泊所含航行状态取值，直接对应原始AIS航行状态字段；不裁定与另一条的代码解释冲突。"
+          },
+          {
+            "knowledge_id": 1741,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1741,
+                "quote": "青岛朝连岛附近水域禁航区（军事任务）。朝连岛位于青岛东南海域，禁航区范围为以下四点连线围成的水域：A(35°50.0′N,121°10.0′E)、B(35°50.0′N,121°30.0′E)、C(35°35.0′N,121°30.0′E)、D(35°35.0′N,121°10.0′E)。该区域经常用于海军实弹射击和军事演习，航行警告会提前发布禁航时段。禁航期间任何船舶不得驶入，过往船舶应绕行外海，保持VHF16频道守听。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "禁航期间任何船舶不得驶入"
+            ],
+            "reason": "军事禁航期间任何船舶不得进入所列多边形水域，直接约束AIS船舶位置。"
+          },
+          {
+            "knowledge_id": 1742,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1742,
+                "quote": "日照港石臼港区航道及警戒区。石臼港区航道自航道入口（35°20.0′N,119°35.0′E）至煤炭码头前沿（35°18.5′N,119°32.0′E），全长约6海里，航道宽度250米，水深-18米。航道入口处设警戒区，以点(35°20.0′N,119°35.0′E)为中心、半径0.5海里的圆形水域。船舶进入警戒区前应向日照VTS中心报告（VHF14频道），航道内限速10节，大型船舶需引航。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "所列航道内的船舶限速直接对应AIS位置和航速。"
+          },
+          {
+            "knowledge_id": 1744,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1744,
+                "quote": "南通港天生港区航道及警戒区。天生港区航道自通州沙西水道入口（32°02.0′N,120°45.0′E）至天生港码头（32°00.0′N,120°43.0′E），全长约4海里，航道宽度150米，水深-8米。航道口门处设警戒区，以点(32°02.0′N,120°45.0′E)为中心、半径0.3海里。该水道水流湍急，船舶应谨慎驾驶，禁止在航道内锚泊。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确禁止船舶在所列航道内锚泊，直接对应AIS位置与航行状态。"
+          },
+          {
+            "knowledge_id": 1746,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1746,
+                "quote": "江阴港夏港港区航道及警戒区。夏港港区航道自江阴长江大桥下游（31°57.0′N,120°15.0′E）至夏港码头（31°56.0′N,120°12.0′E），全长约4.5海里，航道宽度180米，水深-9米。航道入口处设警戒区，以点(31°57.0′N,120°15.0′E)为中心、半径0.4海里。该水域船舶交通密集，港内限速8节，禁止追越。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "港内船舶限速直接对应AIS位置与航速属性；不补入追越判定算法。"
+          },
+          {
+            "knowledge_id": 1748,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "draught"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1748,
+                "quote": "常熟港兴华港区航道。兴华港区航道自白茆沙北水道入口（31°45.0′N,121°00.0′E）至兴华码头（31°43.0′N,120°55.0′E），全长约8海里，航道宽度160米，水深-8.5米。航道两侧设有浮筒，船舶应沿浮筒标示航行。该航道受潮汐影响明显，吃水超过7米的船舶应乘高潮通过。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "吃水超过7米的船舶应乘高潮通过。"
+            ],
+            "reason": "知识明确按船舶吃水条件限制通航，AIS表包含船舶吃水和位置属性；乘高潮仍保留为条件。"
+          },
+          {
+            "knowledge_id": 1749,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1749,
+                "quote": "太仓港集装箱港区航道及警戒区。太仓港航道自长江#10浮（31°38.0′N,121°15.0′E）至集装箱码头前沿（31°36.0′N,121°12.0′E），全长约5海里，航道宽度200米，水深-12米。港区警戒区位于航道入口，以点(31°38.0′N,121°15.0′E)为中心、半径0.5海里。船舶进入警戒区前应向太仓VTS中心报告，航道内限速10节。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "航道内船舶限速直接对应AIS位置与航速。"
+          },
+          {
+            "knowledge_id": 1751,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1751,
+                "quote": "杭州湾嘉兴港区航道。嘉兴港区航道自杭州湾入口（30°33.0′N,121°05.0′E）至独山码头（30°35.0′N,121°00.0′E），全长约10海里，航道宽度200米，水深-9米。航道两侧设有灯浮，航道内设有2处转向点。该水域潮流强劲，船舶应选择高平潮时段进出港，禁止在航道内锚泊。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "所列航道内禁止船舶锚泊直接对应AIS位置和航行状态，未从潮汐叙述补写通航时点。"
+          },
+          {
+            "knowledge_id": 1753,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1753,
+                "quote": "台州港大麦屿港区航道及锚地。大麦屿港区航道自乐清湾口（28°05.0′N,121°05.0′E）至大麦屿码头（28°08.0′N,121°00.0′E），全长约8海里，航道宽度180米，水深-11米。港区锚地位于航道东侧，范围为：A(28°06.0′N,121°06.0′E)、B(28°06.0′N,121°08.0′E)、C(28°04.0′N,121°08.0′E)、D(28°04.0′N,121°06.0′E)，水深10-13米。船舶进出港需向台州VTS中心报告，航道内限速8节。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "航道内船舶限速直接对应AIS位置与航速。"
+          },
+          {
+            "knowledge_id": 1758,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1758,
+                "quote": "汕头港珠池港区航道及警戒区。珠池港区航道自鹿屿附近（23°20.0′N,116°45.0′E）至珠池码头（23°22.0′N,116°43.0′E），全长约5海里，航道宽度150米，水深-10米。港区警戒区位于航道入口，以点(23°20.0′N,116°45.0′E)为中心、半径0.4海里。船舶进入警戒区前应向汕头VTS中心报告（VHF08频道），航道内限速8节。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "航道内船舶限速直接对应AIS位置与航速。"
+          },
+          {
+            "knowledge_id": 1760,
+            "basis": "schema_supported",
+            "fields": [
+              "longitude",
+              "latitude",
+              "geom",
+              "nav_status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1760,
+                "quote": "深圳港盐田港区航道及警戒区。盐田港区航道自大鹏湾口（22°32.0′N,114°25.0′E）至盐田码头（22°35.0′N,114°15.0′E），全长约12海里，航道宽度300米，水深-16米。港区警戒区位于航道入口，以点(22°32.0′N,114°25.0′E)为中心、半径0.5海里。船舶进入警戒区前应向盐田VTS中心报告（VHF14频道），航道内实行分道通航，禁止锚泊。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确航道内禁止船舶锚泊，直接对应AIS位置和航行状态；不自行补写状态代码。"
+          },
+          {
+            "knowledge_id": 1777,
+            "basis": "schema_supported",
+            "fields": [
+              "sog"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1777,
+                "quote": "船舶航速单位“节”等于海里/小时，1节≈1.852公里/小时。高速船舶通常指航速≥25节。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [
+              "高速船舶通常指航速≥25节。"
+            ],
+            "reason": "船舶航速单位说明和通常高速阈值直接解释原始AIS航速属性；保留通常限定。"
+          },
+          {
+            "knowledge_id": 1790,
+            "basis": "schema_supported",
+            "fields": [
+              "mmsi"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1790,
+                "quote": "船舶MMSI的前三位数字表示国家代码，中国为412、413、414。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE public.vessel_ais_data (\r\n    id bigint NOT NULL,\r\n    mmsi integer NOT NULL,\r\n    \"timestamp\" timestamp without time zone NOT NULL,\r\n    longitude numeric(9,6) NOT NULL,\r\n    latitude numeric(8,6) NOT NULL,\r\n    sog numeric(4,1) NOT NULL,\r\n    cog numeric(5,1) NOT NULL,\r\n    heading smallint,\r\n    nav_status smallint NOT NULL,\r\n    rot numeric(4,1),\r\n    destination character varying(32),\r\n    draught numeric(4,2),\r\n    vessel_type smallint,\r\n    imo bigint,\r\n    call_sign character varying(10),\r\n    eta timestamp without time zone,\r\n    last_update timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\r\n    geom public.geometry(Point,4326) NOT NULL,\r\n    CONSTRAINT vessel_ais_data_heading_check CHECK (((heading >= 0) AND (heading <= 359))),\r\n    CONSTRAINT vessel_ais_data_mmsi_check CHECK (((mmsi >= 1) AND (mmsi <= 999999999))),\r\n    CONSTRAINT vessel_ais_data_nav_status_check CHECK (((nav_status >= 0) AND (nav_status <= 255)))\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "COMMENT ON TABLE public.vessel_ais_data IS '船舶AIS数据存储表';\r\nCOMMENT ON COLUMN public.vessel_ais_data.id IS '主键ID';\r\nCOMMENT ON COLUMN public.vessel_ais_data.mmsi IS '船舶MMSI码';\r\nCOMMENT ON COLUMN public.vessel_ais_data.\"timestamp\" IS '数据时间';\r\nCOMMENT ON COLUMN public.vessel_ais_data.longitude IS '经度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.latitude IS '纬度';\r\nCOMMENT ON COLUMN public.vessel_ais_data.sog IS '航速';\r\nCOMMENT ON COLUMN public.vessel_ais_data.cog IS '航向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.heading IS '船首向';\r\nCOMMENT ON COLUMN public.vessel_ais_data.nav_status IS '航行状态';\r\nCOMMENT ON COLUMN public.vessel_ais_data.geom IS '空间位置';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识解释船舶MMSI前三位国家码，原始AIS字段注释明确为船舶MMSI码。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1713,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1713,
+                "quote": "上海青草沙水源地禁航区四边形水域，四个顶点坐标分别为：A(31°26′08.329″N,121°34′18.678″E)、B(31°26′42.713″N,121°33′39.136″E)、C(31°27′10.312″N,121°33′58.456″E)、D(31°26′36.982″N,121°34′35.287″E)，转换为十进制度约为A(121.5719,31.4356)、B(121.5609,31.4452)、C(121.5663,31.4529)、D(121.5765,31.4414)，按A-B-C-D-A顺序围成闭合多边形"
+              }
+            ],
+            "reason": "条目仅定义禁航水域多边形，未明确船舶记录或本表查询条件；AIS表保存船舶点位置，不保存禁航区对象。"
+          },
+          {
+            "knowledge_id": 1714,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1714,
+                "quote": "长江口禁捕管理区范围为东经122°15′（122.25°）以东至124.0°、北纬30°54′（30.90°）至31°41′36″（31.6933°）之间的矩形水域，向西以水陆交界线为界"
+              }
+            ],
+            "reason": "条目仅定义禁捕管理区域，缺少该区域与AIS船舶记录查询或操作约束的直接说明，不能仅凭空间字段确认。"
+          },
+          {
+            "knowledge_id": 1715,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1715,
+                "quote": "黄浦江核心管制区为川杨河口下游100米处（约31°10′12″N,121°29′00″E）至南浦大桥（约31°12′30″N,121°30′30″E）之间的水域"
+              }
+            ],
+            "reason": "条目仅描述管制区起止水域，未给出直接针对AIS记录属性的条件或明确表对象。"
+          },
+          {
+            "knowledge_id": 1716,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1716,
+                "quote": "珠江口水上交通安全特别监管区，东至114°30′08.8″E（114.5024°）经度线，南至21°45′00.0″N（21.75°）纬度线，西至112°59′30″E（112.9917°）经度线，北至广州港黄埔大桥附近（约23.5°以覆盖整个监管区）"
+              }
+            ],
+            "reason": "条目提供监管区地理边界，未说明船舶记录的具体条件；不能只因AIS含经纬度而确认关联。"
+          },
+          {
+            "knowledge_id": 1717,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1717,
+                "quote": "杭州湾水域某次实弹训练禁航区范围为北纬30°19′（30.317°）至30°35′（30.583°），东经121°02′（121.033°）至121°12′（121.20°）的矩形水域"
+              }
+            ],
+            "reason": "条目提供某次实弹训练禁航区边界，未说明船舶记录的具体适用时段或直接查询条件。"
+          },
+          {
+            "knowledge_id": 1718,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1718,
+                "quote": "天津港地处渤海西部海岸海河入海口处，中心位置东经117°42′05″（117.7014°），北纬38°59′08″（38.9856°）。海河水域新港船闸维修禁航区：以38-59.5N 117-42.8E（38.9917°N,117.7133°E）为圆心，半径250米的水域。海河下游二道闸至轮驳公司码头段为通航管制区"
+              }
+            ],
+            "reason": "条目提供天津港及禁航、管制水域位置，未明确本表对象或对船舶记录属性的直接条件。"
+          },
+          {
+            "knowledge_id": 1722,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1722,
+                "quote": "舟山虾峙门深水航道（进港航道）。虾峙门航道是宁波舟山港核心港区最重要的深水进港航道，地理范围：自虾峙门东口（29°45.0′N,122°25.0′E）至螺头角（29°54.0′N,122°01.0′E），全长约24海里，航道宽度约0.3海里，水深22米以上，可满足30万吨级船舶通航。航道两侧设有分道通航制，中间由分隔带分隔。船舶在航道内应保持VHF08频道守听，按照潮汐时段单向通航，大型船舶需引航。"
+              }
+            ],
+            "reason": "条目主要定义航道并要求守听、按潮汐通航和引航；Schema没有通信、潮汐或引航属性，不能从区域坐标推定关联。"
+          },
+          {
+            "knowledge_id": 1723,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1723,
+                "quote": "珠江口桂山锚地。桂山锚地位于珠江口桂山岛附近，是进出广州港、深圳港、珠海港的大型船舶候泊、引航、联检锚地。锚地范围由以下四点围成：A(22°10.0′N,113°48.0′E)、B(22°10.0′N,113°52.0′E)、C(22°07.0′N,113°52.0′E)、D(22°07.0′N,113°48.0′E)。锚地水深12-18米，底质泥沙，可锚泊10万吨级以下船舶。锚地内船舶应按规定显示锚泊信号，保持VHF16频道守听，不得排放污染物。"
+              }
+            ],
+            "reason": "条目定义锚地并要求锚泊信号、守听及排污约束；AIS结构没有这些属性，也没有载重字段支持十万吨级条件。"
+          },
+          {
+            "knowledge_id": 1725,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1725,
+                "quote": "厦门港东渡港区航道及锚地。东渡港区航道自青屿水域（24°26.0′N,118°06.0′E）至东渡码头前沿，全长约8海里，航道宽度200米，水深-12米。港区锚地位于猴屿西侧，范围为：A(24°28.0′N,118°04.0′E)、B(24°28.0′N,118°06.0′E)、C(24°26.0′N,118°06.0′E)、D(24°26.0′N,118°04.0′E)，水深10-14米。该区域为船舶进出厦门港西航道的主要通道，船舶应遵守《厦门水域船舶定线制》和《厦门船舶交通管理系统（VTS）用户指南》。"
+              }
+            ],
+            "reason": "条目提供航道、锚地坐标并要求遵守外部制度，未给出可直接对应AIS字段的船舶条件。"
+          },
+          {
+            "knowledge_id": 1729,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1729,
+                "quote": "渤海湾曹妃甸港区航道及锚地。曹妃甸港区主航道自20万吨级矿石码头（38°55.0′N,118°30.0′E）向外海延伸至38°51.0′N,118°35.0′E，全长约11海里，宽度350米，水深-21米。港区设有1#和2#锚地：1#锚地位于38°54.0′N-38°56.0′N,118°35.0′E-118°40.0′E，2#锚地位于38°51.0′N-38°53.0′N,118°35.0′E-118°40.0′E。锚地底质为泥沙，可锚泊15万吨级以下船舶。船舶进出港需遵守《曹妃甸船舶交通管理系统（VTS）安全管理规定》。"
+              }
+            ],
+            "reason": "条目给出航道、锚地和载重适用范围及外部规定；AIS没有最大载重字段，地理边界本身不足以确认。"
+          },
+          {
+            "knowledge_id": 1743,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1743,
+                "quote": "连云港港主航道及锚地。连云港主航道自外海引航点（34°45.0′N,119°50.0′E）至庙岭集装箱码头（34°45.0′N,119°20.0′E），全长约25海里，航道宽度220米，水深-14米。港区设有2号锚地，范围为：A(34°48.0′N,119°40.0′E)、B(34°48.0′N,119°45.0′E)、C(34°45.0′N,119°45.0′E)、D(34°45.0′N,119°40.0′E)，水深12-15米。船舶进出港需向连云港VTS中心报告，航道内禁止追越。"
+              }
+            ],
+            "reason": "航道内禁止追越有潜在线索，但原文未给出由AIS记录判定追越的规则；不能自行补充轨迹或相对运动算法。"
+          },
+          {
+            "knowledge_id": 1745,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1745,
+                "quote": "镇江港大港港区航道及锚地。大港港区航道自和畅洲北汊入口（32°12.0′N,119°40.0′E）至大港码头前沿（32°11.0′N,119°37.0′E），全长约5海里，航道宽度200米，水深-10米。港区锚地位于和畅洲南侧，范围为：A(32°10.0′N,119°38.0′E)、B(32°10.0′N,119°42.0′E)、C(32°08.0′N,119°42.0′E)、D(32°08.0′N,119°38.0′E)。船舶进出港需遵守《长江江苏段船舶定线制规定》，向镇江VTS中心报告。"
+              }
+            ],
+            "reason": "条目定义航道、锚地并要求遵守外部制度和报告，Schema未记录这些制度或报告属性。"
+          },
+          {
+            "knowledge_id": 1747,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1747,
+                "quote": "张家港港务局码头前沿水域（通航密集区）。张家港港务局码头前沿水域范围为：自(31°56.0′N,120°28.0′E)至(31°53.0′N,120°24.0′E)沿江岸线外300米水域。该区域码头泊位密集，常有多艘船舶同时靠离泊作业。过往船舶应保持安全航速，加强与码头调度通信，避免进入靠离泊作业区。"
+              }
+            ],
+            "reason": "安全航速、靠离泊作业区等要求有船舶线索，但安全阈值、沿岸边界和作业区均未提供，不能补成AIS条件。"
+          },
+          {
+            "knowledge_id": 1750,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1750,
+                "quote": "上海港外高桥港区航道（长江口段）。外高桥港区航道自长江口圆圆沙灯船（31°22.0′N,121°38.0′E）至外高桥码头（31°20.0′N,121°33.0′E），全长约7海里，航道宽度300米，水深-12.5米。该航道为进出上海港的主要通道之一，实行分道通航制，船舶应保持VHF14频道守听，遵守《长江口船舶交通管理系统（VTS）安全监督管理办法》。"
+              }
+            ],
+            "reason": "条目描述航道及分道制、守听和法规要求，未给出分道方向或位置条件；Schema不记录通信和法规遵守情况。"
+          },
+          {
+            "knowledge_id": 1752,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1752,
+                "quote": "宁波舟山港穿山港区航道及警戒区。穿山港区航道自虾峙门航道东口（29°52.0′N,122°10.0′E）至穿山码头前沿（29°55.0′N,122°00.0′E），全长约12海里，航道宽度350米，水深-18米。港区警戒区位于航道入口，以点(29°52.0′N,122°10.0′E)为中心、半径0.6海里。船舶进入警戒区前应向穿山VTS中心报告，大型船舶需引航。"
+              }
+            ],
+            "reason": "条目主要给出航道警戒区与VTS、引航要求；AIS没有引航属性，且大型船舶条件未定义。"
+          },
+          {
+            "knowledge_id": 1754,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1754,
+                "quote": "温州港乐清湾港区航道。乐清湾港区航道自大门岛东侧（27°58.0′N,121°12.0′E）至乐清湾码头（27°55.0′N,121°05.0′E），全长约12海里，航道宽度200米，水深-10米。航道两侧设有浮筒，航道内设有3处转向点。该水域渔船较多，进出港船舶应加强瞭望，保持安全航速。"
+              }
+            ],
+            "reason": "条目提出安全航速和加强瞭望的一般要求，未定义安全阈值，Schema也没有瞭望属性，具体AIS条件无法确认。"
+          },
+          {
+            "knowledge_id": 1755,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1755,
+                "quote": "福州港江阴港区航道及警戒区。江阴港区航道自兴化湾口（25°20.0′N,119°40.0′E）至江阴码头（25°25.0′N,119°20.0′E），全长约15海里，航道宽度250米，水深-15米。港区警戒区位于航道入口，以点(25°20.0′N,119°40.0′E)为中心、半径0.5海里。船舶进入警戒区前应向福州VTS中心报告（VHF10频道），大型船舶需引航。"
+              }
+            ],
+            "reason": "条目给出航道、报告和大型船舶引航要求，AIS没有报告或引航属性，大型条件也未定义。"
+          },
+          {
+            "knowledge_id": 1756,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1756,
+                "quote": "泉州港石湖港区航道及锚地。石湖港区航道自泉州湾口（24°45.0′N,118°50.0′E）至石湖码头（24°48.0′N,118°42.0′E），全长约10海里，航道宽度200米，水深-12米。港区锚地位于航道东侧，范围为：A(24°46.0′N,118°52.0′E)、B(24°46.0′N,118°55.0′E)、C(24°44.0′N,118°55.0′E)、D(24°44.0′N,118°52.0′E)，水深11-14米。船舶进出港需向泉州VTS中心报告，航道内禁止追越。"
+              }
+            ],
+            "reason": "条目禁止航道内追越，但未提供从AIS字段判断追越的口径；其余主要是区域坐标和报告要求。"
+          },
+          {
+            "knowledge_id": 1757,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1757,
+                "quote": "漳州港招银港区航道。招银港区航道自厦门湾南侧（24°25.0′N,118°05.0′E）至招银码头（24°28.0′N,118°02.0′E），全长约6海里，航道宽度180米，水深-12米。航道两侧设有浮灯，航道内设有2处转向点。该水域船舶交通密集，船舶应遵守《厦门水域船舶定线制》，向厦门VTS中心报告。"
+              }
+            ],
+            "reason": "条目主要定义航道并要求遵守定线制与VTS报告，没有给出直接对应AIS字段的方向、速度或状态条件。"
+          },
+          {
+            "knowledge_id": 1759,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1759,
+                "quote": "惠州港荃湾港区航道及锚地。荃湾港区航道自大亚湾口（22°38.0′N,114°38.0′E）至荃湾码头（22°42.0′N,114°35.0′E），全长约8海里，航道宽度200米，水深-14米。港区锚地位于航道南侧，范围为：A(22°40.0′N,114°36.0′E)、B(22°40.0′N,114°39.0′E)、C(22°38.0′N,114°39.0′E)、D(22°38.0′N,114°36.0′E)，水深12-15米。船舶进出港需向惠州VTS中心报告，大型船舶需引航。"
+              }
+            ],
+            "reason": "条目提供区域边界并要求大型船舶引航，AIS不含引航属性，且大型条件未定义，不能仅据空间字段确认。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1739,
+            "kind": "incomplete_rule",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1739,
+                "quote": "nav_status=1（航行中）sog15或sog0.5"
+              }
+            ],
+            "related_knowledge_ids": [],
+            "reason": "sog15、sog0.5 缺失比较符，状态条件与航速条件的连接范围也未完整写出；不补写阈值方向。"
+          },
+          {
+            "knowledge_id": 1739,
+            "kind": "conflicting_content",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1739,
+                "quote": "nav_status=1（航行中）"
+              },
+              {
+                "knowledge_id": 1740,
+                "quote": "nav_status=1锚泊"
+              }
+            ],
+            "related_knowledge_ids": [
+              1740
+            ],
+            "reason": "同一 nav_status=1 在1739被标为航行中，在1740被标为锚泊；不选定其中一方。"
+          },
+          {
+            "knowledge_id": 1740,
+            "kind": "conflicting_content",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1740,
+                "quote": "nav_status=1锚泊"
+              },
+              {
+                "knowledge_id": 1739,
+                "quote": "nav_status=1（航行中）"
+              }
+            ],
+            "related_knowledge_ids": [
+              1739
+            ],
+            "reason": "同一 nav_status=1 在1740被标为锚泊，在1739被标为航行中；不选定其中一方。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "Elasticsearch:medical_institutions",
+        "accepted": [
+          {
+            "knowledge_id": 1696,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1696,
+                "quote": "复旦大学附属华山医院的经纬度坐标为 (lat: 31.2230, lon: 121.4428)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1697,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1697,
+                "quote": "上海交通大学医学院附属瑞金医院的经纬度坐标为 (lat: 31.2125, lon: 121.4682)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1698,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1698,
+                "quote": "北京协和医院的经纬度坐标为 (lat: 39.9087, lon: 116.4135)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1699,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1699,
+                "quote": "四川大学华西医院的经纬度坐标为 (lat: 30.6460, lon: 104.0610)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1700,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1700,
+                "quote": "中山大学附属第一医院的经纬度坐标为 (lat: 23.1310, lon: 113.2895)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1701,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1701,
+                "quote": "深圳市人民医院的经纬度坐标为 (lat: 22.5565, lon: 114.1158)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1702,
+            "basis": "schema_supported",
+            "fields": [
+              "name",
+              "location"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1702,
+                "quote": "浙江大学医学院附属第一医院的经纬度坐标为 (lat: 30.2630, lon: 120.1650)"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识给出具名医院及其经纬度，原始医院索引中的名称与geo_point位置直接支持同一对象的位置属性。"
+          },
+          {
+            "knowledge_id": 1703,
+            "basis": "schema_supported",
+            "fields": [
+              "bed_count",
+              "doctor_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1703,
+                "quote": "大型医院的定义：床位数(bed_count) >= 1500 且 医生数(doctor_count) >= 1500。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "大型医院的床位数和医生数条件直接对应原始医院索引的两个数量属性。"
+          },
+          {
+            "knowledge_id": 1704,
+            "basis": "schema_supported",
+            "fields": [
+              "has_icu",
+              "ambulance_count",
+              "rating"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1704,
+                "quote": "顶尖三甲医院的标准：拥有ICU(has_icu=true) 且 救护车数量(ambulance_count) >= 20 且 患者评分(rating) >= 4.8。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识明确的ICU、救护车和评分条件直接对应医院索引属性；未自行添加其他筛选条件。"
+          },
+          {
+            "knowledge_id": 1705,
+            "basis": "schema_supported",
+            "fields": [
+              "doctor_count",
+              "annual_outpatient"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1705,
+                "quote": "医师力量强的医院定义：医生数(doctor_count) >= 2000 或 年门诊量(annual_outpatient) >= 4000000。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "医生数或年门诊量的条件直接对应医院索引的医生数量和年门诊量属性。"
+          },
+          {
+            "knowledge_id": 1706,
+            "basis": "schema_supported",
+            "fields": [
+              "annual_outpatient"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1706,
+                "quote": "高负荷医院的定义：年门诊量(annual_outpatient) >= 5000000。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "高负荷医院按年门诊量定义，原始医院索引直接保存该属性。"
+          },
+          {
+            "knowledge_id": 1707,
+            "basis": "schema_supported",
+            "fields": [
+              "emergency_24h",
+              "ambulance_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1707,
+                "quote": "急诊能力充足的医院定义：24小时急诊(emergency_24h=true) 且 救护车数量(ambulance_count) >= 10。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "24小时急诊与救护车数量的条件直接对应原始医院索引属性。"
+          },
+          {
+            "knowledge_id": 1708,
+            "basis": "schema_supported",
+            "fields": [
+              "is_teaching_hospital"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1708,
+                "quote": "教学医院的定义：is_teaching_hospital = true。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "教学医院定义直接解释原始医院索引中是否教学医院的布尔属性。"
+          },
+          {
+            "knowledge_id": 1709,
+            "basis": "schema_supported",
+            "fields": [
+              "bed_count",
+              "annual_outpatient"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1709,
+                "quote": "超大规模医院的定义：床位数(bed_count) >= 2000 且 年门诊量(annual_outpatient) >= 6000000。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "超大规模医院的床位数和年门诊量条件直接对应医院索引属性。"
+          },
+          {
+            "knowledge_id": 1710,
+            "basis": "schema_supported",
+            "fields": [
+              "nurse_count",
+              "bed_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1710,
+                "quote": "优秀护理医院的判断标准：护士数(nurse_count) >= 2000 且 床位数/护士数比值 <= 1.2。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "护士数量及床位数与护士数比值所需属性均由原始医院索引直接提供。"
+          },
+          {
+            "knowledge_id": 1711,
+            "basis": "schema_supported",
+            "fields": [
+              "has_icu",
+              "department_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1711,
+                "quote": "现代化医院的定义：拥有ICU(has_icu=true) 且 科室数量(department_count) >= 40。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "ICU与科室数量的现代化医院定义直接对应原始医院索引属性。"
+          },
+          {
+            "knowledge_id": 1712,
+            "basis": "schema_supported",
+            "fields": [
+              "founded_year",
+              "rating"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1712,
+                "quote": "老牌知名医院的定义：成立年份(founded_year) <= 1950 且 评分(rating) >= 4.6。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "-- 医院库（ES）"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "PUT /medical_institutions\r\n{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"name\": { \"type\": \"text\", \"fields\": { \"keyword\": { \"type\": \"keyword\" } } },\r\n      \"city\": { \"type\": \"keyword\" },\r\n      \"district\": { \"type\": \"keyword\" },\r\n      \"address\": { \"type\": \"text\" },\r\n      \"location\": { \"type\": \"geo_point\" },\r\n      \"level\": { \"type\": \"keyword\" },            // 三甲、三乙、二甲、二乙、一甲等\r\n      \"bed_count\": { \"type\": \"integer\" },\r\n      \"doctor_count\": { \"type\": \"integer\" },\r\n      \"nurse_count\": { \"type\": \"integer\" },\r\n      \"ambulance_count\": { \"type\": \"integer\" },   // 救护车数量\r\n      \"department_count\": { \"type\": \"integer\" },  // 科室数量\r\n      \"annual_outpatient\": { \"type\": \"long\" },    // 年门诊量（人次）\r\n      \"has_icu\": { \"type\": \"boolean\" },           // 是否有ICU\r\n      \"is_teaching_hospital\": { \"type\": \"boolean\" }, // 是否教学医院\r\n      \"emergency_24h\": { \"type\": \"boolean\" },\r\n      \"rating\": { \"type\": \"float\" },\r\n      \"founded_year\": { \"type\": \"integer\" }       // 成立年份\r\n    }\r\n  }\r\n}"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "成立年份和评分的老牌知名医院标准直接对应原始医院索引属性。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

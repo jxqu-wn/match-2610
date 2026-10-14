@@ -101,7 +101,6 @@ class Settings(BaseSettings):
     @property
     def schema_sources(self) -> dict[str, Path]:
         return {
-            "bird_schemas.txt": self.path(self.competition_dir) / "Schema/bird_schemas.txt",
             "commom_schema.txt": self.path(self.competition_dir) / "Schema/commom_schema.txt",
             "core_schema.txt": self.path(self.competition_dir) / "Schema/core_schema.txt",
         }

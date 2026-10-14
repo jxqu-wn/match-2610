@@ -1,0 +1,1872 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+      "knowledge": [
+        {
+          "knowledge_id": 1610,
+          "knowledge_text": "corporate_income_tax_returns.revenue 表示收入总额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1611,
+          "knowledge_text": "corporate_income_tax_returns.non_taxable_income 表示不征税收入与免税收入合计，单位：万元。"
+        },
+        {
+          "knowledge_id": 1612,
+          "knowledge_text": "corporate_income_tax_returns.deductions 表示扣除金额，单位：万元。"
+        },
+        {
+          "knowledge_id": 1613,
+          "knowledge_text": "corporate_income_tax_returns.prior_year_losses 表示允许弥补的以前年度亏损，单位：万元。"
+        },
+        {
+          "knowledge_id": 1614,
+          "knowledge_text": "corporate_income_tax_returns.employee_count 表示从业人数，为全年季度平均值，单位：人。"
+        },
+        {
+          "knowledge_id": 1615,
+          "knowledge_text": "corporate_income_tax_returns.total_assets 表示资产总额（用于小型微利企业判定），为全年季度平均值，单位：万元。"
+        },
+        {
+          "knowledge_id": 1617,
+          "knowledge_text": "corporate_income_tax_returns.is_restricted_industry 表示是否从事国家限制或禁止行业，TRUE表示是，FALSE表示否。"
+        },
+        {
+          "knowledge_id": 1628,
+          "knowledge_text": "应纳税所得额计算公式：revenue - non_taxable_income - deductions - prior_year_losses，单位：万元。"
+        },
+        {
+          "knowledge_id": 1629,
+          "knowledge_text": "小型微利企业判定条件：应纳税所得额≤100万元 且 从业人数≤300人 且 资产总额≤5000万元 且 未从事国家限制或禁止行业。"
+        },
+        {
+          "knowledge_id": 1639,
+          "knowledge_text": "实际税负率计算公式：(应纳税额 / 收入总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，单位：%。"
+        },
+        {
+          "knowledge_id": 1641,
+          "knowledge_text": "所得税贡献率计算公式：(应纳税额 / 资产总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，资产总额取自申报表中的全年季度平均值。单位：%。"
+        },
+        {
+          "knowledge_id": 1642,
+          "knowledge_text": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"
+        },
+        {
+          "knowledge_id": 1647,
+          "knowledge_text": "收入扣除后利润率计算公式：(revenue - deductions) / revenue × 100%，单位：%。反映扣除后的利润空间。"
+        },
+        {
+          "knowledge_id": 1653,
+          "knowledge_text": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"
+        },
+        {
+          "knowledge_id": 1655,
+          "knowledge_text": "若corporate_income_tax_returns.is_restricted_industry为TRUE，表示企业从事国家限制或禁止行业，不能享受小型微利企业优惠。"
+        },
+        {
+          "knowledge_id": 1658,
+          "knowledge_text": "企业研究开发费用未形成无形资产计入当期损益的，在按照规定据实扣除的基础上，可按研究开发费用的100%在税前加计扣除（制造业企业），其他企业按75%。本库中加计扣除包含在deductions字段内。"
+        },
+        {
+          "knowledge_id": 1664,
+          "knowledge_text": "企业集中度指每个行业收入最高的n个企业占行业总收入的比例，CRn指数通过计算前n位企业数据总和与行业总数据的比值。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1580,
+          "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+        },
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1595,
+          "knowledge_text": "企业员工规模等级：大型企业 staff_count≥5000，中型企业 1000≤staff_count<5000，小型企业 staff_count<1000。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.company_certification",
+      "knowledge": [
+        {
+          "knowledge_id": 1584,
+          "knowledge_text": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"
+        },
+        {
+          "knowledge_id": 1588,
+          "knowledge_text": "资质到期判断：expire_date < CURDATE() 表示已过期，expire_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 180 DAY) 表示未来半年内到期。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.energy_station",
+      "knowledge": [
+        {
+          "knowledge_id": 1581,
+          "knowledge_text": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+        },
+        {
+          "knowledge_id": 1582,
+          "knowledge_text": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+        },
+        {
+          "knowledge_id": 1583,
+          "knowledge_text": "装机容量单位MW（兆瓦），年发电量单位万kWh。大型火电厂装机容量≥3000MW，大型水电站装机容量≥1000MW，大型风电场装机容量≥500MW，大型光伏电站装机容量≥200MW。"
+        },
+        {
+          "knowledge_id": 1591,
+          "knowledge_text": "场站运行状态：'运行'表示正常发电中，'在建'表示施工中尚未并网，'停机'表示临时停运可恢复，'退役'表示永久关停。"
+        },
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1593,
+          "knowledge_text": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+        },
+        {
+          "knowledge_id": 1594,
+          "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+        },
+        {
+          "knowledge_id": 1597,
+          "knowledge_text": "“双碳”目标指2030年前实现碳达峰、2060年前实现碳中和。清洁能源和新能源是实现双碳目标的主力军。清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"
+        },
+        {
+          "knowledge_id": 1600,
+          "knowledge_text": "年发电量超过装机容量×5000小时的火电厂为超高效火电厂。火电年平均利用小时数约为4500小时。"
+        },
+        {
+          "knowledge_id": 1601,
+          "knowledge_text": "年利用小时数计算公式：年利用小时数 = 年发电量(万kWh) × 10000 ÷ 装机容量(MW) ÷ 1000，简化后为：年利用小时数 = 年发电量(万kWh) ÷ 装机容量(MW) × 10。"
+        },
+        {
+          "knowledge_id": 1603,
+          "knowledge_text": "小型发电场站判断标准：装机容量低于100MW。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.supply_area",
+      "knowledge": [
+        {
+          "knowledge_id": 1585,
+          "knowledge_text": "供电等级划分：一级供电区域为直辖市、省会城市、计划单列市市区；二级供电区域为地级市市区及经济发达县级市；三级供电区域为普通县级市及农村地区。"
+        },
+        {
+          "knowledge_id": 1599,
+          "knowledge_text": "供电户数超过200万的为特大型供电区域，100万-200万为大型供电区域，50万-100万为中型，低于50万为小型。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:energy.employee",
+      "knowledge": [
+        {
+          "knowledge_id": 1580,
+          "knowledge_text": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+        },
+        {
+          "knowledge_id": 1586,
+          "knowledge_text": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"
+        },
+        {
+          "knowledge_id": 1589,
+          "knowledge_text": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-008",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554,
+      1555,
+      1556,
+      1557,
+      1558,
+      1559,
+      1560,
+      1561,
+      1562,
+      1563,
+      1564,
+      1565,
+      1566,
+      1567,
+      1568,
+      1569,
+      1570,
+      1571,
+      1572,
+      1573,
+      1574,
+      1575,
+      1576,
+      1577,
+      1578,
+      1579,
+      1580,
+      1581,
+      1582,
+      1583,
+      1584,
+      1585,
+      1586,
+      1587,
+      1588,
+      1589,
+      1590,
+      1591,
+      1592,
+      1593,
+      1594,
+      1595,
+      1596,
+      1597,
+      1598,
+      1599,
+      1600,
+      1601,
+      1602,
+      1603,
+      1604,
+      1605,
+      1606,
+      1607,
+      1608,
+      1609,
+      1610,
+      1611,
+      1612,
+      1613,
+      1614,
+      1615,
+      1616,
+      1617,
+      1618,
+      1619,
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625,
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631,
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637,
+      1638,
+      1639,
+      1640,
+      1641,
+      1642,
+      1643,
+      1644,
+      1645,
+      1646,
+      1647,
+      1648,
+      1649,
+      1650,
+      1651,
+      1652,
+      1653,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1662,
+      1663,
+      1664,
+      1665,
+      1666,
+      1667,
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696,
+      1697,
+      1698,
+      1699,
+      1700,
+      1701,
+      1702,
+      1703,
+      1704,
+      1705,
+      1706,
+      1707,
+      1708,
+      1709,
+      1710,
+      1711,
+      1712,
+      1713,
+      1714,
+      1715,
+      1716,
+      1717,
+      1718,
+      1719,
+      1720,
+      1721,
+      1722,
+      1723,
+      1724,
+      1725,
+      1726,
+      1727,
+      1728,
+      1729,
+      1730,
+      1731,
+      1732,
+      1733,
+      1734,
+      1735,
+      1736,
+      1737,
+      1738,
+      1739,
+      1740,
+      1741,
+      1742,
+      1743,
+      1744,
+      1745,
+      1746,
+      1747,
+      1748,
+      1749,
+      1750,
+      1751,
+      1752,
+      1753,
+      1754,
+      1755,
+      1756,
+      1757,
+      1758,
+      1759,
+      1760,
+      1761,
+      1762,
+      1763,
+      1764,
+      1765,
+      1766,
+      1767,
+      1768,
+      1769,
+      1770,
+      1771,
+      1772,
+      1773,
+      1774,
+      1775,
+      1776,
+      1777,
+      1778,
+      1779,
+      1780,
+      1781,
+      1782,
+      1783,
+      1784,
+      1785,
+      1786,
+      1787,
+      1788,
+      1789,
+      1790,
+      1791,
+      1792,
+      1793,
+      1794,
+      1795,
+      1796,
+      1797,
+      1798,
+      1799,
+      1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+        "accepted": [
+          {
+            "knowledge_id": 1610,
+            "basis": "explicit",
+            "fields": [
+              "revenue"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1610,
+                "quote": "corporate_income_tax_returns.revenue 表示收入总额，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1611,
+            "basis": "explicit",
+            "fields": [
+              "non_taxable_income"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1611,
+                "quote": "corporate_income_tax_returns.non_taxable_income 表示不征税收入与免税收入合计，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1612,
+            "basis": "explicit",
+            "fields": [
+              "deductions"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1612,
+                "quote": "corporate_income_tax_returns.deductions 表示扣除金额，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1613,
+            "basis": "explicit",
+            "fields": [
+              "prior_year_losses"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1613,
+                "quote": "corporate_income_tax_returns.prior_year_losses 表示允许弥补的以前年度亏损，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1614,
+            "basis": "explicit",
+            "fields": [
+              "employee_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1614,
+                "quote": "corporate_income_tax_returns.employee_count 表示从业人数，为全年季度平均值，单位：人。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1615,
+            "basis": "explicit",
+            "fields": [
+              "total_assets"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1615,
+                "quote": "corporate_income_tax_returns.total_assets 表示资产总额（用于小型微利企业判定），为全年季度平均值，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1617,
+            "basis": "explicit",
+            "fields": [
+              "is_restricted_industry"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1617,
+                "quote": "corporate_income_tax_returns.is_restricted_industry 表示是否从事国家限制或禁止行业，TRUE表示是，FALSE表示否。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条显式引用corporate_income_tax_returns真实字段，其语义及单位与Schema对应。"
+          },
+          {
+            "knowledge_id": 1628,
+            "basis": "schema_supported",
+            "fields": [
+              "revenue",
+              "non_taxable_income",
+              "deductions",
+              "prior_year_losses"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1628,
+                "quote": "应纳税所得额计算公式：revenue - non_taxable_income - deductions - prior_year_losses，单位：万元。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条应纳税所得额公式直接使用本表四项申报属性，Schema对含义及万元单位作了对应说明。"
+          },
+          {
+            "knowledge_id": 1629,
+            "basis": "schema_supported",
+            "fields": [
+              "employee_count",
+              "total_assets",
+              "is_restricted_industry"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1629,
+                "quote": "小型微利企业判定条件：应纳税所得额≤100万元 且 从业人数≤300人 且 资产总额≤5000万元 且 未从事国家限制或禁止行业。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "小型微利判定直接规定从业人数、资产总额及限制行业条件，Schema申报表记录相同对象及属性；依据为这三项条件。"
+          },
+          {
+            "knowledge_id": 1639,
+            "basis": "schema_supported",
+            "fields": [
+              "revenue"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1639,
+                "quote": "实际税负率计算公式：(应纳税额 / 收入总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，单位：%。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条实际税负率明确以收入总额作分母，申报表revenue注释为收入总额，直接支持该分母属性。"
+          },
+          {
+            "knowledge_id": 1641,
+            "basis": "schema_supported",
+            "fields": [
+              "total_assets"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1641,
+                "quote": "所得税贡献率计算公式：(应纳税额 / 资产总额) × 100%。其中应纳税额 = 应纳税所得额 × 适用税率，资产总额取自申报表中的全年季度平均值。单位：%。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确指定申报表中的全年季度平均资产总额，本表total_assets的对象、季度平均口径及单位直接对应。"
+          },
+          {
+            "knowledge_id": 1642,
+            "basis": "schema_supported",
+            "fields": [
+              "revenue",
+              "total_assets"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1642,
+                "quote": "资产周转率计算公式：收入总额 / 资产总额，反映企业资产运营效率。单位：倍。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条周转率直接使用企业收入总额及资产总额，Schema本表同时记录这两项申报属性。"
+          },
+          {
+            "knowledge_id": 1647,
+            "basis": "schema_supported",
+            "fields": [
+              "revenue",
+              "deductions"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1647,
+                "quote": "收入扣除后利润率计算公式：(revenue - deductions) / revenue × 100%，单位：%。反映扣除后的利润空间。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条扣除后利润率公式直接使用revenue与deductions，Schema本表分别为收入总额和扣除金额。"
+          },
+          {
+            "knowledge_id": 1653,
+            "basis": "schema_supported",
+            "fields": [],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1653,
+                "quote": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确把小型微利企业判定对象指定为年度申报数据，Schema本表为企业所得税年度申报信息；判定内容的缺失引用单列审计。"
+          },
+          {
+            "knowledge_id": 1655,
+            "basis": "explicit",
+            "fields": [
+              "is_restricted_industry"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1655,
+                "quote": "若corporate_income_tax_returns.is_restricted_industry为TRUE，表示企业从事国家限制或禁止行业，不能享受小型微利企业优惠。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [
+              "若corporate_income_tax_returns.is_restricted_industry为TRUE"
+            ],
+            "reason": "本条明确引用本表is_restricted_industry并解释其值与优惠限制。"
+          },
+          {
+            "knowledge_id": 1658,
+            "basis": "schema_supported",
+            "fields": [
+              "deductions"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1658,
+                "quote": "企业研究开发费用未形成无形资产计入当期损益的，在按照规定据实扣除的基础上，可按研究开发费用的100%在税前加计扣除（制造业企业），其他企业按75%。本库中加计扣除包含在deductions字段内。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [
+              "本库中加计扣除包含在deductions字段内"
+            ],
+            "reason": "本条明确说明本库研发加计扣除包含在deductions字段，Schema企业所得税申报表以该字段记录扣除金额。"
+          },
+          {
+            "knowledge_id": 1664,
+            "basis": "schema_supported",
+            "fields": [
+              "company_id",
+              "revenue"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1664,
+                "quote": "企业集中度指每个行业收入最高的n个企业占行业总收入的比例，CRn指数通过计算前n位企业数据总和与行业总数据的比值。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE corporate_income_tax_returns (\r\n    return_id BIGINT AUTO_INCREMENT PRIMARY KEY COMMENT '申报ID',\r\n    company_id BIGINT NOT NULL COMMENT '关联公司ID',\r\n    tax_year YEAR NOT NULL COMMENT '纳税年度',\r\n    revenue DECIMAL(18,2) NOT NULL COMMENT '收入总额（万元）',\r\n    non_taxable_income DECIMAL(18,2) DEFAULT 0 COMMENT '不征税收入与免税收入（万元）',\r\n    deductions DECIMAL(18,2) NOT NULL COMMENT '扣除金额（万元）',\r\n    prior_year_losses DECIMAL(18,2) DEFAULT 0 COMMENT '允许弥补的以前年度亏损（万元）',\r\n    building_asset_value DECIMAL(18,2) COMMENT '房屋建筑物资产原值（万元）',\r\n    employee_count INT COMMENT '从业人数（全年季度平均值）',\r\n    total_assets DECIMAL(18,2) COMMENT '资产总额（万元，全年季度平均值）',\r\n    is_restricted_industry BOOLEAN DEFAULT FALSE COMMENT '是否从事国家限制或禁止行业',\r\n\r\n    FOREIGN KEY (company_id) REFERENCES companies(company_id),\r\n    UNIQUE KEY uk_company_year (company_id, tax_year)\r\n) COMMENT='企业所得税年度申报信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条企业行业集中度以企业收入排序及汇总，申报表直接记录公司标识与收入总额；关联依据为企业收入部分。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1624,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1624,
+                "quote": "每股净资产(BPS)计算公式：(total_assets * 10000) / total_shares，其中总资产由万元转换为元。"
+              }
+            ],
+            "reason": "本表也有万元资产总额，但其口径为全年季度平均；每股净资产条目没有指定资产来源，另有财务总资产表，不能仅凭total_assets同名确认使用申报平均资产。"
+          },
+          {
+            "knowledge_id": 1630,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1630,
+                "quote": "企业所得税税率规则：高新技术企业适用15%，小型微利企业适用20%，其他企业适用25%。高新技术企业优先于小型微利判定。"
+              }
+            ],
+            "reason": "条目给出高新技术、小型微利和其他企业的税率；本表没有这些企业类别或税率字段，本条也未提供由本表现有字段判定小型微利的条件，需补充明确适用依据。"
+          },
+          {
+            "knowledge_id": 1631,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1631,
+                "quote": "企业所得税额计算公式：应纳税所得额 × 适用税率，单位：万元。"
+              }
+            ],
+            "reason": "条目公式的应纳税所得额与适用税率都不是本表字段，本条未解释如何由申报属性取得二者；不能借用邻近但未显式引用的知识补全。"
+          },
+          {
+            "knowledge_id": 1652,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1652,
+                "quote": "高新技术企业认定资格由companies.is_key_high_tech字段标识，若为TRUE则适用15%优惠税率，相比普通税率25%可节省10%的应纳税额。"
+              }
+            ],
+            "reason": "本条明确引用companies.is_key_high_tech解释资格和税率，但本表没有该资格或税率属性；仅可通过公司外键连接不足以确认归属。"
+          },
+          {
+            "knowledge_id": 1654,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1654,
+                "quote": "一般企业所得税税率为25%。"
+              }
+            ],
+            "reason": "条目仅给出一般企业税率，没有指定申报表或可核对的税率字段；Schema也没有一般企业判定属性，保留其对本表计算适用性待核。"
+          },
+          {
+            "knowledge_id": 1656,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1656,
+                "quote": "技术先进型服务企业可享受企业所得税优惠税率15%，与高新技术企业待遇相同。"
+              }
+            ],
+            "reason": "本条优惠税率依赖技术先进型服务企业资格，本表没有该资格或税率属性，不能仅沿公司外键传播。"
+          },
+          {
+            "knowledge_id": 1657,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1657,
+                "quote": "符合条件的小型微利企业，年应纳税所得额不超过100万元的部分，减按25%计入应纳税所得额，按20%税率缴纳企业所得税（实际税负5%）。本库按简化规则直接使用20%税率。"
+              }
+            ],
+            "reason": "条目描述小型微利企业应纳税所得额与税率，但未指明本表、未提供由本表字段判定资格或计算应纳税所得额的规则；本表无这些直接属性。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1653,
+            "kind": "missing_reference",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1653,
+                "quote": "小型微利企业判定基于年度申报数据，满足条件则适用20%优惠税率。判定条件见知识108。"
+              }
+            ],
+            "related_knowledge_ids": [
+              108
+            ],
+            "reason": "本条指向知识108，但完整247条输入没有该ID，无法核对其所称判定条件；不能用内容相似的其他知识替换。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:energy.energy_company",
+        "accepted": [
+          {
+            "knowledge_id": 1580,
+            "basis": "schema_supported",
+            "fields": [
+              "staff_count",
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1580,
+                "quote": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确按能源企业注册地统计员工，Schema能源企业表同时记录员工总数和注册地区划代码。"
+          },
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "企业 status='注销' 表示企业主体消亡"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条对企业status=注销的解释直接对应本表企业经营状态中的注销；关联限于企业状态部分。"
+          },
+          {
+            "knowledge_id": 1593,
+            "basis": "schema_supported",
+            "fields": [
+              "business_type"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1593,
+                "quote": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接以能源企业business_type=新能源定义企业类别，Schema能源企业表具有经营类型字段。"
+          },
+          {
+            "knowledge_id": 1595,
+            "basis": "schema_supported",
+            "fields": [
+              "staff_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1595,
+                "quote": "企业员工规模等级：大型企业 staff_count≥5000，中型企业 1000≤staff_count<5000，小型企业 staff_count<1000。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条以staff_count划分企业员工规模，Schema能源企业表该字段明确为员工总数。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1587,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1587,
+                "quote": "“五大发电集团”指：华能国际(EC003)、大唐发电(EC004)、华电集团(EC005)、国家电投(EC006)、国家能源集团(EC009)。“两网”指：国家电网(EC001、EC020-EC022)、南方电网(EC002、EC023)。"
+              }
+            ],
+            "reason": "本条列出发电集团和电网企业名称及EC代码，但未明确表或字段；原始Schema没有这些企业实例、代码约定或集团归属属性，不能仅以能源行业推定对应记录。"
+          },
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:energy.company_certification",
+        "accepted": [
+          {
+            "knowledge_id": 1584,
+            "basis": "schema_supported",
+            "fields": [
+              "cert_type",
+              "expire_date",
+              "issue_authority"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1584,
+                "quote": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n) ENGINE=InnoDB COMMENT='企业资质表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释企业资质类型、发证机关及过期条件，Schema企业资质表具有这三个对应属性。"
+          },
+          {
+            "knowledge_id": 1588,
+            "basis": "schema_supported",
+            "fields": [
+              "expire_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1588,
+                "quote": "资质到期判断：expire_date < CURDATE() 表示已过期，expire_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 180 DAY) 表示未来半年内到期。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE company_certification (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '企业编号',\r\n    cert_type VARCHAR(50) NOT NULL COMMENT '资质类型',\r\n    cert_no VARCHAR(50) COMMENT '证书编号',\r\n    issue_date DATE COMMENT '发证日期',\r\n    expire_date DATE COMMENT '到期日期',\r\n    issue_authority VARCHAR(100) COMMENT '发证机关',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id)\r\n) ENGINE=InnoDB COMMENT='企业资质表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条资质已过期及半年内到期条件直接使用expire_date，Schema企业资质表该字段即到期日期。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:energy.energy_station",
+        "accepted": [
+          {
+            "knowledge_id": 1581,
+            "basis": "schema_supported",
+            "fields": [
+              "energy_type_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1581,
+                "quote": "能源类型分类：火电(THERMAL)、水电(HYDRO)、风电(WIND)、光伏(SOLAR)、核电(NUCLEAR)、生物质发电(BIOMASS)、天然气发电(GAS)、抽水蓄能(PUMPED)、地热发电(GEOTHERMAL)、氢能(HYDROGEN)。清洁能源包括水电、核电、天然气发电、抽水蓄能，新能源包括风电、光伏、生物质发电、地热发电、氢能。可再生能源包括水电、风电、光伏、生物质发电、地热发电。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条能源类型代码与分类直接解释场站的能源类型属性；Schema该字段明确引用能源类型字典，字典原始值核对同一代码对象。"
+          },
+          {
+            "knowledge_id": 1582,
+            "basis": "schema_supported",
+            "fields": [
+              "station_type_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1582,
+                "quote": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO station_type_dict (type_code, type_name, category) VALUES\r\n('PP', '发电厂', '发电'),\r\n('SUB', '变电站', '变电'),\r\n('TL', '输电线路', '输电'),\r\n('DS', '配电站', '配电'),\r\n('WP', '风电场', '发电'),\r\n('SP', '光伏电站', '发电'),\r\n('HP', '水电站', '发电'),\r\n('NP', '核电站', '发电'),\r\n('ES', '储能站', '配电'),\r\n('CC', '集控中心', '变电');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条场站类型代码解释对应场站表的类型属性，Schema该字段引用场站类型字典，原始字典值核对代码对象。"
+          },
+          {
+            "knowledge_id": 1583,
+            "basis": "schema_supported",
+            "fields": [
+              "installed_capacity",
+              "annual_generation",
+              "energy_type_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1583,
+                "quote": "装机容量单位MW（兆瓦），年发电量单位万kWh。大型火电厂装机容量≥3000MW，大型水电站装机容量≥1000MW，大型风电场装机容量≥500MW，大型光伏电站装机容量≥200MW。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释场站装机容量与年发电量单位，并按能源类型给出容量条件；Schema具备相应属性且单位一致。"
+          },
+          {
+            "knowledge_id": 1591,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1591,
+                "quote": "场站运行状态：'运行'表示正常发电中，'在建'表示施工中尚未并网，'停机'表示临时停运可恢复，'退役'表示永久关停。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条场站运行状态四个取值及含义，与Schema能源场站status枚举直接对应。"
+          },
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条场站status=退役的解释直接对应能源场站运行状态；依据为场站状态部分。"
+          },
+          {
+            "knowledge_id": 1593,
+            "basis": "schema_supported",
+            "fields": [
+              "energy_type_code",
+              "company_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1593,
+                "quote": "新能源企业指 business_type='新能源' 的企业，其场站 energy_type_code 通常为 WIND、SOLAR、BIOMASS、GEOTHERMAL、HYDROGEN。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [
+              "通常"
+            ],
+            "reason": "本条直接描述新能源企业所属场站的能源类型代码；场站表记录所属企业及能源类型，Schema字典核对给定能源代码。"
+          },
+          {
+            "knowledge_id": 1594,
+            "basis": "schema_supported",
+            "fields": [
+              "energy_type_code",
+              "annual_generation"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1594,
+                "quote": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条抽水蓄能场站发电量及统计排除条件直接对应能源类型代码和年发电量属性。"
+          },
+          {
+            "knowledge_id": 1597,
+            "basis": "schema_supported",
+            "fields": [
+              "energy_type_code",
+              "installed_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1597,
+                "quote": "清洁能源装机占比 = 清洁能源装机容量 / 总装机容量 × 100%。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条清洁能源装机占比使用清洁类型装机及总装机；场站表记录装机容量，能源类型字典原文明确清洁类别。"
+          },
+          {
+            "knowledge_id": 1600,
+            "basis": "schema_supported",
+            "fields": [
+              "energy_type_code",
+              "annual_generation",
+              "installed_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1600,
+                "quote": "年发电量超过装机容量×5000小时的火电厂为超高效火电厂。火电年平均利用小时数约为4500小时。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO energy_type_dict (type_code, type_name, category, is_renewable) VALUES\r\n('THERMAL', '火电', '传统能源', 0),\r\n('HYDRO', '水电', '清洁能源', 1),\r\n('WIND', '风电', '新能源', 1),\r\n('SOLAR', '光伏', '新能源', 1),\r\n('NUCLEAR', '核电', '清洁能源', 0),\r\n('BIOMASS', '生物质发电', '新能源', 1),\r\n('GAS', '天然气发电', '清洁能源', 0),\r\n('PUMPED', '抽水蓄能', '清洁能源', 1),\r\n('GEOTHERMAL', '地热发电', '新能源', 1),\r\n('HYDROGEN', '氢能', '新能源', 1);"
+              }
+            ],
+            "qualifiers": [
+              "约为4500小时"
+            ],
+            "reason": "本条火电场站效率条件直接涉及年发电量、装机容量与火电类型，Schema能源场站具有对应对象属性。"
+          },
+          {
+            "knowledge_id": 1601,
+            "basis": "schema_supported",
+            "fields": [
+              "annual_generation",
+              "installed_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1601,
+                "quote": "年利用小时数计算公式：年利用小时数 = 年发电量(万kWh) × 10000 ÷ 装机容量(MW) ÷ 1000，简化后为：年利用小时数 = 年发电量(万kWh) ÷ 装机容量(MW) × 10。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条年利用小时公式明确给出万kWh与MW的换算，场站表年发电量和装机容量字段的单位逐项对应。"
+          },
+          {
+            "knowledge_id": 1603,
+            "basis": "schema_supported",
+            "fields": [
+              "installed_capacity",
+              "station_type_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1603,
+                "quote": "小型发电场站判断标准：装机容量低于100MW。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO station_type_dict (type_code, type_name, category) VALUES\r\n('PP', '发电厂', '发电'),\r\n('SUB', '变电站', '变电'),\r\n('TL', '输电线路', '输电'),\r\n('DS', '配电站', '配电'),\r\n('WP', '风电场', '发电'),\r\n('SP', '光伏电站', '发电'),\r\n('HP', '水电站', '发电'),\r\n('NP', '核电站', '发电'),\r\n('ES', '储能站', '配电'),\r\n('CC', '集控中心', '变电');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接以发电场站装机容量定义小型场站；Schema提供装机容量MW及场站类型，原始类型字典标明发电类。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_station (\r\n    station_id VARCHAR(20) PRIMARY KEY COMMENT '场站编号',\r\n    station_name VARCHAR(100) NOT NULL COMMENT '场站名称',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_type_code VARCHAR(10) NOT NULL COMMENT '场站类型代码',\r\n    energy_type_code VARCHAR(10) NOT NULL COMMENT '能源类型代码',\r\n    installed_capacity DECIMAL(12,2) COMMENT '装机容量(MW)',\r\n    annual_generation DECIMAL(12,2) COMMENT '年发电量(万kWh)',\r\n    grid_connect_date DATE COMMENT '并网日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '所在地区划代码',\r\n    status ENUM('运行','在建','停机','退役') DEFAULT '运行' COMMENT '运行状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_type_code) REFERENCES common.station_type_dict(type_code),\r\n    FOREIGN KEY (energy_type_code) REFERENCES common.energy_type_dict(type_code),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源场站表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          },
+          {
+            "knowledge_id": 1602,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1602,
+                "quote": "年利用小时数用于衡量发电场站利用效率，通用高效判断阈值为年利用小时数大于3000小时。"
+              }
+            ],
+            "reason": "本条以年利用小时数判定高效，但Schema没有该指标字段；本条未给出由年发电量和装机容量取得年利用小时数的公式，不能使用未显式引用的相邻条目补全。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:energy.supply_area",
+        "accepted": [
+          {
+            "knowledge_id": 1585,
+            "basis": "schema_supported",
+            "fields": [
+              "supply_level",
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1585,
+                "quote": "供电等级划分：一级供电区域为直辖市、省会城市、计划单列市市区；二级供电区域为地级市市区及经济发达县级市；三级供电区域为普通县级市及农村地区。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条划分供电区域等级，Schema本表直接记录供电等级和供电区域代码，属于同一供电区域对象。"
+          },
+          {
+            "knowledge_id": 1599,
+            "basis": "schema_supported",
+            "fields": [
+              "household_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1599,
+                "quote": "供电户数超过200万的为特大型供电区域，100万-200万为大型供电区域，50万-100万为中型，低于50万为小型。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条按供电户数划分区域规模，本表household_count注释为供电户数，直接对应阈值属性。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE supply_area (\r\n    id INT AUTO_INCREMENT PRIMARY KEY COMMENT '记录ID',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '供电企业编号',\r\n    area_id CHAR(6) NOT NULL COMMENT '供电区域代码',\r\n    supply_level VARCHAR(10) COMMENT '供电等级',\r\n    household_count INT COMMENT '供电户数',\r\n    annual_supply DECIMAL(12,2) COMMENT '年供电量(万kWh)',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    UNIQUE KEY uk_company_area (company_id, area_id)\r\n) ENGINE=InnoDB COMMENT='供电区域表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:energy.employee",
+        "accepted": [
+          {
+            "knowledge_id": 1580,
+            "basis": "schema_supported",
+            "fields": [
+              "employee_id",
+              "company_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1580,
+                "quote": "统计能源企业的员工数量时，不用考虑场站的位置，就按照注册地进行统计"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n) ENGINE=InnoDB COMMENT='能源企业员工表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE energy_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '企业编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '企业名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人代表',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    staff_count INT COMMENT '员工总数',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='能源企业信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确统计能源企业员工数量并按所属企业注册地归集；Schema本表为能源企业员工并记录员工标识、所属企业，关联限于员工及企业归属部分。"
+          },
+          {
+            "knowledge_id": 1586,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1586,
+                "quote": "员工状态“在职”表示当前在岗，“离职”表示已离开企业，“退休”表示已办理退休手续，“外派”表示借调至其他单位。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n) ENGINE=InnoDB COMMENT='能源企业员工表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条在职、离职、退休、外派的员工状态解释，与Schema能源企业员工status四个枚举逐项对应。"
+          },
+          {
+            "knowledge_id": 1589,
+            "basis": "schema_supported",
+            "fields": [
+              "education",
+              "position_code"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1589,
+                "quote": "员工学历与岗位对应：技术人员(CE、TE、EE、SE)通常为硕士或博士，值班员(OP)和检修工(MT、EL)通常为本科或大专，管理人员(GM、DM、PM)通常为硕士。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE employee (\r\n    employee_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属企业编号',\r\n    station_id VARCHAR(20) COMMENT '所属场站编号',\r\n    position_code VARCHAR(20) NOT NULL COMMENT '岗位代码',\r\n    hire_date DATE COMMENT '入职日期',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    education VARCHAR(20) COMMENT '学历',\r\n    status ENUM('在职','离职','退休','外派') DEFAULT '在职' COMMENT '状态',\r\n    FOREIGN KEY (company_id) REFERENCES energy_company(company_id),\r\n    FOREIGN KEY (station_id) REFERENCES energy_station(station_id),\r\n    FOREIGN KEY (position_code) REFERENCES common.energy_position_dict(position_code)\r\n) ENGINE=InnoDB COMMENT='能源企业员工表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE energy_position_dict (\r\n    position_code VARCHAR(20) PRIMARY KEY COMMENT '岗位代码',\r\n    position_name VARCHAR(50) NOT NULL COMMENT '岗位名称',\r\n    category VARCHAR(30) COMMENT '类别'\r\n) ENGINE=InnoDB COMMENT='能源行业岗位字典';"
+              }
+            ],
+            "qualifiers": [
+              "通常"
+            ],
+            "reason": "本条直接描述员工学历与岗位代码的通常对应，Schema能源企业员工具有学历、岗位代码并引用能源岗位字典。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

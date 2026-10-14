@@ -1,0 +1,434 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.station_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1582,
+          "knowledge_text": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.cert_type_dict",
+      "knowledge": [
+        {
+          "knowledge_id": 1584,
+          "knowledge_text": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。资质过期指 expire_date 小于当前日期。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.product_category",
+      "knowledge": [
+        {
+          "knowledge_id": 1571,
+          "knowledge_text": "类目内商品销售排名（类目排名/分类商品排名）：统计每个商品的销售额或销量后，在商品分类内部排序。MySQL 5.7 可通过自连接或变量实现；若训练 SQL 允许 MySQL 8，可使用窗口函数。SQL模式：RANK within category by SUM(order_item.item_amount) or SUM(order_item.quantity)。示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:common.customer_level_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.customer_status_dict",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.product_status_dict",
+      "knowledge": []
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-003",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554,
+      1555,
+      1556,
+      1557,
+      1558,
+      1559,
+      1560,
+      1561,
+      1562,
+      1563,
+      1564,
+      1565,
+      1566,
+      1567,
+      1568,
+      1569,
+      1570,
+      1571,
+      1572,
+      1573,
+      1574,
+      1575,
+      1576,
+      1577,
+      1578,
+      1579,
+      1580,
+      1581,
+      1582,
+      1583,
+      1584,
+      1585,
+      1586,
+      1587,
+      1588,
+      1589,
+      1590,
+      1591,
+      1592,
+      1593,
+      1594,
+      1595,
+      1596,
+      1597,
+      1598,
+      1599,
+      1600,
+      1601,
+      1602,
+      1603,
+      1604,
+      1605,
+      1606,
+      1607,
+      1608,
+      1609,
+      1610,
+      1611,
+      1612,
+      1613,
+      1614,
+      1615,
+      1616,
+      1617,
+      1618,
+      1619,
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625,
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631,
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637,
+      1638,
+      1639,
+      1640,
+      1641,
+      1642,
+      1643,
+      1644,
+      1645,
+      1646,
+      1647,
+      1648,
+      1649,
+      1650,
+      1651,
+      1652,
+      1653,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1662,
+      1663,
+      1664,
+      1665,
+      1666,
+      1667,
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696,
+      1697,
+      1698,
+      1699,
+      1700,
+      1701,
+      1702,
+      1703,
+      1704,
+      1705,
+      1706,
+      1707,
+      1708,
+      1709,
+      1710,
+      1711,
+      1712,
+      1713,
+      1714,
+      1715,
+      1716,
+      1717,
+      1718,
+      1719,
+      1720,
+      1721,
+      1722,
+      1723,
+      1724,
+      1725,
+      1726,
+      1727,
+      1728,
+      1729,
+      1730,
+      1731,
+      1732,
+      1733,
+      1734,
+      1735,
+      1736,
+      1737,
+      1738,
+      1739,
+      1740,
+      1741,
+      1742,
+      1743,
+      1744,
+      1745,
+      1746,
+      1747,
+      1748,
+      1749,
+      1750,
+      1751,
+      1752,
+      1753,
+      1754,
+      1755,
+      1756,
+      1757,
+      1758,
+      1759,
+      1760,
+      1761,
+      1762,
+      1763,
+      1764,
+      1765,
+      1766,
+      1767,
+      1768,
+      1769,
+      1770,
+      1771,
+      1772,
+      1773,
+      1774,
+      1775,
+      1776,
+      1777,
+      1778,
+      1779,
+      1780,
+      1781,
+      1782,
+      1783,
+      1784,
+      1785,
+      1786,
+      1787,
+      1788,
+      1789,
+      1790,
+      1791,
+      1792,
+      1793,
+      1794,
+      1795,
+      1796,
+      1797,
+      1798,
+      1799,
+      1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:common.station_type_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1582,
+            "basis": "schema_supported",
+            "fields": [
+              "type_code",
+              "type_name",
+              "category"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1582,
+                "quote": "场站类型代码映射：PP=发电厂，SUB=变电站，TL=输电线路，DS=配电站，WP=风电场，SP=光伏电站，HP=水电站，NP=核电站，ES=储能站，CC=集控中心。发电类场站包括PP、WP、SP、HP、NP。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE station_type_dict (\r\n    type_code VARCHAR(10) PRIMARY KEY COMMENT '场站类型代码',\r\n    type_name VARCHAR(50) NOT NULL COMMENT '类型名称',\r\n    category VARCHAR(30) COMMENT '大类'\r\n) ENGINE=InnoDB COMMENT='场站类型字典';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO station_type_dict (type_code, type_name, category) VALUES\r\n('PP', '发电厂', '发电'),\r\n('SUB', '变电站', '变电'),\r\n('TL', '输电线路', '输电'),\r\n('DS', '配电站', '配电'),\r\n('WP', '风电场', '发电'),\r\n('SP', '光伏电站', '发电'),\r\n('HP', '水电站', '发电'),\r\n('NP', '核电站', '发电'),\r\n('ES', '储能站', '配电'),\r\n('CC', '集控中心', '变电');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识的场站类型代码、名称及发电类代码集合直接对应Schema场站类型字典的代码、名称和大类。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.cert_type_dict",
+        "accepted": [
+          {
+            "knowledge_id": 1584,
+            "basis": "schema_supported",
+            "fields": [
+              "cert_type_name",
+              "category"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1584,
+                "quote": "企业资质类型：电力业务许可证分为发电类、供电类、新能源类；承装修试许可证分为承装、承修、承试；安全生产许可证由应急管理部颁发。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE cert_type_dict (\r\n    cert_type_code VARCHAR(20) PRIMARY KEY COMMENT '资质类型代码',\r\n    cert_type_name VARCHAR(50) NOT NULL COMMENT '资质类型名称',\r\n    category VARCHAR(20) COMMENT '类别',\r\n    valid_years TINYINT COMMENT '有效期(年)'\r\n) ENGINE=InnoDB COMMENT='资质类型字典';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO cert_type_dict (cert_type_code, cert_type_name, category, valid_years) VALUES\r\n('POWER_SUPPLY', '供电类电力业务许可证', '电力业务', 20),\r\n('POWER_GEN', '发电类电力业务许可证', '电力业务', 20),\r\n('POWER_NEW', '新能源类电力业务许可证', '电力业务', 20),\r\n('INSTALL_REPAIR', '承装修试许可证', '承装修试', 5),\r\n('SAFETY', '安全生产许可证', '安全', 3);"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "知识的企业资质类型片段直接对应Schema中发电、供电、新能源电力业务许可及承装修试、安全生产资质名称与类别。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.product_category",
+        "accepted": [
+          {
+            "knowledge_id": 1571,
+            "basis": "explicit",
+            "fields": [
+              "category_id",
+              "category_name"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1571,
+                "quote": "示例：SELECT pc.category_name, p.product_id, p.product_name, SUM(oi.item_amount) AS sales_amount FROM ecommerce.order_item oi JOIN ecommerce.product p ON oi.product_id = p.product_id JOIN common.product_category pc ON p.category_id = pc.category_id GROUP BY pc.category_name, p.product_id, p.product_name ORDER BY pc.category_name, sales_amount DESC。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE product_category (\r\n  category_id BIGINT NOT NULL COMMENT '商品分类ID',\r\n  category_name VARCHAR(100) NOT NULL COMMENT '商品分类名称',\r\n  parent_category_id BIGINT DEFAULT NULL COMMENT '父级商品分类ID',\r\n  category_level TINYINT NOT NULL COMMENT '分类层级',\r\n  sort_order INT NOT NULL DEFAULT 0 COMMENT '排序号',\r\n  PRIMARY KEY (category_id),\r\n  KEY idx_category_parent (parent_category_id),\r\n  KEY idx_category_level (category_level)\r\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品分类表';"
+              }
+            ],
+            "qualifiers": [
+              "示例：",
+              "若训练 SQL 允许 MySQL 8，可使用窗口函数。"
+            ],
+            "reason": "知识示例SQL真实JOIN common.product_category并使用别名pc的分类ID和名称；关联依据来自该示例。"
+          }
+        ],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.customer_level_dict",
+        "accepted": [],
+        "candidates": [
+          {
+            "knowledge_id": 1564,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1564,
+                "quote": "高价值用户（核心用户/高消费用户/大客户）通常按用户累计应付金额或累计支付金额排序。"
+              }
+            ],
+            "reason": "字典说明中有高价值用户和核心高价值用户，但字典等级依据最低成长值，本条依据累计应付或支付金额排序，未说明排序结果与会员等级的映射，不能确认同一口径。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:common.customer_status_dict",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.product_status_dict",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      }
+    ]
+  }
+}

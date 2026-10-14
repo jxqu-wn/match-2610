@@ -1,0 +1,143 @@
+{
+  "rubric_version": "table-knowledge-reference-v2",
+  "batch_unit": "table",
+  "table_count": 72,
+  "knowledge_count": 247,
+  "tables_per_batch": 6,
+  "batch_count": 12,
+  "input_context_sha256": "a7786431311a932919bf440a581a27b02dbd382f521ea234d8e21096ed62dbff",
+  "batches": [
+    {
+      "batch_id": "batch-001",
+      "target_table_ids": [
+        "MYSQL:common.administrative_division",
+        "MYSQL:common.vehicle_type_dict",
+        "MYSQL:common.vessel_type_dict",
+        "MYSQL:common.employee_type_dict",
+        "MYSQL:common.license_type_dict",
+        "MYSQL:common.dict_registration_type"
+      ]
+    },
+    {
+      "batch_id": "batch-002",
+      "target_table_ids": [
+        "MYSQL:common.dict_size_category",
+        "MYSQL:common.dict_stock_type",
+        "MYSQL:common.dict_industry",
+        "MYSQL:common.energy_type_dict",
+        "MYSQL:common.voltage_level_dict",
+        "MYSQL:common.energy_position_dict"
+      ]
+    },
+    {
+      "batch_id": "batch-003",
+      "target_table_ids": [
+        "MYSQL:common.station_type_dict",
+        "MYSQL:common.cert_type_dict",
+        "MYSQL:common.product_category",
+        "MYSQL:common.customer_level_dict",
+        "MYSQL:common.customer_status_dict",
+        "MYSQL:common.product_status_dict"
+      ]
+    },
+    {
+      "batch_id": "batch-004",
+      "target_table_ids": [
+        "MYSQL:common.order_status_dict",
+        "MYSQL:common.payment_method_dict",
+        "MYSQL:common.payment_status_dict",
+        "MYSQL:common.refund_reason_dict",
+        "MYSQL:common.order_channel_dict",
+        "MYSQL:common.platform_dict"
+      ]
+    },
+    {
+      "batch_id": "batch-005",
+      "target_table_ids": [
+        "MYSQL:common.dict_gender",
+        "MYSQL:common.dict_academic_level",
+        "MYSQL:common.dict_student_status",
+        "MYSQL:common.dict_course_type",
+        "MYSQL:common.dict_exam_item",
+        "MYSQL:common.dict_take_mode"
+      ]
+    },
+    {
+      "batch_id": "batch-006",
+      "target_table_ids": [
+        "MYSQL:common.dict_semester_type",
+        "MYSQL:common.dict_grade_level",
+        "MYSQL:transportation.vehicle_company",
+        "MYSQL:transportation.driver",
+        "MYSQL:transportation.vehicle",
+        "MYSQL:transportation.shipping_company"
+      ]
+    },
+    {
+      "batch_id": "batch-007",
+      "target_table_ids": [
+        "MYSQL:transportation.employee",
+        "MYSQL:transportation.vessel",
+        "MYSQL:finance_tax.companies",
+        "MYSQL:finance_tax.stocks",
+        "MYSQL:finance_tax.stock_daily_trades",
+        "MYSQL:finance_tax.company_financials"
+      ]
+    },
+    {
+      "batch_id": "batch-008",
+      "target_table_ids": [
+        "MYSQL:finance_tax.corporate_income_tax_returns",
+        "MYSQL:energy.energy_company",
+        "MYSQL:energy.company_certification",
+        "MYSQL:energy.energy_station",
+        "MYSQL:energy.supply_area",
+        "MYSQL:energy.employee"
+      ]
+    },
+    {
+      "batch_id": "batch-009",
+      "target_table_ids": [
+        "MYSQL:education_2024.semester",
+        "MYSQL:education_2024.department",
+        "MYSQL:education_2024.teacher",
+        "MYSQL:education_2024.class",
+        "MYSQL:education_2024.student",
+        "MYSQL:education_2024.course"
+      ]
+    },
+    {
+      "batch_id": "batch-010",
+      "target_table_ids": [
+        "MYSQL:education_2024.enrollment",
+        "MYSQL:education_2024.exam_score",
+        "MYSQL:education_2025.semester",
+        "MYSQL:education_2025.department",
+        "MYSQL:education_2025.teacher",
+        "MYSQL:education_2025.class"
+      ]
+    },
+    {
+      "batch_id": "batch-011",
+      "target_table_ids": [
+        "MYSQL:education_2025.student",
+        "MYSQL:education_2025.course",
+        "MYSQL:education_2025.enrollment",
+        "MYSQL:education_2025.exam_score",
+        "MYSQL:ecommerce.customer",
+        "MYSQL:ecommerce.product"
+      ]
+    },
+    {
+      "batch_id": "batch-012",
+      "target_table_ids": [
+        "MYSQL:ecommerce.inventory",
+        "MYSQL:ecommerce.orders",
+        "MYSQL:ecommerce.order_item",
+        "MYSQL:ecommerce.payment",
+        "POSTGRESQL:public.vessel_ais_data",
+        "Elasticsearch:medical_institutions"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,8 @@
-"""数据划分：与已提交划分的规模、分层一致。"""
+"""从清理后的原始数据重新生成可复现的分层划分。"""
 
 from __future__ import annotations
+
+import pytest
 
 from text2query.config import settings
 from text2query.data.split import build_split, split_samples, stratum_for
@@ -15,10 +17,10 @@ def test_split_sizes_and_strata_match_manifest(tmp_path):
         validation_ratio=0.1,
         seed=42,
     )
-    committed = read_json(settings.path(settings.splits_dir) / "split_manifest.json")
-    assert manifest["total_samples"] == committed["total_samples"] == 5830
-    assert manifest["train_samples"] == committed["train_samples"] == 5247
-    assert manifest["validation_samples"] == committed["validation_samples"] == 583
+    committed = read_json(settings.path(settings.competition_dir) / "dataset_manifest.json")["expected_split"]
+    assert manifest["total_samples"] == committed["total_samples"] == 2839
+    assert manifest["train_samples"] == committed["train_samples"] == 2555
+    assert manifest["validation_samples"] == committed["validation_samples"] == 284
     assert manifest["strata"] == committed["strata"]
 
 
@@ -37,3 +39,20 @@ def test_stratum_uses_ordered_cross_source():
     )
     assert stratum_for(cross) == "MYSQL -> POSTGRESQL"
     assert cross.engines() == ["MYSQL", "POSTGRESQL"]
+
+
+def test_split_is_reproducible_with_same_seed():
+    samples = [Sample.model_validate(row) for row in read_json(settings.qa_train)]
+    first = split_samples(samples, validation_ratio=0.1, seed=42)
+    repeated = split_samples(samples, validation_ratio=0.1, seed=42)
+    assert first == repeated
+
+
+def test_split_refuses_to_overwrite_existing_files(tmp_path):
+    train_path = tmp_path / "train.json"
+    original = b'[{"question_id": 999}]\n'
+    train_path.write_bytes(original)
+    with pytest.raises(FileExistsError, match="overwrite"):
+        build_split(input_path=settings.qa_train, output_dir=tmp_path)
+    assert train_path.read_bytes() == original
+    assert not (tmp_path / "validation.json").exists()

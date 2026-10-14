@@ -19,7 +19,16 @@ models/
 checkpoints/
 runs/
 outputs/
+output/
+result.json
+data/preprocessed/
+data/赛题8/splits/*.json
+docs/results/
+docs/experiments/
 wandb/
+
+# Independent evaluation references are versioned for reproducible comparison.
+!/evaluation/table_knowledge/runs/
 
 # Temporary working files
 tmp/

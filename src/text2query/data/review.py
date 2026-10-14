@@ -109,13 +109,14 @@ def describe_summary(catalog: Catalog, review: dict[str, Any] | None, report: di
 
 def apply_reviews(catalog: Catalog | None = None, *, persist: bool = True) -> Catalog:
     catalog = catalog or Catalog.model_validate(read_json(settings.schema_catalog))
-    review = read_json(settings.manual_review)
+    review = read_json(settings.manual_review) if settings.manual_review.exists() else None
     secondary_path = settings.secondary_review
     report = read_json(secondary_path) if secondary_path.exists() else None
 
     if report is not None:
         restore_secondary(catalog)
-    apply_manual_review(catalog, review)
+    if review is not None:
+        apply_manual_review(catalog, review)
     if report is not None:
         apply_secondary_review(catalog, report)
     catalog.description_summary = describe_summary(catalog, review, report)

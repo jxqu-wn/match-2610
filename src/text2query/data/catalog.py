@@ -488,7 +488,7 @@ def build_catalog(data_dir: Path | None = None, *, persist: bool = False) -> Cat
     competition = data_dir / "赛题8"
     tables: list[Table] = []
     sources: list[dict[str, Any]] = []
-    for filename in ("bird_schemas.txt", "commom_schema.txt", "core_schema.txt"):
+    for filename in settings.schema_sources:
         path = competition / "Schema" / filename
         text, encoding = read_source(path)
         tables.extend(parse_sql(text, filename, encoding))
@@ -517,6 +517,8 @@ def build_catalog(data_dir: Path | None = None, *, persist: bool = False) -> Cat
     if persist:
         output = settings.path(settings.preprocessed_dir)
         write_json(output / "schema_extracted.json", catalog.model_dump(by_alias=True))
+        write_json(output / "schema_catalog.json", catalog.model_dump(by_alias=True))
+        write_documents(catalog, output / "schema_documents.jsonl")
     return catalog
 
 

@@ -1,0 +1,1530 @@
+{
+  "tables": [
+    {
+      "table_id": "MYSQL:common.dict_semester_type",
+      "knowledge": []
+    },
+    {
+      "table_id": "MYSQL:common.dict_grade_level",
+      "knowledge": [
+        {
+          "knowledge_id": 1574,
+          "knowledge_text": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1791,
+          "knowledge_text": "消防公司属于特种运输企业，其经营类型通常为'危化品运输'。在 vehicle_company 表中，消防公司通过 business_type='危化品运输' 进行筛选。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.driver",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1768,
+          "knowledge_text": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+        },
+        {
+          "knowledge_id": 1769,
+          "knowledge_text": "驾驶员状态“正常”表示驾照有效，可驾驶车辆；“暂扣”表示暂时失去驾驶资格；“吊销”表示永久取消资格；“过期”表示未及时换证。"
+        },
+        {
+          "knowledge_id": 1773,
+          "knowledge_text": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+        },
+        {
+          "knowledge_id": 1783,
+          "knowledge_text": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+        },
+        {
+          "knowledge_id": 1787,
+          "knowledge_text": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+        },
+        {
+          "knowledge_id": 1792,
+          "knowledge_text": "驾驶员驾照领证年限分段标准：领证超过10年为长期驾龄，5至10年为中期驾龄，5年以下为新手驾龄。领证年限通过当前日期与issue_date的年份差计算。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1798,
+          "knowledge_text": "低龄驾驶员一般指年龄<25岁的驾驶员。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.vehicle",
+      "knowledge": [
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1762,
+          "knowledge_text": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+        },
+        {
+          "knowledge_id": 1765,
+          "knowledge_text": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+        },
+        {
+          "knowledge_id": 1770,
+          "knowledge_text": "车辆注册年份提取函数：YEAR(register_date)。例如查询2023年注册的车辆：YEAR(register_date)=2023。"
+        },
+        {
+          "knowledge_id": 1772,
+          "knowledge_text": "车辆保险到期日 insurance_expire 若小于当前日期，表示保险已过期。过保车辆不得上路。"
+        },
+        {
+          "knowledge_id": 1775,
+          "knowledge_text": "黄牌车指载重≥4.5吨的货车，蓝牌车为载重＜4.5的货车。"
+        },
+        {
+          "knowledge_id": 1781,
+          "knowledge_text": "新能源车辆指纯电动车、插电式混合动力车、燃料电池车。品牌名称中含有“电动”关键词时为新能源车辆。"
+        },
+        {
+          "knowledge_id": 1782,
+          "knowledge_text": "车辆使用年限超过15年的货车应当强制报废。当前年份减去 manufacture_year > 15。"
+        },
+        {
+          "knowledge_id": 1785,
+          "knowledge_text": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+        },
+        {
+          "knowledge_id": 1788,
+          "knowledge_text": "节假日高速公路免费时段：春节、清明、劳动节、国庆节，共4个法定节假日，免费对象为7座及以下小型客车。"
+        },
+        {
+          "knowledge_id": 1789,
+          "knowledge_text": "“老旧车辆”指注册日期 register_date 超过10年的车辆（以当前日期计算）。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    },
+    {
+      "table_id": "MYSQL:transportation.shipping_company",
+      "knowledge": [
+        {
+          "knowledge_id": 1592,
+          "knowledge_text": "企业注销与场站退役不同：企业 status='注销' 表示企业主体消亡，场站 status='退役' 表示该设施永久关停但所属企业可能仍在运营。"
+        },
+        {
+          "knowledge_id": 1761,
+          "knowledge_text": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+        },
+        {
+          "knowledge_id": 1793,
+          "knowledge_text": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1799,
+          "knowledge_text": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+        },
+        {
+          "knowledge_id": 1800,
+          "knowledge_text": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+        }
+      ]
+    }
+  ],
+  "audit": {
+    "rubric_version": "table-knowledge-reference-v2",
+    "batch_id": "batch-006",
+    "status": "complete",
+    "input_issues": [],
+    "reviewed_knowledge_ids": [
+      1554,
+      1555,
+      1556,
+      1557,
+      1558,
+      1559,
+      1560,
+      1561,
+      1562,
+      1563,
+      1564,
+      1565,
+      1566,
+      1567,
+      1568,
+      1569,
+      1570,
+      1571,
+      1572,
+      1573,
+      1574,
+      1575,
+      1576,
+      1577,
+      1578,
+      1579,
+      1580,
+      1581,
+      1582,
+      1583,
+      1584,
+      1585,
+      1586,
+      1587,
+      1588,
+      1589,
+      1590,
+      1591,
+      1592,
+      1593,
+      1594,
+      1595,
+      1596,
+      1597,
+      1598,
+      1599,
+      1600,
+      1601,
+      1602,
+      1603,
+      1604,
+      1605,
+      1606,
+      1607,
+      1608,
+      1609,
+      1610,
+      1611,
+      1612,
+      1613,
+      1614,
+      1615,
+      1616,
+      1617,
+      1618,
+      1619,
+      1620,
+      1621,
+      1622,
+      1623,
+      1624,
+      1625,
+      1626,
+      1627,
+      1628,
+      1629,
+      1630,
+      1631,
+      1632,
+      1633,
+      1634,
+      1635,
+      1636,
+      1637,
+      1638,
+      1639,
+      1640,
+      1641,
+      1642,
+      1643,
+      1644,
+      1645,
+      1646,
+      1647,
+      1648,
+      1649,
+      1650,
+      1651,
+      1652,
+      1653,
+      1654,
+      1655,
+      1656,
+      1657,
+      1658,
+      1659,
+      1660,
+      1661,
+      1662,
+      1663,
+      1664,
+      1665,
+      1666,
+      1667,
+      1668,
+      1669,
+      1670,
+      1671,
+      1672,
+      1673,
+      1674,
+      1675,
+      1676,
+      1677,
+      1678,
+      1679,
+      1680,
+      1681,
+      1682,
+      1683,
+      1684,
+      1685,
+      1686,
+      1687,
+      1688,
+      1689,
+      1690,
+      1691,
+      1692,
+      1693,
+      1694,
+      1695,
+      1696,
+      1697,
+      1698,
+      1699,
+      1700,
+      1701,
+      1702,
+      1703,
+      1704,
+      1705,
+      1706,
+      1707,
+      1708,
+      1709,
+      1710,
+      1711,
+      1712,
+      1713,
+      1714,
+      1715,
+      1716,
+      1717,
+      1718,
+      1719,
+      1720,
+      1721,
+      1722,
+      1723,
+      1724,
+      1725,
+      1726,
+      1727,
+      1728,
+      1729,
+      1730,
+      1731,
+      1732,
+      1733,
+      1734,
+      1735,
+      1736,
+      1737,
+      1738,
+      1739,
+      1740,
+      1741,
+      1742,
+      1743,
+      1744,
+      1745,
+      1746,
+      1747,
+      1748,
+      1749,
+      1750,
+      1751,
+      1752,
+      1753,
+      1754,
+      1755,
+      1756,
+      1757,
+      1758,
+      1759,
+      1760,
+      1761,
+      1762,
+      1763,
+      1764,
+      1765,
+      1766,
+      1767,
+      1768,
+      1769,
+      1770,
+      1771,
+      1772,
+      1773,
+      1774,
+      1775,
+      1776,
+      1777,
+      1778,
+      1779,
+      1780,
+      1781,
+      1782,
+      1783,
+      1784,
+      1785,
+      1786,
+      1787,
+      1788,
+      1789,
+      1790,
+      1791,
+      1792,
+      1793,
+      1794,
+      1795,
+      1796,
+      1797,
+      1798,
+      1799,
+      1800
+    ],
+    "table_audit": [
+      {
+        "table_id": "MYSQL:common.dict_semester_type",
+        "accepted": [],
+        "candidates": [],
+        "content_issues": [],
+        "needs_human_review": false
+      },
+      {
+        "table_id": "MYSQL:common.dict_grade_level",
+        "accepted": [
+          {
+            "knowledge_id": 1574,
+            "basis": "schema_supported",
+            "fields": [
+              "min_score",
+              "max_score",
+              "grade_point"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1574,
+                "quote": "学分绩（GPA/绩点）示例映射：总评>=90 为绩点 4.0；80-89 为 3.0；70-79 为 2.0；60-69 为 1.0；<60 为 0.0。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE dict_grade_level (\r\n    grade_level CHAR(2) PRIMARY KEY COMMENT '等级(A/B/C/D/F)',\r\n    min_score INT COMMENT '最低分数',\r\n    max_score INT COMMENT '最高分数',\r\n    grade_point DECIMAL(3,2) COMMENT '绩点'\r\n);"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO dict_grade_level (grade_level, min_score, max_score, grade_point) VALUES\r\n('A', 90, 100, 4.0),\r\n('B', 80, 89, 3.0),\r\n('C', 70, 79, 2.0),\r\n('D', 60, 69, 1.0),\r\n('F', 0, 59, 0.0);"
+              }
+            ],
+            "qualifiers": [
+              "示例映射"
+            ],
+            "reason": "本条总评分段与绩点映射对应本表分数上下限和绩点，Schema初始化值提供直接对应。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1573,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1573,
+                "quote": "挂科判定规则（示例）：当总评成绩 < 60.00 视为不合格（挂科）。"
+              }
+            ],
+            "reason": "本表有分数段、等级与绩点，但原始Schema未明示哪个等级代表不合格或挂科，且没有总评字段；仅凭F或低绩点不能确认此挂科规则适用于本表。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:transportation.vehicle_company",
+        "accepted": [
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "企业 status='注销' 表示企业主体消亡"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条对企业status=注销的解释直接对应本表企业经营状态中的注销；关联限于企业状态部分。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1787,
+            "basis": "schema_supported",
+            "fields": [
+              "business_type"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1787,
+                "quote": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确涉及驾驶员所属公司business_type；Schema将驾驶员定义为车辆公司员工，车辆公司经营类型包含客运、货运、危化品运输。"
+          },
+          {
+            "knowledge_id": 1791,
+            "basis": "explicit",
+            "fields": [
+              "business_type"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1791,
+                "quote": "消防公司属于特种运输企业，其经营类型通常为'危化品运输'。在 vehicle_company 表中，消防公司通过 business_type='危化品运输' 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              }
+            ],
+            "qualifiers": [
+              "通常"
+            ],
+            "reason": "本条显式指定唯一的vehicle_company表及其business_type筛选。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:transportation.driver",
+        "accepted": [
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1768,
+            "basis": "schema_supported",
+            "fields": [
+              "license_type"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1768,
+                "quote": "A1驾照准驾大型客车；B2驾照准驾大型货车；A2准驾牵引车；C1驾照准驾小型汽车。货车包含A2和B2"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.license_type_dict (license_code, license_name) VALUES\r\n('A1', '大型客车'),\r\n('A2', '牵引车'),\r\n('A3', '城市公交车'),\r\n('B1', '中型客车'),\r\n('B2', '大型货车'),\r\n('C1', '小型汽车'),\r\n('C2', '小型自动挡汽车'),\r\n('C3', '低速载货汽车'),\r\n('C4', '三轮汽车');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "驾驶员表的驾照类型代码引用驾照字典；本条明确解释该类驾照代码及准驾车型，字典值核对了代码对象。"
+          },
+          {
+            "knowledge_id": 1769,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1769,
+                "quote": "驾驶员状态“正常”表示驾照有效，可驾驶车辆；“暂扣”表示暂时失去驾驶资格；“吊销”表示永久取消资格；“过期”表示未及时换证。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条驾驶员驾照状态的四个取值与Schema驾照状态枚举逐项对应。"
+          },
+          {
+            "knowledge_id": 1773,
+            "basis": "schema_supported",
+            "fields": [
+              "issue_date",
+              "valid_years"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1773,
+                "quote": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条驾驶证有效期规则直接使用发证日期和有效年数，与驾驶员表两字段注释直接对应。"
+          },
+          {
+            "knowledge_id": 1783,
+            "basis": "schema_supported",
+            "fields": [
+              "birth_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1783,
+                "quote": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确按驾驶员年龄分组，Schema在驾驶员对象上提供出生日期，直接支持该年龄条件。"
+          },
+          {
+            "knowledge_id": 1787,
+            "basis": "schema_supported",
+            "fields": [
+              "license_type",
+              "company_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1787,
+                "quote": "驾驶员从业资格类型：普通货运、危险品运输、旅客运输。不同类型对应不同的 license_type 和公司 business_type。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '车辆公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（客运/货运/危化品运输）',\r\n    establish_date DATE COMMENT '成立日期',\r\n    legal_person VARCHAR(50) COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='车辆运输公司信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条描述驾驶员资格类型与license_type及所属公司经营类型的对应；Schema直接记录驾照类型及所属车辆公司。"
+          },
+          {
+            "knowledge_id": 1792,
+            "basis": "schema_supported",
+            "fields": [
+              "issue_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1792,
+                "quote": "驾驶员驾照领证年限分段标准：领证超过10年为长期驾龄，5至10年为中期驾龄，5年以下为新手驾龄。领证年限通过当前日期与issue_date的年份差计算。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确用驾驶员issue_date计算领证年限分段，Schema该字段即发证日期。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1798,
+            "basis": "schema_supported",
+            "fields": [
+              "birth_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1798,
+                "quote": "低龄驾驶员一般指年龄<25岁的驾驶员。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              }
+            ],
+            "qualifiers": [
+              "一般"
+            ],
+            "reason": "本条直接定义低龄驾驶员年龄条件，驾驶员表出生日期提供同一对象的年龄依据。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE driver (\r\n    driver_id VARCHAR(18) PRIMARY KEY COMMENT '身份证号',\r\n    name VARCHAR(50) NOT NULL COMMENT '姓名',\r\n    gender ENUM('男','女') NOT NULL COMMENT '性别',\r\n    birth_date DATE NOT NULL COMMENT '出生日期',\r\n    license_type VARCHAR(5) NOT NULL COMMENT '驾照类型代码',\r\n    issue_date DATE NOT NULL COMMENT '发证日期',\r\n    valid_years TINYINT NOT NULL COMMENT '有效期(年)',\r\n    phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '联系地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('正常','暂扣','吊销','过期') DEFAULT '正常' COMMENT '驾照状态',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_name (name),\r\n    INDEX idx_license (license_type),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (license_type) REFERENCES common.license_type_dict(license_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='驾驶员信息表（车辆公司员工）';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1773,
+            "kind": "incomplete_rule",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1773,
+                "quote": "中国驾照有效期规则：初次领证有效期为6年，第二次换证为10年，第三次为长期。可通过 issue_date 和 valid_years 计算到期日。"
+              }
+            ],
+            "related_knowledge_ids": [],
+            "reason": "本条提到第三次换证为长期，并称可用issue_date和valid_years计算到期日，但没有说明长期有效在valid_years中的表示及其到期处理。"
+          },
+          {
+            "knowledge_id": 1783,
+            "kind": "incomplete_rule",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1783,
+                "quote": "驾驶员年龄分组标准：30岁以下为青年驾驶员，30-45岁为中年驾驶员，45岁以上为老年驾驶员。。"
+              }
+            ],
+            "related_knowledge_ids": [],
+            "reason": "中年写作30-45岁，老年写作45岁以上；45岁处的区间边界未明确是否重叠，不能自行选择比较符。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:transportation.vehicle",
+        "accepted": [
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1762,
+            "basis": "schema_supported",
+            "fields": [
+              "load_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1762,
+                "quote": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条按车辆载重分段；本表载重字段以吨为单位，直接对应分段对象及属性。"
+          },
+          {
+            "knowledge_id": 1765,
+            "basis": "schema_supported",
+            "fields": [
+              "vehicle_type_code",
+              "seat_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1765,
+                "quote": "货车同义词：卡车、载货汽车。危化品车同义词：危险品运输车、罐车（仅当运输危化品时）。客车同义词：巴士、大客车、小客车（座位数≥9）。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+              }
+            ],
+            "qualifiers": [
+              "仅当运输危化品时",
+              "座位数≥9"
+            ],
+            "reason": "本条解释货车、危化品车和客车称呼，并以座位数限制小客车；本表记录车辆类型代码和客车座位数，字典明确这些类型对象。"
+          },
+          {
+            "knowledge_id": 1770,
+            "basis": "schema_supported",
+            "fields": [
+              "register_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1770,
+                "quote": "车辆注册年份提取函数：YEAR(register_date)。例如查询2023年注册的车辆：YEAR(register_date)=2023。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              }
+            ],
+            "qualifiers": [
+              "例如"
+            ],
+            "reason": "本条车辆注册年份表达式直接使用本表注释为注册日期的register_date。"
+          },
+          {
+            "knowledge_id": 1772,
+            "basis": "schema_supported",
+            "fields": [
+              "insurance_expire"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1772,
+                "quote": "车辆保险到期日 insurance_expire 若小于当前日期，表示保险已过期。过保车辆不得上路。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条车辆保险过期条件直接解释本表保险到期日字段及过期后的上路约束。"
+          },
+          {
+            "knowledge_id": 1775,
+            "basis": "schema_supported",
+            "fields": [
+              "vehicle_type_code",
+              "load_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1775,
+                "quote": "黄牌车指载重≥4.5吨的货车，蓝牌车为载重＜4.5的货车。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条以货车和载重阈值定义黄蓝牌车辆；本表记录车辆类型和吨载重，支持该条件。"
+          },
+          {
+            "knowledge_id": 1781,
+            "basis": "schema_supported",
+            "fields": [
+              "brand"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1781,
+                "quote": "新能源车辆指纯电动车、插电式混合动力车、燃料电池车。品牌名称中含有“电动”关键词时为新能源车辆。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接提供车辆品牌含电动关键词的新能源筛选条件；本表brand注释为车辆品牌。"
+          },
+          {
+            "knowledge_id": 1782,
+            "basis": "schema_supported",
+            "fields": [
+              "vehicle_type_code",
+              "manufacture_year"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1782,
+                "quote": "车辆使用年限超过15年的货车应当强制报废。当前年份减去 manufacture_year > 15。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条货车报废条件直接使用生产年份manufacture_year，车辆表具有该属性及车辆类型。"
+          },
+          {
+            "knowledge_id": 1785,
+            "basis": "schema_supported",
+            "fields": [
+              "vehicle_type_code",
+              "load_capacity"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1785,
+                "quote": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+              }
+            ],
+            "qualifiers": [
+              "通常"
+            ],
+            "reason": "本条明确把重型货车条件写为load_capacity阈值；本表该字段为吨载重并有车辆类型。"
+          },
+          {
+            "knowledge_id": 1788,
+            "basis": "schema_supported",
+            "fields": [
+              "vehicle_type_code",
+              "seat_count"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1788,
+                "quote": "免费对象为7座及以下小型客车。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "INSERT INTO common.vehicle_type_dict (type_code, type_name, category) VALUES\r\n('BUS', '客车', '客运'),\r\n('TRUCK', '货车', '货运'),\r\n('HAZMAT', '危化品车', '特种'),\r\n('VAN', '面包车', '货运'),\r\n('MINIBUS', '小型客车', '客运'),\r\n('DUMP', '自卸车', '货运'),\r\n('TANKER', '罐式车', '特种'),\r\n('REFRIGERATED', '冷藏车', '特种');"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条免费对象限定为7座及以下小型客车；车辆表具有类型和客车座位数，关联依据为该适用对象部分。"
+          },
+          {
+            "knowledge_id": 1789,
+            "basis": "schema_supported",
+            "fields": [
+              "register_date"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1789,
+                "quote": "“老旧车辆”指注册日期 register_date 超过10年的车辆（以当前日期计算）。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              }
+            ],
+            "qualifiers": [
+              "以当前日期计算"
+            ],
+            "reason": "本条直接以车辆register_date定义老旧车辆，Schema字段即注册日期。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE vehicle (\r\n    vehicle_id VARCHAR(20) PRIMARY KEY COMMENT '车辆唯一编号',\r\n    plate_number VARCHAR(10) NOT NULL UNIQUE COMMENT '车牌号',\r\n    owner_id VARCHAR(18) NOT NULL COMMENT '车主（驾驶员）身份证号',\r\n    vehicle_type_code VARCHAR(20) NOT NULL COMMENT '车辆类型代码',\r\n    brand VARCHAR(30) NOT NULL COMMENT '品牌',\r\n    model VARCHAR(30) NOT NULL COMMENT '型号',\r\n    manufacture_year YEAR NOT NULL COMMENT '生产年份',\r\n    load_capacity DECIMAL(8,2) COMMENT '载重(吨)',\r\n    seat_count TINYINT UNSIGNED COMMENT '座位数（客车用）',\r\n    color VARCHAR(20) COMMENT '颜色',\r\n    register_date DATE NOT NULL COMMENT '注册日期',\r\n    area_id CHAR(6) NOT NULL COMMENT '注册地区划代码',\r\n    insurance_expire DATE COMMENT '保险到期日',\r\n    company_id VARCHAR(20) NOT NULL COMMENT '所属车辆公司ID',\r\n    INDEX idx_plate (plate_number),\r\n    INDEX idx_owner (owner_id),\r\n    INDEX idx_type (vehicle_type_code),\r\n    FOREIGN KEY (owner_id) REFERENCES driver(driver_id),\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id),\r\n    FOREIGN KEY (vehicle_type_code) REFERENCES common.vehicle_type_dict(type_code),\r\n    FOREIGN KEY (company_id) REFERENCES vehicle_company(company_id)\r\n) ENGINE=InnoDB COMMENT='车辆登记表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          },
+          {
+            "knowledge_id": 1771,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1771,
+                "quote": "危化品车辆必须配备押运员，且押运员需持有道路危险货物运输从业资格证。"
+              }
+            ],
+            "reason": "车辆类型可涉及危化品车，但Schema没有押运员或从业资格证属性，无法核实本条要求的配备和持证约束。"
+          },
+          {
+            "knowledge_id": 1784,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1784,
+                "quote": "危险品运输车辆需每年进行一次罐体检测，检测合格标志存储在备注字段（若有）。"
+              }
+            ],
+            "reason": "本表能表达危险品车辆类型，但无罐体检测、合格标志或备注字段；本条若有的存储说明不能确认对应本表。"
+          }
+        ],
+        "content_issues": [
+          {
+            "knowledge_id": 1785,
+            "kind": "conflicting_content",
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1785,
+                "quote": "“重型货车”通常指总质量≥12吨的货车，对应载重 load_capacity ≥ 12 吨。"
+              },
+              {
+                "knowledge_id": 1762,
+                "quote": "车辆载重分段规则（中国公路运输标准）：轻型车：载重 ≤ 5 吨；中型车：5 吨 < 载重 ≤ 15 吨；重型车：载重 > 15 吨。"
+              }
+            ],
+            "related_knowledge_ids": [
+              1762
+            ],
+            "reason": "知识1762把重型车阈值写为载重>15吨，本条通常把重型货车写为load_capacity≥12吨；货车在12至15吨区间的重型口径不同，需保留两条限定交由人审。"
+          }
+        ],
+        "needs_human_review": true
+      },
+      {
+        "table_id": "MYSQL:transportation.shipping_company",
+        "accepted": [
+          {
+            "knowledge_id": 1592,
+            "basis": "schema_supported",
+            "fields": [
+              "status"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1592,
+                "quote": "企业 status='注销' 表示企业主体消亡"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条对企业status=注销的解释直接对应本表企业经营状态中的注销；关联限于企业状态部分。"
+          },
+          {
+            "knowledge_id": 1761,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1761,
+                "quote": "行政区划代码（area_id）为6位数字编码。前2位代表省级行政区，前4位代表地市级行政区，6位全码代表区县级行政区。统计省份时使用 LEFT(area_id,2) 分组，统计城市时使用 LEFT(area_id,4) 分组，统计区县时使用 area_id 全码分组。省份名称可通过 administrative_division 表中 level=1 的记录获取，城市名称可通过 level=2 的记录获取。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条直接解释行政区划字段area_id的编码和分组；本表area_id注释为区划代码，类型为CHAR(6)且引用统一行政区划表。"
+          },
+          {
+            "knowledge_id": 1793,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1793,
+                "quote": "华南地区包括：广东省、广西壮族自治区、海南省。统计时使用 LEFT(area_id,2) IN ('44','45','46') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1799,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1799,
+                "quote": "中国东部地区包括：上海市、江苏省、浙江省、安徽省、福建省、江西省、山东省。统计时使用 LEFT(area_id,2) IN ('31','32','33','34','35','36','37') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          },
+          {
+            "knowledge_id": 1800,
+            "basis": "schema_supported",
+            "fields": [
+              "area_id"
+            ],
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1800,
+                "quote": "中国西部地区包括：重庆市、四川省、贵州省、云南省、西藏自治区、陕西省、甘肃省、青海省、宁夏回族自治区、新疆维吾尔自治区。统计时使用 LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') 进行筛选。"
+              }
+            ],
+            "schema_evidence": [
+              {
+                "source_file": "data/赛题8/Schema/core_schema.txt",
+                "quote": "CREATE TABLE shipping_company (\r\n    company_id VARCHAR(20) PRIMARY KEY COMMENT '船舶公司编号',\r\n    company_name VARCHAR(100) NOT NULL COMMENT '公司名称',\r\n    business_type VARCHAR(50) NOT NULL COMMENT '经营类型（集装箱/散货/油轮/客运）',\r\n    establish_date DATE NOT NULL COMMENT '成立日期',\r\n    legal_person VARCHAR(50) NOT NULL COMMENT '法人',\r\n    contact_phone VARCHAR(20) COMMENT '联系电话',\r\n    address VARCHAR(200) COMMENT '公司地址',\r\n    area_id CHAR(6) NOT NULL COMMENT '行政区划代码',\r\n    status ENUM('运营','停业','注销') DEFAULT '运营' COMMENT '经营状态',\r\n    FOREIGN KEY (area_id) REFERENCES common.administrative_division(id)\r\n) ENGINE=InnoDB COMMENT='船舶公司信息表';"
+              },
+              {
+                "source_file": "data/赛题8/Schema/commom_schema.txt",
+                "quote": "CREATE TABLE IF NOT EXISTS administrative_division (\r\n    id CHAR(6) PRIMARY KEY COMMENT '行政区划代码',\r\n    name VARCHAR(50) NOT NULL COMMENT '行政区划名称',\r\n    full_name VARCHAR(100) NOT NULL COMMENT '行政区划全称',\r\n    province_name VARCHAR(20) NOT NULL COMMENT '省级名称',\r\n    city_name VARCHAR(20) NOT NULL COMMENT '市级名称',\r\n    county_name VARCHAR(20) NOT NULL COMMENT '县级名称',\r\n    level TINYINT NOT NULL COMMENT '级别(1:省/直辖市,2:市,3:区县)',\r\n    longitude DECIMAL(10, 6) COMMENT '经度',\r\n    latitude DECIMAL(10, 6) COMMENT '纬度'\r\n) ENGINE=InnoDB COMMENT='统一行政区划表';"
+              }
+            ],
+            "qualifiers": [],
+            "reason": "本条明确给出行政区划area_id的省级过滤表达式；本表以area_id记录行政区划并引用统一行政区划表，支持该查询条件。"
+          }
+        ],
+        "candidates": [
+          {
+            "knowledge_id": 1596,
+            "knowledge_evidence": [
+              {
+                "knowledge_id": 1596,
+                "quote": "县级市代码特征：前4位中第3-4位为数字（非00），如义乌市(330782)、昆山市(320583)。地级市代码特征：前4位以00结尾。省直管县包括：仙桃市(429004)、潜江市(429005)。"
+              }
+            ],
+            "reason": "条目描述县级市、地级市及省直管县的代码特征，但未明示使用本表area_id；Schema仅说明区划代码，没有县级市或地级市判别属性，保留代码口径适用范围待核。"
+          }
+        ],
+        "content_issues": [],
+        "needs_human_review": true
+      }
+    ]
+  }
+}
