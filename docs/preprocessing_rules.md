@@ -66,7 +66,7 @@ TF-IDF完全由当前原始语料拟合，没有预训练权重或标签训练�
 
 ## 当前实现和复现
 
-`data/catalog.py` 已调用新纯程序关联器；`retrieval/index.py` 不再独立按字段同名或另一套正则补关联，目录关联是唯一来源，索引版本升至3，旧索引需重建。Schema主外键和字段注释保留原始内容，不用知识推断替换描述。
+`data/catalog.py` 已调用新纯程序关联器；`retrieval/index.py` 不再独立按字段同名或另一套正则补关联，目录关联是唯一来源。当前索引版本为4，问题/文档编码隔离及精排流程见[混合检索方案](hybrid_recall.md)，旧索引需重建。精排只影响查询时的候选排序，不参与纯程序预处理或新增关联。Schema主外键和字段注释保留原始内容，不用知识推断替换描述。
 
 ```bash
 PYTHONPATH=src .venv/bin/python -B -m text2query.cli split-dataset

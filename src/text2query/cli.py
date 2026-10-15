@@ -153,9 +153,9 @@ def route_cross_validate(output: Optional[Path] = typer.Option(None), folds: int
 def _encoder(keyword_only: bool, device: str, dtype: str, batch_size: int, max_length: int):
     if keyword_only:
         return None
-    from .routing.embedding import EmbeddingService
+    from .retrieval.embedding import retrieval_encoder
 
-    return EmbeddingService(
+    return retrieval_encoder(
         instruction=settings.retrieval_instruction,
         device=device,
         dtype=dtype,
@@ -184,6 +184,7 @@ def build_index(
     )
 
 
+@app.command("recall")
 @app.command("retrieve")
 def retrieve(
     question: str = typer.Option(..., "--question"),
@@ -197,7 +198,7 @@ def retrieve(
     dtype: str = typer.Option("auto"),
     max_length: int = typer.Option(512),
 ) -> None:
-    """检索候选表并组装上下文（不调用外部模型）。"""
+    """BM25 + embedding → RRF → 本地重排；与 recall 命令等价。"""
     from .llm.planner import SYSTEM
     from .retrieval.context import ContextBuilder
     from .retrieval.index import RetrievalIndex
@@ -293,7 +294,7 @@ def finetuned_submission(
     output_dir: Optional[Path] = typer.Option(None),
     result_path: Optional[Path] = typer.Option(None),
     prompt_style: str = typer.Option("chat"),
-    recall: str = typer.Option("examples"),
+    recall: str = typer.Option("hybrid", help="召回模式：hybrid、schema 或 examples；均使用统一检索评分"),
     max_tables: int = typer.Option(6),
     example_k: int = typer.Option(3),
     workers: int = typer.Option(8),

@@ -39,6 +39,23 @@ class Settings(BaseSettings):
         "Retrieve database schemas, field definitions and query examples needed to answer the database question."
     )
 
+    # ---- Recall：两路召回 → RRF → 本地重排 ----
+    recall_bm25_top_k: int = Field(default=50, gt=0)
+    recall_embedding_top_k: int = Field(default=50, gt=0)
+    recall_rrf_k: int = Field(default=60, gt=0)
+    recall_rerank_top_k: int = Field(default=50, gt=0)
+    recall_rerank_enabled: bool = True
+    reranker_model: Path = Path("models/Qwen3-Reranker-0.6B")
+    reranker_device: str = "cpu"
+    reranker_dtype: str = "auto"
+    reranker_batch_size: int = Field(default=8, gt=0)
+    reranker_max_length: int = Field(default=2048, gt=0)
+    reranker_instruction: str = (
+        "Given a database question, judge whether the document provides evidence needed to answer it. "
+        "Consider the business domain, requested entities, attributes, filters, grouping and aggregation. "
+        "Shared identifiers alone do not establish relevance."
+    )
+
     # ---- LLM（DeepSeek 兼容 OpenAI 协议）----
     # 密钥只从环境变量读取，不参与 T2Q_ 前缀。
     api_key: str | None = Field(default=None, validation_alias="DEEPSEEK_API_KEY")

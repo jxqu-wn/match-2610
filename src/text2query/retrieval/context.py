@@ -271,9 +271,14 @@ class ContextBuilder:
             if hit["source_id"] not in old_evidence
         }
         support_hits = sorted(support.values(), key=lambda hit: (hit["knowledge_rank"], hit["source_id"]))
-        found_knowledge = round_robin([support_hits, found_knowledge], self.budget.knowledge)
+        # 合并表召回携带的知识与直接召回结果后再精排，避免轮取覆盖相关性顺序。
+        found_knowledge = self.index.rank_hits(query, support_hits + found_knowledge, self.budget.knowledge)
         knowledge = previous.get("knowledge", []) + [
-            {"source_id": hit["source_id"], **self.index.by_id[hit["source_id"]]["data"]}
+            {
+                "source_id": hit["source_id"],
+                **self.index.by_id[hit["source_id"]]["data"],
+                "retrieval_evidence": hit,
+            }
             for hit in found_knowledge
         ]
 
@@ -296,13 +301,18 @@ class ContextBuilder:
                 for engine in selected
             ]
         examples = previous.get("examples", []) + [
-            {"source_id": hit["source_id"], **self.index.by_id[hit["source_id"]]["data"]}
+            {
+                "source_id": hit["source_id"],
+                **self.index.by_id[hit["source_id"]]["data"],
+                "retrieval_evidence": hit,
+            }
             for hit in round_robin(groups, self.budget.examples)
         ]
         knowledge = (knowledge[-self.budget.knowledge :] if requests else knowledge[: self.budget.knowledge])
         examples = (examples[-self.budget.examples :] if requests else examples[: self.budget.examples])
 
-        if examples and not requests:
+        # 已启用精排时不再用首个案例强行替换精排选出的表。
+        if examples and not requests and not self.index.recall_metadata["rerank_enabled"]:
             preferred_keys = [
                 key
                 for step in examples[0]["steps"]

@@ -3,6 +3,7 @@
 - 关键词：``rank_bm25``（中文按 1~3 字 n-gram，英文按下划线标识符切分）；
 - 语义：``faiss`` 内积索引（不可用时退回 numpy 精确计算）；
 - 融合：倒数排名融合（RRF）。
+- 精排：本地 CrossEncoder，对 RRF 候选联合编码问题与文档。
 
 索引版本与来源文件 SHA256、编码器签名绑定；资料变化必须重建，避免旧向量
 搭配新结构。
@@ -24,12 +25,12 @@ from ..config import settings
 from ..data.association import ASSOCIATION_VERSION, literal_references
 from ..io import file_sha256, get_logger, read_json, write_json, write_jsonl
 from ..models import Catalog, Sample, Table
+from .ranking import RecallConfig, RerankerService
 from .sql_parser import SourceResolver, engine_set
 
 logger = get_logger(__name__)
 
-INDEX_VERSION = 3
-_RRF_K = 60
+INDEX_VERSION = 4
 
 
 # --------------------------------------------------------------------------- #
@@ -149,7 +150,15 @@ def build_documents(
 
 
 class RetrievalIndex:
-    def __init__(self, documents: list[dict[str, Any]], encoder: Any = None, vectors: np.ndarray | None = None) -> None:
+    def __init__(
+        self,
+        documents: list[dict[str, Any]],
+        encoder: Any = None,
+        vectors: np.ndarray | None = None,
+        *,
+        recall_config: RecallConfig | None = None,
+        reranker: Any = None,
+    ) -> None:
         self.documents = documents
         self.by_id = {d["source_id"]: d for d in documents}
         self.tables: dict[str, Table] = {
@@ -157,8 +166,17 @@ class RetrievalIndex:
         }
         self.encoder = encoder
         self.vectors = vectors
+        if encoder is not None and vectors is None:
+            raise ValueError("混合检索缺少文档向量，请先用 embedding 模型构建索引")
+        self.recall_config = recall_config or RecallConfig.from_settings()
+        self.reranker = reranker
+        if self.reranker is None and encoder is not None and self.recall_config.rerank_enabled:
+            self.reranker = RerankerService()
         self.positions = {d["source_id"]: i for i, d in enumerate(documents)}
-        self.stats = {"semantic_queries": 0, "embedding_cache_hits": 0, "lexical_searches": 0}
+        self.stats = {
+            "semantic_queries": 0, "embedding_cache_hits": 0, "lexical_searches": 0,
+            "rerank_calls": 0, "reranked_documents": 0,
+        }
         tokenized = [tokenize(d["text"]) for d in documents]
         self._tokenized = tokenized
         self._bm25 = BM25Okapi(tokenized) if any(tokenized) else None
@@ -180,6 +198,15 @@ class RetrievalIndex:
             }
             for d in documents
             if d["kind"] == "knowledge"
+        }
+
+    @property
+    def recall_metadata(self) -> dict[str, Any]:
+        return {
+            "strategy": "bm25_embedding_rrf" if self.encoder is not None else "bm25",
+            **self.recall_config.as_dict(),
+            "rerank_enabled": self.reranker is not None and self.recall_config.rerank_enabled,
+            "reranker": self.reranker.signature if self.reranker is not None else None,
         }
 
     # -- FAISS ------------------------------------------------------------ #
@@ -233,6 +260,8 @@ class RetrievalIndex:
         catalog: Catalog | None = None,
         knowledge: list[dict[str, Any]] | None = None,
         train_rows: list[dict[str, Any]] | None = None,
+        recall_config: RecallConfig | None = None,
+        reranker: Any = None,
     ) -> RetrievalIndex:
         from ..data.catalog import load_catalog
 
@@ -245,7 +274,8 @@ class RetrievalIndex:
 
         path.mkdir(parents=True, exist_ok=True)
         write_jsonl(path / "documents.jsonl", documents)
-        vectors = encoder.encode([d["text"] for d in documents]) if encoder else None
+        vectors = encoder.encode_documents([d["text"] for d in documents]) if encoder else None
+        built = cls(documents, encoder, vectors, recall_config=recall_config, reranker=reranker)
         artifacts = ["documents.jsonl"]
         if vectors is not None:
             np.savez_compressed(
@@ -265,12 +295,13 @@ class RetrievalIndex:
                 "version": INDEX_VERSION,
                 "sources": cls._fingerprints(training_source),
                 "encoder": encoder.signature if encoder else None,
+                "recall_defaults": built.recall_metadata,
                 "documents": len(documents),
                 "audit": audit["document_counts"],
                 "artifacts": {name: file_sha256(path / name) for name in artifacts},
             },
         )
-        return cls(documents, encoder, vectors)
+        return built
 
     @classmethod
     def load(
@@ -279,6 +310,8 @@ class RetrievalIndex:
         encoder: Any = None,
         *,
         training_source: Path | None = None,
+        recall_config: RecallConfig | None = None,
+        reranker: Any = None,
     ) -> RetrievalIndex:
         path = path or settings.path("outputs/information_retrieval/index")
         training_source = training_source or settings.train_split
@@ -303,7 +336,7 @@ class RetrievalIndex:
                 if stored["source_ids"].tolist() != [d["source_id"] for d in documents]:
                     raise ValueError("向量与来源未对齐")
                 vectors = stored["vectors"]
-        return cls(documents, encoder, vectors)
+        return cls(documents, encoder, vectors, recall_config=recall_config, reranker=reranker)
 
     # -- 检索 ------------------------------------------------------------- #
     def search(
@@ -319,12 +352,17 @@ class RetrievalIndex:
         scope_table_ids: Iterable[str] | None = None,
         explicit_only: bool = False,
         associated_only: bool = False,
+        source_ids: Iterable[str] | None = None,
+        rerank: bool = True,
     ) -> list[dict[str, Any]]:
+        if limit <= 0:
+            return []
         self.stats["lexical_searches"] += 1
         selected = set(engines)
         scope = set(scope_table_ids) if scope_table_ids is not None else None
         excluded = set(exclude)
         table_filter = set(table_ids) if table_ids is not None else None
+        source_filter = set(source_ids) if source_ids is not None else None
 
         def associated(document: dict[str, Any]) -> list[str]:
             if associated_only:
@@ -345,6 +383,7 @@ class RetrievalIndex:
             and (doc_engines(document) == selected if exact_engines else doc_engines(document) <= selected)
             and bool(doc_engines(document))
             and document["source_id"] not in excluded
+            and (source_filter is None or document["source_id"] in source_filter)
             and (table_filter is None or bool(set(associated(document)) & table_filter))
             and (scope is None or (bool(associated(document)) and set(associated(document)) <= scope))
         ]
@@ -355,7 +394,7 @@ class RetrievalIndex:
         lexical_order = sorted(
             (i for i in candidates if lexical.get(i, 0) > 0),
             key=lambda i: (-lexical[i], self.documents[i]["source_id"]),
-        )
+        )[: self.recall_config.bm25_top_k]
         keyword_rank = {index: rank + 1 for rank, index in enumerate(lexical_order)}
 
         semantic: dict[int, float] = {}
@@ -368,30 +407,79 @@ class RetrievalIndex:
             semantic_rank = {
                 index: rank + 1
                 for rank, index in enumerate(
-                    sorted(candidates, key=lambda i: (-semantic.get(i, 0.0), self.documents[i]["source_id"]))
+                    sorted(candidates, key=lambda i: (-semantic.get(i, 0.0), self.documents[i]["source_id"]))[
+                        : self.recall_config.embedding_top_k
+                    ]
                 )
             }
 
         fused = {
-            i: sum(1 / (_RRF_K + ranks[i]) for ranks in (keyword_rank, semantic_rank) if i in ranks) for i in candidates
+            i: sum(1 / (self.recall_config.rrf_k + ranks[i]) for ranks in (keyword_rank, semantic_rank) if i in ranks)
+            for i in keyword_rank.keys() | semantic_rank.keys()
         }
         ordered = sorted(
-            (i for i in candidates if fused[i] > 0), key=lambda i: (-fused[i], self.documents[i]["source_id"])
-        )[:limit]
+            fused, key=lambda i: (-fused[i], self.documents[i]["source_id"])
+        )
         query_terms = set(terms(query))
-        return [
+        hits = [
             {
                 "source_id": self.documents[i]["source_id"],
                 "table_ids": self.documents[i]["table_ids"],
                 "score": fused[i],
+                "rrf_score": fused[i],
+                "rrf_rank": rank,
+                "candidate_score": fused[i],
+                "rerank_score": None,
+                "ranking_method": "rrf" if self.encoder is not None else "bm25",
                 "semantic_rank": semantic_rank.get(i),
                 "semantic_similarity": semantic.get(i),
                 "keyword_rank": keyword_rank.get(i),
                 "keyword_score": lexical.get(i, 0.0),
                 "keyword_hits": sorted(query_terms & set(self._tokenized[i]), key=lambda t: (-len(t), t))[:12],
             }
-            for i in ordered
+            for rank, i in enumerate(ordered, 1)
         ]
+        return self.rank_hits(query, hits, limit) if rerank else hits[:limit]
+
+    def rank_hits(self, query: str, hits: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+        """合并候选后统一精排；原始检索分数独立保存，不与模型 logits 相加。"""
+        if limit <= 0:
+            return []
+        unique: dict[str, dict[str, Any]] = {}
+        for hit in hits:
+            source_id = hit["source_id"]
+            if source_id not in self.by_id:
+                raise ValueError("精排候选不在当前索引中：" + source_id)
+            previous = unique.get(source_id)
+            if previous is None or hit.get("candidate_score", hit.get("score", 0)) > previous.get(
+                "candidate_score", previous.get("score", 0)
+            ):
+                unique[source_id] = dict(hit)
+        ordered = sorted(
+            unique.values(),
+            key=lambda hit: (-hit.get("candidate_score", hit.get("score", 0)), hit["source_id"]),
+        )
+        if self.reranker is None or not self.recall_config.rerank_enabled:
+            return ordered[:limit]
+        pool = ordered[: max(limit, self.recall_config.rerank_top_k)]
+        if not pool:
+            return []
+        scores = self.reranker.score(query, [self.by_id[hit["source_id"]]["text"] for hit in pool])
+        if len(scores) != len(pool) or not np.isfinite(scores).all():
+            raise ValueError("重排模型分数数量或数值非法")
+        self.stats["rerank_calls"] += 1
+        self.stats["reranked_documents"] += len(pool)
+        for candidate_rank, (hit, score) in enumerate(zip(pool, scores, strict=True), 1):
+            hit.update(
+                candidate_rank=candidate_rank,
+                rerank_score=float(score),
+                score=float(score),
+                ranking_method="rrf_cross_encoder",
+            )
+        pool.sort(key=lambda hit: (-hit["rerank_score"], -hit.get("candidate_score", 0), hit["source_id"]))
+        for rank, hit in enumerate(pool, 1):
+            hit["rerank_rank"] = rank
+        return pool[:limit]
 
     def _lexical_scores(self, query: str, candidates: list[int]) -> dict[int, float]:
         if self._bm25 is None:
@@ -409,7 +497,10 @@ class RetrievalIndex:
         knowledge_limit: int = 12,
     ) -> list[dict[str, Any]]:
         engines = list(engines)
-        base = self.search(query, "schema", engines, len(self.tables), exclude=exclude)
+        if limit <= 0:
+            return []
+        pool_size = max(limit, self.recall_config.rerank_top_k)
+        base = self.search(query, "schema", engines, pool_size, exclude=exclude, rerank=False)
 
         # 使用目录已确定的关联；不在检索阶段重建或补齐关联。
         explicit_docs = [
@@ -419,11 +510,10 @@ class RetrievalIndex:
         counts = Counter(t for d in explicit_docs for t in set(terms(d["text"])))
         anchors = {t for t in query_terms if counts[t] <= max(1, len(explicit_docs) / 10)}
         eligible = {d["source_id"]: sorted(anchors & set(terms(d["text"]))) for d in explicit_docs}
-        knowledge = [
-            hit
-            for hit in self.search(query, "knowledge", engines, len(explicit_docs), associated_only=True)
-            if eligible[hit["source_id"]]
-        ][:knowledge_limit]
+        knowledge = self.search(
+            query, "knowledge", engines, knowledge_limit, associated_only=True,
+            source_ids=[source_id for source_id, matched in eligible.items() if matched],
+        )
 
         supported: dict[str, list[dict[str, Any]]] = {}
         for rank, hit in enumerate(knowledge, 1):
@@ -432,6 +522,7 @@ class RetrievalIndex:
                     continue
                 supported.setdefault(key, []).append(
                     {
+                        **hit,
                         "source_id": hit["source_id"],
                         "knowledge_rank": rank,
                         "knowledge_score": hit["score"],
@@ -439,7 +530,7 @@ class RetrievalIndex:
                         "association_links": links,
                     }
                 )
-        order = sorted(supported, key=lambda key: (-max(h["knowledge_score"] for h in supported[key]), key))
+        order = sorted(supported, key=lambda key: (min(h["knowledge_rank"] for h in supported[key]), key))
         ranks = {key: rank for rank, key in enumerate(order, 1)}
         existing = {hit["table_ids"][0] for hit in base}
         for key in supported:
@@ -449,6 +540,8 @@ class RetrievalIndex:
                         "source_id": "schema:" + key,
                         "table_ids": [key],
                         "score": 0.0,
+                        "rrf_score": 0.0,
+                        "candidate_score": 0.0,
                         "semantic_rank": None,
                         "semantic_similarity": None,
                         "keyword_rank": None,
@@ -460,13 +553,17 @@ class RetrievalIndex:
         for hit in base:
             key = hit["table_ids"][0]
             rank = ranks.get(key)
+            support_score = 0.25 / (self.recall_config.rrf_k + rank) if rank else 0.0
+            candidate_score = hit["rrf_score"] + support_score
             results.append(
                 {
                     **hit,
                     "schema_score": hit["score"],
                     "knowledge_table_rank": rank,
-                    "score": hit["score"] + (0.25 / (_RRF_K + rank) if rank else 0),
+                    "score": candidate_score,
+                    "candidate_score": candidate_score,
+                    "knowledge_support_score": support_score,
                     "knowledge_support": supported.get(key, [])[:2],
                 }
             )
-        return sorted(results, key=lambda h: (-h["score"], h["source_id"]))[:limit]
+        return self.rank_hits(query, results, limit)

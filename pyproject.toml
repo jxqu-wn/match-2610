@@ -12,7 +12,7 @@ license = { text = "MIT" }
 
 # 只使用社区成熟框架，不重复造轮子：
 #   scikit-learn      数据划分与分类器
-#   sentence-transformers  语义向量（Qwen3-Embedding）
+#   sentence-transformers  语义向量及交叉编码器重排（Qwen3）
 #   faiss-cpu         向量检索
 #   rank-bm25         关键词检索
 #   sqlglot           SQL / DDL 解析与校验
@@ -26,7 +26,8 @@ dependencies = [
     "rich>=13.7",
     "numpy>=1.26",
     "scikit-learn>=1.4",
-    "sentence-transformers>=3.0",
+    "sentence-transformers>=5.4.0,<6.0",
+    "transformers>=4.51.0,<6.0",
     "faiss-cpu>=1.8",
     "rank-bm25>=0.2.2",
     "sqlglot>=25.0",

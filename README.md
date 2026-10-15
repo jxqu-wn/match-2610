@@ -10,7 +10,7 @@ V5 基于 `rewrite/framework-based`，当前工作分支为 `rewrite/v5`。
 ## 赛题要点
 
 - **输入**：用户自然语言问题，不指定数据源或数据库。
-- **当前数据范围**：MySQL、PostgreSQL、Elasticsearch；已移除 SQLite 样本、Schema 和相关知识。
+- **当前数据范围**：训练/测试样本与 Schema 覆盖 MySQL、PostgreSQL、Elasticsearch；新版 knowledge.json 同时包含当前 Schema 范围外的知识，检索仍遵守目录关联和数据源过滤。
 - **输出**：MySQL 的 SQL、PostgreSQL 的时空查询、Elasticsearch 的查询 DSL，
   以及跨数据源联邦查询计划（第二步以 `result` 代替第一步结果）。
 - **评测**：查询语句加权执行准确率；ES 查询按 `0.5 × id_match + 0.5 × order_match` 计分。
@@ -37,6 +37,8 @@ src/text2query/
   retrieval/
     sql_parser.py      SQL / DSL 解析（sqlglot）
     index.py           BM25 + FAISS + RRF 混合召回
+    ranking.py         本地 CrossEncoder 精排及 Recall 参数
+    embedding.py       检索问题/文档的编码配置
     context.py         配额、一跳外键扩展、预算裁剪
     evaluate.py        表级召回评估
   llm/
@@ -58,7 +60,10 @@ uv venv .venv --python 3.14
 uv pip install -e '.[dev]'
 ```
 
-语义向量依赖本地 Qwen3-Embedding-0.6B（默认 `models/Qwen3-Embedding-0.6B`）。
+语义向量预留本地路径 `models/Qwen3-Embedding-0.6B`，重排模型预留
+`models/Qwen3-Reranker-0.6B`；通过 `.env.example` 中的路径配置提供完整权重。
+Recall 默认采用 BM25 + embedding → RRF → CrossEncoder 精排，具体流程、参数和
+各入口的行为见[混合检索方案](docs/hybrid_recall.md)。本次未提供权重，未运行测试或模型推理。
 LLM 通过环境变量 `DEEPSEEK_API_KEY` 提供，密钥不写入代码或产物。
 
 ## 框架选型
@@ -70,6 +75,7 @@ LLM 通过环境变量 `DEEPSEEK_API_KEY` 提供，密钥不写入代码或产�
 | 语义向量 | sentence-transformers | 手写 transformers 池化与缓存 |
 | 向量检索 | faiss `IndexFlatIP` | numpy 全量点积 |
 | 关键词检索 | rank-bm25 `BM25Okapi` | 手写 BM25 |
+| 精排 | sentence-transformers `CrossEncoder` | 项目只负责候选编排，不手写模型评分 |
 | 分类器 | scikit-learn KNN / LogisticRegression | 手写感知机与 NB |
 | 模型持久化 | joblib | 手写 `npz` 系数 |
 | 数据模型 | pydantic v2 | 裸 dict 校验 |
@@ -95,16 +101,20 @@ text2query route-predict --question '统计船舶总数' --device cuda
 
 # 3) 库表召回（关键词模式无需模型）
 text2query build-index --device cuda --dtype float16
-text2query retrieve --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
+text2query recall --device cuda --dtype float16 --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
 text2query evaluate-retrieval --device cuda
 
 # 4) 有界规划
-text2query plan --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
+text2query plan --device cuda --dtype float16 --engines MYSQL --question '统计各公司驾驶员中女性驾驶员的比例'
 
 # 5) 生成提交
 text2query generate-submission --workers 8
 text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/completions
 ```
+
+`recall` 与 `retrieve` 等价。默认重排需要本地权重；显式使用 `--keyword-only`
+时仅执行 BM25。索引版本已升至 4，旧索引需在权重就绪后重建。
+微调入口默认 `--recall hybrid`，原 `--recall examples` 也已接入混合检索和重排。
 
 未安装包时可用 `PYTHONPATH=src python -m text2query.cli <command>`。
 
@@ -114,11 +124,12 @@ text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/complet
 | --- | ---: | ---: |
 | `data/赛题8/QA_train.json` | 2,839 | 2,991 条 SQLite 样本 |
 | `data/赛题8/QA_test.json` | 200 | 200 条 SQLite 问题 |
-| `data/赛题8/knowledge.json` | 247 | 1,553 条引用 BIRD 数据库的知识 |
+| `data/赛题8/knowledge.json` | 1,833 | 已替换新版，包含此前移除的 1,553 条其他库知识 |
 | 原始 Schema | 72 张表/索引 | 23 个 BIRD 数据库的 193 张表 |
 
 保留记录的 ID、顺序、问题、查询及其余字段不变。清理依据、删除 ID 和文件 SHA-256
 记录在 [`dataset_manifest.json`](data/赛题8/dataset_manifest.json)。
+该清单记录历史数据清理；当前新版 knowledge.json 的规模与哈希以实际文件为准，不能沿用旧知识指纹。
 测试集本身无数据源标签：按原始编号区间 3040–6230 识别 SQLite 题，并与已有 SQLite 子集交叉核对。
 该规则仅用于本次固定数据清理，不作为模型推理或未来数据分类规则。
 

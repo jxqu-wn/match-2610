@@ -22,6 +22,7 @@ from ..config import settings
 from ..io import file_sha256, get_logger, read_json, sha256_text, write_json
 from ..models import Catalog
 from ..retrieval.context import ContextBuilder
+from ..retrieval.embedding import retrieval_encoder
 from ..retrieval.index import RetrievalIndex, tokenize
 from ..routing.classifier import label
 from ..routing.embedding import EmbeddingService
@@ -134,13 +135,13 @@ def prepare(
     test_vectors = embedder.encode([row["question"] for row in rows])
     labels = classifier.predict(test_vectors)
 
-    retrieval_encoder = EmbeddingService(instruction=settings.retrieval_instruction, **embedding_kwargs)
+    encoder = retrieval_encoder(instruction=settings.retrieval_instruction, **embedding_kwargs)
     if (index_path / "manifest.json").exists():
-        index = RetrievalIndex.load(index_path, retrieval_encoder, training_source=settings.qa_train)
+        index = RetrievalIndex.load(index_path, encoder, training_source=settings.qa_train)
     else:
         index = RetrievalIndex.build(
             index_path,
-            retrieval_encoder,
+            encoder,
             training_source=settings.qa_train,
             catalog=catalog,
             knowledge=read_json(settings.knowledge),

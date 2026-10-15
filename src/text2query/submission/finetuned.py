@@ -15,7 +15,8 @@ from typing import Any
 from ..config import settings
 from ..io import get_logger, read_json, write_json
 from ..models import Catalog, Table
-from ..retrieval.context import ContextBuilder, Budget
+from ..retrieval.context import Budget, ContextBuilder
+from ..retrieval.embedding import retrieval_encoder
 from ..retrieval.index import RetrievalIndex
 from ..routing.embedding import EmbeddingService
 
@@ -140,7 +141,7 @@ class FinetunedPipeline:
         model: str = "finetuned-model",
         api_key: str = "not-needed",
         prompt_style: str = "chat",
-        recall: str = "examples",
+        recall: str = "hybrid",
         max_tables: int = 6,
         example_k: int = 3,
         routing_dir: Path | None = None,
@@ -150,6 +151,10 @@ class FinetunedPipeline:
 
         self.model = model
         self.prompt_style = prompt_style
+        if recall not in ("hybrid", "schema", "examples"):
+            raise ValueError("recall 必须为 hybrid、schema 或 examples")
+        if max_tables < 1 or example_k < 1:
+            raise ValueError("max_tables 和 example_k 必须大于 0")
         self.recall = recall
         self.max_tables = max_tables
         self.example_k = example_k
@@ -159,7 +164,7 @@ class FinetunedPipeline:
         self.tables = self.catalog.by_id()
         self.index = RetrievalIndex.load(
             settings.path("outputs/information_retrieval/index_full_train"),
-            EmbeddingService(instruction=settings.retrieval_instruction, **embedding_kwargs),
+            retrieval_encoder(instruction=settings.retrieval_instruction, **embedding_kwargs),
             training_source=settings.qa_train,
         )
         self.router = self._load_router(routing_dir, **embedding_kwargs)
@@ -178,26 +183,19 @@ class FinetunedPipeline:
 
     def _recall_tables(self, question: str, row: dict[str, Any]) -> tuple[list[str], list[str]]:
         engines = self.router([question])[0].split("|")
-        if self.recall == "schema":
-            builder = ContextBuilder(self.index, Budget(initial_tables=self.max_tables))
+        if self.recall in ("hybrid", "schema"):
+            builder = ContextBuilder(
+                self.index,
+                Budget(initial_tables=self.max_tables, total_tables=max(12, self.max_tables)),
+            )
             context = builder.assemble(question, engines, row.get("question_id"))
             return engines, [t["table_id"] for t in context["candidate_tables"]]
 
-        import numpy as np
-
-        positions = [
-            self.index.positions[document["source_id"]]
-            for document in self.index.documents
-            if document["kind"] == "example" and set(document["engines"]) == set(engines)
-        ]
-        if not positions:
-            return engines, []
-        query = self.index.encoder.encode([question])[0]
-        similarities = np.asarray(self.index.vectors)[positions] @ query
-        order = np.argsort(-similarities)[: self.example_k]
+        # 案例模式也走 BM25 + embedding + RRF + 精排，不再绕过混合检索。
+        hits = self.index.search(question, "example", engines, self.example_k, exact_engines=True)
         keys: list[str] = []
-        for index in order:
-            keys.extend(self.index.documents[positions[int(index)]]["table_ids"])
+        for hit in hits:
+            keys.extend(hit["table_ids"])
         return engines, list(dict.fromkeys(keys))[: self.max_tables]
 
     def _messages(self, question: str, instruction: str) -> list[dict[str, str]]:
@@ -208,10 +206,16 @@ class FinetunedPipeline:
 
     def generate(self, row: dict[str, Any], *, prepare_only: bool = False) -> dict[str, Any]:
         engines, keys = self._recall_tables(row["question"], row)
+        if not any(key in self.tables and key not in EXCLUDED_TABLE_IDS for key in keys):
+            raise ValueError(f"问题 {row['question_id']} 在 {engines} 范围内没有可用的召回表")
         instruction = build_instruction(keys, self.tables)
         messages = self._messages(row["question"], instruction)
         if prepare_only:
-            return {"question_id": row["question_id"], "engines": engines, "table_ids": keys, "messages": messages}
+            return {
+                "question_id": row["question_id"], "engines": engines,
+                "table_ids": keys, "messages": messages,
+                "recall": self.index.recall_metadata,
+            }
         response = self.client.chat.completions.create(
             model=self.model, messages=messages, temperature=0, max_tokens=2048
         )

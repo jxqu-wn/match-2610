@@ -7,6 +7,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from threading import RLock
 from typing import Any
 
 import numpy as np
@@ -29,9 +30,14 @@ def resolve_device(device: str) -> str:
 
 
 def _model_fingerprint(path: Path) -> dict[str, list[int]]:
-    names = ("model.safetensors", "tokenizer.json", "config.json", "modules.json")
+    names = {
+        "tokenizer.json", "tokenizer_config.json", "config.json", "modules.json",
+        "config_sentence_transformers.json", "sentence_bert_config.json",
+        "model.safetensors.index.json", "pytorch_model.bin.index.json",
+    }
+    names.update(p.name for pattern in ("*.safetensors", "pytorch_model*.bin") for p in path.glob(pattern))
     fingerprint: dict[str, list[int]] = {}
-    for name in names:
+    for name in sorted(names):
         target = path / name
         if target.exists():
             stat = target.stat()
@@ -52,13 +58,20 @@ class EmbeddingService:
         batch_size: int = 8,
         max_length: int = 256,
         cache_dir: Path | str | None = None,
+        document_prompt: str | None = None,
     ) -> None:
-        self.model_path = Path(model_path or settings.embedding_model).resolve()
+        self.model_path = settings.path(model_path or settings.embedding_model).resolve()
         self.instruction = instruction or settings.retrieval_instruction
         self.device = resolve_device(device)
         self.dtype = ("float32" if self.device == "cpu" else "float16") if dtype == "auto" else dtype
+        if self.dtype not in ("float32", "float16", "bfloat16"):
+            raise ValueError("embedding dtype 必须为 auto、float32、float16 或 bfloat16")
+        if batch_size < 1 or max_length < 1:
+            raise ValueError("embedding batch_size 和 max_length 必须大于 0")
         self.batch_size = batch_size
         self.max_length = max_length
+        self.document_prompt = document_prompt
+        self._lock = RLock()
         cache_dir = Path(cache_dir or settings.path("outputs/inference/embedding_cache"))
         cache_dir.mkdir(parents=True, exist_ok=True)
         self.signature: dict[str, Any] = {
@@ -70,6 +83,9 @@ class EmbeddingService:
             "normalize": True,
             "files": _model_fingerprint(self.model_path),
         }
+        if document_prompt is not None:
+            self.signature["document_prompt"] = document_prompt
+            self.signature["encoding_protocol"] = "query_document_v1"
         digest = sha256_text(str(sorted(self.signature.items(), key=lambda kv: kv[0])))[:16]
         self.cache_path = cache_dir / f"embeddings_{digest}.npz"
         self._cache: dict[str, np.ndarray] = {}
@@ -80,12 +96,15 @@ class EmbeddingService:
 
     # -- 模型加载 --------------------------------------------------------- #
     def _load(self) -> Any:
+        if not self.model_path.is_dir():
+            raise FileNotFoundError(
+                f"Embedding 模型权重目录不存在：{self.model_path}。"
+                "请提供本地权重并设置 T2Q_EMBEDDING_MODEL；不会自动下载。"
+            )
         from sentence_transformers import SentenceTransformer
 
-        kwargs: dict[str, Any] = {"device": self.device}
-        if self.dtype == "float16":
-            kwargs["model_kwargs"] = {"torch_dtype": "float16"}
-        model = SentenceTransformer(str(self.model_path), **kwargs)
+        kwargs: dict[str, Any] = {"device": self.device, "model_kwargs": {"torch_dtype": self.dtype}}
+        model = SentenceTransformer(str(self.model_path), local_files_only=True, **kwargs)
         model.max_seq_length = self.max_length
         return model
 
@@ -106,19 +125,31 @@ class EmbeddingService:
         temporary.replace(self.cache_path)
 
     def encode(self, texts: list[str]) -> np.ndarray:
-        missing = list(dict.fromkeys(text for text in texts if text not in self._cache))
+        """编码查询；兼容路由训练与现有问题缓存。"""
+        with self._lock:
+            return self._encode(texts, prompt=f"Instruct: {self.instruction}\nQuery: ")
+
+    def encode_documents(self, texts: list[str]) -> np.ndarray:
+        """检索文档与问题分别缓存，避免同文本复用不同 prompt 的向量。"""
+        if self.document_prompt is None:
+            return self.encode(texts)
+        with self._lock:
+            return self._encode(texts, prompt=self.document_prompt, prefix="\0document:")
+
+    def _encode(self, texts: list[str], *, prompt: str, prefix: str = "") -> np.ndarray:
+        missing = list(dict.fromkeys(text for text in texts if prefix + text not in self._cache))
         if missing:
             vectors = self.model.encode(
                 missing,
-                prompt=f"Instruct: {self.instruction}\nQuery: ",
+                prompt=prompt,
                 batch_size=self.batch_size,
                 normalize_embeddings=True,
                 convert_to_numpy=True,
                 show_progress_bar=False,
             )
             for text, vector in zip(missing, np.asarray(vectors, dtype=np.float32)):
-                self._cache[text] = vector
+                self._cache[prefix + text] = vector
             self._save()
         if not texts:
             return np.zeros((0, 0), dtype=np.float32)
-        return np.stack([self._cache[text] for text in texts])
+        return np.stack([self._cache[prefix + text] for text in texts])
