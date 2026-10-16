@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2907,\"db\":\"POSTGRESQL\",\"query\":\"SELECT mmsi, ROUND(AVG(sog), 2) AS avg_sog FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((120.9167 35.8333, 121.1667 35.8333, 121.1667 35.5833, 120.9167 35.5833, 120.9167 35.8333))', 4326)) GROUP BY mmsi\"},\"requirements\":[{\"requirement\":\"查询今天出现在青岛朝连岛附近水域禁航区的船舶\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"timestamp\",\"geom\"]},{\"requirement\":\"输出船舶MMSI\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\"]},{\"requirement\":\"输出平均航速\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"sog\"]}],\"assumptions\":[\"青岛朝连岛附近水域禁航区无精确边界定义，采用近似矩形范围：经度120.9167至121.1667，纬度35.5833至35.8333（基于训练案例中朝连岛禁航区多边形坐标推断）\",\"平均航速按每艘船舶今日在禁航区内所有AIS记录的平均SOG计算，保留两位小数\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.2555367830209434,
+      "usage": {
+        "completion_tokens": 341,
+        "prompt_tokens": 5232,
+        "total_tokens": 5573,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4464
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

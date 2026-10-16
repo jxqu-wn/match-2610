@@ -1,0 +1,520 @@
+[
+  {
+    "question_id": 28,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE t.type_name = '客车' AND v.seat_count < 10;"
+  },
+  {
+    "question_id": 40,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS heavy_vehicle_count FROM transportation.vehicle WHERE load_capacity > 15"
+  },
+  {
+    "question_id": 55,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE LEFT(area_id, 2) = '23';"
+  },
+  {
+    "question_id": 60,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '41%';"
+  },
+  {
+    "question_id": 107,
+    "db": "MYSQL",
+    "query": "SELECT * FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';"
+  },
+  {
+    "question_id": 136,
+    "db": "MYSQL",
+    "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code JOIN common.administrative_division a ON c.area_id = a.id WHERE t.type_name = '危化品车' AND a.province_name = '湖北省' GROUP BY c.company_id, c.company_name;"
+  },
+  {
+    "question_id": 139,
+    "db": "MYSQL",
+    "query": "SELECT vc.company_name, COUNT(DISTINCT v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company vc JOIN transportation.vehicle v ON vc.company_id = v.company_id JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code JOIN common.administrative_division ad ON vc.area_id = ad.id WHERE ad.province_name = '四川省' AND vtd.type_name = '危化品车' GROUP BY vc.company_id, vc.company_name ORDER BY hazmat_vehicle_count DESC;"
+  },
+  {
+    "question_id": 245,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.city_name = '济南市' AND v.brand LIKE '%新能源%';"
+  },
+  {
+    "question_id": 275,
+    "db": "MYSQL",
+    "query": "SELECT v.plate_number FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.city_name = '广州市'"
+  },
+  {
+    "question_id": 299,
+    "db": "MYSQL",
+    "query": "SELECT city_name, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.city_name IN ('青岛市','济南市') GROUP BY ad.city_name;"
+  },
+  {
+    "question_id": 316,
+    "db": "MYSQL",
+    "query": "SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND (r.non_taxable_income IS NULL OR r.non_taxable_income = 0);"
+  },
+  {
+    "question_id": 339,
+    "db": "MYSQL",
+    "query": "SELECT DISTINCT s.stock_code FROM finance_tax.stock_daily_trades t JOIN finance_tax.stocks s ON t.stock_id = s.stock_id WHERE t.trade_date >= '2024-01-01' AND t.trade_date < '2025-01-01'"
+  },
+  {
+    "question_id": 371,
+    "db": "MYSQL",
+    "query": "SELECT i.industry_name, COUNT(c.company_id) AS company_count FROM finance_tax.companies c JOIN common.dict_industry i ON c.industry_code = i.industry_code GROUP BY i.industry_name;"
+  },
+  {
+    "question_id": 395,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_name IN ('大型', '中型');"
+  },
+  {
+    "question_id": 409,
+    "db": "MYSQL",
+    "query": "SELECT c.company_name, s.size_name FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_name = '微型';"
+  },
+  {
+    "question_id": 441,
+    "db": "MYSQL",
+    "query": "SELECT s.stock_name, (f.total_assets - f.total_liabilities) * 10000 / s.total_shares AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets - f.total_liabilities) * 10000 / s.total_shares > s.current_price"
+  },
+  {
+    "question_id": 476,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / r.revenue, 2) AS tax_to_revenue_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;"
+  },
+  {
+    "question_id": 489,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / (f.total_assets - f.total_liabilities) * 100, 2) AS tax_to_net_profit_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND YEAR(f.report_date) = r.tax_year WHERE s.stock_name = '顺丰速运' AND r.tax_year = 2025;"
+  },
+  {
+    "question_id": 498,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(hk.total_mv / avg_ind.avg_mv, 2) AS ratio FROM (SELECT s.current_price * s.total_shares AS total_mv FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id WHERE c.company_name = '海康威视' LIMIT 1) hk CROSS JOIN (SELECT AVG(s2.current_price * s2.total_shares) AS avg_mv FROM finance_tax.stocks s2 JOIN finance_tax.companies c2 ON s2.company_id = c2.company_id WHERE c2.industry_code = (SELECT c3.industry_code FROM finance_tax.companies c3 WHERE c3.company_name = '海康威视' LIMIT 1)) avg_ind;"
+  },
+  {
+    "question_id": 562,
+    "db": "MYSQL",
+    "query": "SELECT es.station_name, es.installed_capacity, ec.company_name FROM energy.energy_station es JOIN energy.energy_company ec ON es.company_id = ec.company_id WHERE es.energy_type_code = 'NUCLEAR';"
+  },
+  {
+    "question_id": 563,
+    "db": "MYSQL",
+    "query": "SELECT DISTINCT ec.company_name FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE cc.cert_type = '供电类电力业务许可证';"
+  },
+  {
+    "question_id": 566,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station;"
+  },
+  {
+    "question_id": 636,
+    "db": "MYSQL",
+    "query": "SELECT ec.company_name, COUNT(e.employee_id) AS emp_count FROM energy.energy_company ec JOIN energy.employee e ON ec.company_id = e.company_id WHERE e.status = '在职' GROUP BY ec.company_id, ec.company_name ORDER BY emp_count DESC LIMIT 5"
+  },
+  {
+    "question_id": 716,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.level = 1 AND ad.name = '吉林省' AND e.education = '硕士'"
+  },
+  {
+    "question_id": 718,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.cert_type = '安全生产许可证';"
+  },
+  {
+    "question_id": 749,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS doctor_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '11%' AND e.education = '博士';"
+  },
+  {
+    "question_id": 752,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(e.employee_id) AS external_employee_count FROM energy.energy_company ec JOIN energy.employee e ON ec.company_id = e.company_id WHERE ec.area_id LIKE '32%' AND e.status = '外派';"
+  },
+  {
+    "question_id": 757,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE ec.area_id LIKE '4403%' AND cc.cert_type = '新能源类电力业务许可证';"
+  },
+  {
+    "question_id": 758,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.name = '武汉市' AND e.education = '大专';"
+  },
+  {
+    "question_id": 764,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS retired_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) IN ('11','12','13') AND e.status = '退休';"
+  },
+  {
+    "question_id": 771,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS maintenance_employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE ec.area_id LIKE '53%' AND ep.category = '检修';"
+  },
+  {
+    "question_id": 795,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE LEFT(ec.area_id,2) IN ('31','32','33','34') AND ep.category IN ('运行','检修');"
+  },
+  {
+    "question_id": 822,
+    "db": "MYSQL",
+    "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25"
+  },
+  {
+    "question_id": 837,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS count FROM energy.energy_station WHERE area_id LIKE '3213%' AND status = '在建'"
+  },
+  {
+    "question_id": 844,
+    "db": "MYSQL",
+    "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '长沙市'"
+  },
+  {
+    "question_id": 861,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station es JOIN common.station_type_dict std ON es.station_type_code = std.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '东莞市' AND std.category = '发电' AND TIMESTAMPDIFF(YEAR, es.grid_connect_date, CURDATE()) > 15;"
+  },
+  {
+    "question_id": 896,
+    "db": "MYSQL",
+    "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.energy_type_dict et ON es.energy_type_code = et.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE et.type_name = '天然气发电' AND ad.city_name = '大庆市'"
+  },
+  {
+    "question_id": 904,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS solar_count FROM energy.energy_station WHERE area_id LIKE '4102%' AND energy_type_code = 'SOLAR';"
+  },
+  {
+    "question_id": 912,
+    "db": "MYSQL",
+    "query": "SELECT SUM(annual_generation) AS thermal_generation FROM energy.energy_station WHERE area_id LIKE '5202%' AND energy_type_code = 'THERMAL';"
+  },
+  {
+    "question_id": 923,
+    "db": "MYSQL",
+    "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '白山市' AND es.energy_type_code = 'PUMPED';"
+  },
+  {
+    "question_id": 935,
+    "db": "MYSQL",
+    "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id JOIN common.station_type_dict std ON es.station_type_code = std.type_code WHERE ad.city_name = '衡阳市' AND std.type_name = '火电';"
+  },
+  {
+    "question_id": 952,
+    "db": "MYSQL",
+    "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.full_name LIKE '伊犁%' AND es.station_type_code = 'WP';"
+  },
+  {
+    "question_id": 959,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS thermal_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '辽源市' AND es.energy_type_code = 'THERMAL';"
+  },
+  {
+    "question_id": 971,
+    "db": "MYSQL",
+    "query": "SELECT SUM(installed_capacity) AS total_capacity FROM energy.energy_station WHERE area_id LIKE '4402%' AND energy_type_code = 'HYDRO';"
+  },
+  {
+    "question_id": 989,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.energy_station es ON ec.company_id = es.company_id WHERE ec.area_id LIKE '37%' AND es.station_type_code = 'WP';"
+  },
+  {
+    "question_id": 1038,
+    "db": "MYSQL",
+    "query": "SELECT ad.city_name, COUNT(DISTINCT ec.company_id) AS expired_company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.expire_date < CURDATE() GROUP BY ad.city_name;"
+  },
+  {
+    "question_id": 1050,
+    "db": "MYSQL",
+    "query": "SELECT SUM(installed_capacity) AS total_installed_capacity, SUM(annual_generation) AS total_annual_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('44','45','50','51','52','53','54','61','62','63','64','65') AND energy_type_code <> 'PUMPED';"
+  },
+  {
+    "question_id": 1072,
+    "db": "MYSQL",
+    "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 20;"
+  },
+  {
+    "question_id": 1089,
+    "db": "MYSQL",
+    "query": "SELECT order_id, payable_amount FROM ecommerce.orders WHERE payable_amount > 500 ORDER BY order_id;"
+  },
+  {
+    "question_id": 1096,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+  },
+  {
+    "question_id": 1148,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'JD';"
+  },
+  {
+    "question_id": 1158,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'WEB';"
+  },
+  {
+    "question_id": 1159,
+    "db": "MYSQL",
+    "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 5;"
+  },
+  {
+    "question_id": 1163,
+    "db": "MYSQL",
+    "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'DIAMOND' ORDER BY customer_id;"
+  },
+  {
+    "question_id": 1197,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'MINI_PROGRAM';"
+  },
+  {
+    "question_id": 1205,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'LIVE';"
+  },
+  {
+    "question_id": 1224,
+    "db": "MYSQL",
+    "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'CANCELLED' ORDER BY customer_id;"
+  },
+  {
+    "question_id": 1232,
+    "db": "MYSQL",
+    "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'GOLD' ORDER BY customer_id;"
+  },
+  {
+    "question_id": 1250,
+    "db": "MYSQL",
+    "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+  },
+  {
+    "question_id": 1298,
+    "db": "MYSQL",
+    "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+  },
+  {
+    "question_id": 1330,
+    "db": "MYSQL",
+    "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+  },
+  {
+    "question_id": 1364,
+    "db": "MYSQL",
+    "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'FROZEN' ORDER BY customer_id;"
+  },
+  {
+    "question_id": 1436,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+  },
+  {
+    "question_id": 1540,
+    "db": "MYSQL",
+    "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+  },
+  {
+    "question_id": 1588,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 2) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+  },
+  {
+    "question_id": 1717,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS course_name_start_num_cnt FROM education_2024.course WHERE course_name LIKE '数%';"
+  },
+  {
+    "question_id": 1723,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(*) AS semester_cnt FROM education_2024.semester;"
+  },
+  {
+    "question_id": 1728,
+    "db": "MYSQL",
+    "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id = 2 ORDER BY cl.class_id ASC LIMIT 30;"
+  },
+  {
+    "question_id": 1853,
+    "db": "MYSQL",
+    "query": "WITH s2024 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), s2025 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), common AS (SELECT s2024.student_id, s2024.course_id, s2024.total_score AS total_2024, s2025.total_score AS total_2025 FROM s2024 JOIN s2025 ON s2024.student_id=s2025.student_id AND s2024.course_id=s2025.course_id), agg AS (SELECT student_id, SUM(total_2024) AS sum_2024, SUM(total_2025) AS sum_2025 FROM common GROUP BY student_id), ranked AS (SELECT student_id, sum_2024, sum_2025, ROW_NUMBER() OVER (ORDER BY sum_2025 ASC, student_id ASC) AS rn FROM agg) SELECT st.student_no, ROUND(r.sum_2024,2) AS total_2024, ROUND(r.sum_2025,2) AS total_2025 FROM ranked r JOIN education_2025.student st ON st.student_id=r.student_id WHERE r.rn=1;"
+  },
+  {
+    "question_id": 1870,
+    "db": "MYSQL",
+    "query": "WITH d2024 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2024 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2024.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2024.course c ON c.course_id = t.course_id GROUP BY c.department_id), d2025 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2025 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2025.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2025.course c ON c.course_id = t.course_id GROUP BY c.department_id) SELECT d.department_id, d.department_name, ROUND(COALESCE(d2024.avg_enroll_2024, 0), 2) AS avg_enroll_2024, ROUND(COALESCE(d2025.avg_enroll_2025, 0), 2) AS avg_enroll_2025 FROM education_2025.department d LEFT JOIN d2024 ON d2024.department_id = d.department_id LEFT JOIN d2025 ON d2025.department_id = d.department_id ORDER BY avg_enroll_2025 DESC, d.department_id ASC LIMIT 5;"
+  },
+  {
+    "question_id": 1878,
+    "db": "MYSQL",
+    "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE start_date_key IS NULL OR start_date_key = 0 UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE start_date_key IS NULL OR start_date_key = 0;"
+  },
+  {
+    "question_id": 1881,
+    "db": "MYSQL",
+    "query": "SELECT '2024' AS year, COUNT(*) AS credit_1_cnt FROM education_2024.course WHERE credit = 1 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_1_cnt FROM education_2025.course WHERE credit = 1;"
+  },
+  {
+    "question_id": 1906,
+    "db": "MYSQL",
+    "query": "WITH a AS (SELECT COUNT(*) AS elective_cnt_2024 FROM education_2024.course WHERE course_type='选修'), b AS (SELECT COUNT(*) AS elective_cnt_2025 FROM education_2025.course WHERE course_type='选修') SELECT b.elective_cnt_2025 - a.elective_cnt_2024 AS diff_2025_minus_2024, a.elective_cnt_2024, b.elective_cnt_2025 FROM a CROSS JOIN b;"
+  },
+  {
+    "question_id": 1919,
+    "db": "MYSQL",
+    "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE semester_code = (SELECT semester_code FROM education_2024.semester ORDER BY end_date_key DESC LIMIT 1) UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE semester_code = (SELECT semester_code FROM education_2025.semester ORDER BY end_date_key DESC LIMIT 1);"
+  },
+  {
+    "question_id": 1996,
+    "db": "MYSQL",
+    "query": "SELECT '2024' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2024.course UNION ALL SELECT '2025' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2025.course;"
+  },
+  {
+    "question_id": 2060,
+    "db": "MYSQL",
+    "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.student WHERE student_status_code='ACTIVE'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.student WHERE student_status_code='ACTIVE') SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+  },
+  {
+    "question_id": 2125,
+    "db": "Elasticsearch",
+    "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"range\":{\"ambulance_count\":{\"gt\":10}}}],\"filter\":{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":30.657,\"lon\":104.065}}}}},\"_source\":[\"name\"]}"
+  },
+  {
+    "question_id": 2219,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":39.95,\"lon\":116.35},\"bottom_right\":{\"lat\":39.85,\"lon\":116.45}}}}}},\"aggs\":{\"avg_ambulance\":{\"avg\":{\"field\":\"ambulance_count\"}}}}"
+  },
+  {
+    "question_id": 2347,
+    "db": "Elasticsearch",
+    "query": "{\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}],\"_source\":[\"name\",\"annual_outpatient\"]}"
+  },
+  {
+    "question_id": 2358,
+    "db": "Elasticsearch",
+    "query": "{\"size\":5,\"query\":{\"bool\":{\"must\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  {
+    "question_id": 2364,
+    "db": "Elasticsearch",
+    "query": "{\"size\":3,\"_source\":[\"name\",\"nurse_count\"],\"query\":{\"bool\":{\"filter\":{\"range\":{\"rating\":{\"gt\":4.6}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.1310,\"lon\":113.2895},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  {
+    "question_id": 2422,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"term\":{\"has_icu\":true}},\"aggs\":{\"hospital_count\":{\"value_count\":{\"field\":\"name.keyword\"}}}}"
+  },
+  {
+    "question_id": 2462,
+    "db": "Elasticsearch",
+    "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"beds_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+  },
+  {
+    "question_id": 2487,
+    "db": "Elasticsearch",
+    "query": "{\"_source\":[\"name\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}},{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}}}"
+  },
+  {
+    "question_id": 2489,
+    "db": "Elasticsearch",
+    "query": "{\"_source\":[\"name\",\"rating\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"founded_year\":{\"lte\":1950}}},{\"range\":{\"rating\":{\"gte\":4.6}}},{\"range\":{\"doctor_count\":{\"gt\":1500}}}]}},\"sort\":[{\"rating\":{\"order\":\"desc\"}}]}"
+  },
+  {
+    "question_id": 2562,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM public.vessel_ais_data WHERE nav_status = 1 ORDER BY sog ASC LIMIT 10"
+  },
+  {
+    "question_id": 2792,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM public.vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90"
+  },
+  {
+    "question_id": 2855,
+    "db": "POSTGRESQL",
+    "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2025-09-09 09:00:00' AND timestamp < '2025-09-10' AND nav_status = 2 AND draught < 10"
+  },
+  {
+    "question_id": 2907,
+    "db": "POSTGRESQL",
+    "query": "SELECT mmsi, ROUND(AVG(sog), 2) AS avg_sog FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((120.9167 35.8333, 121.1667 35.8333, 121.1667 35.5833, 120.9167 35.5833, 120.9167 35.8333))', 4326)) GROUP BY mmsi"
+  },
+  {
+    "question_id": 2908,
+    "db": "POSTGRESQL",
+    "query": "SELECT nav_status, COUNT(DISTINCT mmsi) AS vessel_count FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_Within(geom, ST_GeomFromText('POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))', 4326)) GROUP BY nav_status"
+  },
+  {
+    "question_id": 2930,
+    "db": "POSTGRESQL",
+    "query": "SELECT DISTINCT ON (mmsi) mmsi, timestamp, sog FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.25, 31.6333), 4326)::geography, 926) ORDER BY mmsi, sog DESC"
+  },
+  {
+    "question_id": 2942,
+    "db1": "MYSQL",
+    "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT mmsi, ROUND(SUM(ST_Length(ST_Transform(ST_MakeLine(geom ORDER BY timestamp), 3857)))::numeric, 2) AS track_length_meters FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND geom && ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326) GROUP BY mmsi"
+  },
+  {
+    "question_id": 2949,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND nav_status = 1 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)",
+    "db2": "MYSQL",
+    "query2": "SELECT mmsi, max_load, endurance FROM transportation.vessel WHERE mmsi IN (result)"
+  },
+  {
+    "question_id": 2950,
+    "db1": "MYSQL",
+    "query1": "SELECT mmsi FROM transportation.vessel WHERE max_speed > 20",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000)"
+  },
+  {
+    "question_id": 2968,
+    "db1": "MYSQL",
+    "query1": "SELECT mmsi FROM transportation.vessel WHERE max_load > 50000 AND max_speed > 15",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE - INTERVAL '1 day' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)"
+  },
+  {
+    "question_id": 2970,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND nav_status = 5 AND longitude >= 121.5 AND longitude <= 121.8 AND latitude >= 31.2 AND latitude <= 31.4",
+    "db2": "MYSQL",
+    "query2": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '张海' AND mmsi IN (result)"
+  },
+  {
+    "question_id": 2972,
+    "db1": "MYSQL",
+    "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 45",
+    "db2": "POSTGRESQL",
+    "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 122.0 AND 122.2 AND latitude BETWEEN 30.0 AND 30.2 AND sog < 3"
+  },
+  {
+    "question_id": 2980,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog >= 270 AND cog <= 360 AND sog > 8",
+    "db2": "MYSQL",
+    "query2": "SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND CAST(SUBSTRING_INDEX(endurance, '/', 1) AS UNSIGNED) > 90"
+  },
+  {
+    "question_id": 2984,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hour' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+    "db2": "MYSQL",
+    "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company c ON v.company_id = c.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND v.captain_name <> '' AND c.company_name <> '中远海运'"
+  },
+  {
+    "question_id": 3012,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3",
+    "db2": "MYSQL",
+    "query2": "SELECT sc.company_name FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) ORDER BY sc.company_name ASC"
+  }
+]

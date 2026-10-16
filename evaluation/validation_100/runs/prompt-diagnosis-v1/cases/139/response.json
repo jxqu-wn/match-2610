@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":139,\"db\":\"MYSQL\",\"query\":\"SELECT vc.company_name, COUNT(DISTINCT v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company vc JOIN transportation.vehicle v ON vc.company_id = v.company_id JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code JOIN common.administrative_division ad ON vc.area_id = ad.id WHERE ad.province_name = '四川省' AND vtd.type_name = '危化品车' GROUP BY vc.company_id, vc.company_name ORDER BY hazmat_vehicle_count DESC;\"},\"requirements\":[{\"requirement\":\"查询四川省的危化品车辆公司分布\",\"tables\":[\"MYSQL:transportation.vehicle_company\",\"MYSQL:transportation.vehicle\",\"MYSQL:common.vehicle_type_dict\",\"MYSQL:common.administrative_division\"],\"columns\":[\"company_name\",\"vehicle_id\",\"type_name\",\"province_name\"]}],\"assumptions\":[\"危化品车辆通过车辆类型字典中 type_name='危化品车' 识别\",\"四川省通过行政区划表 province_name='四川省' 识别\",\"公司分布按公司名称分组并统计危化品车辆数量\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.6373427319922484,
+      "usage": {
+        "completion_tokens": 275,
+        "prompt_tokens": 13832,
+        "total_tokens": 14107,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 13064
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

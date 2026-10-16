@@ -1,0 +1,3243 @@
+[
+  {
+    "question_id": 28,
+    "proxy_type": "knowledge",
+    "question": "统计所有座位数小于10的客车数量",
+    "reference": {
+      "question_id": 28,
+      "question": "统计所有座位数小于10的客车数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE t.type_name='客车' AND v.seat_count < 10;"
+    },
+    "predicted": {
+      "question_id": 28,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE t.type_name = '客车' AND v.seat_count < 10;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "347e3c6ef14a67a5f6a0352f6c688ef972484bf8ad5f56f51956aa4bb6987c60",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "客车字典连接、座位数<10、单列计数均相同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c8b6b1a9d964eefe7b9c6e351675a6616b70da690a8f40957931baf3de414124",
+    "prediction_sha256": "d340d4053a56513c5d25ad51e0dfa820b2dc0391431951361c0071f0fd169711",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 40,
+    "proxy_type": "knowledge",
+    "question": "统计所有重型车的数量",
+    "reference": {
+      "question_id": 40,
+      "question": "统计所有重型车的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS heavy_vehicle_count FROM transportation.vehicle WHERE load_capacity > 15;"
+    },
+    "predicted": {
+      "question_id": 40,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS heavy_vehicle_count FROM transportation.vehicle WHERE load_capacity > 15"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "aa503eb2d805c851c53b6df283a23d24dd78e352aefe9356521eb97d55758f8f",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "载重>15与参考一致；只差分号。",
+    "reference_label_caveat": null,
+    "reference_sha256": "7baf2fe882e019eb88eee82c1c5f597a1144e32b030a218461a74365a8e4144e",
+    "prediction_sha256": "3e8e1ed36889befe94479ea69c4f98995f9ff780ea77b6e34845cb8b57a4d820",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 55,
+    "proxy_type": "knowledge",
+    "question": "查询黑龙江省注册的车辆总数",
+    "reference": {
+      "question_id": 55,
+      "question": "查询黑龙江省注册的车辆总数",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '23%';"
+    },
+    "predicted": {
+      "question_id": 55,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE LEFT(area_id, 2) = '23';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "34be9e93371e8e57392f560a95486491d5a9351d80b691f76b52cc494ac28833",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "6位area_id的LEFT(...,2)=23与LIKE 23%筛选同一省份，计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e928a6e828c7c048c77257a5b0e4906fbefca74fe3e28033c9fd73550ed16c5b",
+    "prediction_sha256": "befba6a847af7298b1332ffcdd9631ccb044579fcdd755e97b1450dd448a843b",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 60,
+    "proxy_type": "knowledge",
+    "question": "查询河南省注册的车辆总数",
+    "reference": {
+      "question_id": 60,
+      "question": "查询河南省注册的车辆总数",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '41%';"
+    },
+    "predicted": {
+      "question_id": 60,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '41%';"
+    },
+    "assumptions": [
+      "河南省的行政区划代码前两位为41，因此使用 area_id LIKE '41%' 筛选河南省注册的车辆"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "1635fc9db4a155ca1885fff434ea32a6bcc4fe00801d9fd46a0a59da008589c2",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "河南41%前缀计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "0b67702ca45a1d9eda2292a823e71855b7bb2fc834c4192d7732cd225b58f7ea",
+    "prediction_sha256": "6f3cbba49db450c22b97bda5b72c5d189a041ea3fe49fbbc556233bfe3ab0ce6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 107,
+    "proxy_type": "simple",
+    "question": "查询所有车辆中颜色为'黑'且品牌为'奔驰'的车辆",
+    "reference": {
+      "question_id": 107,
+      "question": "查询所有车辆中颜色为'黑'且品牌为'奔驰'的车辆",
+      "db": "MYSQL",
+      "query": "SELECT plate_number FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';"
+    },
+    "predicted": {
+      "question_id": 107,
+      "db": "MYSQL",
+      "query": "SELECT * FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "e09711b0ad6077ce3fbcb96438600e8699a9b6bfcb6aa58bf80783742437d58a",
+    "semantic_status": "different",
+    "difference_category": "output",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "过滤条件一致，但参考只返回plate_number，预测SELECT *增加全部车辆字段；题目自身未明确输出列。",
+    "reference_label_caveat": "题目未说明只输出车牌；参考投影选择没有在题面中明示。",
+    "reference_sha256": "81e10cdd464b847f307ddfa4101b69a033e11c053b9126720d0d8652fef65700",
+    "prediction_sha256": "949c306ca06bccfe27892e5b7029608aff1c919ef66e7eca182a9ea8babf24f3",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 136,
+    "proxy_type": "knowledge",
+    "question": "统计湖北省各公司拥有的危化品车辆数",
+    "reference": {
+      "question_id": 136,
+      "question": "统计湖北省各公司拥有的危化品车辆数",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE v.area_id LIKE '42%' AND t.type_name = '危化品车' GROUP BY c.company_id;"
+    },
+    "predicted": {
+      "question_id": 136,
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code JOIN common.administrative_division a ON c.area_id = a.id WHERE t.type_name = '危化品车' AND a.province_name = '湖北省' GROUP BY c.company_id, c.company_name;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "5c586c1f20b8591ca0fcd5a19de8c81fa45ba8c6b40e40a689539bddae27db43",
+    "semantic_status": "different",
+    "difference_category": "region_object",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考按车辆v.area_id筛湖北，预测按公司c.area_id筛湖北；公司注册地不保证等于车辆注册地。",
+    "reference_label_caveat": null,
+    "reference_sha256": "74df8950ead7e19f5ba2962102f744906623c58edd65d4b3dae5e71e8debae1c",
+    "prediction_sha256": "1e5090cefd2d55f4daf86d00bd77dbd90fded830a01950493d56db9d74585a17",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 139,
+    "proxy_type": "knowledge",
+    "question": "查询四川省所有危化品车辆的公司分布",
+    "reference": {
+      "question_id": 139,
+      "question": "查询四川省所有危化品车辆的公司分布",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE v.area_id LIKE '51%' AND t.type_name = '危化品车' GROUP BY c.company_id;"
+    },
+    "predicted": {
+      "question_id": 139,
+      "db": "MYSQL",
+      "query": "SELECT vc.company_name, COUNT(DISTINCT v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company vc JOIN transportation.vehicle v ON vc.company_id = v.company_id JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code JOIN common.administrative_division ad ON vc.area_id = ad.id WHERE ad.province_name = '四川省' AND vtd.type_name = '危化品车' GROUP BY vc.company_id, vc.company_name ORDER BY hazmat_vehicle_count DESC;"
+    },
+    "assumptions": [
+      "危化品车辆通过车辆类型字典中 type_name='危化品车' 识别",
+      "四川省通过行政区划表 province_name='四川省' 识别",
+      "公司分布按公司名称分组并统计危化品车辆数量"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": false,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "65086f1d02aabba021fbad34c8a91d4bab946e93c4a4043a98b2452f9bdbd89f",
+    "semantic_status": "different",
+    "difference_category": "region_object",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考按车辆注册地筛四川，预测改成公司注册地；COUNT DISTINCT在此不是核心问题。",
+    "reference_label_caveat": null,
+    "reference_sha256": "4b2ba420a21974faeeef7b40ad30c2b7ca9ae4f46219c796f3dcca97f39db654",
+    "prediction_sha256": "b88ba3183931a3c3ef9261c85b7388c7d75f8a9261ee809843215ff82f41f256",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 245,
+    "proxy_type": "knowledge",
+    "question": "查询济南市注册的所有新能源车数量",
+    "reference": {
+      "question_id": 245,
+      "question": "查询济南市注册的所有新能源车数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '3701%' AND brand LIKE '%电动%';"
+    },
+    "predicted": {
+      "question_id": 245,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.city_name = '济南市' AND v.brand LIKE '%新能源%';"
+    },
+    "assumptions": [
+      "新能源车通过品牌字段包含“新能源”识别，因schema中无专门新能源标识字段"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "a402119df244b1742b336a7f01542bf1770d5e69a45049b8f354ece866298e39",
+    "semantic_status": "different",
+    "difference_category": "business_definition",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考brand包含电动，预测改为包含新能源，选择的车辆集合不同；无证据支持等价替换。",
+    "reference_label_caveat": null,
+    "reference_sha256": "143f0c92723c1f33b874de437b3966bdce3fb3df27bbc70474bb03174cd86dfc",
+    "prediction_sha256": "e2799f80830b6c7caea23adcc33b74ea71f69d5402f7c8171135f4fa13886103",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 275,
+    "proxy_type": "knowledge",
+    "question": "查询广州市注册的所有车辆",
+    "reference": {
+      "question_id": 275,
+      "question": "查询广州市注册的所有车辆",
+      "db": "MYSQL",
+      "query": "SELECT * FROM transportation.vehicle WHERE area_id LIKE '4401%';"
+    },
+    "predicted": {
+      "question_id": 275,
+      "db": "MYSQL",
+      "query": "SELECT v.plate_number FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.city_name = '广州市'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "df9028061ecbd1296dc97ff19913eb6526e57c48afdbf75a4c345909ef0a40c0",
+    "semantic_status": "different",
+    "difference_category": "output",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考返回车辆全部字段，预测仅plate_number。城市字典连接本身不是主要差异。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e5d052e3be2eb32e9508e55f3f696a684bc4c14189933191e976859f60290d6b",
+    "prediction_sha256": "ea39e40d28ad0542f2c22fc1e89405515101a8997da765bfec97335ec4d94109",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 299,
+    "proxy_type": "knowledge",
+    "question": "查询山东省青岛市和济南市的车辆数对比",
+    "reference": {
+      "question_id": 299,
+      "question": "查询山东省青岛市和济南市的车辆数对比",
+      "db": "MYSQL",
+      "query": "SELECT CASE WHEN area_id LIKE '3701%' THEN '济南' WHEN area_id LIKE '3702%' THEN '青岛' END AS city, COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '3701%' OR area_id LIKE '3702%' GROUP BY city;"
+    },
+    "predicted": {
+      "question_id": 299,
+      "db": "MYSQL",
+      "query": "SELECT city_name, COUNT(*) AS vehicle_count FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.city_name IN ('青岛市','济南市') GROUP BY ad.city_name;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "d97aa0e975722c5d636d8075924a29d0fca47de8016a6853898b0ca93c90f582",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "同样按济南、青岛两城市分组计数；参考CASE短名称与字典city_name完整名称视为同一业务维度。仅语义一致，不声明原始字符串结果完全相等。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e5ccc9ba2ecb7a8ac92fa2bb7a7a1a9e010d8445e2f8cce63049ceca4cbd561c",
+    "prediction_sha256": "6580c187385310c43c1744711ba5f77c50ceb95de0f0966686e6a54e5da96725",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 316,
+    "proxy_type": "knowledge",
+    "question": "查询2025年度没有不征税收入的企业名称",
+    "reference": {
+      "question_id": 316,
+      "question": "查询2025年度没有不征税收入的企业名称",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND r.non_taxable_income = 0;"
+    },
+    "predicted": {
+      "question_id": 316,
+      "db": "MYSQL",
+      "query": "SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND (r.non_taxable_income IS NULL OR r.non_taxable_income = 0);"
+    },
+    "assumptions": [
+      "“没有不征税收入”解释为不征税收入与免税收入合计为0或为空"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "cac6a81f783f71f13dab67a45a7ecf8f4911ff6c3c59687ad0487f6db7df715b",
+    "semantic_status": "different",
+    "difference_category": "null_policy",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测额外接受non_taxable_income IS NULL；Schema明确该字段可空，参考只接受=0，结果集合可不同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "1fc4e428540b591f5059e173b71c6922eabead10e4db8079f2b6b5f0f5342213",
+    "prediction_sha256": "f562680a4e04e2cbe60f14a05f3602ca4f384d740b5867c1d99c5b035609ae46",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 339,
+    "proxy_type": "simple",
+    "question": "查询所有在2024年有交易记录的股票的代码",
+    "reference": {
+      "question_id": 339,
+      "question": "查询所有在2024年有交易记录的股票的代码",
+      "db": "MYSQL",
+      "query": "SELECT DISTINCT s.stock_code FROM finance_tax.stock_daily_trades t JOIN finance_tax.stocks s ON t.stock_id = s.stock_id WHERE t.trade_date BETWEEN '2024-01-01' AND '2024-12-31';"
+    },
+    "predicted": {
+      "question_id": 339,
+      "db": "MYSQL",
+      "query": "SELECT DISTINCT s.stock_code FROM finance_tax.stock_daily_trades t JOIN finance_tax.stocks s ON t.stock_id = s.stock_id WHERE t.trade_date >= '2024-01-01' AND t.trade_date < '2025-01-01'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "45be2e58b990443e3e7d969f7d34155ce34bccf3da2aee354d6a0ac6fcaf8038",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "trade_date为DATE；2024闭区间与[2024-01-01,2025-01-01)等价，DISTINCT股票代码一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "fb470eb9acc37abb0da365b8f3ab431de28daf5cce4083cb5e6825f583cfb099",
+    "prediction_sha256": "e53cb1eaaf3b0ffa59e32889482b6ac5ea0fe365074800f9b2088675200309d7",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 371,
+    "proxy_type": "knowledge",
+    "question": "查询每个行业的公司数量",
+    "reference": {
+      "question_id": 371,
+      "question": "查询每个行业的公司数量",
+      "db": "MYSQL",
+      "query": "SELECT i.industry_name, COUNT(*) AS cnt FROM finance_tax.companies c JOIN common.dict_industry i ON c.industry_code = i.industry_code GROUP BY i.industry_name ORDER BY cnt DESC;"
+    },
+    "predicted": {
+      "question_id": 371,
+      "db": "MYSQL",
+      "query": "SELECT i.industry_name, COUNT(c.company_id) AS company_count FROM finance_tax.companies c JOIN common.dict_industry i ON c.industry_code = i.industry_code GROUP BY i.industry_name;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "9f7e86a4374f38666e6dd81279b193d7e45b89903f8f3e8ec4520963ae90cc40",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "company_id为非空主键，因此COUNT(company_id)=COUNT(*)；题目未要求行排序，忽略参考的额外ORDER BY。",
+    "reference_label_caveat": null,
+    "reference_sha256": "60d16d6b905dd6f754d1f292535fc914437e6843e26d90ad3c3f6ffb0f62f144",
+    "prediction_sha256": "68d781977458e5617e58880109295c016ad5ff00b6e9dd0596c9e418576fcb2c",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 395,
+    "proxy_type": "knowledge",
+    "question": "查询上市公司中，规模为大型或中型的公司数量",
+    "reference": {
+      "question_id": 395,
+      "question": "查询上市公司中，规模为大型或中型的公司数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_name IN ('大型','中型');"
+    },
+    "predicted": {
+      "question_id": 395,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_name IN ('大型', '中型');"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "cf78855f9bfcc49b8311c9151f099348f26638e7fc2c69583a32cbf14cc3fb30",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "大型/中型字典筛选与计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "ea68ec529a436abfe89b056c50661bcff328b2c400f41619b4c9bc2dc7498844",
+    "prediction_sha256": "54dcebd98b6029c553651b3c662f2e4ad37f85022f19bfba7f2003dcf2483539",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 409,
+    "proxy_type": "knowledge",
+    "question": "查询所有微型企业的公司名称和规模",
+    "reference": {
+      "question_id": 409,
+      "question": "查询所有微型企业的公司名称和规模",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, s.size_name FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_code = 'XS';"
+    },
+    "predicted": {
+      "question_id": 409,
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, s.size_name FROM finance_tax.companies c JOIN common.dict_size_category s ON c.size_category_code = s.size_code WHERE s.size_name = '微型';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "4b667651ce41ac11b8917d0daa0ee2f14896a68650fe2005ae877a2a5f3badbb",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "按业务规模字典XS=微型映射理解，两条查询均返回微型公司名称和规模；未读取实际字典行验证结果集。",
+    "reference_label_caveat": null,
+    "reference_sha256": "60c17068c8ceb6de1170ae77cd9fa5fd9675fb431c874a1612adbd2577f7dd45",
+    "prediction_sha256": "76cabdd69095d170e82896784920488654bfe05ece8ee015d69ef453ba6bb2c9",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 441,
+    "proxy_type": "calculation",
+    "question": "查询2025年每股净资产超过股价的股票（破净股）",
+    "reference": {
+      "question_id": 441,
+      "question": "查询2025年每股净资产超过股价的股票（破净股）",
+      "db": "MYSQL",
+      "query": "SELECT s.stock_name, (f.total_assets * 10000 / s.total_shares) AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets * 10000 / s.total_shares) > s.current_price;"
+    },
+    "predicted": {
+      "question_id": 441,
+      "db": "MYSQL",
+      "query": "SELECT s.stock_name, (f.total_assets - f.total_liabilities) * 10000 / s.total_shares AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets - f.total_liabilities) * 10000 / s.total_shares > s.current_price"
+    },
+    "assumptions": [
+      "每股净资产按(总资产-总负债)*10000/总股本计算，总资产和总负债单位为万元，需转换为元",
+      "2025年数据取2025年12月31日报告期",
+      "输出股票名称、每股净资产和股价"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0fd2f09850de3627f0c9e1cb8cef9d323ddcece0d8a476d7190cba75df407c6e",
+    "semantic_status": "different",
+    "difference_category": "formula",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考BPS=总资产*10000/总股本，与原始knowledge1624一致；预测误减总负债，把EPS/净利润近似公式用于BPS，影响输出和破净筛选。正确BPS知识1624未进入提示词。",
+    "reference_label_caveat": null,
+    "reference_sha256": "98e3e409aa5a1e2d3b43f92d3f064736faeabef75d3ead1a78268eb90e180cca",
+    "prediction_sha256": "74dd491398710399237f43e19facf4870f4125e249e7726d473edc036d51f02b",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 476,
+    "proxy_type": "calculation",
+    "question": "请计算顺丰控股2025年度所得税额占营业收入的比例",
+    "reference": {
+      "question_id": 476,
+      "question": "请计算顺丰控股2025年度所得税额占营业收入的比例",
+      "db": "MYSQL",
+      "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * 0.25 / r.revenue) * 100 AS tax_burden FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;"
+    },
+    "predicted": {
+      "question_id": 476,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / r.revenue, 2) AS tax_to_revenue_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;"
+    },
+    "assumptions": [
+      "所得税额按应纳税所得额乘以适用税率计算，税率根据高新技术企业资格及小型微利企业条件确定，与训练案例口径一致",
+      "营业收入使用企业所得税年度申报表中的收入总额（revenue）字段"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "ed6ef425eac9cf6ae9834cc287bfec9484442ad8a1d340606776ea9fa0448f96",
+    "semantic_status": "different",
+    "difference_category": "formula_unit",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考固定25%税率并乘100输出百分数，预测改为分档税率且不乘100；不仅是ROUND2差异。固定税率是否适合该企业需要数据确认。",
+    "reference_label_caveat": "固定25%还是按企业属性分档，及比例与百分数，缺少题目级明确口径。",
+    "reference_sha256": "f92af65e25f1d7bce8b22096417274699ef240b4ef5263ac38c433bfbf60b91a",
+    "prediction_sha256": "fbeba6dd541389ec144687c721e4070582ccb240d68152f6fcf6654c5442e931",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 489,
+    "proxy_type": "calculation",
+    "question": "请计算顺丰速运2025年度所得税费用占净利润的比例",
+    "reference": {
+      "question_id": 489,
+      "question": "请计算顺丰速运2025年度所得税费用占净利润的比例",
+      "db": "MYSQL",
+      "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * 0.25) / (f.total_assets - f.total_liabilities) * 100 AS ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND r.tax_year = 2025 JOIN finance_tax.stocks s ON r.company_id = s.company_id WHERE s.stock_name = '顺丰速运' AND f.report_date = '2025-12-31';"
+    },
+    "predicted": {
+      "question_id": 489,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / (f.total_assets - f.total_liabilities) * 100, 2) AS tax_to_net_profit_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND YEAR(f.report_date) = r.tax_year WHERE s.stock_name = '顺丰速运' AND r.tax_year = 2025;"
+    },
+    "assumptions": [
+      "净利润采用知识库定义：总资产减总负债（company_financials表）",
+      "所得税费用采用知识库定义：应纳税所得额乘以适用税率，税率根据高新技术企业15%、小型微利企业20%、其他25%判定",
+      "顺丰速运对应stocks.stock_name字段值"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "239c42df7cc30c41dcd477ca1a4140493290c6e980707c694a68f957c1b6d177",
+    "semantic_status": "different",
+    "difference_category": "formula_time",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测改成分档税率，且把2025-12-31报表改为2025年内所有报表；可改变税额及返回行数，不是仅精度差异。",
+    "reference_label_caveat": null,
+    "reference_sha256": "559f110023b900a08606b9b5e2ebea6c1748ac07a765d2ec9f28abc0343ebdde",
+    "prediction_sha256": "99cbd919043f74bbb874853ef715e4d135016eac006f3ad6bd4fb4fccfc359d5",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 498,
+    "proxy_type": "calculation",
+    "question": "计算海康威视2025年总市值是行业平均市值的多少倍",
+    "reference": {
+      "question_id": 498,
+      "question": "计算海康威视2025年总市值是行业平均市值的多少倍",
+      "db": "MYSQL",
+      "query": "SELECT (s.current_price * s.total_shares) / 183000000000 AS ratio FROM finance_tax.stocks s WHERE s.stock_name = '海康威视';"
+    },
+    "predicted": {
+      "question_id": 498,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(hk.total_mv / avg_ind.avg_mv, 2) AS ratio FROM (SELECT s.current_price * s.total_shares AS total_mv FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id WHERE c.company_name = '海康威视' LIMIT 1) hk CROSS JOIN (SELECT AVG(s2.current_price * s2.total_shares) AS avg_mv FROM finance_tax.stocks s2 JOIN finance_tax.companies c2 ON s2.company_id = c2.company_id WHERE c2.industry_code = (SELECT c3.industry_code FROM finance_tax.companies c3 WHERE c3.company_name = '海康威视' LIMIT 1)) avg_ind;"
+    },
+    "assumptions": [
+      "2025年总市值使用stocks表中最新股价current_price与总股本total_shares的乘积近似计算，未使用stock_daily_trades按2025年交易日筛选",
+      "行业平均市值按海康威视所属industry_code下所有公司计算，未额外限定A股等市场分类"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0b8e8aeec6a3ccc7e77525c9808ed62ee93023f9f43ac0b1c88ae2d619a637bb",
+    "semantic_status": "uncertain",
+    "difference_category": "reference_constant",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考行业平均市值直接硬编码183000000000，预测实际按行业AVG计算且改用company_name定位；缺少真实行业数据及公司名/股票名映射，无法确认分母和实体是否一致。",
+    "reference_label_caveat": "参考行业平均市值硬编码，需要真实数据核对。",
+    "reference_sha256": "95bb5c3f77c713177248f1db40b6c675f69eefb328cd470ce2f700527e291385",
+    "prediction_sha256": "965f5a829fb8a7481b73d360921b0d18fda59a1d96ae4f381ed2ecb07cbcb2fb",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 562,
+    "proxy_type": "knowledge",
+    "question": "查询所有核电场的名称、装机容量和所属企业",
+    "reference": {
+      "question_id": 562,
+      "question": "查询所有核电场的名称、装机容量和所属企业",
+      "db": "MYSQL",
+      "query": "SELECT es.station_name, es.installed_capacity, ec.company_name FROM energy.energy_station es JOIN energy.energy_company ec ON es.company_id = ec.company_id WHERE es.energy_type_code = 'NUCLEAR';"
+    },
+    "predicted": {
+      "question_id": 562,
+      "db": "MYSQL",
+      "query": "SELECT es.station_name, es.installed_capacity, ec.company_name FROM energy.energy_station es JOIN energy.energy_company ec ON es.company_id = ec.company_id WHERE es.energy_type_code = 'NUCLEAR';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "c816115fd2e14a04e563e5a1e036145f7401cf1ac7cfc937871b896181ba2ebd",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "核电能源代码、公司连接和三个输出列一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "77c39cfdd368f731c49a5c7afc5777292b22a67fcd4362c55e159f344b507d90",
+    "prediction_sha256": "d1f467823bd1b86a5e385134aee69125c53fd9f6911b534ecbcf1365f0ce58b6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 563,
+    "proxy_type": "knowledge",
+    "question": "查询所有供电类电力业务许可证持有企业的名称",
+    "reference": {
+      "question_id": 563,
+      "question": "查询所有供电类电力业务许可证持有企业的名称",
+      "db": "MYSQL",
+      "query": "SELECT DISTINCT ec.company_name FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE cc.cert_type = '供电类电力业务许可证';"
+    },
+    "predicted": {
+      "question_id": 563,
+      "db": "MYSQL",
+      "query": "SELECT DISTINCT ec.company_name FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE cc.cert_type = '供电类电力业务许可证';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "a95df84e76b668da64f195708f5c0d0a2f7e312f52be7099fff82696ecdcfbf8",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "供电许可证、DISTINCT企业名称均一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c2a354f313b075cdde9ebb9cadc9b93f22584a7cab7ce70ed079e06efc70c8de",
+    "prediction_sha256": "1043fa48091dafaaf8427011c6a3b95297ec161946902d64aa52c289fcc6e328",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 566,
+    "proxy_type": "simple",
+    "question": "统计所有发电场站的数量",
+    "reference": {
+      "question_id": 566,
+      "question": "统计所有发电场站的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station;"
+    },
+    "predicted": {
+      "question_id": 566,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "2ebf4e9ee326a3b7394121e602e56ea7afb848f7a16793c5eb677eaa2f3b12f0",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "同表COUNT(*)完全一致；发电场站是否需再按场站类型过滤是两者共同的标签口径问题。",
+    "reference_label_caveat": "发电场站文字与包含非发电类型的能源场站表范围需确认；双方查询相同。",
+    "reference_sha256": "89bc38e2f1097ad3e2d474688f0dc10c2ecf38517642ddfa7b4955fcf602bf73",
+    "prediction_sha256": "ff3035c3cb49d094d4a28b78c6349273f8264277bfa9830dada5fc5f0ea3edeb",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 636,
+    "proxy_type": "knowledge",
+    "question": "查询各电力企业中拥有在职员工数量最多的前5家企业",
+    "reference": {
+      "question_id": 636,
+      "question": "查询各电力企业中拥有在职员工数量最多的前5家企业",
+      "db": "MYSQL",
+      "query": "SELECT ec.company_name, COUNT(e.employee_id) AS emp_count FROM energy.energy_company ec JOIN energy.employee e ON ec.company_id = e.company_id WHERE e.status = '在职' GROUP BY ec.company_id, ec.company_name ORDER BY emp_count DESC LIMIT 5;"
+    },
+    "predicted": {
+      "question_id": 636,
+      "db": "MYSQL",
+      "query": "SELECT ec.company_name, COUNT(e.employee_id) AS emp_count FROM energy.energy_company ec JOIN energy.employee e ON ec.company_id = e.company_id WHERE e.status = '在职' GROUP BY ec.company_id, ec.company_name ORDER BY emp_count DESC LIMIT 5"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0d1f584105ec99166ae888ed82fe03dad4c39483ee94a5d270ca28b45f5d7f5c",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "在职条件、企业分组、人数降序和TOP5一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "2e87832f8f795a68ce2e5a3e0c32d7f8a71da0b59ccd6dd7f314889cc561ff63",
+    "prediction_sha256": "fa48f887a870c0692e5c97a0355d5b4a42852719f96a4798914d948a35128a6d",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 716,
+    "proxy_type": "knowledge",
+    "question": "统计吉林省电力企业中硕士学历员工的数量",
+    "reference": {
+      "question_id": 716,
+      "question": "统计吉林省电力企业中硕士学历员工的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS master_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) = '22' AND e.education = '硕士';"
+    },
+    "predicted": {
+      "question_id": 716,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.level = 1 AND ad.name = '吉林省' AND e.education = '硕士'"
+    },
+    "assumptions": [
+      "员工表education字段直接存储学历名称，'硕士'为有效取值",
+      "administrative_division表包含level和name字段，level=1表示省级行政区"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "1c2d28374a81183984a850d6f9f8613fd5b9e03ebe4a4a37bb8cddddb6298642",
+    "semantic_status": "different",
+    "difference_category": "region_level",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "用ec.area_id=ad.id后限定ad.level=1、name=吉林省，只保留省级代码记录；参考22%含全省区县，范围不同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "109987136d7f52972245e441220844afb47d6e2706d457759bb4c04396df56e6",
+    "prediction_sha256": "11fc13bee4ea2d74c09494571f399f0923dd99e5bfff4c495853ac82626f8918",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 718,
+    "proxy_type": "knowledge",
+    "question": "统计珠三角地区电力企业中拥有安全生产许可证的企业数量",
+    "reference": {
+      "question_id": 718,
+      "question": "统计珠三角地区电力企业中拥有安全生产许可证的企业数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.cert_type = '安全生产许可证';"
+    },
+    "predicted": {
+      "question_id": 718,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.cert_type = '安全生产许可证';"
+    },
+    "assumptions": [
+      "珠三角地区城市代码采用训练案例中的集合：4401、4403、4404、4406、4413、4419、4420、4407、4412",
+      "电力企业通过energy_company表表示，未额外过滤business_type",
+      "安全生产许可证通过cert_type='安全生产许可证'识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "6f53d4d7788640babf13be2236d0fbbf3dccb48659e841b222280bd746e0f449",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "珠三角9城市集合、安全生产许可证及DISTINCT企业计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "3ba2df011a45568797ee2ac0ba5ebe966c534e6e3fe63f8f82fa8874ffe3e811",
+    "prediction_sha256": "52dc33f1934e254ccf96e79feeb0d96fc71bd21db3b629d471ef2036f71896ac",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 749,
+    "proxy_type": "knowledge",
+    "question": "统计北京市电力企业中拥有博士学历的员工数量",
+    "reference": {
+      "question_id": 749,
+      "question": "统计北京市电力企业中拥有博士学历的员工数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS doctor_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '11%' AND e.education = '博士';"
+    },
+    "predicted": {
+      "question_id": 749,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS doctor_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '11%' AND e.education = '博士';"
+    },
+    "assumptions": [
+      "北京市的行政区划代码以'11'开头，因此使用 area_id LIKE '11%' 筛选注册地在北京的企业",
+      "学历字段 education 中博士的取值为'博士'"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "8cb3584e15ea8f1695347560f11549f710e5e0f888230888e579ab2eaefad3eb",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "北京11%及博士学历计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "ce6f767b0951bd7708efa3ae2fba84a77e626bffec652a6c03a6a0106380c967",
+    "prediction_sha256": "7ce02d530cf3bedb523d8751a405f67ca2a089d7375b4b316781f341537ca3cf",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 752,
+    "proxy_type": "knowledge",
+    "question": "统计江苏省电力企业中外派员工的数量",
+    "reference": {
+      "question_id": 752,
+      "question": "统计江苏省电力企业中外派员工的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS expat_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '32%' AND e.status = '外派';"
+    },
+    "predicted": {
+      "question_id": 752,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(e.employee_id) AS external_employee_count FROM energy.energy_company ec JOIN energy.employee e ON ec.company_id = e.company_id WHERE ec.area_id LIKE '32%' AND e.status = '外派';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "a50b6c11632c18bda6441cd44f0a20a5ec28e54d97b980b73bb09f1215c9037a",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "江苏32%、外派条件一致；employee_id非空主键，换连接顺序和COUNT主键不改变含义。",
+    "reference_label_caveat": null,
+    "reference_sha256": "b68123505c273c7d001ba12becda1adc3222a877cb7e13ae47b81c5f68c645bc",
+    "prediction_sha256": "0d786406626b91554d81edaa7dac5e180e748bf294a81e902ea626c6be9adccc",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 757,
+    "proxy_type": "knowledge",
+    "question": "统计深圳市电力企业中拥有新能源类电力业务许可证的企业数量",
+    "reference": {
+      "question_id": 757,
+      "question": "统计深圳市电力企业中拥有新能源类电力业务许可证的企业数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS new_energy_cert_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE ec.area_id LIKE '4403%' AND cc.cert_type = '新能源类电力业务许可证';"
+    },
+    "predicted": {
+      "question_id": 757,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE ec.area_id LIKE '4403%' AND cc.cert_type = '新能源类电力业务许可证';"
+    },
+    "assumptions": [
+      "深圳市行政区划代码前4位为4403，使用area_id LIKE '4403%'筛选深圳市企业",
+      "新能源类电力业务许可证的cert_type值为'新能源类电力业务许可证'"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "08295466aeaa733fdf9d67295ce11a4456fce160a1b9e29c6c06e9244c64970a",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "深圳4403%、新能源许可证及去重企业计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "997d88e5211cd6ec3859703dbe69f3d7d9fcb432cdd4ce4ef3f1ab2d1ba3a7da",
+    "prediction_sha256": "7834f80cf82f7627a04803af3e78da4d1d57f255f1c2c4b9c16b4e90b1148314",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 758,
+    "proxy_type": "knowledge",
+    "question": "统计武汉市电力企业中学历为大专的员工数量",
+    "reference": {
+      "question_id": 758,
+      "question": "统计武汉市电力企业中学历为大专的员工数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS diploma_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '4201%' AND e.education = '大专';"
+    },
+    "predicted": {
+      "question_id": 758,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.name = '武汉市' AND e.education = '大专';"
+    },
+    "assumptions": [
+      "administrative_division 表包含 id 和 name 字段，且武汉市对应 level=2 的记录",
+      "员工学历字段 education 中存储的值为中文“大专”"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "36a3dec1be686ad184b5d92e12e66a8d64bca0f03937e8b36ff291223566a1a6",
+    "semantic_status": "different",
+    "difference_category": "region_level",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测将企业区县area_id精确连接到ad.id后用ad.name=武汉市筛选，不能覆盖武汉下属区县；应区分name与city_name。",
+    "reference_label_caveat": null,
+    "reference_sha256": "0e374cc5aed8575830905872e139df8a18a1c69ba0045fc780ef03448f08329f",
+    "prediction_sha256": "0883543e52fc1d1859830edf2fecd9796b056340912ad3222585a976b77557e6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 764,
+    "proxy_type": "knowledge",
+    "question": "统计京津冀地区电力企业中退休员工的数量",
+    "reference": {
+      "question_id": 764,
+      "question": "统计京津冀地区电力企业中退休员工的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS retired_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) IN ('11','12','13') AND e.status = '退休';"
+    },
+    "predicted": {
+      "question_id": 764,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS retired_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) IN ('11','12','13') AND e.status = '退休';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "df270e82dd11a39510557d774222a9d6ff9f9aba80e752c473449cf3251302c3",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "京津冀省级前缀与退休状态一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "607c0acb800c21292f5329ad695303d917eb327f920fdc9f1c447b70d2c0e057",
+    "prediction_sha256": "6fbd89c11507f53142895c011b82e70f99581df1694d4ac9b80eb0a74c9d80a4",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 771,
+    "proxy_type": "knowledge",
+    "question": "统计云南省电力企业中检修岗位员工的数量",
+    "reference": {
+      "question_id": 771,
+      "question": "统计云南省电力企业中检修岗位员工的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS maintenance_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE ec.area_id LIKE '53%' AND ep.category = '检修';"
+    },
+    "predicted": {
+      "question_id": 771,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS maintenance_employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE ec.area_id LIKE '53%' AND ep.category = '检修';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "ddf4cad342b4aff34bc1bd0806ab50e1ad8ea1029a3c8103367e3bd642077d80",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "云南前缀、岗位category=检修和计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "f946f1ec4d2805e9ba3954b62be06a87c70b7fd9c0705ad89c501cfc8f3dde7d",
+    "prediction_sha256": "eaab91e7af82756626687114a1f6c71b47e720feeea85c01d41090a53dc66f0c",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 795,
+    "proxy_type": "knowledge",
+    "question": "统计长三角地区电力企业中运行检修类岗位的员工数量",
+    "reference": {
+      "question_id": 795,
+      "question": "统计长三角地区电力企业中运行检修类岗位的员工数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS op_maintenance_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE LEFT(ec.area_id,2) IN ('31','32','33','34') AND ep.category IN ('运行','检修');"
+    },
+    "predicted": {
+      "question_id": 795,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS employee_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.energy_position_dict ep ON e.position_code = ep.position_code WHERE LEFT(ec.area_id,2) IN ('31','32','33','34') AND ep.category IN ('运行','检修');"
+    },
+    "assumptions": [
+      "长三角地区按省级行政区划代码前2位识别：上海31、江苏32、浙江33、安徽34",
+      "电力企业通过energy.employee关联energy.energy_company确定，员工所属企业即电力企业",
+      "运行检修类岗位通过energy_position_dict.category IN ('运行','检修')识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "34b627d5cd64100ba5b52edb62770e3dc9b3f301e39ec4b4bf8f30655aecee89",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "长三角前缀集合、运行/检修岗位集合和计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "532b298b335cc99de8f1a6424f9f21d6d7fda91d4f6a82c55ded2db72291fe85",
+    "prediction_sha256": "336faa0bb11bb2f51d452573d3f37782febc750a71abcb2180f1ca4354f2a04b",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 822,
+    "proxy_type": "simple",
+    "question": "查询各电力企业中员工年龄小于25岁的员工姓名和年龄",
+    "reference": {
+      "question_id": 822,
+      "question": "查询各电力企业中员工年龄小于25岁的员工姓名和年龄",
+      "db": "MYSQL",
+      "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age, ec.company_name FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25;"
+    },
+    "predicted": {
+      "question_id": 822,
+      "db": "MYSQL",
+      "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": false,
+    "generation_calls": 1,
+    "answer_sha256": "a8b10d1d2c9577f2269e2a8907c607fc6ec24aef543437e49adaf8151dcfaacd",
+    "semantic_status": "different",
+    "difference_category": "output",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测省略参考中的企业名称和企业连接，输出列数量不同；题目明确姓名、年龄，对企业维度的要求存在歧义。",
+    "reference_label_caveat": "题目要求姓名和年龄，参考额外返回公司名，是否必须含企业维度需澄清。",
+    "reference_sha256": "db3296cd940dfec8f6fc2c8e8c00209562fb7563b932a37cf6b45a44866ab45f",
+    "prediction_sha256": "d320fc1ed089e104a51f3dd033d5ab797bd1a5e34b57d5f19409f098e25e844c",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 837,
+    "proxy_type": "knowledge",
+    "question": "统计宿迁市发电场站中在建项目的数量",
+    "reference": {
+      "question_id": 837,
+      "question": "统计宿迁市发电场站中在建项目的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS constructing_count FROM energy.energy_station WHERE area_id LIKE '3213%' AND status = '在建';"
+    },
+    "predicted": {
+      "question_id": 837,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS count FROM energy.energy_station WHERE area_id LIKE '3213%' AND status = '在建'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "8e637881f67d722aad03c6d3fa95a9d5f572dabd94b019eecfef3a55bef638ea",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "宿迁3213%、在建状态及计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "3b9ce391cf73e0672b32d27f7b93528e595b65ed72a00fd21572c99055aadbb7",
+    "prediction_sha256": "6354125764f411d521d10f10406426140844865a44f42ebb22adb8da686bc269",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 844,
+    "proxy_type": "calculation",
+    "question": "统计长沙市发电场站的总装机容量",
+    "reference": {
+      "question_id": 844,
+      "question": "统计长沙市发电场站的总装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_capacity FROM energy.energy_station WHERE area_id LIKE '4301%';"
+    },
+    "predicted": {
+      "question_id": 844,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '长沙市'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "04d9ac56bee8d30e51860945364b7e517ac312d94523141d04c29469c0954220",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "按行政区划正常映射，长沙4301%与city_name=长沙市对应同一区域；非空外键连接不改变场站计数基数，SUM装机容量一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "f27a137608433325d9614c48aba5bc7f748befb4de10d448e4c8a517f304a6ff",
+    "prediction_sha256": "ebd884cecb596d717243212556b3b123d816a662066677018f51fdcb2faad296",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 861,
+    "proxy_type": "knowledge",
+    "question": "统计东莞市发电场站中运营超过15年的场站数量",
+    "reference": {
+      "question_id": 861,
+      "question": "统计东莞市发电场站中运营超过15年的场站数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS old_station_count FROM energy.energy_station WHERE area_id LIKE '4419%' AND TIMESTAMPDIFF(YEAR, grid_connect_date, CURDATE()) > 15;"
+    },
+    "predicted": {
+      "question_id": 861,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station es JOIN common.station_type_dict std ON es.station_type_code = std.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '东莞市' AND std.category = '发电' AND TIMESTAMPDIFF(YEAR, es.grid_connect_date, CURDATE()) > 15;"
+    },
+    "assumptions": [
+      "运营超过15年按并网日期起算，使用 TIMESTAMPDIFF(YEAR, grid_connect_date, CURDATE()) > 15",
+      "发电场站按 station_type_dict.category = '发电' 识别",
+      "东莞市按 administrative_division.city_name = '东莞市' 识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "92e056b9427dbfd2b78ff2369abfb565e1f1db0ed0dad1a5ee5af62deea621d3",
+    "semantic_status": "different",
+    "difference_category": "extra_filter",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测额外限定station_type_dict.category=发电，参考统计所有满足地区、并网年限的场站；Schema与knowledge1582允许非发电场站存在，不能视为冗余。预测可能更贴近发电二字，但不与参考一致。",
+    "reference_label_caveat": "题目发电场站，参考未过滤发电类型；预测额外过滤在题意上可能合理。",
+    "reference_sha256": "befd91ee40bfec5acb2f6d789fb977694ce44c685a2d77ff8f8a1b0bbfaf4a88",
+    "prediction_sha256": "5c91ea84b1716b7a19dc453bf9236c2c0b99ab3a18a79abf9b9ab41c603d87f0",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 896,
+    "proxy_type": "calculation",
+    "question": "统计大庆市发电场站中天然气发电站的装机容量",
+    "reference": {
+      "question_id": 896,
+      "question": "统计大庆市发电场站中天然气发电站的装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS gas_capacity FROM energy.energy_station WHERE area_id LIKE '2306%' AND energy_type_code = 'GAS';"
+    },
+    "predicted": {
+      "question_id": 896,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.energy_type_dict et ON es.energy_type_code = et.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE et.type_name = '天然气发电' AND ad.city_name = '大庆市'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "e712e10f0aa6b19cfd0116974a0c3b10f58c3a4c9d4a7b9b41a088b600286bc6",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "knowledge1581明确天然气发电=GAS，按能源字典与行政区划正常映射，筛选和SUM同义。",
+    "reference_label_caveat": null,
+    "reference_sha256": "15dd46ccce09304973251692e645c8fefe28196b8c663e36649eb1589b8a8549",
+    "prediction_sha256": "23e055407bec8865dfade8be9b23b7009b8b0df1759ed8f7c8ca37770740221e",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 904,
+    "proxy_type": "knowledge",
+    "question": "统计开封市发电场站中光伏电站的数量",
+    "reference": {
+      "question_id": 904,
+      "question": "统计开封市发电场站中光伏电站的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS solar_count FROM energy.energy_station WHERE area_id LIKE '4102%' AND energy_type_code = 'SOLAR';"
+    },
+    "predicted": {
+      "question_id": 904,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS solar_count FROM energy.energy_station WHERE area_id LIKE '4102%' AND energy_type_code = 'SOLAR';"
+    },
+    "assumptions": [
+      "开封市的行政区划代码为4102，使用area_id LIKE '4102%'匹配开封市下辖区域",
+      "光伏电站通过energy_type_code='SOLAR'识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "c27747b84db3bf3ad59efe86c91cbc2296d024c4c4d272aadec6cca83092e1cf",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "开封4102%、SOLAR代码、计数一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "d21454b2d6c7f266caf0cf46eb2874a4492b303cd0426d15fc6059ca292063d1",
+    "prediction_sha256": "0430111229e84183bc5265c38d43a45127d7bcedfeaa8f7e1b7791097ab82139",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 912,
+    "proxy_type": "calculation",
+    "question": "统计六盘水市发电场站中火电场的年发电量",
+    "reference": {
+      "question_id": 912,
+      "question": "统计六盘水市发电场站中火电场的年发电量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(annual_generation) AS thermal_generation FROM energy.energy_station WHERE area_id LIKE '5202%' AND energy_type_code = 'THERMAL';"
+    },
+    "predicted": {
+      "question_id": 912,
+      "db": "MYSQL",
+      "query": "SELECT SUM(annual_generation) AS thermal_generation FROM energy.energy_station WHERE area_id LIKE '5202%' AND energy_type_code = 'THERMAL';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "9314928c97c029390b8612781ee8118a888ae400031546e5662cc0d40dceb0e3",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "六盘水5202%、THERMAL代码、SUM年发电量一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "1d53b88bca976ed312c298b78a065faffcdea126d434fe7b970b3e3d388a7d43",
+    "prediction_sha256": "4f742f3187e8d8175a969c20c262fcc0fe8d79a9c54135a7ee59dc95ea6e1cc3",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 923,
+    "proxy_type": "calculation",
+    "question": "统计白山市发电场站中抽水蓄能电站的装机容量",
+    "reference": {
+      "question_id": 923,
+      "question": "统计白山市发电场站中抽水蓄能电站的装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS pumped_capacity FROM energy.energy_station WHERE area_id LIKE '2206%' AND energy_type_code = 'PUMPED';"
+    },
+    "predicted": {
+      "question_id": 923,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '白山市' AND es.energy_type_code = 'PUMPED';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "af200671d93f9f35141efa54300d33d81c3019b541463703db887d6c74e919d4",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "白山2206%与city_name=白山市为同一区域编码，PUMPED及SUM装机容量一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "78d5a2b4fa0736f4c217df66289f67135e3fd171b61ab188e4352eb82d693f7c",
+    "prediction_sha256": "b0c7c12621a2cd774ea73c7f6a6b0101f35b3711cd6d6e21593c2525b799d061",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 935,
+    "proxy_type": "calculation",
+    "question": "统计衡阳市发电场站中火电场的装机容量",
+    "reference": {
+      "question_id": 935,
+      "question": "统计衡阳市发电场站中火电场的装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS thermal_capacity FROM energy.energy_station WHERE area_id LIKE '4304%' AND energy_type_code = 'THERMAL';"
+    },
+    "predicted": {
+      "question_id": 935,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id JOIN common.station_type_dict std ON es.station_type_code = std.type_code WHERE ad.city_name = '衡阳市' AND std.type_name = '火电';"
+    },
+    "assumptions": [
+      "场站类型字典中火电场的类型名称为'火电'",
+      "衡阳市通过行政区划表的city_name字段识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "81fb8b717243932cb871f86b6edc5ca4b58bcc3e93425d91ab5ba5a84f60b932",
+    "semantic_status": "different",
+    "difference_category": "wrong_dictionary",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考按能源类型energy_type_code=THERMAL，预测在场站类型字典station_type_dict中猜type_name=火电；knowledge1582的场站分类与能源分类不是同一维度。",
+    "reference_label_caveat": null,
+    "reference_sha256": "9a018f37749e55fb98b417a5077f0cc97d609b383a5e1c0205149b4e4901dc91",
+    "prediction_sha256": "4f754a9b2bef791f2325f93e8c50d18fa4e0a368dc00258b455c7c7d710f79a2",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 952,
+    "proxy_type": "calculation",
+    "question": "统计伊犁州发电场站中风电场的总装机容量",
+    "reference": {
+      "question_id": 952,
+      "question": "统计伊犁州发电场站中风电场的总装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS wind_capacity FROM energy.energy_station WHERE area_id LIKE '6540%' AND station_type_code = 'WP';"
+    },
+    "predicted": {
+      "question_id": 952,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.full_name LIKE '伊犁%' AND es.station_type_code = 'WP';"
+    },
+    "assumptions": [
+      "伊犁州通过行政区划全称以'伊犁'开头识别，因未提供具体区划代码",
+      "风电场通过station_type_code='WP'识别，依据知识1582"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0b8fabc603430da18383dbc86f7ab1a3d48b0f4ef552e7d2bf5c5cee4cf3b31b",
+    "semantic_status": "uncertain",
+    "difference_category": "dictionary_value",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考伊犁州代码6540%，预测full_name LIKE 伊犁%；未提供字典实际行或全称组成规范，若全称以新疆等上级名称开头会漏匹配，不能确认等价。",
+    "reference_label_caveat": null,
+    "reference_sha256": "2f6611aa0b377cfc31bd510f80b2fcfbd6d83e6374fd458fff7bb8bf73a11847",
+    "prediction_sha256": "79f9f65deec86290ccfe34ee791196201bd1a23544949159b514a9858f418861",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 959,
+    "proxy_type": "knowledge",
+    "question": "统计辽源市发电场站中火电场的数量",
+    "reference": {
+      "question_id": 959,
+      "question": "统计辽源市发电场站中火电场的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS thermal_count FROM energy.energy_station WHERE area_id LIKE '2204%' AND energy_type_code = 'THERMAL';"
+    },
+    "predicted": {
+      "question_id": 959,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS thermal_count FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '辽源市' AND es.energy_type_code = 'THERMAL';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "aef0cedd18bdbf8ba003a12e0dd7188cbf453d183253fd25e7b1df7f75721fc9",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "辽源2204%与city_name=辽源市按正常行政映射同义，THERMAL和COUNT一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "d44d218fb381f1a063c6eca0c2eea07ad0ca79e0ef8c0b11bdb188ad815d1932",
+    "prediction_sha256": "847c228dc847eb5db70a7734bcf3da0b1fb1262c06b536972a49e66c13c3d8ce",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 971,
+    "proxy_type": "calculation",
+    "question": "统计韶关市发电场站中水电站的装机容量",
+    "reference": {
+      "question_id": 971,
+      "question": "统计韶关市发电场站中水电站的装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS hydro_capacity FROM energy.energy_station WHERE area_id LIKE '4402%' AND energy_type_code = 'HYDRO';"
+    },
+    "predicted": {
+      "question_id": 971,
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_capacity FROM energy.energy_station WHERE area_id LIKE '4402%' AND energy_type_code = 'HYDRO';"
+    },
+    "assumptions": [
+      "韶关市的行政区划代码为4402，因此使用area_id LIKE '4402%'过滤韶关市",
+      "水电站通过energy_type_code='HYDRO'识别"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "7fa4497b33250acbe9c06c3e8716617941f35cecf20ef039fe6e84ff0c02d714",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "韶关4402%、HYDRO、SUM装机容量一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "3e72843746c41bc76f1463800278c994496ceaf08fb5b3e9ae64f7ea6fd39aab",
+    "prediction_sha256": "0aa535801cf6bd8f34954e5e631072c217097aded2ad2b4a3595a4099dd09426",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 989,
+    "proxy_type": "knowledge",
+    "question": "统计山东省拥有风力发电场的电力企业数量",
+    "reference": {
+      "question_id": 989,
+      "question": "统计山东省拥有风力发电场的电力企业数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT company_id) AS company_count FROM energy.energy_station WHERE area_id LIKE '37%' AND station_type_code = 'WP';"
+    },
+    "predicted": {
+      "question_id": 989,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.energy_station es ON ec.company_id = es.company_id WHERE ec.area_id LIKE '37%' AND es.station_type_code = 'WP';"
+    },
+    "assumptions": [
+      "山东省的行政区划代码前两位为37，使用 area_id LIKE '37%' 筛选",
+      "风力发电场对应场站类型代码 WP"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "66738af6188cc81ec2857ae1b55ff1c499e411a3ba41ceb862081a740234d049",
+    "semantic_status": "different",
+    "difference_category": "region_object",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考按场站es.area_id筛山东，预测按企业ec.area_id筛山东；跨省经营时集合不同。题目山东省企业与参考场站位置口径本身需澄清。",
+    "reference_label_caveat": "题面山东省企业与参考按场站所在地过滤存在歧义。",
+    "reference_sha256": "576a89789c8e53877b643ab3a408e38ac530732596f270204bf4483a6d5b817f",
+    "prediction_sha256": "cb2f326c760377a4b9c9bd83d4381cce9374ea8654346e32e6406c75c5c46b03",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1038,
+    "proxy_type": "knowledge",
+    "question": "统计珠三角各城市电力企业中拥有资质过期的企业数量",
+    "reference": {
+      "question_id": 1038,
+      "question": "统计珠三角各城市电力企业中拥有资质过期的企业数量",
+      "db": "MYSQL",
+      "query": "SELECT LEFT(ec.area_id,4) AS city_code, COUNT(DISTINCT ec.company_id) AS expired_company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.expire_date < CURDATE() GROUP BY LEFT(ec.area_id,4);"
+    },
+    "predicted": {
+      "question_id": 1038,
+      "db": "MYSQL",
+      "query": "SELECT ad.city_name, COUNT(DISTINCT ec.company_id) AS expired_company_count FROM energy.energy_company ec JOIN energy.company_certification cc ON ec.company_id = cc.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE LEFT(ec.area_id,4) IN ('4401','4403','4404','4406','4413','4419','4420','4407','4412') AND cc.expire_date < CURDATE() GROUP BY ad.city_name;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "dc9405588ffe66af4c3771b6da4fd407bb9bb0c061b443208ba7c8f9ddcc42b3",
+    "semantic_status": "equivalent",
+    "difference_category": "dimension_mapping",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "同一9城集合、资质过期条件与DISTINCT企业计数；城市代码变为字典城市名称属于维度表示替换，未声明原始结果值完全相同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "b9a8e9c3b3cc1554d2c4039a777c1718892d854510dfa5f8d06b9de90b6c9d17",
+    "prediction_sha256": "771b04c07a6d903c5b64226a84fe7b73d9cd777dd834262c3c7989810e64f57a",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1050,
+    "proxy_type": "calculation",
+    "question": "查询西电东送送端省份的总装机容量和总年发电量",
+    "reference": {
+      "question_id": 1050,
+      "question": "查询西电东送送端省份的总装机容量和总年发电量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_capacity, SUM(annual_generation) AS total_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65');"
+    },
+    "predicted": {
+      "question_id": 1050,
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_installed_capacity, SUM(annual_generation) AS total_annual_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('44','45','50','51','52','53','54','61','62','63','64','65') AND energy_type_code <> 'PUMPED';"
+    },
+    "assumptions": [
+      "西电东送送端省份按送端省级行政区划代码识别，包括内蒙古(15)、广西(45)、四川(51)、云南(53)、贵州(52)、西藏(54)、陕西(61)、甘肃(62)、青海(63)、宁夏(64)、新疆(65)；其中内蒙古仅包含西部电网覆盖的蒙西地区，但行政区划代码无法区分蒙东与蒙西，故按整个内蒙古统计。",
+      "统计发电量时排除抽水蓄能电站（energy_type_code='PUMPED'），因其年发电量为0且功能为储能调峰。"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "b0ede4bc04da5eac450f24200414bb3c9ac2fe0a659f912f063f9c39ecab411e",
+    "semantic_status": "different",
+    "difference_category": "region_set",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测省份集合比参考多44、45，并对两个SUM同时排除PUMPED，会改变总装机容量；assumptions中说含内蒙古15但SQL实际没15，说明与查询也不一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "3ca1ef96c5a4fb1335480b613fe182212f66a5371c2540f8b96661620aa1758b",
+    "prediction_sha256": "f05770a52144ba25699a5e4330bf29a917ec848c6c9e7b0017fc716957b53fde",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1072,
+    "proxy_type": "simple",
+    "question": "帮我查询应付金额最高的20个订单，输出结果。",
+    "reference": {
+      "question_id": 1072,
+      "question": "帮我查询应付金额最高的20个订单，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 20;"
+    },
+    "predicted": {
+      "question_id": 1072,
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 20;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "81bf639f61292a4c974a634631a1485b3e95a0561cebe62f3a26b6f95c16a331",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "订单金额降序、order_id打破并列、TOP20及两列输出完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "1b408fa72b1c12548cae2f5bd7df7b95ab7e19eb7a020af7a482a16a43098d9b",
+    "prediction_sha256": "c9584609fa2bf2b792fe30a16c0196f35c11443656b7e999a764e1f765380495",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1089,
+    "proxy_type": "simple",
+    "question": "帮我查询应付金额大于500的订单，返回查询结果。",
+    "reference": {
+      "question_id": 1089,
+      "question": "帮我查询应付金额大于500的订单，返回查询结果。",
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders WHERE payable_amount > 500 ORDER BY order_id;"
+    },
+    "predicted": {
+      "question_id": 1089,
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders WHERE payable_amount > 500 ORDER BY order_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "acce5bbad5e57e92a87aad6a88f561042243d7f70f24d51c169a8e8ee160b241",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "应付金额>500、两列输出和排序一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c09bd9f5ce413210134537ddb827b9895a3df68beb61b1d00e9c98d0d2e8b900",
+    "prediction_sha256": "b4af19f981f1c429a372fd2d1f14e65895c9ccae887264aad8d6e6543981937d",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1096,
+    "proxy_type": "calculation",
+    "question": "帮我统计SELF平台的GMV",
+    "reference": {
+      "question_id": 1096,
+      "question": "帮我统计SELF平台的GMV",
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+    },
+    "predicted": {
+      "question_id": 1096,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "c5be1d06086e5ce95afea661a8e365126a977ce965d02d740c53eb13aa9d7606",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "SELF平台GMV公式与ROUND2完全一致。SUM金额仍ROUND与新增一般规则有文本冲突，但两份查询语义相同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "9e8895e7d3f485f73e770e177b93845eba9a90804bd7f395281db74d19bc8d8b",
+    "prediction_sha256": "f789cc75c7e6bddf2f8bc02443b7234488d0a2d0648d619986e20169c08abe5e",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1148,
+    "proxy_type": "calculation",
+    "question": "帮我统计JD平台的GMV。",
+    "reference": {
+      "question_id": 1148,
+      "question": "帮我统计JD平台的GMV。",
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'JD';"
+    },
+    "predicted": {
+      "question_id": 1148,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'JD';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "7288fbf61ead00efa6b2c8422e39ed8c9f771b9f7d3440fe14ea6645bcbad129",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "JD平台GMV公式与ROUND2完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "7c9f5b7b59d0729d3056e82af67dbef6b0ab69773c7e82cc2bea49ea2ffe0d58",
+    "prediction_sha256": "ae71b3760b21e2674cd429ccc3148ac469f1ac6d28fb6aa7fe414d368176e880",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1158,
+    "proxy_type": "simple",
+    "question": "请帮我统计WEB渠道的订单数量。",
+    "reference": {
+      "question_id": 1158,
+      "question": "请帮我统计WEB渠道的订单数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'WEB';"
+    },
+    "predicted": {
+      "question_id": 1158,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'WEB';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "425851d147c8f689878e4b740b4b4907a4a9d805beed68820640e9fe7daf4fa3",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "WEB渠道COUNT一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "0de42a28aca165bb07a0b5a4ce008fc2987deaf68c2be1332719b0df1ad4a85f",
+    "prediction_sha256": "da36e8fd0610ec320c31dc5b8d21118483ab8f7b394f2cdd8ec4924c64a60386",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1159,
+    "proxy_type": "simple",
+    "question": "查询应付金额最高的5个订单。",
+    "reference": {
+      "question_id": 1159,
+      "question": "查询应付金额最高的5个订单。",
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 5;"
+    },
+    "predicted": {
+      "question_id": 1159,
+      "db": "MYSQL",
+      "query": "SELECT order_id, payable_amount FROM ecommerce.orders ORDER BY payable_amount DESC, order_id ASC LIMIT 5;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "dbd662272965fb631d97305b5f1a717266f193c4ae97754275da5f4d939e690b",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "订单金额TOP5、并列顺序与输出完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "8cd5df4ce7edaa311178cd0949fa67bdcd1706c2b4ed44379652eff8f24fbdd0",
+    "prediction_sha256": "5e9d37dabbb544f25fe24e9d752e6ae04754fa2a35883bcbb78073664dfe8193",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1163,
+    "proxy_type": "simple",
+    "question": "帮我查询会员等级为DIAMOND的用户。",
+    "reference": {
+      "question_id": 1163,
+      "question": "帮我查询会员等级为DIAMOND的用户。",
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'DIAMOND' ORDER BY customer_id;"
+    },
+    "predicted": {
+      "question_id": 1163,
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'DIAMOND' ORDER BY customer_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "4aae6c1d996caf4700df02f51cad279c1e9277cb10dc74b1ac801b7a151b398e",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "DIAMOND筛选、用户ID及名称输出一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "95c0c118b0e77b478f6f993d6ef8f79d0d8092ea7746008bbc7e97992cd4071a",
+    "prediction_sha256": "a72f23b0947b262d462713125d6ba1e0d3ec6949c70c2cfb917cc39c24b89da4",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1197,
+    "proxy_type": "simple",
+    "question": "请统计MINI_PROGRAM渠道的订单数量",
+    "reference": {
+      "question_id": 1197,
+      "question": "请统计MINI_PROGRAM渠道的订单数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'MINI_PROGRAM';"
+    },
+    "predicted": {
+      "question_id": 1197,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'MINI_PROGRAM';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0c25673980612ecb09bba90cd01370ce58f00699fea38d8de7778f7748ccd783",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "MINI_PROGRAM渠道COUNT一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "4105abbd9acb26dec936938d461ff9ba7137a5977df5d168cd617f09f361a21f",
+    "prediction_sha256": "32f3a3bd4dfd8d2d462fb0cbff4bb3cf4a596de135058b1398ae44e68bd064ce",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1205,
+    "proxy_type": "simple",
+    "question": "帮我统计LIVE渠道的订单数量。",
+    "reference": {
+      "question_id": 1205,
+      "question": "帮我统计LIVE渠道的订单数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'LIVE';"
+    },
+    "predicted": {
+      "question_id": 1205,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS order_count FROM ecommerce.orders WHERE order_channel_code = 'LIVE';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "9751e85ad920fadb5b780b85c9ad9e1b9412fa6938dc50daf192a3155429e009",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "LIVE渠道COUNT一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "7f41af34fe44cdb1e9ff5e08edeea1123a7cb91958eb3c7b20509d1dc99a49d1",
+    "prediction_sha256": "6269e70c11eff89384d5ce23f838daedb2d48616786334e7bfdacea0da593ec6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1224,
+    "proxy_type": "simple",
+    "question": "在电商平台上请查询状态为CANCELLED的用户ID和用户名",
+    "reference": {
+      "question_id": 1224,
+      "question": "在电商平台上请查询状态为CANCELLED的用户ID和用户名",
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'CANCELLED' ORDER BY customer_id;"
+    },
+    "predicted": {
+      "question_id": 1224,
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'CANCELLED' ORDER BY customer_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "98f8af61e7411ed080a1c46f859aedb68aa0079873101b4b8b2f02d03372fc82",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "CANCELLED状态、用户ID及名称输出一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "b8a9f3b9ad1716dd2e612e48d660ac0b2255f1a6dbbd61eff45378f1992537e8",
+    "prediction_sha256": "1ec99400035f0924d8d588b6a2335cd5b5fbfa56bc6e255fa16d1e0dd939385c",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1232,
+    "proxy_type": "simple",
+    "question": "查询会员等级为GOLD的用户，输出结果。",
+    "reference": {
+      "question_id": 1232,
+      "question": "查询会员等级为GOLD的用户，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'GOLD' ORDER BY customer_id;"
+    },
+    "predicted": {
+      "question_id": 1232,
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE level_code = 'GOLD' ORDER BY customer_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "5c34934c8bcda122b40135e9a9670d3c17f44fa1065bd698c50b02dba7951431",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "GOLD筛选、用户ID及名称输出一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "06e7af7a6c2960f6e1ce6a1e6cc9d94bfef2067ae58611f2598a2ad6f9dc889f",
+    "prediction_sha256": "0e7e77ff11238e3270263e9d704ea1ccedabf37810f224baa480999cedc7c879",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1250,
+    "proxy_type": "knowledge",
+    "question": "请按会员等级名称统计用户数量，输出结果。",
+    "reference": {
+      "question_id": 1250,
+      "question": "请按会员等级名称统计用户数量，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "predicted": {
+      "question_id": 1250,
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "76c778e1f3a7d3242252966277c9cc07b376e39ff99067390230deccf02d079c",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "会员等级名称字典连接、分组、计数和排序完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "ebd97aba5f64f73b7f0edefd4d41ea7bfc9e4bdffccb5196fccd86893c930daa",
+    "prediction_sha256": "22dd956efc73a78a3024ce9aea1e184140b5a7a488da1b834abb14b989e415d6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1298,
+    "proxy_type": "knowledge",
+    "question": "请帮我按会员等级名称统计用户数量，输出结果。",
+    "reference": {
+      "question_id": 1298,
+      "question": "请帮我按会员等级名称统计用户数量，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "predicted": {
+      "question_id": 1298,
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "27a06bc86e7194d67da35bb9481d4eff53e0cf88a0f614493c68cf7c1ad12948",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "会员等级名称字典连接、分组、计数和排序完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "665a4b3f80c91283fbb37929e3129b49802ec5923d496b6f16e1ba07edc88a80",
+    "prediction_sha256": "84933131bc8870dcfd053402cb4ef04bdc6d13132a8ef687c0444db41f6235d7",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1330,
+    "proxy_type": "knowledge",
+    "question": "帮我按会员等级名称统计用户数量，输出结果。",
+    "reference": {
+      "question_id": 1330,
+      "question": "帮我按会员等级名称统计用户数量，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "predicted": {
+      "question_id": 1330,
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "70e42d284ca0732ec057e63871d9ffa02d91596d3a939c66db09a93b53545e6c",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "会员等级名称字典连接、分组、计数和排序完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e6356dfb354bd253703325575f33047a3c96ce1194feeb6878b8e1383998b158",
+    "prediction_sha256": "9581bf5db49adb74437e0be82ec18e9720a53c7abed9fc1fc4d77d3c30e205d7",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1364,
+    "proxy_type": "simple",
+    "question": "在电商平台上查询状态为FROZEN的用户ID和用户名，输出结果。",
+    "reference": {
+      "question_id": 1364,
+      "question": "在电商平台上查询状态为FROZEN的用户ID和用户名，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'FROZEN' ORDER BY customer_id;"
+    },
+    "predicted": {
+      "question_id": 1364,
+      "db": "MYSQL",
+      "query": "SELECT customer_id, customer_name FROM ecommerce.customer WHERE status_code = 'FROZEN' ORDER BY customer_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "00e6aaaed08f509450cf76d4e16c938d8b16abfa3f36672d07655934b3b93e14",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "FROZEN状态、用户ID及名称输出一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "983a8618fff07e6931e64babc45276bc025c7ede1d2474e78488a84da261282d",
+    "prediction_sha256": "ee4102656e32ff57cfcecf5397c56b1687289e2373316312df241201d8b1d58d",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1436,
+    "proxy_type": "calculation",
+    "question": "请帮我统计SELF平台的GMV，输出结果。",
+    "reference": {
+      "question_id": 1436,
+      "question": "请帮我统计SELF平台的GMV，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+    },
+    "predicted": {
+      "question_id": 1436,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(SUM(total_amount), 2) AS gmv FROM ecommerce.orders WHERE platform_code = 'SELF';"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "c22c3c971b4dfddc662a6b208456598a130527933faa0301b0caa1850aa8e038",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "SELF平台GMV公式与ROUND2完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e594bffc93f106c20b76108cf5e00ae707228022c40cdb76eb1a6281dc546acc",
+    "prediction_sha256": "b81b5b778dc86a7dbbd486f4e419dafeed0314debf1b9810cc51c145a93b7e66",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1540,
+    "proxy_type": "knowledge",
+    "question": "帮我按会员等级名称统计用户数量",
+    "reference": {
+      "question_id": 1540,
+      "question": "帮我按会员等级名称统计用户数量",
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "predicted": {
+      "question_id": 1540,
+      "db": "MYSQL",
+      "query": "SELECT d.level_name, COUNT(*) AS user_count FROM ecommerce.customer c JOIN common.customer_level_dict d ON c.level_code = d.level_code GROUP BY d.level_code, d.level_name ORDER BY d.level_code;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "c3f75cbc41f4fe5206c0025dea590a0359346525844eff289f662f9b47f571ab",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "会员等级名称字典连接、分组、计数和排序完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c8dad25844607d4882b6b1ea84e77d5ae72cbd01639b40cd4bdb18ed88a51d5c",
+    "prediction_sha256": "f3808160fdc58d49dbb621a8f237eab699f5e7d05df2b653bb56b752b4541570",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1588,
+    "proxy_type": "calculation",
+    "question": "请统计整体退款率，输出结果。",
+    "reference": {
+      "question_id": 1588,
+      "question": "请统计整体退款率，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+    },
+    "predicted": {
+      "question_id": 1588,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 2) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "789d29aa70b6a264260cb6d1cbe0d14a26f5e1730d399bfabfc5ac383b7d18be",
+    "semantic_status": "rules_only_difference",
+    "difference_category": "precision",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "退款订单数、总订单数、DISTINCT及NULLIF分母均相同，仅参考ROUND(...,4)变为统一规则要求的ROUND(...,2)。",
+    "reference_label_caveat": null,
+    "reference_sha256": "d8c06fdfada3be899d41718c66b893177baa8555eec260b2e688bfb66a596a75",
+    "prediction_sha256": "1a6f224e7801c2577857327c1d0bbdd123d10d082accde78731383162b35616a",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1717,
+    "proxy_type": "simple",
+    "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+    "reference": {
+      "question_id": 1717,
+      "question": "查询课程表里是否存在课程名以“数”开头的课程，若存在返回数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS course_name_start_with_num_cnt FROM education_2024.course c WHERE c.course_name LIKE '数%';"
+    },
+    "predicted": {
+      "question_id": 1717,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS course_name_start_num_cnt FROM education_2024.course WHERE course_name LIKE '数%';"
+    },
+    "assumptions": [
+      "问题未指定课程表所属年份，候选表包含education_2024.course和education_2025.course，选择education_2024.course作为查询对象。"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "774fbbc54271552b7b67e14cb6de1f280ba2aeea034aac1d8eb9d2d9d5a2c0ab",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "均使用education_2024.course、数%及COUNT；但题面没有年份，参考来源自身存在年份歧义。",
+    "reference_label_caveat": "题面没有年份，当前参考和预测碰巧都选2024；不代表推断依据充分。",
+    "reference_sha256": "f343782d199052833bbf7b24f116a0385e996e103e4d8af1b36a6cf7f8e8824e",
+    "prediction_sha256": "5d85fabda8272f36fccdeeaaab2e9f968418353b6eb3018c169a52d63e7a9a07",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1723,
+    "proxy_type": "simple",
+    "question": "统计学期表共有多少条记录，并返回数量。",
+    "reference": {
+      "question_id": 1723,
+      "question": "统计学期表共有多少条记录，并返回数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS semester_cnt FROM education_2025.semester sem;"
+    },
+    "predicted": {
+      "question_id": 1723,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS semester_cnt FROM education_2024.semester;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": false,
+    "generation_calls": 1,
+    "answer_sha256": "52bce2194f3e5dad3ab2b305bd80c1bc283d4c349d8d9d8f8696b8b2fe4b6aba",
+    "semantic_status": "different",
+    "difference_category": "ambiguous_year",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考education_2025.semester，预测education_2024.semester，物理业务库不同；问题未提供年份，不能据此断言模型本可唯一选择正确年份。",
+    "reference_label_caveat": "题面没有年份，2024/2025库选择缺少唯一依据。",
+    "reference_sha256": "5b6d56de67050993258f834f6baf1624b79f7e382f2903c89b390c901d21c208",
+    "prediction_sha256": "924c882291d7d32a42fe2b28b53c0d8ddd188c739d5338649f0924f4f281e569",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1728,
+    "proxy_type": "simple",
+    "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+    "reference": {
+      "question_id": 1728,
+      "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+      "db": "MYSQL",
+      "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+    },
+    "predicted": {
+      "question_id": 1728,
+      "db": "MYSQL",
+      "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id = 2 ORDER BY cl.class_id ASC LIMIT 30;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": false,
+    "generation_calls": 1,
+    "answer_sha256": "38501eff996f5532156008a12a56641cad749143bdf0d1637fdbdb7e9c39d72d",
+    "semantic_status": "different",
+    "difference_category": "ambiguous_year",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "院系2、排序和TOP30一致，但参考education_2025.class，预测2024.class；题面缺少年份。",
+    "reference_label_caveat": "题面没有年份，2024/2025库选择缺少唯一依据。",
+    "reference_sha256": "915dd72cf6406218ff01eb9d4ab331bc75534bbd6f0914e6770808c924b9d4c3",
+    "prediction_sha256": "81972ebb910c84b062d625c36d5aace852db0ce3e3e7f0e6518e9ea0a1c73401",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1853,
+    "proxy_type": "calculation",
+    "question": "找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。",
+    "reference": {
+      "question_id": 1853,
+      "question": "找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。",
+      "db": "MYSQL",
+      "query": "WITH per2024 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2024 FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), per2025 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2025 FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), common_students AS ( SELECT p24.student_id, p24.total_score_2024, p25.total_score_2025 FROM per2024 p24 JOIN per2025 p25 ON p25.student_id = p24.student_id ) SELECT s.student_no, ROUND(c.total_score_2024, 2) AS total_score_2024, ROUND(c.total_score_2025, 2) AS total_score_2025 FROM common_students c JOIN education_2025.student s ON s.student_id = c.student_id ORDER BY c.total_score_2025 ASC, s.student_no ASC LIMIT 1;"
+    },
+    "predicted": {
+      "question_id": 1853,
+      "db": "MYSQL",
+      "query": "WITH s2024 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), s2025 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), common AS (SELECT s2024.student_id, s2024.course_id, s2024.total_score AS total_2024, s2025.total_score AS total_2025 FROM s2024 JOIN s2025 ON s2024.student_id=s2025.student_id AND s2024.course_id=s2025.course_id), agg AS (SELECT student_id, SUM(total_2024) AS sum_2024, SUM(total_2025) AS sum_2025 FROM common GROUP BY student_id), ranked AS (SELECT student_id, sum_2024, sum_2025, ROW_NUMBER() OVER (ORDER BY sum_2025 ASC, student_id ASC) AS rn FROM agg) SELECT st.student_no, ROUND(r.sum_2024,2) AS total_2024, ROUND(r.sum_2025,2) AS total_2025 FROM ranked r JOIN education_2025.student st ON st.student_id=r.student_id WHERE r.rn=1;"
+    },
+    "assumptions": [
+      "总评折算分按平时30%、期中30%、期末40%计算，与训练案例一致",
+      "共同选修指同一学生在两年中选修了同一门课程",
+      "排名第一按2025年共同课程总评之和升序排列，若相同则按学号升序"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": false,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "af30e4883f9e575a490d808eba67afc2acf33b6a3aa31a0843629864df7fcc46",
+    "semantic_status": "different",
+    "difference_category": "aggregation_scope",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测先按学生+课程汇总、两年按共同课程连接再汇总，参考按各年全部课程汇总后只交集学生；还以student_id替代student_no打破并列。参考没有落实题面的共同课程限定，应记录标签疑点。",
+    "reference_label_caveat": "题面要求共同课程，参考仅对共同学生求各年全部课程总分。",
+    "reference_sha256": "22fdf3f41352e8ace0e5165a97e3cb55af03a2bef5671268806f62a9ed840cae",
+    "prediction_sha256": "4175a8952df74ca89cb709b33b33e85e5dff5fd687c8af54259f5dc4933e4960",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1870,
+    "proxy_type": "calculation",
+    "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+    "reference": {
+      "question_id": 1870,
+      "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+      "db": "MYSQL",
+      "query": "WITH e2024 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2024 FROM education_2024.enrollment e JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2024 AS (SELECT department_id, AVG(enroll_cnt_2024) AS avg_enroll_per_course_2024 FROM e2024 GROUP BY department_id), e2025 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2025 FROM education_2025.enrollment e JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2025 AS (SELECT department_id, AVG(enroll_cnt_2025) AS avg_enroll_per_course_2025 FROM e2025 GROUP BY department_id) SELECT COALESCE(a2024.department_id,a2025.department_id) AS department_id, ROUND(a2024.avg_enroll_per_course_2024,2) AS avg_enroll_per_course_2024, ROUND(a2025.avg_enroll_per_course_2025,2) AS avg_enroll_per_course_2025 FROM a2025 LEFT JOIN a2024 ON a2024.department_id=a2025.department_id ORDER BY avg_enroll_per_course_2025 DESC, department_id ASC LIMIT 5;"
+    },
+    "predicted": {
+      "question_id": 1870,
+      "db": "MYSQL",
+      "query": "WITH d2024 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2024 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2024.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2024.course c ON c.course_id = t.course_id GROUP BY c.department_id), d2025 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2025 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2025.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2025.course c ON c.course_id = t.course_id GROUP BY c.department_id) SELECT d.department_id, d.department_name, ROUND(COALESCE(d2024.avg_enroll_2024, 0), 2) AS avg_enroll_2024, ROUND(COALESCE(d2025.avg_enroll_2025, 0), 2) AS avg_enroll_2025 FROM education_2025.department d LEFT JOIN d2024 ON d2024.department_id = d.department_id LEFT JOIN d2025 ON d2025.department_id = d.department_id ORDER BY avg_enroll_2025 DESC, d.department_id ASC LIMIT 5;"
+    },
+    "assumptions": [
+      "问题未明确要求去重学生，按选课记录数统计每门课程的选课人数",
+      "问题未明确要求只返回两年都存在的院系，使用2025年院系表左连接两年聚合结果，缺失年份均值按0处理"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": false,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "148d7b6e4a4e9069c5cb0bbc4ed46f45bae681911d922345b4c835728a007e32",
+    "semantic_status": "different",
+    "difference_category": "aggregation_scope",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "COUNT(*)代替每课程COUNT DISTINCT学生；从全部2025院系左连接而非从有2025选课均值的院系起步，并补0且多输出院系名称，群体/粒度/列均变化。enrollment未声明学生课程组合唯一。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c68e1e6d4d89f619a792537d65f44490358250619f59f86fa8becadbfb58ed53",
+    "prediction_sha256": "5621098f9e641cc150bcbfab5205fc4985965ec6f7fe57c8c17278e135f14439",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1878,
+    "proxy_type": "simple",
+    "question": "比较2024与2025学期表里起始日期键为空或为0的学期记录数，返回两年各自数量。",
+    "reference": {
+      "question_id": 1878,
+      "question": "比较2024与2025学期表里起始日期键为空或为0的学期记录数，返回两年各自数量。",
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS semester_start_key_empty_or_zero_cnt FROM education_2024.semester WHERE start_date_key IS NULL OR start_date_key=0 UNION ALL SELECT '2025' AS year, COUNT(*) AS semester_start_key_empty_or_zero_cnt FROM education_2025.semester WHERE start_date_key IS NULL OR start_date_key=0;"
+    },
+    "predicted": {
+      "question_id": 1878,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE start_date_key IS NULL OR start_date_key = 0 UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE start_date_key IS NULL OR start_date_key = 0;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "e5ddbfa4446ec4186e29e370b65eb6463940ce499bbb89a4a074a947a96f601f",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "两年起始日期键NULL或0的COUNT及UNION ALL一致；只差别名。",
+    "reference_label_caveat": null,
+    "reference_sha256": "bf349157011f1d9b48c814022d609b57e44fbb7700a482097db6a4b85f0dbbf9",
+    "prediction_sha256": "d46a885f560c9cff993fe0435324019c33734847ba4dd1c5a760cf8875b7d3b6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1881,
+    "proxy_type": "simple",
+    "question": "比较2024与2025课程表中学分为1的课程数量，返回两年数量。",
+    "reference": {
+      "question_id": 1881,
+      "question": "比较2024与2025课程表中学分为1的课程数量，返回两年数量。",
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS course_credit_1_cnt FROM education_2024.course WHERE credit=1 UNION ALL SELECT '2025' AS year, COUNT(*) AS course_credit_1_cnt FROM education_2025.course WHERE credit=1;"
+    },
+    "predicted": {
+      "question_id": 1881,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS credit_1_cnt FROM education_2024.course WHERE credit = 1 UNION ALL SELECT '2025' AS year, COUNT(*) AS credit_1_cnt FROM education_2025.course WHERE credit = 1;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": false,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "3c47eeaefaae6c0ec123e8bd26a47773d9452be33ed64ac6be737c29221bf419",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "两年课程学分=1计数和UNION ALL一致；预测使用了提示词未展示但完整目录中真实存在的2025课程表。",
+    "reference_label_caveat": null,
+    "reference_sha256": "740037d39834c2f5cae5828731471b9ae591b55d6be34ea9de849c5b190758c5",
+    "prediction_sha256": "40f26823019be05e1d0c78fba7be12e434e6951e46a3b87b5d4c8993a529c63f",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1906,
+    "proxy_type": "calculation",
+    "question": "比较2024与2025课程表中课程类型为选修的课程数量差，即2025减2024，返回差值与两年数量。",
+    "reference": {
+      "question_id": 1906,
+      "question": "比较2024与2025课程表中课程类型为选修的课程数量差，即2025减2024，返回差值与两年数量。",
+      "db": "MYSQL",
+      "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.course WHERE course_type='选修'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.course WHERE course_type='选修') SELECT (b.cnt_2025-a.cnt_2024) AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+    },
+    "predicted": {
+      "question_id": 1906,
+      "db": "MYSQL",
+      "query": "WITH a AS (SELECT COUNT(*) AS elective_cnt_2024 FROM education_2024.course WHERE course_type='选修'), b AS (SELECT COUNT(*) AS elective_cnt_2025 FROM education_2025.course WHERE course_type='选修') SELECT b.elective_cnt_2025 - a.elective_cnt_2024 AS diff_2025_minus_2024, a.elective_cnt_2024, b.elective_cnt_2025 FROM a CROSS JOIN b;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "53d64a17fe4a627497f6fb668db689fff34a923d80be1da6223c04862eb7ec52",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "两年选修课程COUNT、2025减2024差值及三个输出列一致，只差CTE列别名。",
+    "reference_label_caveat": null,
+    "reference_sha256": "0a115cb67afa85eb9cc7a67b12d23d57b239eba50b2b6030c7566f44b3e895e8",
+    "prediction_sha256": "8975d2e5e4a37ed23a284dff00e3c72f45b398b6baf4c8f5e1c6c8ef04813048",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1919,
+    "proxy_type": "simple",
+    "question": "比较2024与2025学期表中结束日期键最大的记录数量，按结束日期键排序取前1学期代码后，再统计该前1对应的行数，返回两年数量。",
+    "reference": {
+      "question_id": 1919,
+      "question": "比较2024与2025学期表中结束日期键最大的记录数量，按结束日期键排序取前1学期代码后，再统计该前1对应的行数，返回两年数量。",
+      "db": "MYSQL",
+      "query": "WITH t2024 AS (SELECT end_date_key, COUNT(*) AS cnt FROM education_2024.semester WHERE end_date_key IS NOT NULL GROUP BY end_date_key ORDER BY end_date_key DESC LIMIT 1), t2025 AS (SELECT end_date_key, COUNT(*) AS cnt FROM education_2025.semester WHERE end_date_key IS NOT NULL GROUP BY end_date_key ORDER BY end_date_key DESC LIMIT 1) SELECT t2025.cnt AS top_end_date_key_row_cnt_2025, t2024.cnt AS top_end_date_key_row_cnt_2024 FROM t2024 CROSS JOIN t2025;"
+    },
+    "predicted": {
+      "question_id": 1919,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE semester_code = (SELECT semester_code FROM education_2024.semester ORDER BY end_date_key DESC LIMIT 1) UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE semester_code = (SELECT semester_code FROM education_2025.semester ORDER BY end_date_key DESC LIMIT 1);"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "d414f499cd6b2027dd7e79dbfe00b8ab979f1a70da06d778161456ab1e5a6a5e",
+    "semantic_status": "different",
+    "difference_category": "aggregation_scope",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考统计最大非空end_date_key对应所有记录、横向输出两年；预测先取一个semester_code再计数并纵向输出。最大日期并列或semester_code重复时数值不同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "8fe791de012fbe3f3458820caf39363458e46049c495710bb0a57cef898c1c7b",
+    "prediction_sha256": "1260f4183ce65e002a2c63600ae9a296d8afca59819ecf1f21839cb3e20d4d95",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 1996,
+    "proxy_type": "calculation",
+    "question": "比较2024与2025学期一中每门课程的平均学分，取课程表学分，返回两年平均学分，对课程求平均。",
+    "reference": {
+      "question_id": 1996,
+      "question": "比较2024与2025学期一中每门课程的平均学分，取课程表学分，返回两年平均学分，对课程求平均。",
+      "db": "MYSQL",
+      "query": "WITH p2024 AS (SELECT DISTINCT e.course_id, c.credit FROM education_2024.enrollment e JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0), p2025 AS (SELECT DISTINCT e.course_id, c.credit FROM education_2025.enrollment e JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0) SELECT (SELECT ROUND(AVG(credit),2) FROM p2024) AS avg_credit_for_distinct_courses_2024, (SELECT ROUND(AVG(credit),2) FROM p2025) AS avg_credit_for_distinct_courses_2025;"
+    },
+    "predicted": {
+      "question_id": 1996,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2024.course UNION ALL SELECT '2025' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2025.course;"
+    },
+    "assumptions": [
+      "问题中的“学期一”理解为2024学年和2025学年，分别对应education_2024和education_2025数据库中的课程表",
+      "“对课程求平均”理解为对课程表中的学分字段求平均值"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": false,
+    "final_full_tables": false,
+    "generation_calls": 1,
+    "answer_sha256": "a6d559b207bba3f0298fb36d4f8e4527fa4282f3471831f61688460d7c89ef16",
+    "semantic_status": "different",
+    "difference_category": "missing_requirement",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "遗漏学期1和排除退课、按有选课的去重课程统计，改成全课程表AVG；还改变两年结果布局。缺表后用假设直接删除业务要求。",
+    "reference_label_caveat": null,
+    "reference_sha256": "9d48e5f52c144def06a1b22944acc4e631bf01d3a31ea4510330c6e3bc60c9f6",
+    "prediction_sha256": "9a94d4ad7b12f342010efd178cc599fd989c21e0dfae5d8a4df93813ce4bf031",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2060,
+    "proxy_type": "calculation",
+    "question": "比较2024与2025学生表中学籍状态为在读的总人数差，即2025减2024，返回差值与两年数量。",
+    "reference": {
+      "question_id": 2060,
+      "question": "比较2024与2025学生表中学籍状态为在读的总人数差，即2025减2024，返回差值与两年数量。",
+      "db": "MYSQL",
+      "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.student WHERE student_status_code='ACTIVE'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.student WHERE student_status_code='ACTIVE') SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+    },
+    "predicted": {
+      "question_id": 2060,
+      "db": "MYSQL",
+      "query": "WITH a AS (SELECT COUNT(*) AS cnt_2024 FROM education_2024.student WHERE student_status_code='ACTIVE'), b AS (SELECT COUNT(*) AS cnt_2025 FROM education_2025.student WHERE student_status_code='ACTIVE') SELECT b.cnt_2025-a.cnt_2024 AS diff_2025_minus_2024, a.cnt_2024, b.cnt_2025 FROM a CROSS JOIN b;"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "84379b2aa117d93c8a7a55671433f5edbfab5ae66f7e1fa66570ec61b6ad37bb",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "两年ACTIVE人数、2025减2024差值及三列输出完全一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "3808f9f68d7b38d385622cc6ce16d97934a1077e45c101f666fb2ca71393207c",
+    "prediction_sha256": "5b191acc857d4b2e320c77277f4464ee1d57472cdc7db0cbcf086cc9340663cb",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2125,
+    "proxy_type": "geo",
+    "question": "成都天府广场周围8公里内，找出24小时急诊且救护车数大于10的医院。",
+    "reference": {
+      "question_id": 2125,
+      "question": "成都天府广场周围8公里内，找出24小时急诊且救护车数大于10的医院。",
+      "db": "Elasticsearch",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"range\":{\"ambulance_count\":{\"gt\":10}}}],\"filter\":{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":30.6600,\"lon\":104.0630}}}}},\"_source\":[\"name\"]}"
+    },
+    "predicted": {
+      "question_id": 2125,
+      "db": "Elasticsearch",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"range\":{\"ambulance_count\":{\"gt\":10}}}],\"filter\":{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":30.657,\"lon\":104.065}}}}},\"_source\":[\"name\"]}"
+    },
+    "assumptions": [
+      "成都天府广场坐标取(30.657, 104.065)，距离8公里使用geo_distance查询"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "2e9d855798eb670975d0363d233bb311911562e567fe4ffead5cf2c4d7174613",
+    "semantic_status": "different",
+    "difference_category": "spatial_geometry",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "8km半径与急诊/救护车条件一致，但天府广场中心由(30.6600,104.0630)改为(30.657,104.065)，空间范围会变。",
+    "reference_label_caveat": null,
+    "reference_sha256": "d17f9130323daecd9894653f178119745f4b9097e18c87459ad34ac8dbb13e33",
+    "prediction_sha256": "721c64a54a380cbdfcc3fba160936647f69095c54634709b8f8f2abd2a7e040d",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2219,
+    "proxy_type": "geo",
+    "question": "在矩形区域（39.95,116.35 至 39.85,116.45）内，计算医院的平均救护车数量。",
+    "reference": {
+      "question_id": 2219,
+      "question": "在矩形区域（39.95,116.35 至 39.85,116.45）内，计算医院的平均救护车数量。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":39.95,\"lon\":116.35},\"bottom_right\":{\"lat\":39.85,\"lon\":116.45}}}},\"aggs\":{\"avg_ambulance\":{\"avg\":{\"field\":\"ambulance_count\"}}}}"
+    },
+    "predicted": {
+      "question_id": 2219,
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"bool\":{\"filter\":{\"geo_bounding_box\":{\"location\":{\"top_left\":{\"lat\":39.95,\"lon\":116.35},\"bottom_right\":{\"lat\":39.85,\"lon\":116.45}}}}}},\"aggs\":{\"avg_ambulance\":{\"avg\":{\"field\":\"ambulance_count\"}}}}"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "68c34679762234e156f3b55d6e61ae0b514dd0b3669a5a970de0eae7b4e554c2",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "同一矩形和AVG救护车数；把geo_bounding_box包入bool.filter不改变被聚合文档集合。两者均未落实平均值ROUND2，SQL式精度规则在DSL上仍有适用范围问题。",
+    "reference_label_caveat": null,
+    "reference_sha256": "4b22594667993d6a4859870aa00e7af3f77ce06fda08711fa7de34d09b03e911",
+    "prediction_sha256": "b0318a276d724177a2d4a182a9c5ffece81d883881c7d1b40036c49e08b8ae64",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2347,
+    "proxy_type": "geo",
+    "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+    "reference": {
+      "question_id": 2347,
+      "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\",\"daily_outpatient\"],\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2347,
+      "db": "Elasticsearch",
+      "query": "{\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}],\"_source\":[\"name\",\"annual_outpatient\"]}"
+    },
+    "assumptions": [
+      "日均门诊量由年门诊量 annual_outpatient 除以365计算，但Elasticsearch查询无法直接计算，因此返回 annual_outpatient 字段，后续可计算日均门诊量。",
+      "上海静安寺的坐标采用训练案例中的 (31.2235, 121.4447)。"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0a00c05f8eb661fdaa397d59c745a6ca20b83f9818e3953227388148130c1e48",
+    "semantic_status": "different",
+    "difference_category": "output_metric",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "返回annual_outpatient年门诊量，未按题意计算日均门诊量；声称后续计算但本流程不执行该计算。参考daily_outpatient字段亦不在Schema中，双方均需复核。",
+    "reference_label_caveat": "参考daily_outpatient字段不在给定ES Schema；预测未实际计算日均值。",
+    "reference_sha256": "28b6981c7f4599f679297f99979bf74731957f1d610e5d7c072ed020e6f22729",
+    "prediction_sha256": "c86004f04664f8c1b2a4be6723f0c90df183d9c7fbe110e561a7ac2b8d5ab50b",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2358,
+    "proxy_type": "geo",
+    "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+    "reference": {
+      "question_id": 2358,
+      "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":5,\"_source\":[\"name\"],\"query\":{\"bool\":{\"filter\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2358,
+      "db": "Elasticsearch",
+      "query": "{\"size\":5,\"query\":{\"bool\":{\"must\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0f41a6f03c13590ee55c15d06c2d5d53b17a8057366bfd7c8455017ad3b63ff9",
+    "semantic_status": "different",
+    "difference_category": "output",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "三甲条件、中心点、距离排序及TOP5相同，但预测省略_source限制，返回全部源字段而非参考仅name。",
+    "reference_label_caveat": null,
+    "reference_sha256": "ddc07da39bccfe88a82e43f476248524e080610f1d575064870367f8cd990e15",
+    "prediction_sha256": "6f73c9f431942608f9e5d860e870c965e5d8f7bf7fea8abd29f8477949efcd2d",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2364,
+    "proxy_type": "geo",
+    "question": "找到最靠近中山大学附属第一医院且评分高于4.6的3个医院，返回名称和护士数。",
+    "reference": {
+      "question_id": 2364,
+      "question": "找到最靠近中山大学附属第一医院且评分高于4.6的3个医院，返回名称和护士数。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\",\"nurse_count\"],\"size\":3,\"query\":{\"bool\":{\"filter\":{\"range\":{\"rating\":{\"gt\":4.6}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.1310,\"lon\":113.2895},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2364,
+      "db": "Elasticsearch",
+      "query": "{\"size\":3,\"_source\":[\"name\",\"nurse_count\"],\"query\":{\"bool\":{\"filter\":{\"range\":{\"rating\":{\"gt\":4.6}}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":23.1310,\"lon\":113.2895},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "assumptions": [
+      "中山大学附属第一医院坐标采用训练案例中的(23.1310,113.2895)"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "daa64a699fab2e752ac0ae8c3692ffb556815f2ea108263f93ac3ec73b33263e",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "医院中心、评分>4.6、距离升序TOP3和name/nurse_count投影一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "dbcddee6d5516ebf09c71a0fa78c034c9377ede6912ec7dafcd206aee6417b64",
+    "prediction_sha256": "dd91a30beebf3ba0e56743c9e8a92c75195b1f72260e0bc514c26741d5baeb5c",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2422,
+    "proxy_type": "simple",
+    "question": "统计所有拥有ICU的医院数量。",
+    "reference": {
+      "question_id": 2422,
+      "question": "统计所有拥有ICU的医院数量。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"term\":{\"has_icu\":true}},\"aggs\":{\"hospital_count\":{\"value_count\":{\"field\":\"name.keyword\"}}}}"
+    },
+    "predicted": {
+      "question_id": 2422,
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"term\":{\"has_icu\":true}},\"aggs\":{\"hospital_count\":{\"value_count\":{\"field\":\"name.keyword\"}}}}"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "349779a397fdca38ebbe2dabd79f45cf102fdee6c5f9552356838e7bc0ae0039",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "has_icu=true、size0及value_count name.keyword一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "287a271e16ca49132b1ed5c6522a935e76bb5d25552bb91bfaaa510af906f09a",
+    "prediction_sha256": "084def82d3b99a10672fe2c97ee16db5e704e7c6b020590d59bf07a223c775ee",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2462,
+    "proxy_type": "knowledge",
+    "question": "统计所有高负荷医院的床位数的统计值（总和、平均值、最大值、最小值）。",
+    "reference": {
+      "question_id": 2462,
+      "question": "统计所有高负荷医院的床位数的统计值（总和、平均值、最大值、最小值）。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"range\":{\"annual_outpatient\":{\"gte\":5000000}}},\"aggs\":{\"beds_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+    },
+    "predicted": {
+      "question_id": 2462,
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"beds_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+    },
+    "assumptions": [
+      "高负荷医院定义为大型医院，即床位数达到1500张及以上且医生数达到1500人及以上"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "22c0a24670e0df87ea60ca211a62fdf54971037bbbc23120e5229a87104aa71b",
+    "semantic_status": "different",
+    "difference_category": "business_definition",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "高负荷应按knowledge1706的annual_outpatient>=5000000，预测误用大型医院的bed_count>=1500且doctor_count>=1500。正确知识1706在冻结索引无任何表/引擎关联，因此进不了ES候选。",
+    "reference_label_caveat": null,
+    "reference_sha256": "e17dd3e93890031d312d5d8c0eda96d2ec83bc757bffb973560952776b6f2f62",
+    "prediction_sha256": "1cff30dd7f998438f1a2cebc53229201688b8b17f1ec536511290581103aca6e",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2487,
+    "proxy_type": "knowledge",
+    "question": "查询所有超大规模且优秀护理的医院的名称。",
+    "reference": {
+      "question_id": 2487,
+      "question": "查询所有超大规模且优秀护理的医院的名称。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":2000}}},{\"range\":{\"annual_outpatient\":{\"gte\":6000000}}},{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}}}"
+    },
+    "predicted": {
+      "question_id": 2487,
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}},{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}}}"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "8e35252ff6e7030b8b7f700c7a0e0eb567d03935ee316147087024296977191c",
+    "semantic_status": "different",
+    "difference_category": "business_definition",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "超大规模应按knowledge1709的床位>=2000且年门诊>=6000000，预测用大型医院的床位>=1500且医生>=1500；优秀护理部分保持。知识1709在冻结索引误关联MYSQL字典，未进入ES提示词。",
+    "reference_label_caveat": null,
+    "reference_sha256": "92321704ac9c384dac06875e9439c810ac3a32fabcd7edc1c01b48c606ee8e27",
+    "prediction_sha256": "04f0af85bba4a2679b9a0023d7842546792a2eabb4e975815742620d63c15d88",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2489,
+    "proxy_type": "knowledge",
+    "question": "查询所有老牌知名医院中医生数大于1500的医院名称和评分，并按评分降序排列。",
+    "reference": {
+      "question_id": 2489,
+      "question": "查询所有老牌知名医院中医生数大于1500的医院名称和评分，并按评分降序排列。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\",\"rating\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"founded_year\":{\"lte\":1950}}},{\"range\":{\"rating\":{\"gte\":4.6}}},{\"range\":{\"doctor_count\":{\"gt\":1500}}}]}},\"sort\":[{\"rating\":{\"order\":\"desc\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2489,
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\",\"rating\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"founded_year\":{\"lte\":1950}}},{\"range\":{\"rating\":{\"gte\":4.6}}},{\"range\":{\"doctor_count\":{\"gt\":1500}}}]}},\"sort\":[{\"rating\":{\"order\":\"desc\"}}]}"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "649438e3614b762294e4895ad333609606cc526fdd1c98664e74e508073e3560",
+    "semantic_status": "equivalent",
+    "difference_category": "same",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "老牌知名两个阈值、医生>1500、名称评分和评分降序一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "bf8b4b0c44551385dba2655ef52852c61ee9a3e50aa414752d3fd5c48487602b",
+    "prediction_sha256": "61aaeb0c1be9d2a0843951489ebaefbad7f97e090434cf657c8210de243d8f56",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2562,
+    "proxy_type": "knowledge",
+    "question": "检索航行状态为锚泊的船舶ais记录，按此时的速度升序排列，显示10条。",
+    "reference": {
+      "question_id": 2562,
+      "question": "检索航行状态为锚泊的船舶ais记录，按此时的速度升序排列，显示10条。",
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM vessel_ais_data WHERE nav_status = 1 ORDER BY sog ASC LIMIT 10"
+    },
+    "predicted": {
+      "question_id": 2562,
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM public.vessel_ais_data WHERE nav_status = 1 ORDER BY sog ASC LIMIT 10"
+    },
+    "assumptions": [
+      "锚泊的航行状态编码为1，依据训练案例example:2499和example:2548"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "3f9a70e3e965031d4fe371c18ec1eca623616bb1271f495f31376defabcd5800",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "默认public限定、nav_status=1、速度升序TOP10等价。",
+    "reference_label_caveat": null,
+    "reference_sha256": "657c425005c4a585f2278aaa010363fc79a3d8eca43146a1ed6a94669408bfad",
+    "prediction_sha256": "289ccb8c454862c0f01006ddbe70c4c36e52e402561e5ab5673ea0363427ece6",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2792,
+    "proxy_type": "simple",
+    "question": "查询船首向（heading）在0到90度之间且对地航向（cog）也在0到90度之间的船舶",
+    "reference": {
+      "question_id": 2792,
+      "question": "查询船首向（heading）在0到90度之间且对地航向（cog）也在0到90度之间的船舶",
+      "db": "POSTGRESQL",
+      "query": "SELECT DISTINCT ON (mmsi) mmsi, heading, cog FROM vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90 ORDER BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2792,
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM public.vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "3fec16f800c15a019a7c11897aaec942e3e3c2a1ac0bb35eb49a16998dea6219",
+    "semantic_status": "different",
+    "difference_category": "dedup_grain",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考DISTINCT ON(mmsi)每船一行、只输出mmsi/heading/cog；预测全部AIS记录与所有字段，粒度和输出均不同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "2dbc2e9b66a3f7ccc7091c51c431a0198b8cebaf26147cbf7025b818f41a5cc1",
+    "prediction_sha256": "d5e3eb1bcce57423fe5669958667a36b602475626f939c564387942fbc40e266",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2855,
+    "proxy_type": "simple",
+    "question": "查询2025年9月9日当天09:00:00之后，所有航行状态为2且吃水深度小于10米的船舶记录",
+    "reference": {
+      "question_id": 2855,
+      "question": "查询2025年9月9日当天09:00:00之后，所有航行状态为2且吃水深度小于10米的船舶记录",
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM vessel_ais_data WHERE timestamp >= '2025-09-09 09:00:00' AND timestamp < '2025-09-10 00:00:00' AND nav_status = 2 AND draught < 10"
+    },
+    "predicted": {
+      "question_id": 2855,
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM public.vessel_ais_data WHERE timestamp >= '2025-09-09 09:00:00' AND timestamp < '2025-09-10' AND nav_status = 2 AND draught < 10"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "5adce7feef790a2921aac03e17830980a51a2a831f81f5fb86b3f8dee99bf749",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "日期字符串隐式午夜转换与显式00:00:00含义相同；当天9点起、航行状态2、吃水<10及全记录投影一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c6ff0e3e1a2b9b79dc1bd8a9be41af561060161b05b942e874ffe3fd7b19a2f8",
+    "prediction_sha256": "949c992dc1bd98b5138f042106a66471d4dde9701e2c673e9bee4fd1693c8846",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2907,
+    "proxy_type": "geo",
+    "question": "查询今天出现在青岛朝连岛附近水域禁航区的船舶MMSI和平均航速。",
+    "reference": {
+      "question_id": 2907,
+      "question": "查询今天出现在青岛朝连岛附近水域禁航区的船舶MMSI和平均航速。",
+      "db": "POSTGRESQL",
+      "query": "SELECT mmsi, AVG(sog) AS avg_sog FROM vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((121.1667 35.8333, 121.50 35.8333, 121.50 35.5833, 121.1667 35.5833, 121.1667 35.8333))', 4326)) GROUP BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2907,
+      "db": "POSTGRESQL",
+      "query": "SELECT mmsi, ROUND(AVG(sog), 2) AS avg_sog FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((120.9167 35.8333, 121.1667 35.8333, 121.1667 35.5833, 120.9167 35.5833, 120.9167 35.8333))', 4326)) GROUP BY mmsi"
+    },
+    "assumptions": [
+      "青岛朝连岛附近水域禁航区无精确边界定义，采用近似矩形范围：经度120.9167至121.1667，纬度35.5833至35.8333（基于训练案例中朝连岛禁航区多边形坐标推断）",
+      "平均航速按每艘船舶今日在禁航区内所有AIS记录的平均SOG计算，保留两位小数"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "137f417cdb32fbbe825f10b1e66e8e0fa6f4863a6061886e2bc93b43bfee0082",
+    "semantic_status": "different",
+    "difference_category": "spatial_geometry",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "禁航区经度范围由[121.1667,121.50]移为[120.9167,121.1667]，选区不同；另加ROUND2是次要规则差异。",
+    "reference_label_caveat": null,
+    "reference_sha256": "99ec56e2212c76afe794e33130d7720b32c11015f6728181718240f791441339",
+    "prediction_sha256": "d8df01d938f3a81f2046ec4b9bea2288c742aebe38d54fabf2d37232911c63f4",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2908,
+    "proxy_type": "geo",
+    "question": "统计最近48小时内进入日照港石臼港区警戒区的船舶数量，按航行状态分组。",
+    "reference": {
+      "question_id": 2908,
+      "question": "统计最近48小时内进入日照港石臼港区警戒区的船舶数量，按航行状态分组。",
+      "db": "POSTGRESQL",
+      "query": "SELECT nav_status, COUNT(DISTINCT mmsi) AS cnt FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(119.5833, 35.3333), 4326)::geography, 926) GROUP BY nav_status"
+    },
+    "predicted": {
+      "question_id": 2908,
+      "db": "POSTGRESQL",
+      "query": "SELECT nav_status, COUNT(DISTINCT mmsi) AS vessel_count FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_Within(geom, ST_GeomFromText('POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))', 4326)) GROUP BY nav_status"
+    },
+    "assumptions": [
+      "日照港石臼港区警戒区范围未在schema中定义，使用近似矩形POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))表示"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "e412b411382b4e7a9b29d0b865cc61f206309fb28ea02fbf8908dae382660309",
+    "semantic_status": "different",
+    "difference_category": "spatial_geometry",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考中心(119.5833,35.3333)半径926米圆区，预测自造矩形[119.45,119.65]×[35.30,35.45]；时间与去重分组相同也不能补偿选区错误。",
+    "reference_label_caveat": null,
+    "reference_sha256": "10b26565c311aa2966f2946ae48f77d7cef95e853eb98ea188fb7b73ec05142a",
+    "prediction_sha256": "3e4083195a8cdfa5bdaa20bc97bb65b03f19364e739e8bc56f60d2c853c67049",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2930,
+    "proxy_type": "geo",
+    "question": "检索最近48小时内进入太仓港集装箱港区警戒区的船舶，对于每艘船，找出其在警戒区内速度最快的记录时间及对应的速度。",
+    "reference": {
+      "question_id": 2930,
+      "question": "检索最近48小时内进入太仓港集装箱港区警戒区的船舶，对于每艘船，找出其在警戒区内速度最快的记录时间及对应的速度。",
+      "db": "POSTGRESQL",
+      "query": "WITH zone AS (SELECT ST_SetSRID(ST_MakePoint(121.25, 31.6333), 4326)::geography AS center), ranked AS (SELECT v.mmsi, v.sog, v.timestamp, ROW_NUMBER() OVER (PARTITION BY v.mmsi ORDER BY v.sog DESC) AS rn FROM vessel_ais_data v, zone z WHERE v.timestamp >= NOW() - INTERVAL '48 hours' AND ST_DWithin(v.geom::geography, z.center, 926)) SELECT mmsi, sog, timestamp FROM ranked WHERE rn = 1"
+    },
+    "predicted": {
+      "question_id": 2930,
+      "db": "POSTGRESQL",
+      "query": "SELECT DISTINCT ON (mmsi) mmsi, timestamp, sog FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.25, 31.6333), 4326)::geography, 926) ORDER BY mmsi, sog DESC"
+    },
+    "assumptions": [
+      "太仓港集装箱港区警戒区中心坐标采用训练案例中的(121.25, 31.6333)，半径926米",
+      "速度最快指sog字段值最大"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "743e4920e3d2e79453b73e721ef01346bc2766f451fe38811ce9efa7ec40ac43",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "相同48h、同中心和926米范围；DISTINCT ON(mmsi) ORDER BY sog DESC与ROW_NUMBER取rn1均给每船最快记录。两者并列最快均未限定时间；按已具名mmsi/sog/timestamp对齐，列排列不同，未声明原始元组顺序等价。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c7f5768e057c89e3297c212edd175b6aae5dea412c68cb62365c804784ad4fd5",
+    "prediction_sha256": "5cd77e714227e12117fd92750d1c1dc155aef24d90f3e144a2ba587947591b79",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2942,
+    "proxy_type": "federation",
+    "question": "查询所属公司为长航集团的船舶，在2024年6月1日经过(121.0,31.0)至(121.5,31.5)矩形区域的轨迹，并返回船舶MMSI和在区域内的部分轨迹长度",
+    "reference": {
+      "question_id": 2942,
+      "question": "查询所属公司为长航集团的船舶，在2024年6月1日经过(121.0,31.0)至(121.5,31.5)矩形区域的轨迹，并返回船舶MMSI和在区域内的部分轨迹长度",
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'",
+      "db2": "POSTGRESQL",
+      "query2": "WITH tracks AS (SELECT mmsi, ST_MakeLine(geom ORDER BY timestamp) AS track FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = '2024-06-01' GROUP BY mmsi) SELECT mmsi, ST_Length(ST_Intersection(track, ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326))::geography) AS length_in_area FROM tracks WHERE ST_Intersects(track, ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326))"
+    },
+    "predicted": {
+      "question_id": 2942,
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT mmsi, ROUND(SUM(ST_Length(ST_Transform(ST_MakeLine(geom ORDER BY timestamp), 3857)))::numeric, 2) AS track_length_meters FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND geom && ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326) GROUP BY mmsi"
+    },
+    "assumptions": [
+      "轨迹长度按船舶在矩形区域内的AIS点顺序连接后的折线长度计算，单位为米",
+      "公司名称精确匹配'长航集团'"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "feea92190eb5e44c74d8bf54a2f1f0316c6bc74394c8c31f5c72680c8f6bc836",
+    "semantic_status": "different",
+    "difference_category": "track_pipeline",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "先WHERE过滤区域内点再连线，遗漏穿越边界的线段，未对整条轨迹ST_Intersection；同层SUM包ST_MakeLine聚合不合法，3857平面距离也不同于参考geography长度，额外ROUND2。",
+    "reference_label_caveat": null,
+    "reference_sha256": "c47637dfe862aecb116498d9e6c9897fb688f1a377ee23623dda220404e23815",
+    "prediction_sha256": "adb2909dfd30d24594fb63aa633f56d815816049b7578d739b4012e116c44821",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2949,
+    "proxy_type": "federation",
+    "question": "查询今天在(120.8,30.5)半径8公里内航行状态为锚泊的船舶，获取其最大荷载量和自持力。",
+    "reference": {
+      "question_id": 2949,
+      "question": "查询今天在(120.8,30.5)半径8公里内航行状态为锚泊的船舶，获取其最大荷载量和自持力。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND nav_status = 1 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi, max_load, endurance FROM transportation.vessel WHERE mmsi IN (result)"
+    },
+    "predicted": {
+      "question_id": 2949,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND nav_status = 1 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi, max_load, endurance FROM transportation.vessel WHERE mmsi IN (result)"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "7c799f4b32ee8bdd14b25cf0a3af73f8d53f53ea2df59f48622a16c8407901ff",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "两步顺序、锚泊、8km、今天、DISTINCT MMSI、result绑定和max_load/endurance输出一致，仅补public。",
+    "reference_label_caveat": null,
+    "reference_sha256": "4f32271456866274d9d98261c2f2020a7d2013392a4d087681a45fea49e34171",
+    "prediction_sha256": "04d20b599f4e0e14a729e75e8272050171621b69abcae88ea1069e7132d63f54",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2950,
+    "proxy_type": "federation",
+    "question": "找到最大航速大于20节的船舶，统计其在最近24小时内以(121.5,31.2)为中心、半径15公里范围内的出现次数。",
+    "reference": {
+      "question_id": 2950,
+      "question": "找到最大航速大于20节的船舶，统计其在最近24小时内以(121.5,31.2)为中心、半径15公里范围内的出现次数。",
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_speed > 20",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT mmsi, COUNT(*) AS appearances FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000) GROUP BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2950,
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_speed > 20",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000)"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "51487d8103de97ade5cf9b4ff57433a6d66a914bfb2ec9719fd4974a0b4ee17d",
+    "semantic_status": "different",
+    "difference_category": "aggregation_scope",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "参考每个MMSI分别COUNT，预测合并所有船舶为一个COUNT且丢MMSI。与统一规则数量只输出一列有作用域冲突风险；本次没有无规则A/B，不能证明该规则导致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "2641c71f9c19612eac44bbe498ff5194c52ce4253f9d3d0fac02e6a39093b87d",
+    "prediction_sha256": "6afe42e333cfd43f58fa7ec38668ec2003c243f642f9f39eb4820f7c18bd9e20",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2968,
+    "proxy_type": "federation",
+    "question": "查询最大荷载量大于50000吨且最大航速超过15节的船舶，在昨天出现在(120.8, 30.5)半径8公里内的MMSI。",
+    "reference": {
+      "question_id": 2968,
+      "question": "查询最大荷载量大于50000吨且最大航速超过15节的船舶，在昨天出现在(120.8, 30.5)半径8公里内的MMSI。",
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_load > 50000 AND max_speed > 15",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE - 1 AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)"
+    },
+    "predicted": {
+      "question_id": 2968,
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_load > 50000 AND max_speed > 15",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = CURRENT_DATE - INTERVAL '1 day' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(120.8, 30.5), 4326)::geography, 8000)"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "8aa35c2c639075bef2f9215cd3a5acbbc0883f4f1d139b3f2e56c6c1eb3589ea",
+    "semantic_status": "equivalent",
+    "difference_category": "rewrite",
+    "reference_consistent": true,
+    "core_consistent_allowing_rule_precision": true,
+    "review_note": "MySQL荷载/最大速度与PG空间筛选、DISTINCT输出及result绑定一致；CURRENT_DATE-1与CURRENT_DATE-INTERVAL 1day均表示昨日日期起点，date比较含义相同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "a420184562f1598eb337b4399dd59a50bf9a17a96f30ba0b83017d8b97296815",
+    "prediction_sha256": "4e44d17b7ba34f7e210e9628b712f7ca9d08598cc2e3b5ac12616028a5968580",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2970,
+    "proxy_type": "federation",
+    "question": "查询船长姓名为‘张海’的船舶，在2024年6月1日08:00至12:00期间位于(121.5, 31.2)至(121.8, 31.4)矩形区域内且航行状态为系泊的MMSI。",
+    "reference": {
+      "question_id": 2970,
+      "question": "查询船长姓名为‘张海’的船舶，在2024年6月1日08:00至12:00期间位于(121.5, 31.2)至(121.8, 31.4)矩形区域内且航行状态为系泊的MMSI。",
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v WHERE v.captain_name = '张海'",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00' AND nav_status = 5 AND ST_Within(geom, ST_MakeEnvelope(121.5, 31.2, 121.8, 31.4, 4326))"
+    },
+    "predicted": {
+      "question_id": 2970,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND nav_status = 5 AND longitude >= 121.5 AND longitude <= 121.8 AND latitude >= 31.2 AND latitude <= 31.4",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '张海' AND mmsi IN (result)"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "e15987b3fe04c1b282346c2237c1ede4e9ca6532861cd3e7682ddcd1b4ad0494",
+    "semantic_status": "different",
+    "difference_category": "spatial_boundary",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "反转两个系统执行顺序本身可行；但经纬度>=/<=包含边界，参考ST_Within对点排除多边形边界，无法确认完全一致，故严格计为差异。",
+    "reference_label_caveat": null,
+    "reference_sha256": "70a56763957badd9c526c6ad64fbe5d57be944fa477e9794e7bb059b0a5d4f3b",
+    "prediction_sha256": "77e0650e20500d1bfdb13c59b6af0ec1a4540c3047875844e36c07fbb0b9f601",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2972,
+    "proxy_type": "federation",
+    "question": "查询自持力超过45天的船舶，在最近24小时内位于(122.0, 30.0)至(122.2, 30.2)矩形内且速度小于3节的MMSI。",
+    "reference": {
+      "question_id": 2972,
+      "question": "查询自持力超过45天的船舶，在最近24小时内位于(122.0, 30.0)至(122.2, 30.2)矩形内且速度小于3节的MMSI。",
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 45",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND sog < 3 AND ST_Within(geom, ST_MakeEnvelope(122.0, 30.0, 122.2, 30.2, 4326))"
+    },
+    "predicted": {
+      "question_id": 2972,
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 45",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 122.0 AND 122.2 AND latitude BETWEEN 30.0 AND 30.2 AND sog < 3"
+    },
+    "assumptions": [
+      "自持力字段endurance为VARCHAR类型，可能包含非纯数字内容；假设其存储的数值部分可直接与45比较，若包含单位或非数字字符则需额外解析。",
+      "矩形范围按经纬度边界包含端点处理，即经度[122.0,122.2]、纬度[30.0,30.2]。"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "0e964b34acf1f5d6ec9dd7b05d42c2c469a98f9580d0c3f26627b23a0be623ac",
+    "semantic_status": "different",
+    "difference_category": "spatial_boundary",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "自持力、速度和时间条件一致，但BETWEEN包含矩形边界，参考ST_Within对点排除边界；边界记录集合不同。",
+    "reference_label_caveat": null,
+    "reference_sha256": "0b48a291e706020a941c09176225ff13b454eae35bdba126370ec248015b534c",
+    "prediction_sha256": "bd0a2bba85d6dd0f94f15b31aef2d8d27220967f7378294a04d00d0b52d7a544",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2980,
+    "proxy_type": "federation",
+    "question": "查询过去24小时内航向在270至360度之间且速度大于8节的船舶，再从中找出自持力超过90天的MMSI。",
+    "reference": {
+      "question_id": 2980,
+      "question": "查询过去24小时内航向在270至360度之间且速度大于8节的船舶，再从中找出自持力超过90天的MMSI。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog BETWEEN 270 AND 360 AND sog > 8",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND endurance > 90"
+    },
+    "predicted": {
+      "question_id": 2980,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog >= 270 AND cog <= 360 AND sog > 8",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND CAST(SUBSTRING_INDEX(endurance, '/', 1) AS UNSIGNED) > 90"
+    },
+    "assumptions": [
+      "endurance字段为VARCHAR(32)，存储格式为'天数/海里数'，取'/'前部分作为天数进行数值比较"
+    ],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "ac2f5960e77e6a2285e798ffca93d6e56a3e5eedd84bf5bdbefbe5808d3d8107",
+    "semantic_status": "uncertain",
+    "difference_category": "varchar_semantics",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "时间、航向和速度一致；参考VARCHAR endurance直接与90做数值比较，预测假设天数/海里格式后SUBSTRING_INDEX并CAST UNSIGNED。知识只定义天数或海里，未规定格式及取值域，不能证明小数、符号和混合字符串时一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "be014dcec949100cd9056a6d6c003914556e5ea9ac3873652c40b6f0b36e84fe",
+    "prediction_sha256": "e09a4ac2df7ec5af791ece58ad54c69a353a7d6a4e1a446cfc141f0466dc32c7",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 2984,
+    "proxy_type": "federation",
+    "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+    "reference": {
+      "question_id": 2984,
+      "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+      "db2": "MYSQL",
+      "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND sc.company_name != '中远海运'"
+    },
+    "predicted": {
+      "question_id": 2984,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hour' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+      "db2": "MYSQL",
+      "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company c ON v.company_id = c.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND v.captain_name <> '' AND c.company_name <> '中远海运'"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "d0ba1504e1536356b8ba1cdbf9e4d9b648459c0ef82046fcfda17344313ec057",
+    "semantic_status": "different",
+    "difference_category": "null_policy",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "预测额外要求captain_name<>空串，参考仅IS NOT NULL；可空VARCHAR未禁止空串，集合可能不同。两步空间和公司排除条件一致。",
+    "reference_label_caveat": null,
+    "reference_sha256": "bc911ddd8938da2d24bc461e342755241c9208e25501016cd5065ef36c450cc2",
+    "prediction_sha256": "1cac86413f322b27b59cbb63379b96aeddcf5110aa1aae7b1e34ce9c64dcfe87",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  },
+  {
+    "question_id": 3012,
+    "proxy_type": "federation",
+    "question": "查询最近24小时内出现在点(118.7,20.1)8公里范围内且出现次数超过3次的船舶，按公司名称升序排列。",
+    "reference": {
+      "question_id": 3012,
+      "question": "查询最近24小时内出现在点(118.7,20.1)8公里范围内且出现次数超过3次的船舶，按公司名称升序排列。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3",
+      "db2": "MYSQL",
+      "query2": "SELECT * FROM transportation.vessel WHERE mmsi IN (result) ORDER BY (SELECT company_name FROM transportation.shipping_company WHERE company_id = vessel.company_id) ASC"
+    },
+    "predicted": {
+      "question_id": 3012,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3",
+      "db2": "MYSQL",
+      "query2": "SELECT sc.company_name FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) ORDER BY sc.company_name ASC"
+    },
+    "assumptions": [],
+    "unqualified_unknowns": [],
+    "prompt_full_tables": true,
+    "final_full_tables": true,
+    "generation_calls": 1,
+    "answer_sha256": "85a511b7d61e0d8a9f3ec10aea1ff821f2954673d46c07ba384c28fd00757828",
+    "semantic_status": "different",
+    "difference_category": "output",
+    "reference_consistent": false,
+    "core_consistent_allowing_rule_precision": false,
+    "review_note": "出现次数>3、空间、时间及公司排序一致，但最终仅输出company_name，参考输出船舶全部字段，丢失船舶对象。",
+    "reference_label_caveat": null,
+    "reference_sha256": "eebee85e5f74beda394be8321f6b63c5e8da209039b793aa112e8df323ac6265",
+    "prediction_sha256": "7d420c27cfdc4dcdfdd47cfe6d1b4f7cff75bd2bc094076ecd3752e249f4161f",
+    "reviewer": "Codex逐题静态语义审查；未进行独立人工复核或数据库执行"
+  }
+]

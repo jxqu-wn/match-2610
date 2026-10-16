@@ -1,0 +1,84 @@
+{
+  "binding": {
+    "baseline_answers_sha256": "3126e3474a92e5ec81bd88fab79ae290d9707e705f2049579f973e8784542f23",
+    "control_answers_sha256": "23ada7d86744109d1487232f584ac42903fc990fc0657d9b33a41a1e94718dcd"
+  },
+  "scope": "offline manual diagnosis of these exact generated artifacts, not runtime rules or execution accuracy",
+  "notes": {
+    "2942": {
+      "baseline": "仅提供PG Schema；requirements承认所属公司要求无表字段，却省略长航集团条件并返回complete。",
+      "control": "补充Schema后最终恢复MYSQL→PG，需3次请求；查询仍在连线前按区域过滤点位，可能漏掉端点都在区域外但线段穿过区域的轨迹。还把result当作临时表读取，外部替换协议兼容性未知。",
+      "failure_layers": [
+        "routing",
+        "scope_filter",
+        "requirements_acceptance",
+        "cross_system_planning",
+        "trajectory_semantics",
+        "result_contract"
+      ]
+    },
+    "2949": {
+      "baseline": "库表和跨系统协议完整；与参考的主要字段、时空条件一致，未做执行等价核验。",
+      "failure_layers": []
+    },
+    "2950": {
+      "baseline": "系统和表覆盖完整，但参考按mmsi分组统计，生成查询仅返回总体COUNT(*)，统计粒度和输出列与标注不同。",
+      "failure_layers": [
+        "aggregation_granularity",
+        "output_projection"
+      ]
+    },
+    "2968": {
+      "baseline": "库表和跨系统协议完整；主要字段、阈值和时空条件与参考相符，未做执行等价核验。",
+      "failure_layers": []
+    },
+    "2970": {
+      "baseline": "仅提供PG Schema；明确表示无法按船长张海过滤，仍返回complete。",
+      "control": "补Schema后首次仍跨系统混写，修复后恢复MYSQL船长过滤与PG时空查询。",
+      "failure_layers": [
+        "routing",
+        "scope_filter",
+        "requirements_acceptance",
+        "cross_system_planning"
+      ]
+    },
+    "2972": {
+      "baseline": "仅提供PG Schema，将自持力超过45天错误映射为draught>45。",
+      "control": "最终恢复endurance字段，但其VARCHAR天/海里口径需要真实值核验；生成了字符串提取与数值转换假设。",
+      "failure_layers": [
+        "routing",
+        "scope_filter",
+        "semantic_substitution",
+        "requirements_acceptance",
+        "cross_system_planning",
+        "units_and_types"
+      ]
+    },
+    "2980": {
+      "baseline": "仅提供PG Schema，将自持力超过90天错误映射为draught>90。",
+      "control": "最终恢复endurance字段，但MYSQL语句SUBSTRING(endurance FROM '^[0-9]+')将正则字符串放入位置参数，不能实现声称的正则提取。",
+      "failure_layers": [
+        "routing",
+        "scope_filter",
+        "semantic_substitution",
+        "requirements_acceptance",
+        "cross_system_planning",
+        "function_semantics"
+      ]
+    },
+    "2984": {
+      "baseline": "库表、连接键及主要时空与公司/船长过滤与参考一致，未做执行等价核验。",
+      "failure_layers": []
+    },
+    "3012": {
+      "baseline": "系统和表覆盖完整，但生成查询只输出公司名；参考返回船舶记录，按公司名排序。需核验最终输出对象与列。",
+      "failure_layers": [
+        "output_projection"
+      ]
+    }
+  },
+  "external_documentation": {
+    "mysql_substring": "https://dev.mysql.com/doc/refman/8.0/en/string-functions.html",
+    "mysql_regexp_substr": "https://dev.mysql.com/doc/refman/8.0/en/regexp.html"
+  }
+}

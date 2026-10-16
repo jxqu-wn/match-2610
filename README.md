@@ -34,6 +34,7 @@ src/text2query/
   routing/
     embedding.py       sentence-transformers 语义向量 + 向量缓存
     classifier.py      路由分类器（scikit-learn）+ 字符 TF-IDF 对照
+    multilabel.py      语义向量多标签路由（独立系统判定、阈值及持久化）
   retrieval/
     sql_parser.py      SQL / DSL 解析（sqlglot）
     index.py           BM25 + FAISS + RRF 混合召回
@@ -60,10 +61,15 @@ uv venv .venv --python 3.14
 uv pip install -e '.[dev]'
 ```
 
-语义向量预留本地路径 `models/Qwen3-Embedding-0.6B`，重排模型预留
-`models/Qwen3-Reranker-0.6B`；通过 `.env.example` 中的路径配置提供完整权重。
+语义向量使用共享路径 `../models/Qwen3-Embedding-8B`，重排模型使用
+`../models/Qwen3-Reranker-8B`；通过 `.env.example` 可覆盖两个本地目录。
 Recall 默认采用 BM25 + embedding → RRF → CrossEncoder 精排，具体流程、参数和
-各入口的行为见[混合检索方案](docs/hybrid_recall.md)。本次未提供权重，未运行测试或模型推理。
+各入口的行为见[混合检索方案](docs/hybrid_recall.md)。两个8B模型已完成真实GPU测试和
+[人工＋LLM基准对比](docs/gpu_evaluation.md)；`tests/test_local_models.py` 默认关闭，需显式启用。
+0.6B模型的权重、资源消耗及与8B的同口径对照见 [0.6B实验](docs/gpu_evaluation_0.6b.md)。
+三种预处理方案生成最终DDL提示词并比较完整业务库／表覆盖率的流程见 [提示词覆盖率实验](docs/preprocessing_prompt_coverage.md)。
+固定抽取50道验证题导出的LLM消息、可阅读提示词及覆盖率见 [50题提示词报告](docs/prompt_coverage_50.md)。
+新增语义向量多标签路由及独立的跨系统、跨业务库评估见 [多标签路由实验](docs/semantic_multilabel_routing.md)。
 LLM 通过环境变量 `DEEPSEEK_API_KEY` 提供，密钥不写入代码或产物。
 
 ## 框架选型
@@ -116,6 +122,9 @@ text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/complet
 时仅执行 BM25。索引版本已升至 4，旧索引需在权重就绪后重建。
 微调入口默认 `--recall hybrid`，原 `--recall examples` 也已接入混合检索和重排。
 
+语义向量多标签路由及其多库验证结果见[路由实验](docs/semantic_multilabel_routing.md)和[实际提示词覆盖率](docs/semantic_multilabel_prompt_coverage.md)。
+当前查询生成入口统一追加`data/赛题8/问题描述与查询指令口径规则.txt`；100题生成结果及40道非确认一致题的完整提示词、逐题归因见[提示词审计](docs/validation_100_prompt_diagnosis.md)。
+
 未安装包时可用 `PYTHONPATH=src python -m text2query.cli <command>`。
 
 ## 数据与划分
@@ -129,7 +138,8 @@ text2query finetuned-submission --endpoint http://127.0.0.1:8000/v1/chat/complet
 
 保留记录的 ID、顺序、问题、查询及其余字段不变。清理依据、删除 ID 和文件 SHA-256
 记录在 [`dataset_manifest.json`](data/赛题8/dataset_manifest.json)。
-该清单记录历史数据清理；当前新版 knowledge.json 的规模与哈希以实际文件为准，不能沿用旧知识指纹。
+该清单记录历史数据清理；新版知识的来源、规模与哈希记录在
+[`knowledge_manifest.json`](data/赛题8/knowledge_manifest.json)。
 测试集本身无数据源标签：按原始编号区间 3040–6230 识别 SQLite 题，并与已有 SQLite 子集交叉核对。
 该规则仅用于本次固定数据清理，不作为模型推理或未来数据分类规则。
 

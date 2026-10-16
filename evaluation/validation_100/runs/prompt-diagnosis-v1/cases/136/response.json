@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":136,\"db\":\"MYSQL\",\"query\":\"SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code JOIN common.administrative_division a ON c.area_id = a.id WHERE t.type_name = '危化品车' AND a.province_name = '湖北省' GROUP BY c.company_id, c.company_name;\"},\"requirements\":[{\"requirement\":\"统计湖北省各公司拥有的危化品车辆数\",\"tables\":[\"MYSQL:transportation.vehicle_company\",\"MYSQL:transportation.vehicle\",\"MYSQL:common.vehicle_type_dict\",\"MYSQL:common.administrative_division\"],\"columns\":[\"company_name\",\"vehicle_id\",\"type_name\",\"province_name\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.257867930980865,
+      "usage": {
+        "completion_tokens": 209,
+        "prompt_tokens": 14911,
+        "total_tokens": 15120,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 14143
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

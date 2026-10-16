@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2792,\"db\":\"POSTGRESQL\",\"query\":\"SELECT * FROM public.vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90\"},\"requirements\":[{\"requirement\":\"查询船首向（heading）在0到90度之间且对地航向（cog）也在0到90度之间的船舶\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"heading\",\"cog\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.2769169959938154,
+      "usage": {
+        "completion_tokens": 117,
+        "prompt_tokens": 5082,
+        "total_tokens": 5199,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4314
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

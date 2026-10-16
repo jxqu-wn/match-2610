@@ -1,0 +1,31 @@
+.[20:35:06] INFO     Loading SentenceTransformer model from                      
+                    /root/autodl-tmp/match/models/Qwen3-Embedding-8B.           
+Loading weights:   0%|          | 0/398 [00:00<?, ?it/s]Loading weights: 100%|██████████| 398/398 [00:00<00:00, 10922.17it/s]
+[20:35:10] INFO     Loaded 1 prompt with these keys: ['query']                  
+[20:35:11] INFO     Loading faiss with AVX512-SPR support.                      
+           INFO     Could not load library with AVX512-SPR support due to:      
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512_spr'")                              
+           INFO     Loading faiss with AVX512 support.                          
+           INFO     Could not load library with AVX512 support due to:          
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512'")                                  
+           INFO     Loading faiss with AVX2 support.                            
+           INFO     Could not load library with AVX2 support due to:            
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx2'")                                    
+           INFO     Loading faiss.                                              
+           INFO     Successfully loaded faiss.                                  
+           INFO     Loading CrossEncoder model from                             
+                    /root/autodl-tmp/match/models/Qwen3-Reranker-8B.            
+Loading weights:   0%|          | 0/399 [00:00<?, ?it/s]Loading weights: 100%|██████████| 399/399 [00:00<00:00, 11611.96it/s]
+[20:35:15] INFO     Loaded 1 prompt with these keys: ['query']                  
+           WARNING  Default prompt name is set to 'query'. This prompt will be  
+                    applied to all inference calls, except if a `prompt` or     
+                    `prompt_name` parameter is provided.                        
+.
+============================= slowest 3 durations ==============================
+113.31s setup    tests/test_embedding.py::test_float32_normalization_is_persisted_and_reused
+13.55s call     tests/test_local_models.py::test_local_embedding_rrf_and_reranking
+0.98s setup    tests/test_local_models.py::test_local_embedding_rrf_and_reranking
+2 passed in 127.93s (0:02:07)

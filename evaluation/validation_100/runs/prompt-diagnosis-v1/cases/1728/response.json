@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1728,\"db\":\"MYSQL\",\"query\":\"SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id = 2 ORDER BY cl.class_id ASC LIMIT 30;\"},\"requirements\":[{\"requirement\":\"查询院系编号为2的班级\",\"tables\":[\"MYSQL:education_2024.class\"],\"columns\":[\"department_id\"]},{\"requirement\":\"返回班级编号与名称\",\"tables\":[\"MYSQL:education_2024.class\"],\"columns\":[\"class_id\",\"class_name\"]},{\"requirement\":\"按班级编号升序取前30条\",\"tables\":[\"MYSQL:education_2024.class\"],\"columns\":[\"class_id\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.8512988139991648,
+      "usage": {
+        "completion_tokens": 169,
+        "prompt_tokens": 10690,
+        "total_tokens": 10859,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 9922
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

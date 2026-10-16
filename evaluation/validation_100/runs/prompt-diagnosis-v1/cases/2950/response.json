@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2950,\"db1\":\"MYSQL\",\"query1\":\"SELECT mmsi FROM transportation.vessel WHERE max_speed > 20\",\"db2\":\"POSTGRESQL\",\"query2\":\"SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000)\"},\"requirements\":[{\"requirement\":\"最大航速大于20节的船舶\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"mmsi\",\"max_speed\"]},{\"requirement\":\"最近24小时内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"timestamp\"]},{\"requirement\":\"以(121.5,31.2)为中心、半径15公里范围内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"geom\"]},{\"requirement\":\"统计出现次数\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.791287831030786,
+      "usage": {
+        "completion_tokens": 273,
+        "prompt_tokens": 12209,
+        "total_tokens": 12482,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 12032
+        },
+        "prompt_cache_hit_tokens": 12032,
+        "prompt_cache_miss_tokens": 177
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

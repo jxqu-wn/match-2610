@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":476,\"db\":\"MYSQL\",\"query\":\"SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / r.revenue, 2) AS tax_to_revenue_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;\"},\"requirements\":[{\"requirement\":\"计算顺丰控股2025年度所得税额占营业收入的比例\",\"tables\":[\"MYSQL:finance_tax.corporate_income_tax_returns\",\"MYSQL:finance_tax.stocks\",\"MYSQL:finance_tax.companies\"],\"columns\":[\"revenue\",\"non_taxable_income\",\"deductions\",\"prior_year_losses\",\"employee_count\",\"total_assets\",\"is_restricted_industry\",\"tax_year\",\"company_id\",\"stock_name\",\"is_key_high_tech\"]}],\"assumptions\":[\"所得税额按应纳税所得额乘以适用税率计算，税率根据高新技术企业资格及小型微利企业条件确定，与训练案例口径一致\",\"营业收入使用企业所得税年度申报表中的收入总额（revenue）字段\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.683558192977216,
+      "usage": {
+        "completion_tokens": 378,
+        "prompt_tokens": 12568,
+        "total_tokens": 12946,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11800
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

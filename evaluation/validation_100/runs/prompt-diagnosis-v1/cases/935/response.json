@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":935,\"db\":\"MYSQL\",\"query\":\"SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id JOIN common.station_type_dict std ON es.station_type_code = std.type_code WHERE ad.city_name = '衡阳市' AND std.type_name = '火电';\"},\"requirements\":[{\"requirement\":\"统计衡阳市发电场站中火电场的装机容量\",\"tables\":[\"MYSQL:energy.energy_station\",\"MYSQL:common.administrative_division\",\"MYSQL:common.station_type_dict\"],\"columns\":[\"installed_capacity\",\"area_id\",\"city_name\",\"station_type_code\",\"type_name\"]}],\"assumptions\":[\"场站类型字典中火电场的类型名称为'火电'\",\"衡阳市通过行政区划表的city_name字段识别\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.2788090849644504,
+      "usage": {
+        "completion_tokens": 207,
+        "prompt_tokens": 12912,
+        "total_tokens": 13119,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12144
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

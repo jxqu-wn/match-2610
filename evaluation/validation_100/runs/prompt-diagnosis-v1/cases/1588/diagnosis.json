@@ -1,0 +1,101 @@
+{
+  "question_id": 1588,
+  "question": "请统计整体退款率，输出结果。",
+  "semantic_status": "rules_only_difference",
+  "primary": "prompt_conflict",
+  "primary_label": "规则或案例冲突",
+  "finding": "系统新规则明确比率ROUND2且优先于案例，参考与召回退款率案例为ROUND4。预测遵循新规则，不能将精度差异归为模型生成错误。",
+  "next_validation": "先统一规则与监督标签，或明确本任务评估允许的精度。",
+  "reference": {
+    "question_id": 1588,
+    "question": "请统计整体退款率，输出结果。",
+    "db": "MYSQL",
+    "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+  },
+  "predicted": {
+    "question_id": 1588,
+    "db": "MYSQL",
+    "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 2) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+  },
+  "source_semantic_review": "退款订单数、总订单数、DISTINCT及NULLIF分母均相同，仅参考ROUND(...,4)变为统一规则要求的ROUND(...,2)。",
+  "evidence": {
+    "prompt_table_ids": [
+      "MYSQL:ecommerce.customer",
+      "MYSQL:ecommerce.order_item",
+      "MYSQL:ecommerce.orders",
+      "MYSQL:ecommerce.payment",
+      "MYSQL:ecommerce.product",
+      "MYSQL:finance_tax.corporate_income_tax_returns"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1558,
+      1557,
+      353,
+      1554,
+      1568,
+      1610,
+      708,
+      1556,
+      1561,
+      226,
+      1135,
+      1140
+    ],
+    "prompt_example_ids": [
+      1196,
+      1584,
+      1356,
+      1070
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 1584,
+        "question": "请帮我统计整体退款率，输出结果。",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:ecommerce.order_item",
+              "MYSQL:ecommerce.orders"
+            ],
+            "joins": [
+              {
+                "left_table": "MYSQL:ecommerce.orders",
+                "left_columns": [
+                  "order_id"
+                ],
+                "right_table": "MYSQL:ecommerce.order_item",
+                "right_columns": [
+                  "order_id"
+                ]
+              }
+            ],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [
+      {
+        "knowledge_id": 1558,
+        "knowledge_text": "退款率（订单退款率/售后退款率）可按退款订单数占订单数计算。订单明细中退款金额超过0时，可认为发生退款。计算公式：COUNT(DISTINCT CASE WHEN refund_amount > 0 THEN order_id END) / COUNT(DISTINCT order_id)。"
+      }
+    ],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "1aca9c149cd7fa55ebdd5d8a124c9833a6c72d0dd0208e243a72e401d00ab941",
+  "actual_response_sha256": "1288100721ff9c4771958e49ad84704d9d4fa6b5341bd32415d7c0328fe7f975",
+  "causal_experiment_performed": false
+}

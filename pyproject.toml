@@ -50,6 +50,7 @@ packages = ["src/text2query"]
 pythonpath = ["src"]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["model: explicitly enabled integration tests using local model weights"]
 
 [tool.ruff]
 line-length = 120

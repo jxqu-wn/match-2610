@@ -1,0 +1,27 @@
+{
+  "method": "逐题静态语义审查：对照问题、原始参考、真实Schema、可用业务知识和实际生成结果；不以字面相同、表覆盖或静态通过替代语义一致性",
+  "frozen_before_generation": true,
+  "dimensions": [
+    "数据源与分步result绑定",
+    "必要表与连接基数",
+    "过滤条件和比较边界",
+    "时间范围与时区",
+    "统计对象、去重与分组粒度",
+    "公式、分母、单位与NULL处理",
+    "输出列及精度",
+    "排序和TOP N",
+    "空间几何、单位和轨迹过滤顺序"
+  ],
+  "statuses": {
+    "equivalent": "忽略别名及无关格式，在题目要求范围内确认与参考返回同一含义；未要求排序时不因额外稳定排序判错",
+    "rules_only_difference": "业务计算、对象和条件一致，仅新增统一规则造成数值ROUND或输出口径与旧标签不一致；不计入严格参考一致",
+    "different": "存在可定位、会改变结果含义的业务差异",
+    "uncertain": "问题/参考/业务映射存在实质歧义或无法静态确认；不计入确认一致",
+    "generation_failed": "完整生成/修复流程没有得到可校验答案；不计入一致"
+  },
+  "strict_reference_consistency": "equivalent / 全部100题，未决与失败保留在分母",
+  "core_consistency": "(equivalent + rules_only_difference) / 全部100题；与严格一致性分开报告",
+  "execution_accuracy": null,
+  "reviewer": "Codex逐题语义复核；非独立人工标注、非执行判分",
+  "development_limit": "既有开发验证集，近似题型标签，无SQLite，跨系统样本9题，不推算外部680题得分"
+}

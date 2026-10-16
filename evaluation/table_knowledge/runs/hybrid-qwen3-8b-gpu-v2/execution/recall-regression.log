@@ -1,0 +1,8 @@
+......................                                                   [100%]
+============================= slowest 5 durations ==============================
+114.87s setup    tests/test_dataset.py::test_dataset_counts_and_hashes[QA_train.json-2839]
+3.48s setup    tests/test_retrieval.py::test_keyword_index_finds_vehicle_table
+0.85s call     tests/test_retrieval.py::test_source_comparison_works_without_historical_reviews
+0.80s setup    tests/test_dataset.py::test_schema_excludes_bird_databases_and_knowledge_preserves_full_source
+0.23s call     tests/test_hybrid_evaluation.py::test_schema_queries_have_no_knowledge_associations
+22 passed in 120.62s (0:02:00)

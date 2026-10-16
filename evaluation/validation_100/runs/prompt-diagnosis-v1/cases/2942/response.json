@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2942,\"db1\":\"MYSQL\",\"query1\":\"SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'\",\"db2\":\"POSTGRESQL\",\"query2\":\"SELECT mmsi, ROUND(SUM(ST_Length(ST_Transform(ST_MakeLine(geom ORDER BY timestamp), 3857)))::numeric, 2) AS track_length_meters FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND geom && ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326) GROUP BY mmsi\"},\"requirements\":[{\"requirement\":\"船舶所属公司为长航集团\",\"tables\":[\"MYSQL:transportation.vessel\",\"MYSQL:transportation.shipping_company\"],\"columns\":[\"mmsi\",\"company_id\",\"company_name\"]},{\"requirement\":\"2024年6月1日经过矩形区域(121.0,31.0)至(121.5,31.5)\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"timestamp\",\"geom\"]},{\"requirement\":\"返回船舶MMSI和在区域内的部分轨迹长度\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"geom\",\"timestamp\"]}],\"assumptions\":[\"轨迹长度按船舶在矩形区域内的AIS点顺序连接后的折线长度计算，单位为米\",\"公司名称精确匹配'长航集团'\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.714638105011545,
+      "usage": {
+        "completion_tokens": 394,
+        "prompt_tokens": 13358,
+        "total_tokens": 13752,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12590
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

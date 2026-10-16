@@ -1,0 +1,143 @@
+{
+  "question_id": 1050,
+  "question": "查询西电东送送端省份的总装机容量和总年发电量",
+  "semantic_status": "different",
+  "primary": "mixed",
+  "primary_label": "输入与模型处理混合",
+  "finding": "送端省份知识1590缺失；案例只给西部地区集合，不等于西电东送送端。模型又将仅针对发电量的排除PUMPED作用于装机容量，并使assumptions省份列表与SQL不一致。原知识送端9省与参考含重庆的10代码也需核对。",
+  "next_validation": "补送端定义并核验参考；将每个过滤条件绑定到其适用指标。",
+  "reference": {
+    "question_id": 1050,
+    "question": "查询西电东送送端省份的总装机容量和总年发电量",
+    "db": "MYSQL",
+    "query": "SELECT SUM(installed_capacity) AS total_capacity, SUM(annual_generation) AS total_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65');"
+  },
+  "predicted": {
+    "question_id": 1050,
+    "db": "MYSQL",
+    "query": "SELECT SUM(installed_capacity) AS total_installed_capacity, SUM(annual_generation) AS total_annual_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('44','45','50','51','52','53','54','61','62','63','64','65') AND energy_type_code <> 'PUMPED';"
+  },
+  "source_semantic_review": "预测省份集合比参考多44、45，并对两个SUM同时排除PUMPED，会改变总装机容量；assumptions中说含内蒙古15但SQL实际没15，说明与查询也不一致。",
+  "evidence": {
+    "prompt_table_ids": [
+      "MYSQL:common.administrative_division",
+      "MYSQL:common.energy_type_dict",
+      "MYSQL:common.station_type_dict",
+      "MYSQL:energy.energy_company",
+      "MYSQL:energy.energy_station",
+      "MYSQL:energy.supply_area"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1583,
+      1601,
+      1761,
+      1582,
+      1594,
+      1830,
+      1593,
+      1385,
+      1603,
+      432,
+      577,
+      1591
+    ],
+    "prompt_example_ids": [
+      1018,
+      1015,
+      1025,
+      1033
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 1018,
+        "question": "统计西部各省份发电场站中水电站装机容量与总装机容量的比例",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT LEFT(area_id,2) AS province_code, SUM(CASE WHEN energy_type_code='HYDRO' THEN installed_capacity ELSE 0 END)*100.0/SUM(installed_capacity) AS hydro_pct FROM energy.energy_station WHERE LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') GROUP BY LEFT(area_id,2);",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:energy.energy_station"
+            ],
+            "joins": [],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      },
+      {
+        "question_id": 1015,
+        "question": "统计西部地区各省份新能源发电场站的装机容量占比",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT LEFT(es.area_id,2) AS province_code, SUM(CASE WHEN et.is_renewable=1 THEN es.installed_capacity ELSE 0 END)*100.0/SUM(es.installed_capacity) AS renewable_pct FROM energy.energy_station es JOIN common.energy_type_dict et ON es.energy_type_code = et.type_code WHERE LEFT(es.area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') GROUP BY LEFT(es.area_id,2);",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:common.energy_type_dict",
+              "MYSQL:energy.energy_station"
+            ],
+            "joins": [
+              {
+                "left_table": "MYSQL:energy.energy_station",
+                "left_columns": [
+                  "energy_type_code"
+                ],
+                "right_table": "MYSQL:common.energy_type_dict",
+                "right_columns": [
+                  "type_code"
+                ]
+              }
+            ],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      },
+      {
+        "question_id": 1025,
+        "question": "统计西部地区各省份电力企业中水电场站装机容量与总装机容量的比值",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT LEFT(area_id,2) AS province_code, SUM(CASE WHEN energy_type_code='HYDRO' THEN installed_capacity ELSE 0 END)*100.0/SUM(installed_capacity) AS hydro_pct FROM energy.energy_station WHERE LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65') GROUP BY LEFT(area_id,2);",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:energy.energy_station"
+            ],
+            "joins": [],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [
+      {
+        "knowledge_id": 1594,
+        "knowledge_text": "抽水蓄能电站(PUMPED)的 annual_generation 为0，因为其功能是储能调峰而非发电。统计发电量时应排除 energy_type_code='PUMPED' 的场站。"
+      }
+    ],
+    "raw_knowledge_not_in_actual_prompt": [
+      {
+        "knowledge_id": 1590,
+        "knowledge_text": "“西电东送”指将西部地区的电力输送到东部地区。送端省份包括四川、云南、贵州、甘肃、青海、宁夏、陕西、新疆、西藏；受端省份包括上海、江苏、浙江、安徽、福建、山东、广东。",
+        "frozen_index_engines": [],
+        "frozen_index_table_ids": [],
+        "scope": "Offline diagnosis only; not added to generation or production association"
+      }
+    ]
+  },
+  "actual_request_sha256": "23224de88ec59ea908a1efe5fd6f62b17ddecead7b44f917f4854a6c7612485b",
+  "actual_response_sha256": "ca80ce6ff00aba30dcc86c8c601545f8a20e3a379868d03ace4a86c2763f32c4",
+  "causal_experiment_performed": false
+}

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1919,\"db\":\"MYSQL\",\"query\":\"SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE semester_code = (SELECT semester_code FROM education_2024.semester ORDER BY end_date_key DESC LIMIT 1) UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE semester_code = (SELECT semester_code FROM education_2025.semester ORDER BY end_date_key DESC LIMIT 1);\"},\"requirements\":[{\"requirement\":\"比较2024与2025学期表中结束日期键最大的记录数量\",\"tables\":[\"MYSQL:education_2024.semester\",\"MYSQL:education_2025.semester\"],\"columns\":[\"end_date_key\"]},{\"requirement\":\"按结束日期键排序取前1学期代码\",\"tables\":[\"MYSQL:education_2024.semester\",\"MYSQL:education_2025.semester\"],\"columns\":[\"semester_code\",\"end_date_key\"]},{\"requirement\":\"统计该前1对应的行数\",\"tables\":[\"MYSQL:education_2024.semester\",\"MYSQL:education_2025.semester\"],\"columns\":[\"semester_code\"]},{\"requirement\":\"返回两年数量\",\"tables\":[\"MYSQL:education_2024.semester\",\"MYSQL:education_2025.semester\"],\"columns\":[]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.526605154038407,
+      "usage": {
+        "completion_tokens": 326,
+        "prompt_tokens": 10822,
+        "total_tokens": 11148,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 10054
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

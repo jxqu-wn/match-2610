@@ -14,11 +14,11 @@ from text2query.retrieval.sql_parser import engine_set
 @pytest.mark.parametrize("relative, expected", [
     ("QA_train.json", 2839),
     ("QA_test.json", 200),
-    ("knowledge.json", 247),
+    ("knowledge.json", 1833),
 ])
 def test_dataset_counts_and_hashes(relative, expected):
     root = settings.path(settings.competition_dir)
-    manifest = read_json(root / "dataset_manifest.json")
+    manifest = read_json(root / ("knowledge_manifest.json" if relative == "knowledge.json" else "dataset_manifest.json"))
     entry = manifest["datasets"][relative]
     rows = read_json(root / relative)
     key = "knowledge_id" if relative == "knowledge.json" else "question_id"
@@ -73,13 +73,14 @@ def test_unlabelled_test_set_retains_non_sqlite_boundary_cases():
     assert all(set(row) == {"question_id", "question"} for row in rows)
 
 
-def test_knowledge_and_schema_exclude_bird_databases(catalog):
+def test_schema_excludes_bird_databases_and_knowledge_preserves_full_source(catalog):
     root = settings.path(settings.competition_dir)
     manifest = read_json(root / "dataset_manifest.json")
     removed_names = set(manifest["sqlite_databases_removed"])
     knowledge = read_json(settings.knowledge)
-    assert [row["knowledge_id"] for row in knowledge] == list(range(1554, 1801))
     assert not (root / "Schema/bird_schemas.txt").exists()
     assert not removed_names.intersection(table.namespace for table in catalog.tables)
-    for row in knowledge:
-        assert not any("数据库" + name in row["knowledge_text"] for name in removed_names)
+    assert all(set(row) == {"knowledge_id", "knowledge_text"} for row in knowledge)
+    assert any("数据库" + name in row["knowledge_text"] for row in knowledge for name in removed_names)
+    current = read_json(root / "knowledge_manifest.json")["datasets"]["knowledge.json"]
+    assert current["sha256"] == current["source_sha256"] == file_sha256(settings.knowledge)

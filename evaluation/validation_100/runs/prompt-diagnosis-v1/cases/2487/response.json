@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2487,\"db\":\"Elasticsearch\",\"query\":\"{\\\"_source\\\":[\\\"name\\\"],\\\"query\\\":{\\\"bool\\\":{\\\"must\\\":[{\\\"range\\\":{\\\"bed_count\\\":{\\\"gte\\\":1500}}},{\\\"range\\\":{\\\"doctor_count\\\":{\\\"gte\\\":1500}}},{\\\"range\\\":{\\\"nurse_count\\\":{\\\"gte\\\":2000}}},{\\\"script\\\":{\\\"script\\\":{\\\"source\\\":\\\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\\\"}}}]}}}\"},\"requirements\":[{\"requirement\":\"超大规模医院：床位数达到1500张及以上，且医生数达到1500人及以上\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"bed_count\",\"doctor_count\"]},{\"requirement\":\"优秀护理医院：护士数达到2000人及以上，且床位数与护士数之比不超过1.2\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"nurse_count\",\"bed_count\"]},{\"requirement\":\"输出医院名称\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"name\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.4302438339800574,
+      "usage": {
+        "completion_tokens": 266,
+        "prompt_tokens": 5212,
+        "total_tokens": 5478,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4444
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2462,\"db\":\"Elasticsearch\",\"query\":\"{\\\"size\\\":0,\\\"query\\\":{\\\"bool\\\":{\\\"must\\\":[{\\\"range\\\":{\\\"bed_count\\\":{\\\"gte\\\":1500}}},{\\\"range\\\":{\\\"doctor_count\\\":{\\\"gte\\\":1500}}}]}},\\\"aggs\\\":{\\\"beds_stats\\\":{\\\"stats\\\":{\\\"field\\\":\\\"bed_count\\\"}}}}\"},\"requirements\":[{\"requirement\":\"统计所有高负荷医院的床位数的统计值（总和、平均值、最大值、最小值）\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"bed_count\",\"doctor_count\"]}],\"assumptions\":[\"高负荷医院定义为大型医院，即床位数达到1500张及以上且医生数达到1500人及以上\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.7209616969921626,
+      "usage": {
+        "completion_tokens": 177,
+        "prompt_tokens": 5292,
+        "total_tokens": 5469,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4524
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

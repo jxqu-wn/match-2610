@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":441,\"db\":\"MYSQL\",\"query\":\"SELECT s.stock_name, (f.total_assets - f.total_liabilities) * 10000 / s.total_shares AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets - f.total_liabilities) * 10000 / s.total_shares > s.current_price\"},\"requirements\":[{\"requirement\":\"查询2025年每股净资产超过股价的股票\",\"tables\":[\"MYSQL:finance_tax.stocks\",\"MYSQL:finance_tax.company_financials\"],\"columns\":[\"stock_name\",\"total_assets\",\"total_liabilities\",\"total_shares\",\"current_price\",\"report_date\"]}],\"assumptions\":[\"每股净资产按(总资产-总负债)*10000/总股本计算，总资产和总负债单位为万元，需转换为元\",\"2025年数据取2025年12月31日报告期\",\"输出股票名称、每股净资产和股价\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.302923626964912,
+      "usage": {
+        "completion_tokens": 251,
+        "prompt_tokens": 12790,
+        "total_tokens": 13041,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12022
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "question_id": 989,
+  "question": "统计山东省拥有风力发电场的电力企业数量",
+  "semantic_status": "different",
+  "primary": "underdetermined",
+  "primary_label": "题目、参考或数据口径尚不能裁定",
+  "finding": "题面说山东省拥有风场的企业，模型按企业注册地，参考按场站所在地。两者业务意义不同，但题面没有清楚说明采用哪一处位置。",
+  "next_validation": "先确定区域修饰对象并统一同模板标注。",
+  "reference": {
+    "question_id": 989,
+    "question": "统计山东省拥有风力发电场的电力企业数量",
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT company_id) AS company_count FROM energy.energy_station WHERE area_id LIKE '37%' AND station_type_code = 'WP';"
+  },
+  "predicted": {
+    "question_id": 989,
+    "db": "MYSQL",
+    "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.energy_station es ON ec.company_id = es.company_id WHERE ec.area_id LIKE '37%' AND es.station_type_code = 'WP';"
+  },
+  "source_semantic_review": "参考按场站es.area_id筛山东，预测按企业ec.area_id筛山东；跨省经营时集合不同。题目山东省企业与参考场站位置口径本身需澄清。",
+  "evidence": {
+    "prompt_table_ids": [
+      "MYSQL:common.administrative_division",
+      "MYSQL:energy.company_certification",
+      "MYSQL:energy.employee",
+      "MYSQL:energy.energy_company",
+      "MYSQL:energy.energy_station",
+      "MYSQL:energy.supply_area"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1593,
+      1835,
+      1580,
+      1761,
+      1603,
+      1829,
+      1348,
+      1582,
+      1341,
+      1659,
+      1356,
+      1370
+    ],
+    "prompt_example_ids": [
+      675,
+      639,
+      1014,
+      1031
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [],
+    "knowledge_in_actual_prompt": [],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "94c6504c914192dcd42dc25614a6fb49e6ca76677249a4ddc80f6bd3b02a2332",
+  "actual_response_sha256": "a6ee379abe508c4f84032fa24cbb98cfd5040bebc4a9c962aa18026fee6c09d8",
+  "causal_experiment_performed": false
+}

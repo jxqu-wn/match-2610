@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2125,\"db\":\"Elasticsearch\",\"query\":\"{\\\"query\\\":{\\\"bool\\\":{\\\"must\\\":[{\\\"term\\\":{\\\"emergency_24h\\\":true}},{\\\"range\\\":{\\\"ambulance_count\\\":{\\\"gt\\\":10}}}],\\\"filter\\\":{\\\"geo_distance\\\":{\\\"distance\\\":\\\"8km\\\",\\\"location\\\":{\\\"lat\\\":30.657,\\\"lon\\\":104.065}}}}},\\\"_source\\\":[\\\"name\\\"]}\"},\"requirements\":[{\"requirement\":\"找出医院名称\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"name\"]},{\"requirement\":\"24小时急诊\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"emergency_24h\"]},{\"requirement\":\"救护车数大于10\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"ambulance_count\"]},{\"requirement\":\"成都天府广场周围8公里内\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"location\"]}],\"assumptions\":[\"成都天府广场坐标取(30.657, 104.065)，距离8公里使用geo_distance查询\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.4331721920170821,
+      "usage": {
+        "completion_tokens": 261,
+        "prompt_tokens": 5385,
+        "total_tokens": 5646,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4617
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

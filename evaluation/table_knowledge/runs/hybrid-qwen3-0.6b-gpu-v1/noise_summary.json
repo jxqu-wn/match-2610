@@ -1,0 +1,61 @@
+{
+  "source_report_sha256": "743a93f3e1c3ca36734bed1a4fde34ead4eb0d80cfeb4b5ac7fde97e0bbd0437",
+  "summarizer_sha256": "a65acb4e01d02f45c701f2c7716b617e189abe262962a26b9731e4b38d0b62a2",
+  "cutoff": 12,
+  "scope": "candidate_ranking_projection_only_not_confirmed_associations",
+  "unjudged_is_excluded_from_noise_counts": true,
+  "summary": {
+    "frozen_247": {
+      "bm25": {
+        "unrelated_per_effective": 6.926605504587156,
+        "passes_200_percent_noise_target_on_judged": false,
+        "violating_tables_on_judged": 62,
+        "zero_effective_with_judged_noise_tables": 32
+      },
+      "embedding": {
+        "unrelated_per_effective": 4.366459627329193,
+        "passes_200_percent_noise_target_on_judged": false,
+        "violating_tables_on_judged": 52,
+        "zero_effective_with_judged_noise_tables": 28
+      },
+      "rrf": {
+        "unrelated_per_effective": 4.684210526315789,
+        "passes_200_percent_noise_target_on_judged": false,
+        "violating_tables_on_judged": 55,
+        "zero_effective_with_judged_noise_tables": 29
+      },
+      "rrf_rerank": {
+        "unrelated_per_effective": 3.32,
+        "passes_200_percent_noise_target_on_judged": false,
+        "violating_tables_on_judged": 51,
+        "zero_effective_with_judged_noise_tables": 28
+      }
+    },
+    "current_1833": {
+      "bm25": {
+        "unrelated_per_effective": 0.9402985074626866,
+        "passes_200_percent_noise_target_on_judged": true,
+        "violating_tables_on_judged": 27,
+        "zero_effective_with_judged_noise_tables": 24
+      },
+      "embedding": {
+        "unrelated_per_effective": 0.7547169811320755,
+        "passes_200_percent_noise_target_on_judged": true,
+        "violating_tables_on_judged": 11,
+        "zero_effective_with_judged_noise_tables": 10
+      },
+      "rrf": {
+        "unrelated_per_effective": 0.746268656716418,
+        "passes_200_percent_noise_target_on_judged": true,
+        "violating_tables_on_judged": 23,
+        "zero_effective_with_judged_noise_tables": 21
+      },
+      "rrf_rerank": {
+        "unrelated_per_effective": 1.12987012987013,
+        "passes_200_percent_noise_target_on_judged": true,
+        "violating_tables_on_judged": 19,
+        "zero_effective_with_judged_noise_tables": 12
+      }
+    }
+  }
+}

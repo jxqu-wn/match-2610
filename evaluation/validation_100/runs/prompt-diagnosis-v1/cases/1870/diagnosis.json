@@ -1,0 +1,133 @@
+{
+  "question_id": 1870,
+  "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+  "semantic_status": "different",
+  "primary": "mixed",
+  "primary_label": "输入与模型处理混合",
+  "finding": "两年course结构缺失，模型未请求补表；案例已给COUNT DISTINCT学生，却选择COUNT(*)，并擅自扩展到全部院系、补0和多一列名称。输入不完整与粒度、空值、输出推理问题并存。",
+  "next_validation": "补完整课程/院系Schema，再固定去重对象、院系集合和NULL策略。",
+  "reference": {
+    "question_id": 1870,
+    "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+    "db": "MYSQL",
+    "query": "WITH e2024 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2024 FROM education_2024.enrollment e JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2024 AS (SELECT department_id, AVG(enroll_cnt_2024) AS avg_enroll_per_course_2024 FROM e2024 GROUP BY department_id), e2025 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2025 FROM education_2025.enrollment e JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2025 AS (SELECT department_id, AVG(enroll_cnt_2025) AS avg_enroll_per_course_2025 FROM e2025 GROUP BY department_id) SELECT COALESCE(a2024.department_id,a2025.department_id) AS department_id, ROUND(a2024.avg_enroll_per_course_2024,2) AS avg_enroll_per_course_2024, ROUND(a2025.avg_enroll_per_course_2025,2) AS avg_enroll_per_course_2025 FROM a2025 LEFT JOIN a2024 ON a2024.department_id=a2025.department_id ORDER BY avg_enroll_per_course_2025 DESC, department_id ASC LIMIT 5;"
+  },
+  "predicted": {
+    "question_id": 1870,
+    "db": "MYSQL",
+    "query": "WITH d2024 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2024 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2024.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2024.course c ON c.course_id = t.course_id GROUP BY c.department_id), d2025 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2025 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2025.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2025.course c ON c.course_id = t.course_id GROUP BY c.department_id) SELECT d.department_id, d.department_name, ROUND(COALESCE(d2024.avg_enroll_2024, 0), 2) AS avg_enroll_2024, ROUND(COALESCE(d2025.avg_enroll_2025, 0), 2) AS avg_enroll_2025 FROM education_2025.department d LEFT JOIN d2024 ON d2024.department_id = d.department_id LEFT JOIN d2025 ON d2025.department_id = d.department_id ORDER BY avg_enroll_2025 DESC, d.department_id ASC LIMIT 5;"
+  },
+  "source_semantic_review": "COUNT(*)代替每课程COUNT DISTINCT学生；从全部2025院系左连接而非从有2025选课均值的院系起步，并补0且多输出院系名称，群体/粒度/列均变化。enrollment未声明学生课程组合唯一。",
+  "evidence": {
+    "prompt_table_ids": [
+      "MYSQL:education_2024.department",
+      "MYSQL:education_2024.enrollment",
+      "MYSQL:education_2024.semester",
+      "MYSQL:education_2024.student",
+      "MYSQL:education_2025.class",
+      "MYSQL:education_2025.enrollment"
+    ],
+    "reference_tables_not_in_prompt": [
+      "MYSQL:education_2024.course",
+      "MYSQL:education_2025.course"
+    ],
+    "predicted_tables_not_in_prompt": [
+      "MYSQL:education_2024.course",
+      "MYSQL:education_2025.course",
+      "MYSQL:education_2025.department"
+    ],
+    "prompt_knowledge_ids": [
+      1575,
+      1576,
+      1385,
+      1026,
+      1044,
+      1027,
+      1042,
+      878,
+      720,
+      1045,
+      1513,
+      1294
+    ],
+    "prompt_example_ids": [
+      1843,
+      1849,
+      1952,
+      1789
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 1849,
+        "question": "统计2024与2025学期一中课程选择人数差，即2025减2024，差值最大的前5门课程，去重学生并排除退课，返回课程编号、课程名与差值。",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "WITH p2024 AS (SELECT course_id, COUNT(DISTINCT student_id) AS cnt_2024 FROM education_2024.enrollment WHERE semester_id=1 AND is_withdraw=0 GROUP BY course_id), p2025 AS (SELECT course_id, COUNT(DISTINCT student_id) AS cnt_2025 FROM education_2025.enrollment WHERE semester_id=1 AND is_withdraw=0 GROUP BY course_id) SELECT c.course_id, c.course_name, COALESCE(p2025.cnt_2025,0)-COALESCE(p2024.cnt_2024,0) AS diff_cnt_2025_minus_2024 FROM p2025 LEFT JOIN p2024 ON p2024.course_id=p2025.course_id JOIN education_2025.course c ON c.course_id=p2025.course_id ORDER BY diff_cnt_2025_minus_2024 DESC, c.course_id ASC LIMIT 5;",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:education_2024.enrollment",
+              "MYSQL:education_2025.course",
+              "MYSQL:education_2025.enrollment"
+            ],
+            "joins": [],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      },
+      {
+        "question_id": 1789,
+        "question": "统计学期一中每个院系选课人数，去重学生，并返回院系编号与选课人数，按选课人数降序取前10。",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT c.department_id, COUNT(DISTINCT e.student_id) AS active_enroll_student_cnt FROM education_2025.course c JOIN education_2025.enrollment e ON e.course_id=c.course_id JOIN education_2025.student s ON s.student_id=e.student_id WHERE e.semester_id=1 AND e.is_withdraw=0 AND s.student_status_code='ACTIVE' GROUP BY c.department_id ORDER BY active_enroll_student_cnt DESC, c.department_id ASC LIMIT 10;",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:education_2025.course",
+              "MYSQL:education_2025.enrollment",
+              "MYSQL:education_2025.student"
+            ],
+            "joins": [
+              {
+                "left_table": "MYSQL:education_2025.enrollment",
+                "left_columns": [
+                  "course_id"
+                ],
+                "right_table": "MYSQL:education_2025.course",
+                "right_columns": [
+                  "course_id"
+                ]
+              },
+              {
+                "left_table": "MYSQL:education_2025.student",
+                "left_columns": [
+                  "student_id"
+                ],
+                "right_table": "MYSQL:education_2025.enrollment",
+                "right_columns": [
+                  "student_id"
+                ]
+              }
+            ],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "a5e068c46c66ec066120b82ff2bb29980d58c382a87d58f2018122e04097d4a7",
+  "actual_response_sha256": "41caeff063b4c85dcbc27a20f0daaf7e0d72beb5003363212a6ef6c216e9c931",
+  "causal_experiment_performed": false
+}

@@ -1,0 +1,17 @@
+{
+  "format_version": 1,
+  "operation": "replace_with_full_source",
+  "source": "../data/knowledge.json (workspace source; copied byte-for-byte)",
+  "historical_filter_manifest": "dataset_manifest.json",
+  "datasets": {
+    "knowledge.json": {
+      "before": 1833,
+      "removed": 0,
+      "after": 1833,
+      "removed_ids": [],
+      "source_sha256": "e752a624077c4eb9aafb586638f72397c2e440f8c3134ff970daaa0f4c1151e6",
+      "sha256": "e752a624077c4eb9aafb586638f72397c2e440f8c3134ff970daaa0f4c1151e6",
+      "selection": "Entire supplied knowledge file, including knowledge outside current Schema namespaces."
+    }
+  }
+}

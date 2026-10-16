@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2980,\"db1\":\"POSTGRESQL\",\"query1\":\"SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog >= 270 AND cog <= 360 AND sog > 8\",\"db2\":\"MYSQL\",\"query2\":\"SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND CAST(SUBSTRING_INDEX(endurance, '/', 1) AS UNSIGNED) > 90\"},\"requirements\":[{\"requirement\":\"过去24小时内航向在270至360度之间且速度大于8节的船舶\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"timestamp\",\"cog\",\"sog\"]},{\"requirement\":\"自持力超过90天的MMSI\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"mmsi\",\"endurance\"]}],\"assumptions\":[\"endurance字段为VARCHAR(32)，存储格式为'天数/海里数'，取'/'前部分作为天数进行数值比较\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.1754781759809703,
+      "usage": {
+        "completion_tokens": 247,
+        "prompt_tokens": 12562,
+        "total_tokens": 12809,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11794
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

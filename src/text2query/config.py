@@ -31,7 +31,7 @@ class Settings(BaseSettings):
     output_dir: Path = Path("outputs")
 
     # ---- 模型 ----
-    embedding_model: Path = Path("models/Qwen3-Embedding-0.6B")
+    embedding_model: Path = Path("../models/Qwen3-Embedding-8B")
     routing_instruction: str = (
         "Identify the business entities and data requirements of this database query for database routing."
     )
@@ -45,7 +45,7 @@ class Settings(BaseSettings):
     recall_rrf_k: int = Field(default=60, gt=0)
     recall_rerank_top_k: int = Field(default=50, gt=0)
     recall_rerank_enabled: bool = True
-    reranker_model: Path = Path("models/Qwen3-Reranker-0.6B")
+    reranker_model: Path = Path("../models/Qwen3-Reranker-8B")
     reranker_device: str = "cpu"
     reranker_dtype: str = "auto"
     reranker_batch_size: int = Field(default=8, gt=0)

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":861,\"db\":\"MYSQL\",\"query\":\"SELECT COUNT(*) AS station_count FROM energy.energy_station es JOIN common.station_type_dict std ON es.station_type_code = std.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '东莞市' AND std.category = '发电' AND TIMESTAMPDIFF(YEAR, es.grid_connect_date, CURDATE()) > 15;\"},\"requirements\":[{\"requirement\":\"统计东莞市发电场站中运营超过15年的场站数量\",\"tables\":[\"MYSQL:energy.energy_station\",\"MYSQL:common.station_type_dict\",\"MYSQL:common.administrative_division\"],\"columns\":[\"station_id\",\"station_type_code\",\"area_id\",\"grid_connect_date\",\"type_code\",\"category\",\"id\",\"city_name\"]}],\"assumptions\":[\"运营超过15年按并网日期起算，使用 TIMESTAMPDIFF(YEAR, grid_connect_date, CURDATE()) > 15\",\"发电场站按 station_type_dict.category = '发电' 识别\",\"东莞市按 administrative_division.city_name = '东莞市' 识别\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.4663000929867849,
+      "usage": {
+        "completion_tokens": 259,
+        "prompt_tokens": 12948,
+        "total_tokens": 13207,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12180
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

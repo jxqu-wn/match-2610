@@ -6,11 +6,13 @@
 
 from __future__ import annotations
 
+import gc
 from pathlib import Path
 from threading import RLock
 from typing import Any
 
 import numpy as np
+from sklearn.preprocessing import normalize
 
 from ..config import settings
 from ..io import get_logger, sha256_text
@@ -81,6 +83,7 @@ class EmbeddingService:
             "device": self.device,
             "dtype": self.dtype,
             "normalize": True,
+            "normalization_dtype": "float32",
             "files": _model_fingerprint(self.model_path),
         }
         if document_prompt is not None:
@@ -113,6 +116,18 @@ class EmbeddingService:
         if self._model is None:
             self._model = self._load()
         return self._model
+
+    def unload(self) -> None:
+        """释放模型，保留已编码向量，支持显存受限时分阶段推理。"""
+        with self._lock:
+            if self._model is None:
+                return
+            self._model = None
+            gc.collect()
+            if self.device.startswith("cuda"):
+                import torch
+
+                torch.cuda.empty_cache()
 
     # -- 编码 ------------------------------------------------------------- #
     def _save(self) -> None:
@@ -147,7 +162,10 @@ class EmbeddingService:
                 convert_to_numpy=True,
                 show_progress_bar=False,
             )
-            for text, vector in zip(missing, np.asarray(vectors, dtype=np.float32)):
+            # BF16/FP16 模型内部归一化有舍入误差；FAISS 内积需使用真正的
+            # 单位向量。转为 float32 后再归一化，缓存签名同步记录此协议。
+            vectors = normalize(np.asarray(vectors, dtype=np.float32), norm="l2", axis=1)
+            for text, vector in zip(missing, vectors, strict=True):
                 self._cache[prefix + text] = vector
             self._save()
         if not texts:

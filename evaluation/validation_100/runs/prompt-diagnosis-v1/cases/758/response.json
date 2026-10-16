@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":758,\"db\":\"MYSQL\",\"query\":\"SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.name = '武汉市' AND e.education = '大专';\"},\"requirements\":[{\"requirement\":\"统计员工数量\",\"tables\":[\"MYSQL:energy.employee\"],\"columns\":[\"employee_id\"]},{\"requirement\":\"学历为大专\",\"tables\":[\"MYSQL:energy.employee\"],\"columns\":[\"education\"]},{\"requirement\":\"武汉市电力企业\",\"tables\":[\"MYSQL:energy.energy_company\",\"MYSQL:common.administrative_division\"],\"columns\":[\"company_id\",\"area_id\",\"id\",\"name\"]}],\"assumptions\":[\"administrative_division 表包含 id 和 name 字段，且武汉市对应 level=2 的记录\",\"员工学历字段 education 中存储的值为中文“大专”\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.999785388004966,
+      "usage": {
+        "completion_tokens": 225,
+        "prompt_tokens": 12677,
+        "total_tokens": 12902,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11909
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,186 @@
+Embedding frozen_247: 247 documents
+[21:53:11] INFO     Loading SentenceTransformer model from                      
+                    /root/autodl-tmp/match/models/Qwen3-Embedding-0.6B.         
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 12890.20it/s]
+[21:53:12] INFO     Loaded 1 prompt with these keys: ['query']                  
+Embedding current_1833: 1833 documents
+[21:53:23] INFO     Loading faiss with AVX512-SPR support.                      
+           INFO     Could not load library with AVX512-SPR support due to:      
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512_spr'")                              
+           INFO     Loading faiss with AVX512 support.                          
+           INFO     Could not load library with AVX512 support due to:          
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512'")                                  
+           INFO     Loading faiss with AVX2 support.                            
+           INFO     Could not load library with AVX2 support due to:            
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx2'")                                    
+           INFO     Loading faiss.                                              
+           INFO     Successfully loaded faiss.                                  
+           INFO     Loading CrossEncoder model from                             
+                    /root/autodl-tmp/match/models/Qwen3-Reranker-0.6B.          
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 10661.85it/s]
+[21:53:24] INFO     Loaded 1 prompt with these keys: ['query']                  
+           WARNING  Default prompt name is set to 'query'. This prompt will be  
+                    applied to all inference calls, except if a `prompt` or     
+                    `prompt_name` parameter is provided.                        
+frozen_247: 1/72 MYSQL:common.administrative_division
+frozen_247: 2/72 MYSQL:common.vehicle_type_dict
+frozen_247: 3/72 MYSQL:common.vessel_type_dict
+frozen_247: 4/72 MYSQL:common.employee_type_dict
+frozen_247: 5/72 MYSQL:common.license_type_dict
+frozen_247: 6/72 MYSQL:common.dict_registration_type
+frozen_247: 7/72 MYSQL:common.dict_size_category
+frozen_247: 8/72 MYSQL:common.dict_stock_type
+frozen_247: 9/72 MYSQL:common.dict_industry
+frozen_247: 10/72 MYSQL:common.energy_type_dict
+frozen_247: 11/72 MYSQL:common.voltage_level_dict
+frozen_247: 12/72 MYSQL:common.energy_position_dict
+frozen_247: 13/72 MYSQL:common.station_type_dict
+frozen_247: 14/72 MYSQL:common.cert_type_dict
+frozen_247: 15/72 MYSQL:common.product_category
+frozen_247: 16/72 MYSQL:common.customer_level_dict
+frozen_247: 17/72 MYSQL:common.customer_status_dict
+frozen_247: 18/72 MYSQL:common.product_status_dict
+frozen_247: 19/72 MYSQL:common.order_status_dict
+frozen_247: 20/72 MYSQL:common.payment_method_dict
+frozen_247: 21/72 MYSQL:common.payment_status_dict
+frozen_247: 22/72 MYSQL:common.refund_reason_dict
+frozen_247: 23/72 MYSQL:common.order_channel_dict
+frozen_247: 24/72 MYSQL:common.platform_dict
+frozen_247: 25/72 MYSQL:common.dict_gender
+frozen_247: 26/72 MYSQL:common.dict_academic_level
+frozen_247: 27/72 MYSQL:common.dict_student_status
+frozen_247: 28/72 MYSQL:common.dict_course_type
+frozen_247: 29/72 MYSQL:common.dict_exam_item
+frozen_247: 30/72 MYSQL:common.dict_take_mode
+frozen_247: 31/72 MYSQL:common.dict_semester_type
+frozen_247: 32/72 MYSQL:common.dict_grade_level
+frozen_247: 33/72 MYSQL:transportation.vehicle_company
+frozen_247: 34/72 MYSQL:transportation.driver
+frozen_247: 35/72 MYSQL:transportation.vehicle
+frozen_247: 36/72 MYSQL:transportation.shipping_company
+frozen_247: 37/72 MYSQL:transportation.employee
+frozen_247: 38/72 MYSQL:transportation.vessel
+frozen_247: 39/72 MYSQL:finance_tax.companies
+frozen_247: 40/72 MYSQL:finance_tax.stocks
+frozen_247: 41/72 MYSQL:finance_tax.stock_daily_trades
+frozen_247: 42/72 MYSQL:finance_tax.company_financials
+frozen_247: 43/72 MYSQL:finance_tax.corporate_income_tax_returns
+frozen_247: 44/72 MYSQL:energy.energy_company
+frozen_247: 45/72 MYSQL:energy.company_certification
+frozen_247: 46/72 MYSQL:energy.energy_station
+frozen_247: 47/72 MYSQL:energy.supply_area
+frozen_247: 48/72 MYSQL:energy.employee
+frozen_247: 49/72 MYSQL:education_2024.semester
+frozen_247: 50/72 MYSQL:education_2024.department
+frozen_247: 51/72 MYSQL:education_2024.teacher
+frozen_247: 52/72 MYSQL:education_2024.class
+frozen_247: 53/72 MYSQL:education_2024.student
+frozen_247: 54/72 MYSQL:education_2024.course
+frozen_247: 55/72 MYSQL:education_2024.enrollment
+frozen_247: 56/72 MYSQL:education_2024.exam_score
+frozen_247: 57/72 MYSQL:education_2025.semester
+frozen_247: 58/72 MYSQL:education_2025.department
+frozen_247: 59/72 MYSQL:education_2025.teacher
+frozen_247: 60/72 MYSQL:education_2025.class
+frozen_247: 61/72 MYSQL:education_2025.student
+frozen_247: 62/72 MYSQL:education_2025.course
+frozen_247: 63/72 MYSQL:education_2025.enrollment
+frozen_247: 64/72 MYSQL:education_2025.exam_score
+frozen_247: 65/72 MYSQL:ecommerce.customer
+frozen_247: 66/72 MYSQL:ecommerce.product
+frozen_247: 67/72 MYSQL:ecommerce.inventory
+frozen_247: 68/72 MYSQL:ecommerce.orders
+frozen_247: 69/72 MYSQL:ecommerce.order_item
+frozen_247: 70/72 MYSQL:ecommerce.payment
+frozen_247: 71/72 POSTGRESQL:public.vessel_ais_data
+frozen_247: 72/72 Elasticsearch:medical_institutions
+current_1833: 1/72 MYSQL:common.administrative_division
+current_1833: 2/72 MYSQL:common.vehicle_type_dict
+current_1833: 3/72 MYSQL:common.vessel_type_dict
+current_1833: 4/72 MYSQL:common.employee_type_dict
+current_1833: 5/72 MYSQL:common.license_type_dict
+current_1833: 6/72 MYSQL:common.dict_registration_type
+current_1833: 7/72 MYSQL:common.dict_size_category
+current_1833: 8/72 MYSQL:common.dict_stock_type
+current_1833: 9/72 MYSQL:common.dict_industry
+current_1833: 10/72 MYSQL:common.energy_type_dict
+current_1833: 11/72 MYSQL:common.voltage_level_dict
+current_1833: 12/72 MYSQL:common.energy_position_dict
+current_1833: 13/72 MYSQL:common.station_type_dict
+current_1833: 14/72 MYSQL:common.cert_type_dict
+current_1833: 15/72 MYSQL:common.product_category
+current_1833: 16/72 MYSQL:common.customer_level_dict
+current_1833: 17/72 MYSQL:common.customer_status_dict
+current_1833: 18/72 MYSQL:common.product_status_dict
+current_1833: 19/72 MYSQL:common.order_status_dict
+current_1833: 20/72 MYSQL:common.payment_method_dict
+current_1833: 21/72 MYSQL:common.payment_status_dict
+current_1833: 22/72 MYSQL:common.refund_reason_dict
+current_1833: 23/72 MYSQL:common.order_channel_dict
+current_1833: 24/72 MYSQL:common.platform_dict
+current_1833: 25/72 MYSQL:common.dict_gender
+current_1833: 26/72 MYSQL:common.dict_academic_level
+current_1833: 27/72 MYSQL:common.dict_student_status
+current_1833: 28/72 MYSQL:common.dict_course_type
+current_1833: 29/72 MYSQL:common.dict_exam_item
+current_1833: 30/72 MYSQL:common.dict_take_mode
+current_1833: 31/72 MYSQL:common.dict_semester_type
+current_1833: 32/72 MYSQL:common.dict_grade_level
+current_1833: 33/72 MYSQL:transportation.vehicle_company
+current_1833: 34/72 MYSQL:transportation.driver
+current_1833: 35/72 MYSQL:transportation.vehicle
+current_1833: 36/72 MYSQL:transportation.shipping_company
+current_1833: 37/72 MYSQL:transportation.employee
+current_1833: 38/72 MYSQL:transportation.vessel
+current_1833: 39/72 MYSQL:finance_tax.companies
+current_1833: 40/72 MYSQL:finance_tax.stocks
+current_1833: 41/72 MYSQL:finance_tax.stock_daily_trades
+current_1833: 42/72 MYSQL:finance_tax.company_financials
+current_1833: 43/72 MYSQL:finance_tax.corporate_income_tax_returns
+current_1833: 44/72 MYSQL:energy.energy_company
+current_1833: 45/72 MYSQL:energy.company_certification
+current_1833: 46/72 MYSQL:energy.energy_station
+current_1833: 47/72 MYSQL:energy.supply_area
+current_1833: 48/72 MYSQL:energy.employee
+current_1833: 49/72 MYSQL:education_2024.semester
+current_1833: 50/72 MYSQL:education_2024.department
+current_1833: 51/72 MYSQL:education_2024.teacher
+current_1833: 52/72 MYSQL:education_2024.class
+current_1833: 53/72 MYSQL:education_2024.student
+current_1833: 54/72 MYSQL:education_2024.course
+current_1833: 55/72 MYSQL:education_2024.enrollment
+current_1833: 56/72 MYSQL:education_2024.exam_score
+current_1833: 57/72 MYSQL:education_2025.semester
+current_1833: 58/72 MYSQL:education_2025.department
+current_1833: 59/72 MYSQL:education_2025.teacher
+current_1833: 60/72 MYSQL:education_2025.class
+current_1833: 61/72 MYSQL:education_2025.student
+current_1833: 62/72 MYSQL:education_2025.course
+current_1833: 63/72 MYSQL:education_2025.enrollment
+current_1833: 64/72 MYSQL:education_2025.exam_score
+current_1833: 65/72 MYSQL:ecommerce.customer
+current_1833: 66/72 MYSQL:ecommerce.product
+current_1833: 67/72 MYSQL:ecommerce.inventory
+current_1833: 68/72 MYSQL:ecommerce.orders
+current_1833: 69/72 MYSQL:ecommerce.order_item
+current_1833: 70/72 MYSQL:ecommerce.payment
+current_1833: 71/72 POSTGRESQL:public.vessel_ais_data
+current_1833: 72/72 Elasticsearch:medical_institutions
+{
+  "output": "evaluation/table_knowledge/runs/hybrid-qwen3-0.6b-gpu-v1",
+  "hardware": {
+    "gpu": "NVIDIA GeForce RTX 4090",
+    "total_gib": 47.37115478515625,
+    "peak_allocated_gib": 2.3968563079833984,
+    "peak_reserved_gib": 2.486328125,
+    "embedding_kept_loaded": true
+  },
+  "embedding_seconds": 13.754477985203266,
+  "ranking_seconds": {
+    "frozen_247": 37.21069976687431,
+    "current_1833": 37.86360977217555
+  }
+}

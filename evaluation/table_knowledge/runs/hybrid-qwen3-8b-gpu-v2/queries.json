@@ -1,0 +1,290 @@
+[
+  {
+    "table_id": "MYSQL:common.administrative_division",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：administrative_division\n描述：统一行政区划表\n字段：id (CHAR(6))：行政区划代码\n字段：name (VARCHAR(50))：行政区划名称\n字段：full_name (VARCHAR(100))：行政区划全称\n字段：province_name (VARCHAR(20))：省级名称\n字段：city_name (VARCHAR(20))：市级名称\n字段：county_name (VARCHAR(20))：县级名称\n字段：level (TINYINT)：级别(1:省/直辖市,2:市,3:区县)\n字段：longitude (DECIMAL(10, 6))：经度\n字段：latitude (DECIMAL(10, 6))：纬度"
+  },
+  {
+    "table_id": "MYSQL:common.vehicle_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：vehicle_type_dict\n描述：车辆类型字典\n字段：type_code (VARCHAR(20))：类型代码\n字段：type_name (VARCHAR(50))：类型名称（客车/货车/危化品车等）\n字段：category (VARCHAR(20))：大类"
+  },
+  {
+    "table_id": "MYSQL:common.vessel_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：vessel_type_dict\n描述：船舶类型字典\n字段：type_code (SMALLINT)：AIS船舶类型代码\n字段：type_name (VARCHAR(50))：类型名称\n字段：category (VARCHAR(20))：大类"
+  },
+  {
+    "table_id": "MYSQL:common.employee_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：employee_type_dict\n描述：人员类型字典\n字段：type_code (VARCHAR(20))：人员类型代码\n字段：type_name (VARCHAR(50))：类型名称（船长/大副/轮机长/水手等）"
+  },
+  {
+    "table_id": "MYSQL:common.license_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：license_type_dict\n描述：驾照类型字典\n字段：license_code (VARCHAR(5))：驾照代码\n字段：license_name (VARCHAR(50))：驾照名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_registration_type",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_registration_type\n描述：企业登记注册类型字典\n字段：type_code (VARCHAR(20))：注册类型代码\n字段：type_name (VARCHAR(100))：注册类型名称\n字段：description (VARCHAR(200))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.dict_size_category",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_size_category\n描述：企业规模划型字典\n字段：size_code (VARCHAR(10))：规模代码\n字段：size_name (VARCHAR(20))：规模名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_stock_type",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_stock_type\n描述：股票分类字典\n字段：type_category (VARCHAR(30))：分类维度\n字段：type_code (VARCHAR(20))：类型代码\n字段：type_name (VARCHAR(50))：类型名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_industry",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_industry\n描述：行业分类字典\n字段：industry_code (VARCHAR(20))：行业代码（国标）\n字段：industry_name (VARCHAR(100))：行业名称"
+  },
+  {
+    "table_id": "MYSQL:common.energy_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：energy_type_dict\n描述：能源类型字典\n字段：type_code (VARCHAR(10))：能源类型代码\n字段：type_name (VARCHAR(30))：类型名称\n字段：category (VARCHAR(20))：大类\n字段：is_renewable (TINYINT(1))：是否可再生"
+  },
+  {
+    "table_id": "MYSQL:common.voltage_level_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：voltage_level_dict\n描述：电压等级字典\n字段：level_code (VARCHAR(10))：电压等级代码\n字段：level_name (VARCHAR(20))：等级名称\n字段：level_value (INT)：电压值(kV)\n字段：category (VARCHAR(20))：类别"
+  },
+  {
+    "table_id": "MYSQL:common.energy_position_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：energy_position_dict\n描述：能源行业岗位字典\n字段：position_code (VARCHAR(20))：岗位代码\n字段：position_name (VARCHAR(50))：岗位名称\n字段：category (VARCHAR(30))：类别"
+  },
+  {
+    "table_id": "MYSQL:common.station_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：station_type_dict\n描述：场站类型字典\n字段：type_code (VARCHAR(10))：场站类型代码\n字段：type_name (VARCHAR(50))：类型名称\n字段：category (VARCHAR(30))：大类"
+  },
+  {
+    "table_id": "MYSQL:common.cert_type_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：cert_type_dict\n描述：资质类型字典\n字段：cert_type_code (VARCHAR(20))：资质类型代码\n字段：cert_type_name (VARCHAR(50))：资质类型名称\n字段：category (VARCHAR(20))：类别\n字段：valid_years (TINYINT)：有效期(年)"
+  },
+  {
+    "table_id": "MYSQL:common.product_category",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：product_category\n描述：商品分类表\n字段：category_id (BIGINT)：商品分类ID\n字段：category_name (VARCHAR(100))：商品分类名称\n字段：parent_category_id (BIGINT)：父级商品分类ID\n字段：category_level (TINYINT)：分类层级\n字段：sort_order (INT)：排序号"
+  },
+  {
+    "table_id": "MYSQL:common.customer_level_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：customer_level_dict\n描述：用户等级字典\n字段：level_code (VARCHAR(32))：用户等级编码\n字段：level_name (VARCHAR(64))：用户等级名称\n字段：min_growth_value (INT)：最低成长值\n字段：description (VARCHAR(255))：说明\n字段：sort_order (INT)：排序号"
+  },
+  {
+    "table_id": "MYSQL:common.customer_status_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：customer_status_dict\n描述：用户状态字典\n字段：status_code (VARCHAR(32))：用户状态编码\n字段：status_name (VARCHAR(64))：用户状态名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.product_status_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：product_status_dict\n描述：商品状态字典\n字段：status_code (VARCHAR(32))：商品状态编码\n字段：status_name (VARCHAR(64))：商品状态名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.order_status_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：order_status_dict\n描述：订单状态字典\n字段：status_code (VARCHAR(32))：订单状态编码\n字段：status_name (VARCHAR(64))：订单状态名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.payment_method_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：payment_method_dict\n描述：支付方式字典\n字段：method_code (VARCHAR(32))：支付方式编码\n字段：method_name (VARCHAR(64))：支付方式名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.payment_status_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：payment_status_dict\n描述：支付状态字典\n字段：status_code (VARCHAR(32))：支付状态编码\n字段：status_name (VARCHAR(64))：支付状态名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.refund_reason_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：refund_reason_dict\n描述：退款原因字典\n字段：reason_code (VARCHAR(32))：退款原因编码\n字段：reason_name (VARCHAR(64))：退款原因名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.order_channel_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：order_channel_dict\n描述：下单渠道字典\n字段：channel_code (VARCHAR(32))：下单渠道编码\n字段：channel_name (VARCHAR(64))：下单渠道名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.platform_dict",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：platform_dict\n描述：销售平台字典\n字段：platform_code (VARCHAR(32))：销售平台编码\n字段：platform_name (VARCHAR(64))：销售平台名称\n字段：description (VARCHAR(255))：说明"
+  },
+  {
+    "table_id": "MYSQL:common.dict_gender",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_gender\n描述：1. 性别字典\n字段：gender_code (CHAR(1))：性别代码(M/F)\n字段：gender_name (VARCHAR(10))：性别名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_academic_level",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_academic_level\n描述：2. 学历层次字典\n字段：level_code (VARCHAR(20))：学历代码(UNDERGRAD/MASTER等)\n字段：level_name (VARCHAR(50))：学历名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_student_status",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_student_status\n描述：3. 学生状态字典\n字段：status_code (VARCHAR(20))：状态代码(ACTIVE/INACTIVE/GRADUATED等)\n字段：status_name (VARCHAR(50))：状态名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_course_type",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_course_type\n描述：4. 课程类型字典\n字段：type_code (VARCHAR(20))：课程类型代码\n字段：type_name (VARCHAR(50))：课程类型名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_exam_item",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_exam_item\n描述：5. 考试项目字典\n字段：item_code (VARCHAR(20))：考试项目代码\n字段：item_name (VARCHAR(50))：考试项目名称\n字段：default_weight (DECIMAL(5, 2))：默认权重（如平时成绩占30%）"
+  },
+  {
+    "table_id": "MYSQL:common.dict_take_mode",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_take_mode\n描述：6. 选课方式字典\n字段：mode_code (VARCHAR(20))：选课方式代码\n字段：mode_name (VARCHAR(50))：选课方式名称"
+  },
+  {
+    "table_id": "MYSQL:common.dict_semester_type",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_semester_type\n描述：7. 学期字典（与业务库中的 semester 表互补，用于描述学期性质）\n字段：semester_code (VARCHAR(20))：学期代码（如2024-FALL）\n字段：semester_name (VARCHAR(50))：学期名称\n字段：season (VARCHAR(10))：季节(SPRING/FALL/SUMMER)\n字段：is_current (TINYINT(1))：是否为当前学期"
+  },
+  {
+    "table_id": "MYSQL:common.dict_grade_level",
+    "query": "系统：MYSQL\n业务库：common\n表/索引：dict_grade_level\n描述：8. 成绩等级参考表\n字段：grade_level (CHAR(2))：等级(A/B/C/D/F)\n字段：min_score (INT)：最低分数\n字段：max_score (INT)：最高分数\n字段：grade_point (DECIMAL(3, 2))：绩点"
+  },
+  {
+    "table_id": "MYSQL:transportation.vehicle_company",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：vehicle_company\n描述：车辆运输公司信息表\n字段：company_id (VARCHAR(20))：车辆公司编号\n字段：company_name (VARCHAR(100))：公司名称\n字段：business_type (VARCHAR(50))：经营类型（客运/货运/危化品运输）\n字段：establish_date (DATE)：成立日期\n字段：legal_person (VARCHAR(50))：法人\n字段：contact_phone (VARCHAR(20))：联系电话\n字段：address (VARCHAR(200))：公司地址\n字段：area_id (CHAR(6))：注册地区划代码\n字段：status (ENUM('运营', '停业', '注销'))：经营状态\n外键：area_id → MYSQL:common.administrative_division"
+  },
+  {
+    "table_id": "MYSQL:transportation.driver",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：driver\n描述：驾驶员信息表（车辆公司员工）\n字段：driver_id (VARCHAR(18))：身份证号\n字段：name (VARCHAR(50))：姓名\n字段：gender (ENUM('男', '女'))：性别\n字段：birth_date (DATE)：出生日期\n字段：license_type (VARCHAR(5))：驾照类型代码\n字段：issue_date (DATE)：发证日期\n字段：valid_years (TINYINT)：有效期(年)\n字段：phone (VARCHAR(20))：联系电话\n字段：address (VARCHAR(200))：联系地址\n字段：area_id (CHAR(6))：行政区划代码\n字段：status (ENUM('正常', '暂扣', '吊销', '过期'))：驾照状态\n字段：company_id (VARCHAR(20))：所属车辆公司ID\n外键：area_id → MYSQL:common.administrative_division\n外键：license_type → MYSQL:common.license_type_dict\n外键：company_id → MYSQL:transportation.vehicle_company"
+  },
+  {
+    "table_id": "MYSQL:transportation.vehicle",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：vehicle\n描述：车辆登记表\n字段：vehicle_id (VARCHAR(20))：车辆唯一编号\n字段：plate_number (VARCHAR(10))：车牌号\n字段：owner_id (VARCHAR(18))：车主（驾驶员）身份证号\n字段：vehicle_type_code (VARCHAR(20))：车辆类型代码\n字段：brand (VARCHAR(30))：品牌\n字段：model (VARCHAR(30))：型号\n字段：manufacture_year (YEAR)：生产年份\n字段：load_capacity (DECIMAL(8, 2))：载重(吨)\n字段：seat_count (TINYINT UNSIGNED)：座位数（客车用）\n字段：color (VARCHAR(20))：颜色\n字段：register_date (DATE)：注册日期\n字段：area_id (CHAR(6))：注册地区划代码\n字段：insurance_expire (DATE)：保险到期日\n字段：company_id (VARCHAR(20))：所属车辆公司ID\n外键：owner_id → MYSQL:transportation.driver\n外键：area_id → MYSQL:common.administrative_division\n外键：vehicle_type_code → MYSQL:common.vehicle_type_dict\n外键：company_id → MYSQL:transportation.vehicle_company"
+  },
+  {
+    "table_id": "MYSQL:transportation.shipping_company",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：shipping_company\n描述：船舶公司信息表\n字段：company_id (VARCHAR(20))：船舶公司编号\n字段：company_name (VARCHAR(100))：公司名称\n字段：business_type (VARCHAR(50))：经营类型（集装箱/散货/油轮/客运）\n字段：establish_date (DATE)：成立日期\n字段：legal_person (VARCHAR(50))：法人\n字段：contact_phone (VARCHAR(20))：联系电话\n字段：address (VARCHAR(200))：公司地址\n字段：area_id (CHAR(6))：行政区划代码\n字段：status (ENUM('运营', '停业', '注销'))：经营状态\n外键：area_id → MYSQL:common.administrative_division"
+  },
+  {
+    "table_id": "MYSQL:transportation.employee",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：employee\n描述：船舶公司员工表\n字段：employee_id (VARCHAR(18))：身份证号\n字段：name (VARCHAR(50))：姓名\n字段：gender (ENUM('男', '女'))：性别\n字段：employee_type_code (VARCHAR(20))：人员类型代码（船长/大副等）\n字段：company_id (VARCHAR(20))：所属船舶公司ID\n字段：hire_date (DATE)：入职日期\n字段：phone (VARCHAR(20))：联系电话\n字段：status (ENUM('在职', '离职', '退休'))：状态\n外键：employee_type_code → MYSQL:common.employee_type_dict\n外键：company_id → MYSQL:transportation.shipping_company"
+  },
+  {
+    "table_id": "MYSQL:transportation.vessel",
+    "query": "系统：MYSQL\n业务库：transportation\n表/索引：vessel\n描述：船舶基础信息表\n字段：mmsi (INT UNSIGNED)：船舶MMSI，9位唯一标识\n字段：company_id (VARCHAR(20))：所属船舶公司ID\n字段：vessel_type (SMALLINT)：船舶类型代码（参照AIS标准）\n字段：max_load (DECIMAL(10, 2))：最大荷载量（吨）\n字段：max_speed (DECIMAL(4, 1))：最大航速（节）\n字段：endurance (VARCHAR(32))：自持力（天/海里）\n字段：captain_name (VARCHAR(32))：船长姓名\n字段：area_id (CHAR(6))：注册地区划代码\n外键：company_id → MYSQL:transportation.shipping_company\n外键：area_id → MYSQL:common.administrative_division\n外键：vessel_type → MYSQL:common.vessel_type_dict"
+  },
+  {
+    "table_id": "MYSQL:finance_tax.companies",
+    "query": "系统：MYSQL\n业务库：finance_tax\n表/索引：companies\n描述：公司基础信息主表\n字段：company_id (BIGINT)：公司唯一ID\n字段：company_name (VARCHAR(200))：公司法定全称\n字段：stock_code (VARCHAR(20))：股票代码（若上市）\n字段：established_year (YEAR)：注册/成立年份\n字段：registered_capital (DECIMAL(18, 2))：注册资本（万元）\n字段：industry_code (VARCHAR(20))：所属行业代码\n字段：registration_type_code (VARCHAR(20))：登记注册类型代码\n字段：is_private (BOOLEAN)：是否民营企业\n字段：size_category_code (VARCHAR(10))：规模划型代码\n字段：is_key_high_tech (BOOLEAN)：是否重点扶持高新技术企业\n字段：is_tech_advanced_service (BOOLEAN)：是否技术先进型服务企业\n外键：industry_code → MYSQL:common.dict_industry\n外键：registration_type_code → MYSQL:common.dict_registration_type\n外键：size_category_code → MYSQL:common.dict_size_category"
+  },
+  {
+    "table_id": "MYSQL:finance_tax.stocks",
+    "query": "系统：MYSQL\n业务库：finance_tax\n表/索引：stocks\n描述：股票基本信息表\n字段：stock_id (BIGINT)：词条ID\n字段：company_id (BIGINT)：关联公司ID\n字段：stock_code (VARCHAR(20))：股票代码\n字段：stock_name (VARCHAR(50))：股票简称\n字段：stock_full_name (VARCHAR(200))：公司全称（冗余）\n字段：share_right_type (VARCHAR(20))：股东权利类型（引用字典）\n字段：register_type (VARCHAR(20))：记名方式\n字段：par_value_type (VARCHAR(20))：面额类型\n字段：market_class (VARCHAR(5))：上市地点分类（A/B/H/N等）\n字段：listing_date (DATE)：上市时间\n字段：total_shares (BIGINT)：股本（股）\n字段：current_price (DECIMAL(10, 2))：最新股票价格（元）\n外键：company_id → MYSQL:finance_tax.companies"
+  },
+  {
+    "table_id": "MYSQL:finance_tax.stock_daily_trades",
+    "query": "系统：MYSQL\n业务库：finance_tax\n表/索引：stock_daily_trades\n描述：股票每日成交汇总信息\n字段：trade_id (BIGINT)：词条ID\n字段：stock_id (BIGINT)：关联股票ID\n字段：trade_date (DATE)：交易日期\n字段：volume (BIGINT)：成交量（股）\n字段：avg_trade_size (INT)：每笔成交股数\n字段：open_price (DECIMAL(10, 2))：开盘价\n字段：close_price (DECIMAL(10, 2))：收盘价\n字段：high_price (DECIMAL(10, 2))：最高价\n字段：low_price (DECIMAL(10, 2))：最低价\n外键：stock_id → MYSQL:finance_tax.stocks"
+  },
+  {
+    "table_id": "MYSQL:finance_tax.company_financials",
+    "query": "系统：MYSQL\n业务库：finance_tax\n表/索引：company_financials\n描述：公司定期财务摘要信息\n字段：financial_id (BIGINT)：词条ID\n字段：company_id (BIGINT)：关联公司ID\n字段：report_date (DATE)：报表日期\n字段：dividend_cash (DECIMAL(18, 2))：现金分红总额（万元）\n字段：dividend_stock (INT)：每股股息（分/股）\n字段：total_assets (DECIMAL(18, 2))：总资产（万元）\n字段：total_liabilities (DECIMAL(18, 2))：总负债（万元）\n外键：company_id → MYSQL:finance_tax.companies"
+  },
+  {
+    "table_id": "MYSQL:finance_tax.corporate_income_tax_returns",
+    "query": "系统：MYSQL\n业务库：finance_tax\n表/索引：corporate_income_tax_returns\n描述：企业所得税年度申报信息表\n字段：return_id (BIGINT)：申报ID\n字段：company_id (BIGINT)：关联公司ID\n字段：tax_year (YEAR)：纳税年度\n字段：revenue (DECIMAL(18, 2))：收入总额（万元）\n字段：non_taxable_income (DECIMAL(18, 2))：不征税收入与免税收入（万元）\n字段：deductions (DECIMAL(18, 2))：扣除金额（万元）\n字段：prior_year_losses (DECIMAL(18, 2))：允许弥补的以前年度亏损（万元）\n字段：building_asset_value (DECIMAL(18, 2))：房屋建筑物资产原值（万元）\n字段：employee_count (INT)：从业人数（全年季度平均值）\n字段：total_assets (DECIMAL(18, 2))：资产总额（万元，全年季度平均值）\n字段：is_restricted_industry (BOOLEAN)：是否从事国家限制或禁止行业\n外键：company_id → MYSQL:finance_tax.companies"
+  },
+  {
+    "table_id": "MYSQL:energy.energy_company",
+    "query": "系统：MYSQL\n业务库：energy\n表/索引：energy_company\n描述：能源企业信息表\n字段：company_id (VARCHAR(20))：企业编号\n字段：company_name (VARCHAR(100))：企业名称\n字段：business_type (VARCHAR(50))：经营类型\n字段：establish_date (DATE)：成立日期\n字段：legal_person (VARCHAR(50))：法人代表\n字段：contact_phone (VARCHAR(20))：联系电话\n字段：area_id (CHAR(6))：注册地区划代码\n字段：staff_count (INT)：员工总数\n字段：status (ENUM('运营', '停业', '注销'))：经营状态\n外键：area_id → MYSQL:common.administrative_division"
+  },
+  {
+    "table_id": "MYSQL:energy.company_certification",
+    "query": "系统：MYSQL\n业务库：energy\n表/索引：company_certification\n描述：企业资质表\n字段：id (INT)：记录ID\n字段：company_id (VARCHAR(20))：企业编号\n字段：cert_type (VARCHAR(50))：资质类型\n字段：cert_no (VARCHAR(50))：证书编号\n字段：issue_date (DATE)：发证日期\n字段：expire_date (DATE)：到期日期\n字段：issue_authority (VARCHAR(100))：发证机关\n外键：company_id → MYSQL:energy.energy_company"
+  },
+  {
+    "table_id": "MYSQL:energy.energy_station",
+    "query": "系统：MYSQL\n业务库：energy\n表/索引：energy_station\n描述：能源场站表\n字段：station_id (VARCHAR(20))：场站编号\n字段：station_name (VARCHAR(100))：场站名称\n字段：company_id (VARCHAR(20))：所属企业编号\n字段：station_type_code (VARCHAR(10))：场站类型代码\n字段：energy_type_code (VARCHAR(10))：能源类型代码\n字段：installed_capacity (DECIMAL(12, 2))：装机容量(MW)\n字段：annual_generation (DECIMAL(12, 2))：年发电量(万kWh)\n字段：grid_connect_date (DATE)：并网日期\n字段：area_id (CHAR(6))：所在地区划代码\n字段：status (ENUM('运行', '在建', '停机', '退役'))：运行状态\n外键：company_id → MYSQL:energy.energy_company\n外键：station_type_code → MYSQL:common.station_type_dict\n外键：energy_type_code → MYSQL:common.energy_type_dict\n外键：area_id → MYSQL:common.administrative_division"
+  },
+  {
+    "table_id": "MYSQL:energy.supply_area",
+    "query": "系统：MYSQL\n业务库：energy\n表/索引：supply_area\n描述：供电区域表\n字段：id (INT)：记录ID\n字段：company_id (VARCHAR(20))：供电企业编号\n字段：area_id (CHAR(6))：供电区域代码\n字段：supply_level (VARCHAR(10))：供电等级\n字段：household_count (INT)：供电户数\n字段：annual_supply (DECIMAL(12, 2))：年供电量(万kWh)\n外键：company_id → MYSQL:energy.energy_company\n外键：area_id → MYSQL:common.administrative_division"
+  },
+  {
+    "table_id": "MYSQL:energy.employee",
+    "query": "系统：MYSQL\n业务库：energy\n表/索引：employee\n描述：能源企业员工表\n字段：employee_id (VARCHAR(18))：身份证号\n字段：name (VARCHAR(50))：姓名\n字段：gender (ENUM('男', '女'))：性别\n字段：birth_date (DATE)：出生日期\n字段：company_id (VARCHAR(20))：所属企业编号\n字段：station_id (VARCHAR(20))：所属场站编号\n字段：position_code (VARCHAR(20))：岗位代码\n字段：hire_date (DATE)：入职日期\n字段：phone (VARCHAR(20))：联系电话\n字段：education (VARCHAR(20))：学历\n字段：status (ENUM('在职', '离职', '退休', '外派'))：状态\n外键：company_id → MYSQL:energy.energy_company\n外键：station_id → MYSQL:energy.energy_station\n外键：position_code → MYSQL:common.energy_position_dict"
+  },
+  {
+    "table_id": "MYSQL:education_2024.semester",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：semester\n描述：学期表\n字段：semester_id (INT)：未确认\n字段：academic_year (INT)：未确认\n字段：semester_code (VARCHAR(20))：未确认\n字段：start_date_key (INT)：未确认\n字段：end_date_key (INT)：未确认"
+  },
+  {
+    "table_id": "MYSQL:education_2024.department",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：department\n描述：院系表（真实院系名称）\n字段：department_id (INT)：未确认\n字段：department_code (VARCHAR(20))：未确认\n字段：department_name (VARCHAR(100))：未确认"
+  },
+  {
+    "table_id": "MYSQL:education_2024.teacher",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：teacher\n描述：教师表\n字段：teacher_id (INT)：未确认\n字段：teacher_no (VARCHAR(20))：未确认\n字段：teacher_name (VARCHAR(100))：未确认\n字段：department_id (INT)：未确认\n字段：gender_code (CHAR(1))：未确认\n字段：phone (VARCHAR(20))：未确认\n字段：region_id (INT)：未确认\n外键：department_id → MYSQL:education_2024.department"
+  },
+  {
+    "table_id": "MYSQL:education_2024.class",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：class\n描述：班级表\n字段：class_id (INT)：未确认\n字段：class_code (VARCHAR(20))：未确认\n字段：class_name (VARCHAR(100))：未确认\n字段：department_id (INT)：未确认\n字段：grade_year (INT)：未确认\n外键：department_id → MYSQL:education_2024.department"
+  },
+  {
+    "table_id": "MYSQL:education_2024.student",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：student\n描述：学生表\n字段：student_id (INT)：未确认\n字段：student_no (VARCHAR(20))：未确认\n字段：student_name (VARCHAR(100))：未确认\n字段：gender_code (CHAR(1))：未确认\n字段：academic_level_code (VARCHAR(20))：未确认\n字段：department_id (INT)：未确认\n字段：class_id (INT)：未确认\n字段：home_region_id (INT)：未确认\n字段：student_status_code (VARCHAR(20))：未确认\n字段：admit_date_key (INT)：未确认\n外键：department_id → MYSQL:education_2024.department\n外键：class_id → MYSQL:education_2024.class"
+  },
+  {
+    "table_id": "MYSQL:education_2024.course",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：course\n描述：课程表\n字段：course_id (INT)：未确认\n字段：course_code (VARCHAR(20))：未确认\n字段：course_name (VARCHAR(200))：未确认\n字段：department_id (INT)：未确认\n字段：teacher_id (INT)：未确认\n字段：credit (DECIMAL(3, 1))：未确认\n字段：course_type (VARCHAR(20))：未确认\n字段：max_score (INT)：未确认\n外键：department_id → MYSQL:education_2024.department\n外键：teacher_id → MYSQL:education_2024.teacher"
+  },
+  {
+    "table_id": "MYSQL:education_2024.enrollment",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：enrollment\n描述：选课表\n字段：enrollment_id (INT)：未确认\n字段：student_id (INT)：未确认\n字段：course_id (INT)：未确认\n字段：semester_id (INT)：未确认\n字段：enroll_date_key (INT)：未确认\n字段：take_mode (VARCHAR(20))：未确认\n字段：is_withdraw (TINYINT(1))：未确认\n外键：student_id → MYSQL:education_2024.student\n外键：course_id → MYSQL:education_2024.course\n外键：semester_id → MYSQL:education_2024.semester"
+  },
+  {
+    "table_id": "MYSQL:education_2024.exam_score",
+    "query": "系统：MYSQL\n业务库：education_2024\n表/索引：exam_score\n描述：成绩表\n字段：exam_score_id (INT)：未确认\n字段：enrollment_id (INT)：未确认\n字段：exam_item (VARCHAR(20))：未确认\n字段：score (DECIMAL(5, 2))：未确认\n字段：score_date_key (INT)：未确认\n外键：enrollment_id → MYSQL:education_2024.enrollment"
+  },
+  {
+    "table_id": "MYSQL:education_2025.semester",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：semester\n描述：未确认\n字段：semester_id (INT)：未确认\n字段：academic_year (INT)：未确认\n字段：semester_code (VARCHAR(20))：未确认\n字段：start_date_key (INT)：未确认\n字段：end_date_key (INT)：未确认"
+  },
+  {
+    "table_id": "MYSQL:education_2025.department",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：department\n描述：未确认\n字段：department_id (INT)：未确认\n字段：department_code (VARCHAR(20))：未确认\n字段：department_name (VARCHAR(100))：未确认"
+  },
+  {
+    "table_id": "MYSQL:education_2025.teacher",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：teacher\n描述：未确认\n字段：teacher_id (INT)：未确认\n字段：teacher_no (VARCHAR(20))：未确认\n字段：teacher_name (VARCHAR(100))：未确认\n字段：department_id (INT)：未确认\n字段：gender_code (CHAR(1))：未确认\n字段：phone (VARCHAR(20))：未确认\n字段：region_id (INT)：未确认\n外键：department_id → MYSQL:education_2025.department"
+  },
+  {
+    "table_id": "MYSQL:education_2025.class",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：class\n描述：未确认\n字段：class_id (INT)：未确认\n字段：class_code (VARCHAR(20))：未确认\n字段：class_name (VARCHAR(100))：未确认\n字段：department_id (INT)：未确认\n字段：grade_year (INT)：未确认\n外键：department_id → MYSQL:education_2025.department"
+  },
+  {
+    "table_id": "MYSQL:education_2025.student",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：student\n描述：未确认\n字段：student_id (INT)：未确认\n字段：student_no (VARCHAR(20))：未确认\n字段：student_name (VARCHAR(100))：未确认\n字段：gender_code (CHAR(1))：未确认\n字段：academic_level_code (VARCHAR(20))：未确认\n字段：department_id (INT)：未确认\n字段：class_id (INT)：未确认\n字段：home_region_id (INT)：未确认\n字段：student_status_code (VARCHAR(20))：未确认\n字段：admit_date_key (INT)：未确认\n外键：department_id → MYSQL:education_2025.department\n外键：class_id → MYSQL:education_2025.class"
+  },
+  {
+    "table_id": "MYSQL:education_2025.course",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：course\n描述：未确认\n字段：course_id (INT)：未确认\n字段：course_code (VARCHAR(20))：未确认\n字段：course_name (VARCHAR(200))：未确认\n字段：department_id (INT)：未确认\n字段：teacher_id (INT)：未确认\n字段：credit (DECIMAL(3, 1))：未确认\n字段：course_type (VARCHAR(20))：未确认\n字段：max_score (INT)：未确认\n外键：department_id → MYSQL:education_2025.department\n外键：teacher_id → MYSQL:education_2025.teacher"
+  },
+  {
+    "table_id": "MYSQL:education_2025.enrollment",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：enrollment\n描述：未确认\n字段：enrollment_id (INT)：未确认\n字段：student_id (INT)：未确认\n字段：course_id (INT)：未确认\n字段：semester_id (INT)：未确认\n字段：enroll_date_key (INT)：未确认\n字段：take_mode (VARCHAR(20))：未确认\n字段：is_withdraw (TINYINT(1))：未确认\n外键：student_id → MYSQL:education_2025.student\n外键：course_id → MYSQL:education_2025.course\n外键：semester_id → MYSQL:education_2025.semester"
+  },
+  {
+    "table_id": "MYSQL:education_2025.exam_score",
+    "query": "系统：MYSQL\n业务库：education_2025\n表/索引：exam_score\n描述：未确认\n字段：exam_score_id (INT)：未确认\n字段：enrollment_id (INT)：未确认\n字段：exam_item (VARCHAR(20))：未确认\n字段：score (DECIMAL(5, 2))：未确认\n字段：score_date_key (INT)：未确认\n外键：enrollment_id → MYSQL:education_2025.enrollment"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.customer",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：customer\n描述：用户表\n字段：customer_id (BIGINT)：用户ID\n字段：customer_name (VARCHAR(100))：用户姓名\n字段：gender (ENUM('M', 'F', 'U'))：性别：M男，F女，U未知\n字段：phone (VARCHAR(32))：手机号\n字段：email (VARCHAR(128))：邮箱\n字段：level_code (VARCHAR(32))：用户等级编码，关联common.customer_level_dict.level_code\n字段：status_code (VARCHAR(32))：用户状态编码，关联common.customer_status_dict.status_code\n字段：province_code (VARCHAR(12))：省级行政区划编码，关联common.administrative_division.division_code\n字段：city_code (VARCHAR(12))：城市行政区划编码，关联common.administrative_division.division_code\n字段：register_time (DATETIME)：注册时间\n字段：last_login_time (DATETIME)：最近登录时间\n字段：growth_value (INT)：成长值"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.product",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：product\n描述：商品表\n字段：product_id (BIGINT)：商品ID\n字段：product_name (VARCHAR(200))：商品名称\n字段：category_id (BIGINT)：商品分类ID，关联common.product_category.category_id\n字段：brand_name (VARCHAR(100))：品牌名称\n字段：status_code (VARCHAR(32))：商品状态编码，关联common.product_status_dict.status_code\n字段：sale_price (DECIMAL(12, 2))：销售单价\n字段：cost_price (DECIMAL(12, 2))：成本单价\n字段：listed_time (DATETIME)：上架时间"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.inventory",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：inventory\n描述：库存表\n字段：inventory_id (BIGINT)：库存ID\n字段：product_id (BIGINT)：商品ID，关联ecommerce.product.product_id\n字段：warehouse_code (VARCHAR(32))：仓库编码\n字段：warehouse_name (VARCHAR(100))：仓库名称\n字段：province_code (VARCHAR(12))：仓库所在省份编码，关联common.administrative_division.division_code\n字段：city_code (VARCHAR(12))：仓库所在城市编码，关联common.administrative_division.division_code\n字段：stock_quantity (INT)：当前库存数量\n字段：locked_quantity (INT)：锁定库存数量\n字段：safety_stock (INT)：安全库存数量\n字段：updated_time (DATETIME)：库存更新时间\n外键：product_id → MYSQL:ecommerce.product"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.orders",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：orders\n描述：订单表\n字段：order_id (BIGINT)：订单ID\n字段：order_no (VARCHAR(64))：订单编号\n字段：customer_id (BIGINT)：用户ID，关联ecommerce.customer.customer_id\n字段：order_status_code (VARCHAR(32))：订单状态编码，关联common.order_status_dict.status_code\n字段：order_channel_code (VARCHAR(32))：下单渠道编码，关联common.order_channel_dict.channel_code\n字段：platform_code (VARCHAR(32))：销售平台编码，关联common.platform_dict.platform_code\n字段：order_time (DATETIME)：下单时间\n字段：pay_time (DATETIME)：支付时间\n字段：finish_time (DATETIME)：完成时间\n字段：total_amount (DECIMAL(14, 2))：订单商品总金额\n字段：discount_amount (DECIMAL(14, 2))：订单优惠金额\n字段：freight_amount (DECIMAL(14, 2))：运费金额\n字段：payable_amount (DECIMAL(14, 2))：订单应付金额\n字段：receiver_province_code (VARCHAR(12))：收货省份编码，关联common.administrative_division.division_code\n字段：receiver_city_code (VARCHAR(12))：收货城市编码，关联common.administrative_division.division_code\n外键：customer_id → MYSQL:ecommerce.customer"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.order_item",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：order_item\n描述：订单明细表\n字段：order_item_id (BIGINT)：订单明细ID\n字段：order_id (BIGINT)：订单ID，关联ecommerce.orders.order_id\n字段：product_id (BIGINT)：商品ID，关联ecommerce.product.product_id\n字段：quantity (INT)：购买数量\n字段：unit_price (DECIMAL(12, 2))：成交单价\n字段：discount_amount (DECIMAL(12, 2))：明细优惠金额\n字段：item_amount (DECIMAL(14, 2))：明细应付金额\n字段：item_cost_amount (DECIMAL(14, 2))：明细成本金额\n字段：refund_quantity (INT)：退款数量\n字段：refund_amount (DECIMAL(14, 2))：退款金额\n字段：refund_reason_code (VARCHAR(32))：退款原因编码，关联common.refund_reason_dict.reason_code\n外键：order_id → MYSQL:ecommerce.orders\n外键：product_id → MYSQL:ecommerce.product"
+  },
+  {
+    "table_id": "MYSQL:ecommerce.payment",
+    "query": "系统：MYSQL\n业务库：ecommerce\n表/索引：payment\n描述：支付表\n字段：payment_id (BIGINT)：支付ID\n字段：payment_no (VARCHAR(64))：支付流水号\n字段：order_id (BIGINT)：订单ID，关联ecommerce.orders.order_id\n字段：payment_method_code (VARCHAR(32))：支付方式编码，关联common.payment_method_dict.method_code\n字段：payment_status_code (VARCHAR(32))：支付状态编码，关联common.payment_status_dict.status_code\n字段：payment_amount (DECIMAL(14, 2))：支付金额\n字段：refund_amount (DECIMAL(14, 2))：退款金额\n字段：paid_time (DATETIME)：支付成功时间\n字段：created_time (DATETIME)：支付记录创建时间\n外键：order_id → MYSQL:ecommerce.orders"
+  },
+  {
+    "table_id": "POSTGRESQL:public.vessel_ais_data",
+    "query": "系统：POSTGRESQL\n业务库：public\n表/索引：vessel_ais_data\n描述：船舶AIS数据存储表\n字段：id (BIGINT)：主键ID\n字段：mmsi (INT)：船舶MMSI码\n字段：timestamp (TIMESTAMP)：数据时间\n字段：longitude (DECIMAL(9, 6))：经度\n字段：latitude (DECIMAL(8, 6))：纬度\n字段：sog (DECIMAL(4, 1))：航速\n字段：cog (DECIMAL(5, 1))：航向\n字段：heading (SMALLINT)：船首向\n字段：nav_status (SMALLINT)：航行状态\n字段：rot (DECIMAL(4, 1))：未确认\n字段：destination (VARCHAR(32))：未确认\n字段：draught (DECIMAL(4, 2))：未确认\n字段：vessel_type (SMALLINT)：未确认\n字段：imo (BIGINT)：未确认\n字段：call_sign (VARCHAR(10))：未确认\n字段：eta (TIMESTAMP)：未确认\n字段：last_update (TIMESTAMP)：未确认\n字段：geom (public.geometry(POINT, 4326))：空间位置"
+  },
+  {
+    "table_id": "Elasticsearch:medical_institutions",
+    "query": "系统：Elasticsearch\n业务库：未提供\n表/索引：medical_institutions\n描述：未确认\n字段：name (text)：未确认\n字段：name.keyword (keyword)：未确认\n字段：city (keyword)：未确认\n字段：district (keyword)：未确认\n字段：address (text)：未确认\n字段：location (geo_point)：未确认\n字段：level (keyword)：三甲、三乙、二甲、二乙、一甲等\n字段：bed_count (integer)：未确认\n字段：doctor_count (integer)：未确认\n字段：nurse_count (integer)：未确认\n字段：ambulance_count (integer)：救护车数量\n字段：department_count (integer)：科室数量\n字段：annual_outpatient (long)：年门诊量（人次）\n字段：has_icu (boolean)：是否有ICU\n字段：is_teaching_hospital (boolean)：是否教学医院\n字段：emergency_24h (boolean)：未确认\n字段：rating (float)：未确认\n字段：founded_year (integer)：成立年份"
+  }
+]

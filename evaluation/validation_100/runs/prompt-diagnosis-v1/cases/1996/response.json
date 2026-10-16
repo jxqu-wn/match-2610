@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1996,\"db\":\"MYSQL\",\"query\":\"SELECT '2024' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2024.course UNION ALL SELECT '2025' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2025.course;\"},\"requirements\":[{\"requirement\":\"比较2024与2025学期一中每门课程的平均学分，取课程表学分，返回两年平均学分，对课程求平均\",\"tables\":[\"MYSQL:education_2024.course\",\"MYSQL:education_2025.course\"],\"columns\":[\"credit\"]}],\"assumptions\":[\"问题中的“学期一”理解为2024学年和2025学年，分别对应education_2024和education_2025数据库中的课程表\",\"“对课程求平均”理解为对课程表中的学分字段求平均值\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.3453276689979248,
+      "usage": {
+        "completion_tokens": 202,
+        "prompt_tokens": 10185,
+        "total_tokens": 10387,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 9417
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

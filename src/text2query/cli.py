@@ -145,6 +145,57 @@ def route_cross_validate(output: Optional[Path] = typer.Option(None), folds: int
     _echo(cross_validate(output=output, folds=folds))
 
 
+@app.command("route-multilabel-evaluate")
+def route_multilabel_evaluate(
+    output: Annotated[Path | None, typer.Option()] = None,
+    parent: Annotated[Path | None, typer.Option(help="冻结划分与原路由所在实验目录")] = None,
+    model_path: Annotated[Path | None, typer.Option(help="本地语义模型目录，默认0.6B")] = None,
+    device: Annotated[str, typer.Option()] = "cpu",
+    dtype: Annotated[str, typer.Option()] = "float32",
+    batch_size: Annotated[int, typer.Option()] = 8,
+    max_length: Annotated[int, typer.Option()] = 256,
+) -> None:
+    """语义多标签路由训练/评价，单独报告跨系统联查及同系统跨库子集。"""
+    import argparse
+
+    from .experiments.multilabel_routing import DEFAULT_OUTPUT, DEFAULT_PARENT, encode, evaluate
+
+    args = argparse.Namespace(output=output or settings.path(DEFAULT_OUTPUT),
+                              parent=parent or settings.path(DEFAULT_PARENT),
+                              model_path=model_path or settings.path("../models/Qwen3-Embedding-0.6B"),
+                              device=device, dtype=dtype, batch_size=batch_size, max_length=max_length)
+    if (args.output / "selection.json").exists():
+        raise FileExistsError("结果已冻结，请指定新的 --output")
+    if not (args.output / "encoding_complete.json").exists():
+        encode(args)
+    _echo(evaluate(args))
+
+
+@app.command("route-multilabel-predict")
+def route_multilabel_predict(
+    question: Annotated[str, typer.Option("--question")],
+    output: Annotated[Path | None, typer.Option(help="训练完成的semantic_multilabel模型目录")] = None,
+    save: Annotated[Path | None, typer.Option(help="保存可供recall --classification-json读取的JSON")] = None,
+) -> None:
+    """用已保存的语义多标签模型预测单个问题，编码设置与训练时保持一致。"""
+    from .experiments.multilabel_routing import DEFAULT_OUTPUT
+    from .routing.embedding import EmbeddingService
+    from .routing.multilabel import SemanticMultiLabelRouter
+
+    directory = output or settings.path(DEFAULT_OUTPUT) / "semantic_multilabel"
+    signature = read_json(directory / "encoder_settings.json")
+    embedder = EmbeddingService(model_path=signature["model_path"], instruction=signature["instruction"],
+                               device=signature["device"], dtype=signature["dtype"],
+                               max_length=signature["max_length"], cache_dir=directory.parent / "embedding_cache")
+    try:
+        result = SemanticMultiLabelRouter.load(directory, embedder).route(question)
+        if save:
+            write_json(save, result)
+        _echo(result)
+    finally:
+        embedder.unload()
+
+
 # --------------------------------------------------------------------------- #
 # 召回
 # --------------------------------------------------------------------------- #

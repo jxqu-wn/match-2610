@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":952,\"db\":\"MYSQL\",\"query\":\"SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.full_name LIKE '伊犁%' AND es.station_type_code = 'WP';\"},\"requirements\":[{\"requirement\":\"统计伊犁州发电场站中风电场的总装机容量\",\"tables\":[\"MYSQL:energy.energy_station\",\"MYSQL:common.administrative_division\"],\"columns\":[\"installed_capacity\",\"station_type_code\",\"area_id\",\"full_name\"]}],\"assumptions\":[\"伊犁州通过行政区划全称以'伊犁'开头识别，因未提供具体区划代码\",\"风电场通过station_type_code='WP'识别，依据知识1582\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.068133459019009,
+      "usage": {
+        "completion_tokens": 190,
+        "prompt_tokens": 12793,
+        "total_tokens": 12983,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12025
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

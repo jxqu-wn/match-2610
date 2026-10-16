@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":822,\"db\":\"MYSQL\",\"query\":\"SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25\"},\"requirements\":[{\"requirement\":\"查询各电力企业中员工年龄小于25岁的员工姓名和年龄\",\"tables\":[\"MYSQL:energy.employee\"],\"columns\":[\"name\",\"birth_date\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.3861684279982,
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 13163,
+        "total_tokens": 13282,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12395
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

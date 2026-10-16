@@ -1,0 +1,9 @@
+.....                                                                    [100%]
+============================= slowest 5 durations ==============================
+114.85s setup    tests/test_dataset.py::test_dataset_counts_and_hashes[knowledge.json-1833]
+0.80s setup    tests/test_dataset.py::test_schema_excludes_bird_databases_and_knowledge_preserves_full_source
+0.38s call     tests/test_hybrid_evaluation.py::test_schema_queries_have_no_knowledge_associations
+0.04s teardown tests/test_hybrid_evaluation.py::test_schema_queries_have_no_knowledge_associations
+
+(1 durations < 0.005s hidden.  Use -vv to show these durations.)
+5 passed in 116.10s (0:01:56)

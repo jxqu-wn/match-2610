@@ -1,0 +1,157 @@
+# 822：查询各电力企业中员工年龄小于25岁的员工姓名和年龄
+
+归类：**题目、参考或数据口径尚不能裁定**；原语义审查状态：`different`。
+
+题目明确要求员工姓名和年龄，参考额外包含公司名称。案例696/556含公司维度，598不含；是否必须输出企业名没有统一口径，不能仅从少一列认定模型不理解年龄查询。
+
+[实际请求和完整提示词](request.json) · [实际响应](response.json) · [结构化证据](diagnosis.json)
+
+## 参考与预测
+
+参考：
+
+```json
+{
+  "question_id": 822,
+  "question": "查询各电力企业中员工年龄小于25岁的员工姓名和年龄",
+  "db": "MYSQL",
+  "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age, ec.company_name FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25;"
+}
+```
+
+预测：
+
+```json
+{
+  "question_id": 822,
+  "db": "MYSQL",
+  "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25"
+}
+```
+
+## 输入证据
+
+```json
+{
+  "prompt_table_ids": [
+    "MYSQL:common.energy_position_dict",
+    "MYSQL:energy.employee",
+    "MYSQL:energy.energy_company",
+    "MYSQL:energy.energy_station",
+    "MYSQL:transportation.driver",
+    "MYSQL:transportation.employee"
+  ],
+  "reference_tables_not_in_prompt": [],
+  "predicted_tables_not_in_prompt": [],
+  "prompt_knowledge_ids": [
+    530,
+    6,
+    1580,
+    532,
+    529,
+    531,
+    836,
+    536,
+    533,
+    1147,
+    1149,
+    537
+  ],
+  "prompt_example_ids": [
+    696,
+    598,
+    556,
+    1022
+  ],
+  "pruned_evidence": [],
+  "rule_priority_excerpts": [
+    "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+    "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+    "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+    "3.其他情况一律不使用 ROUND。"
+  ],
+  "examples_in_actual_prompt": [
+    {
+      "question_id": 696,
+      "question": "查询各电力企业中年龄最小的员工姓名和年龄",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "SELECT ec.company_name, e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id ORDER BY age LIMIT 3;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:energy.employee",
+            "MYSQL:energy.energy_company"
+          ],
+          "joins": [
+            {
+              "left_table": "MYSQL:energy.employee",
+              "left_columns": [
+                "company_id"
+              ],
+              "right_table": "MYSQL:energy.energy_company",
+              "right_columns": [
+                "company_id"
+              ]
+            }
+          ],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    },
+    {
+      "question_id": 598,
+      "question": "查询所有电力企业员工的姓名、出生日期和年龄",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "SELECT name, birth_date, TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS age FROM energy.employee;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:energy.employee"
+          ],
+          "joins": [],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    },
+    {
+      "question_id": 556,
+      "question": "查询所有员工姓名及其所属电力企业名称",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "SELECT e.name, ec.company_name FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:energy.employee",
+            "MYSQL:energy.energy_company"
+          ],
+          "joins": [
+            {
+              "left_table": "MYSQL:energy.employee",
+              "left_columns": [
+                "company_id"
+              ],
+              "right_table": "MYSQL:energy.energy_company",
+              "right_columns": [
+                "company_id"
+              ]
+            }
+          ],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    }
+  ],
+  "knowledge_in_actual_prompt": [],
+  "raw_knowledge_not_in_actual_prompt": []
+}
+```
+
+后续核验：确定各企业中是否要求保留企业输出维度。
+
+这是现有请求的静态证据归因，没有运行改提示词或换模型的控制变量实验。

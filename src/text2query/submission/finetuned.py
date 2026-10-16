@@ -19,6 +19,7 @@ from ..retrieval.context import Budget, ContextBuilder
 from ..retrieval.embedding import retrieval_encoder
 from ..retrieval.index import RetrievalIndex
 from ..routing.embedding import EmbeddingService
+from .prompts import with_query_rules
 
 logger = get_logger(__name__)
 
@@ -105,7 +106,7 @@ def build_instruction(table_ids: list[str], tables: dict[str, Table]) -> str:
     for group in grouped:
         body.append(f"[{group['engine']} / {group['database']}]")
         body.append("\n".join(group["blocks"]))
-    return header + "\n" + "\n".join(body)
+    return with_query_rules(header + "\n" + "\n".join(body))
 
 
 def strip_fences(text: str) -> str:

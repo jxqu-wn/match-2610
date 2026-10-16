@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1870,\"db\":\"MYSQL\",\"query\":\"WITH d2024 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2024 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2024.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2024.course c ON c.course_id = t.course_id GROUP BY c.department_id), d2025 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2025 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2025.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2025.course c ON c.course_id = t.course_id GROUP BY c.department_id) SELECT d.department_id, d.department_name, ROUND(COALESCE(d2024.avg_enroll_2024, 0), 2) AS avg_enroll_2024, ROUND(COALESCE(d2025.avg_enroll_2025, 0), 2) AS avg_enroll_2025 FROM education_2025.department d LEFT JOIN d2024 ON d2024.department_id = d.department_id LEFT JOIN d2025 ON d2025.department_id = d.department_id ORDER BY avg_enroll_2025 DESC, d.department_id ASC LIMIT 5;\"},\"requirements\":[{\"requirement\":\"比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值\",\"tables\":[\"MYSQL:education_2024.enrollment\",\"MYSQL:education_2024.course\",\"MYSQL:education_2025.enrollment\",\"MYSQL:education_2025.course\"],\"columns\":[\"semester_id\",\"is_withdraw\",\"course_id\",\"department_id\"]},{\"requirement\":\"排除退课\",\"tables\":[\"MYSQL:education_2024.enrollment\",\"MYSQL:education_2025.enrollment\"],\"columns\":[\"is_withdraw\"]},{\"requirement\":\"返回两年院系平均选课人数前5，按2025均值降序\",\"tables\":[\"MYSQL:education_2025.department\"],\"columns\":[\"department_id\",\"department_name\"]}],\"assumptions\":[\"问题未明确要求去重学生，按选课记录数统计每门课程的选课人数\",\"问题未明确要求只返回两年都存在的院系，使用2025年院系表左连接两年聚合结果，缺失年份均值按0处理\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.7391969120362774,
+      "usage": {
+        "completion_tokens": 591,
+        "prompt_tokens": 11861,
+        "total_tokens": 12452,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11093
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

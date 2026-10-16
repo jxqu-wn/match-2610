@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":498,\"db\":\"MYSQL\",\"query\":\"SELECT ROUND(hk.total_mv / avg_ind.avg_mv, 2) AS ratio FROM (SELECT s.current_price * s.total_shares AS total_mv FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id WHERE c.company_name = '海康威视' LIMIT 1) hk CROSS JOIN (SELECT AVG(s2.current_price * s2.total_shares) AS avg_mv FROM finance_tax.stocks s2 JOIN finance_tax.companies c2 ON s2.company_id = c2.company_id WHERE c2.industry_code = (SELECT c3.industry_code FROM finance_tax.companies c3 WHERE c3.company_name = '海康威视' LIMIT 1)) avg_ind;\"},\"requirements\":[{\"requirement\":\"计算海康威视2025年总市值\",\"tables\":[\"MYSQL:finance_tax.stocks\",\"MYSQL:finance_tax.companies\"],\"columns\":[\"current_price\",\"total_shares\",\"company_name\"]},{\"requirement\":\"计算海康威视所属行业的平均总市值\",\"tables\":[\"MYSQL:finance_tax.stocks\",\"MYSQL:finance_tax.companies\"],\"columns\":[\"current_price\",\"total_shares\",\"industry_code\"]},{\"requirement\":\"计算海康威视总市值是行业平均市值的倍数\",\"tables\":[],\"columns\":[]}],\"assumptions\":[\"2025年总市值使用stocks表中最新股价current_price与总股本total_shares的乘积近似计算，未使用stock_daily_trades按2025年交易日筛选\",\"行业平均市值按海康威视所属industry_code下所有公司计算，未额外限定A股等市场分类\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.91095133399358,
+      "usage": {
+        "completion_tokens": 392,
+        "prompt_tokens": 13432,
+        "total_tokens": 13824,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12664
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

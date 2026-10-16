@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":989,\"db\":\"MYSQL\",\"query\":\"SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.energy_station es ON ec.company_id = es.company_id WHERE ec.area_id LIKE '37%' AND es.station_type_code = 'WP';\"},\"requirements\":[{\"requirement\":\"统计山东省拥有风力发电场的电力企业数量\",\"tables\":[\"MYSQL:energy.energy_company\",\"MYSQL:energy.energy_station\"],\"columns\":[\"energy_company.company_id\",\"energy_company.area_id\",\"energy_station.company_id\",\"energy_station.station_type_code\"]}],\"assumptions\":[\"山东省的行政区划代码前两位为37，使用 area_id LIKE '37%' 筛选\",\"风力发电场对应场站类型代码 WP\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.5542947860085405,
+      "usage": {
+        "completion_tokens": 185,
+        "prompt_tokens": 13449,
+        "total_tokens": 13634,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12681
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

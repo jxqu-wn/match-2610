@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gc
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from threading import RLock
@@ -124,3 +125,15 @@ class RerankerService:
         if not np.isfinite(values).all():
             raise ValueError("重排模型返回了非有限分数")
         return values.tolist()
+
+    def unload(self) -> None:
+        """释放权重，用于分阶段评估，不改变任何候选或评分。"""
+        with self._lock:
+            if self._model is None:
+                return
+            self._model = None
+            gc.collect()
+            if self.device.startswith("cuda"):
+                import torch
+
+                torch.cuda.empty_cache()

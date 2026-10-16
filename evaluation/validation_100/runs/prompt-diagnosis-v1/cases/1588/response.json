@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1588,\"db\":\"MYSQL\",\"query\":\"SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 2) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;\"},\"requirements\":[{\"requirement\":\"统计整体退款率\",\"tables\":[\"MYSQL:ecommerce.orders\",\"MYSQL:ecommerce.order_item\"],\"columns\":[\"order_id\",\"refund_amount\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.4256839079898782,
+      "usage": {
+        "completion_tokens": 141,
+        "prompt_tokens": 12711,
+        "total_tokens": 12852,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11943
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

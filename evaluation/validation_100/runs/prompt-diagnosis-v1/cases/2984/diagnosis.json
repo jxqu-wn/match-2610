@@ -1,0 +1,88 @@
+{
+  "question_id": 2984,
+  "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+  "semantic_status": "different",
+  "primary": "underdetermined",
+  "primary_label": "题目、参考或数据口径尚不能裁定",
+  "finding": "案例108与参考使用IS NOT NULL，模型额外排空串；自然语言不为空通常可含两者，而Schema未禁止空串。缺少空值业务口径，不能直接当作推理能力问题。",
+  "next_validation": "在统一规则中区分NULL、空字符串和无效文本，先核对实际数据。",
+  "reference": {
+    "question_id": 2984,
+    "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+    "db2": "MYSQL",
+    "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND sc.company_name != '中远海运'"
+  },
+  "predicted": {
+    "question_id": 2984,
+    "db1": "POSTGRESQL",
+    "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hour' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+    "db2": "MYSQL",
+    "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company c ON v.company_id = c.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND v.captain_name <> '' AND c.company_name <> '中远海运'"
+  },
+  "source_semantic_review": "预测额外要求captain_name<>空串，参考仅IS NOT NULL；可空VARCHAR未禁止空串，集合可能不同。两步空间和公司排除条件一致。",
+  "evidence": {
+    "prompt_table_ids": [
+      "MYSQL:common.administrative_division",
+      "MYSQL:common.employee_type_dict",
+      "MYSQL:common.vessel_type_dict",
+      "MYSQL:transportation.shipping_company",
+      "MYSQL:transportation.vessel",
+      "POSTGRESQL:public.vessel_ais_data"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1790,
+      426,
+      1659,
+      231,
+      1821,
+      881,
+      638,
+      425,
+      477,
+      1739,
+      1660,
+      1786
+    ],
+    "prompt_example_ids": [
+      3000,
+      108,
+      2895,
+      2969
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 108,
+        "question": "查询所有船舶中，船长姓名不为空的船舶",
+        "steps": [
+          {
+            "engine": "MYSQL",
+            "query": "SELECT mmsi, captain_name FROM transportation.vessel WHERE captain_name IS NOT NULL;",
+            "step": "query",
+            "table_ids": [
+              "MYSQL:transportation.vessel"
+            ],
+            "joins": [],
+            "parse_status": "parsed",
+            "unresolved_tables": []
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "66f5578f9bddd72c0574e5408cf22146215bdc4547f6e425f79ce21002d9897d",
+  "actual_response_sha256": "588d6fab54d98297f7856486908c448f1e3a9c1eff56f6cba0c0aaa318bcb38f",
+  "causal_experiment_performed": false
+}

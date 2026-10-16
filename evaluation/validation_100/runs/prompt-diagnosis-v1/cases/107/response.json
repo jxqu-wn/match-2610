@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":107,\"db\":\"MYSQL\",\"query\":\"SELECT * FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';\"},\"requirements\":[{\"requirement\":\"查询所有车辆中颜色为'黑'且品牌为'奔驰'的车辆\",\"tables\":[\"MYSQL:transportation.vehicle\"],\"columns\":[\"color\",\"brand\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.7762551450286992,
+      "usage": {
+        "completion_tokens": 92,
+        "prompt_tokens": 12248,
+        "total_tokens": 12340,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11480
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

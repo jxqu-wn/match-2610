@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":716,\"db\":\"MYSQL\",\"query\":\"SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.level = 1 AND ad.name = '吉林省' AND e.education = '硕士'\"},\"requirements\":[{\"requirement\":\"统计硕士学历员工数量\",\"tables\":[\"MYSQL:energy.employee\"],\"columns\":[\"education\",\"employee_id\"]},{\"requirement\":\"限定吉林省电力企业\",\"tables\":[\"MYSQL:energy.energy_company\",\"MYSQL:common.administrative_division\"],\"columns\":[\"area_id\",\"id\",\"level\",\"name\"]}],\"assumptions\":[\"员工表education字段直接存储学历名称，'硕士'为有效取值\",\"administrative_division表包含level和name字段，level=1表示省级行政区\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.1109358809771948,
+      "usage": {
+        "completion_tokens": 206,
+        "prompt_tokens": 12676,
+        "total_tokens": 12882,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11908
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

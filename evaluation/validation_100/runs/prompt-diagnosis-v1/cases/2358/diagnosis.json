@@ -1,0 +1,71 @@
+{
+  "question_id": 2358,
+  "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+  "semantic_status": "different",
+  "primary": "underdetermined",
+  "primary_label": "题目、参考或数据口径尚不能裁定",
+  "finding": "题面只要求医疗机构，没有说只返回name；最相近案例2338恰好省略_source。预测沿用该返回格式，不能根据参考多了_source就认定模型未遵守明确输出要求。",
+  "next_validation": "明确机构类ES查询默认_source；执行评分若仅比较ID，这种投影差异可能无影响。",
+  "reference": {
+    "question_id": 2358,
+    "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+    "db": "Elasticsearch",
+    "query": "{\"size\":5,\"_source\":[\"name\"],\"query\":{\"bool\":{\"filter\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  "predicted": {
+    "question_id": 2358,
+    "db": "Elasticsearch",
+    "query": "{\"size\":5,\"query\":{\"bool\":{\"must\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  "source_semantic_review": "三甲条件、中心点、距离排序及TOP5相同，但预测省略_source限制，返回全部源字段而非参考仅name。",
+  "evidence": {
+    "prompt_table_ids": [
+      "Elasticsearch:medical_institutions"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1704,
+      1708,
+      1712,
+      1703,
+      1711
+    ],
+    "prompt_example_ids": [
+      2338,
+      2311,
+      2133,
+      2319
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 2338,
+        "question": "找到最靠近北京天安门广场的5个医疗机构。",
+        "steps": [
+          {
+            "engine": "Elasticsearch",
+            "query": "{\"size\":5,\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}",
+            "step": "query",
+            "table_ids": [
+              "Elasticsearch:medical_institutions"
+            ],
+            "joins": [],
+            "parse_status": "single_index_by_catalog"
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "8c836148fcead53f33f42fe805191edda972663b9cfda66b62da7c03ea99c137",
+  "actual_response_sha256": "b6d5fc5f0bf4f38e6c2aec8438007845fc406547b51f0a44a11e37328c4a07e3",
+  "causal_experiment_performed": false
+}

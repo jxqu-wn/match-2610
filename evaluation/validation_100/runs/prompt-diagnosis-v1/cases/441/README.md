@@ -1,0 +1,179 @@
+# 441：查询2025年每股净资产超过股价的股票（破净股）
+
+归类：**输入与模型处理混合**；原语义审查状态：`different`。
+
+BPS专门知识1624确实未进入提示词，但案例433、439已明确BPS=total_assets*10000/total_shares。模型仍采用减负债公式；不能将本题仅归因于knowledge漏召回，另有EPS近似知识干扰及模型证据选择错误。
+
+[实际请求和完整提示词](request.json) · [实际响应](response.json) · [结构化证据](diagnosis.json)
+
+## 参考与预测
+
+参考：
+
+```json
+{
+  "question_id": 441,
+  "question": "查询2025年每股净资产超过股价的股票（破净股）",
+  "db": "MYSQL",
+  "query": "SELECT s.stock_name, (f.total_assets * 10000 / s.total_shares) AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets * 10000 / s.total_shares) > s.current_price;"
+}
+```
+
+预测：
+
+```json
+{
+  "question_id": 441,
+  "db": "MYSQL",
+  "query": "SELECT s.stock_name, (f.total_assets - f.total_liabilities) * 10000 / s.total_shares AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets - f.total_liabilities) * 10000 / s.total_shares > s.current_price"
+}
+```
+
+## 输入证据
+
+```json
+{
+  "prompt_table_ids": [
+    "MYSQL:common.dict_stock_type",
+    "MYSQL:education_2025.class",
+    "MYSQL:finance_tax.companies",
+    "MYSQL:finance_tax.company_financials",
+    "MYSQL:finance_tax.stock_daily_trades",
+    "MYSQL:finance_tax.stocks"
+  ],
+  "reference_tables_not_in_prompt": [],
+  "predicted_tables_not_in_prompt": [],
+  "prompt_knowledge_ids": [
+    1632,
+    1605,
+    1635,
+    1604,
+    1607,
+    1644,
+    1608,
+    1661,
+    1621,
+    1620,
+    1385,
+    1615
+  ],
+  "prompt_example_ids": [
+    403,
+    433,
+    439,
+    428
+  ],
+  "pruned_evidence": [],
+  "rule_priority_excerpts": [
+    "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+    "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+    "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+    "3.其他情况一律不使用 ROUND。"
+  ],
+  "examples_in_actual_prompt": [
+    {
+      "question_id": 433,
+      "question": "查询优先股股票中，每股净资产最高的前两名",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "SELECT s.stock_name, (f.total_assets * 10000 / s.total_shares) AS bps FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE s.share_right_type = 'PREFERRED' AND f.report_date = '2025-12-31' ORDER BY bps DESC LIMIT 2;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:finance_tax.company_financials",
+            "MYSQL:finance_tax.stocks"
+          ],
+          "joins": [
+            {
+              "left_table": "MYSQL:finance_tax.stocks",
+              "left_columns": [
+                "company_id"
+              ],
+              "right_table": "MYSQL:finance_tax.company_financials",
+              "right_columns": [
+                "company_id"
+              ]
+            }
+          ],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    },
+    {
+      "question_id": 439,
+      "question": "计算各行业2025年平均每股净资产",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "SELECT i.industry_name, AVG((f.total_assets * 10000) / s.total_shares) FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id JOIN finance_tax.company_financials f ON s.company_id = f.company_id JOIN common.dict_industry i ON c.industry_code = i.industry_code WHERE f.report_date = '2025-12-31' GROUP BY i.industry_name;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:common.dict_industry",
+            "MYSQL:finance_tax.companies",
+            "MYSQL:finance_tax.company_financials",
+            "MYSQL:finance_tax.stocks"
+          ],
+          "joins": [
+            {
+              "left_table": "MYSQL:finance_tax.stocks",
+              "left_columns": [
+                "company_id"
+              ],
+              "right_table": "MYSQL:finance_tax.companies",
+              "right_columns": [
+                "company_id"
+              ]
+            },
+            {
+              "left_table": "MYSQL:finance_tax.stocks",
+              "left_columns": [
+                "company_id"
+              ],
+              "right_table": "MYSQL:finance_tax.company_financials",
+              "right_columns": [
+                "company_id"
+              ]
+            },
+            {
+              "left_table": "MYSQL:finance_tax.companies",
+              "left_columns": [
+                "industry_code"
+              ],
+              "right_table": "MYSQL:common.dict_industry",
+              "right_columns": [
+                "industry_code"
+              ]
+            }
+          ],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    }
+  ],
+  "knowledge_in_actual_prompt": [
+    {
+      "knowledge_id": 1632,
+      "knowledge_text": "市盈率(PE)近似指股价与每股净利润的比值，其中每股净利润等于净利润除以总股本，净利润近似为总资产减总负债，总资产需由万元转换为元。计算公式：current_price / ((total_assets - total_liabilities) * 10000 / total_shares)。"
+    },
+    {
+      "knowledge_id": 1635,
+      "knowledge_text": "每股收益(EPS)近似指净利润与总股本的比值，其中净利润近似为总资产减总负债，总资产需由万元转换为元。计算公式：(total_assets - total_liabilities) * 10000 / total_shares。"
+    }
+  ],
+  "raw_knowledge_not_in_actual_prompt": [
+    {
+      "knowledge_id": 1624,
+      "knowledge_text": "每股净资产(BPS)指每股股票对应的净资产，由总资产除以总股本计算，其中总资产需由万元转换为元。计算公式：(total_assets * 10000) / total_shares。",
+      "frozen_index_engines": [],
+      "frozen_index_table_ids": [],
+      "scope": "Offline diagnosis only; not added to generation or production association"
+    }
+  ]
+}
+```
+
+后续核验：补正确BPS知识并减少EPS干扰；保留正确案例作对照，不能声称输入完全没有正确公式。
+
+这是现有请求的静态证据归因，没有运行改提示词或换模型的控制变量实验。

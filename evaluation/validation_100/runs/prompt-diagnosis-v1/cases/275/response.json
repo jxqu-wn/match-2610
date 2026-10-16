@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":275,\"db\":\"MYSQL\",\"query\":\"SELECT v.plate_number FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.city_name = '广州市'\"},\"requirements\":[{\"requirement\":\"查询广州市注册的所有车辆\",\"tables\":[\"MYSQL:transportation.vehicle\",\"MYSQL:common.administrative_division\"],\"columns\":[\"plate_number\",\"area_id\",\"city_name\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.449262790963985,
+      "usage": {
+        "completion_tokens": 112,
+        "prompt_tokens": 13859,
+        "total_tokens": 13971,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 13091
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

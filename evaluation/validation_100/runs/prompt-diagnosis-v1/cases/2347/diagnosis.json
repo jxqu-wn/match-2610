@@ -1,0 +1,87 @@
+{
+  "question_id": 2347,
+  "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+  "semantic_status": "different",
+  "primary": "mixed",
+  "primary_label": "输入与模型处理混合",
+  "finding": "Schema无daily_outpatient，但案例两次使用该字段，参考也使用它，输入证据自相矛盾。模型知道要日均，却只输出年量并把计算推给不存在的后续步骤，是额外的需求未完成。",
+  "next_validation": "先澄清真实字段/派生规则；确认生成结果自身完成日均计算。",
+  "reference": {
+    "question_id": 2347,
+    "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+    "db": "Elasticsearch",
+    "query": "{\"_source\":[\"name\",\"daily_outpatient\"],\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+  },
+  "predicted": {
+    "question_id": 2347,
+    "db": "Elasticsearch",
+    "query": "{\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}],\"_source\":[\"name\",\"annual_outpatient\"]}"
+  },
+  "source_semantic_review": "返回annual_outpatient年门诊量，未按题意计算日均门诊量；声称后续计算但本流程不执行该计算。参考daily_outpatient字段亦不在Schema中，双方均需复核。",
+  "evidence": {
+    "prompt_table_ids": [
+      "Elasticsearch:medical_institutions"
+    ],
+    "reference_tables_not_in_prompt": [],
+    "predicted_tables_not_in_prompt": [],
+    "prompt_knowledge_ids": [
+      1708,
+      1712,
+      1704,
+      1703,
+      1711
+    ],
+    "prompt_example_ids": [
+      2070,
+      2130,
+      2367,
+      2079
+    ],
+    "pruned_evidence": [],
+    "rule_priority_excerpts": [
+      "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+      "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+      "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+      "3.其他情况一律不使用 ROUND。"
+    ],
+    "examples_in_actual_prompt": [
+      {
+        "question_id": 2367,
+        "question": "找到最靠近上海静安寺且拥有ICU的3个医院，返回名称和日均门诊量。",
+        "steps": [
+          {
+            "engine": "Elasticsearch",
+            "query": "{\"_source\":[\"name\",\"daily_outpatient\"],\"size\":3,\"query\":{\"bool\":{\"filter\":{\"term\":{\"has_icu\":true}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}]}",
+            "step": "query",
+            "table_ids": [
+              "Elasticsearch:medical_institutions"
+            ],
+            "joins": [],
+            "parse_status": "single_index_by_catalog"
+          }
+        ]
+      },
+      {
+        "question_id": 2079,
+        "question": "查询上海东方明珠塔周围3公里内的所有医院，返回名称和日均门诊量。",
+        "steps": [
+          {
+            "engine": "Elasticsearch",
+            "query": "{\"query\":{\"geo_distance\":{\"distance\":\"3km\",\"location\":{\"lat\":31.2395,\"lon\":121.4990}}},\"_source\":[\"name\",\"daily_outpatient\"]}",
+            "step": "query",
+            "table_ids": [
+              "Elasticsearch:medical_institutions"
+            ],
+            "joins": [],
+            "parse_status": "single_index_by_catalog"
+          }
+        ]
+      }
+    ],
+    "knowledge_in_actual_prompt": [],
+    "raw_knowledge_not_in_actual_prompt": []
+  },
+  "actual_request_sha256": "3d8e8851bcdec59e1ea71070624c917341cbeb07ad39066918b91dec3e1a0de8",
+  "actual_response_sha256": "25d24288fc61a79ef1fbfc8378beac3ad8646733ccb9e6fcff77a472d69a9113",
+  "causal_experiment_performed": false
+}

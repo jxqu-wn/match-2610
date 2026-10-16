@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2972,\"db1\":\"MYSQL\",\"query1\":\"SELECT mmsi FROM transportation.vessel WHERE endurance > 45\",\"db2\":\"POSTGRESQL\",\"query2\":\"SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 122.0 AND 122.2 AND latitude BETWEEN 30.0 AND 30.2 AND sog < 3\"},\"requirements\":[{\"requirement\":\"自持力超过45天的船舶\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"mmsi\",\"endurance\"]},{\"requirement\":\"最近24小时内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"timestamp\"]},{\"requirement\":\"位于(122.0, 30.0)至(122.2, 30.2)矩形内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"longitude\",\"latitude\"]},{\"requirement\":\"速度小于3节\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"sog\"]},{\"requirement\":\"输出MMSI\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\"]}],\"assumptions\":[\"自持力字段endurance为VARCHAR类型，可能包含非纯数字内容；假设其存储的数值部分可直接与45比较，若包含单位或非数字字符则需额外解析。\",\"矩形范围按经纬度边界包含端点处理，即经度[122.0,122.2]、纬度[30.0,30.2]。\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 2.6718654350261204,
+      "usage": {
+        "completion_tokens": 380,
+        "prompt_tokens": 12797,
+        "total_tokens": 13177,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 12029
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2358,\"db\":\"Elasticsearch\",\"query\":\"{\\\"size\\\":5,\\\"query\\\":{\\\"bool\\\":{\\\"must\\\":{\\\"term\\\":{\\\"level\\\":\\\"三甲\\\"}}}},\\\"sort\\\":[{\\\"_geo_distance\\\":{\\\"location\\\":{\\\"lat\\\":39.9087,\\\"lon\\\":116.3975},\\\"order\\\":\\\"asc\\\",\\\"unit\\\":\\\"km\\\"}}]}\"},\"requirements\":[{\"requirement\":\"筛选三级甲等医疗机构\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"level\"]},{\"requirement\":\"按距离北京天安门广场由近到远排序\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"location\"]},{\"requirement\":\"返回最靠近的5个医疗机构\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"name\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.1378675469895825,
+      "usage": {
+        "completion_tokens": 200,
+        "prompt_tokens": 4775,
+        "total_tokens": 4975,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4007
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

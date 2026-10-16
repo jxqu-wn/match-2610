@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2908,\"db\":\"POSTGRESQL\",\"query\":\"SELECT nav_status, COUNT(DISTINCT mmsi) AS vessel_count FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_Within(geom, ST_GeomFromText('POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))', 4326)) GROUP BY nav_status\"},\"requirements\":[{\"requirement\":\"统计最近48小时内进入日照港石臼港区警戒区的船舶数量\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"timestamp\",\"geom\"]},{\"requirement\":\"按航行状态分组\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"nav_status\"]}],\"assumptions\":[\"日照港石臼港区警戒区范围未在schema中定义，使用近似矩形POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))表示\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.9224851740291342,
+      "usage": {
+        "completion_tokens": 286,
+        "prompt_tokens": 5235,
+        "total_tokens": 5521,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4467
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "verified_at": "2026-10-15T13:44:00.707139+00:00",
+  "mode": "sha256",
+  "all_sizes_match": true,
+  "all_hashes_match": true,
+  "total_expected_bytes": 2414918427,
+  "files": [
+    {
+      "repo": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Embedding-0.6B/model.safetensors",
+      "expected_bytes": 1191586416,
+      "actual_bytes": 1191586416,
+      "expected_sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+      "actual_sha256": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Embedding-0.6B/tokenizer.json",
+      "expected_bytes": 11423705,
+      "actual_bytes": 11423705,
+      "expected_sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+      "actual_sha256": "def76fb086971c7867b829c23a26261e38d9d74e02139253b38aeb9df8b4b50a",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Embedding-0.6B/vocab.json",
+      "expected_bytes": 2776833,
+      "actual_bytes": 2776833,
+      "expected_sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "actual_sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-0.6B",
+      "revision": "97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Embedding-0.6B/merges.txt",
+      "expected_bytes": 1671853,
+      "actual_bytes": 1671853,
+      "expected_sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "actual_sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Reranker-0.6B/model.safetensors",
+      "expected_bytes": 1191588280,
+      "actual_bytes": 1191588280,
+      "expected_sha256": "27cd75a405b9c1b46b59abfd88aaa209e6fed2a1972cde9b70e7659537c5e65b",
+      "actual_sha256": "27cd75a405b9c1b46b59abfd88aaa209e6fed2a1972cde9b70e7659537c5e65b",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Reranker-0.6B/tokenizer.json",
+      "expected_bytes": 11422654,
+      "actual_bytes": 11422654,
+      "expected_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "actual_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Reranker-0.6B/vocab.json",
+      "expected_bytes": 2776833,
+      "actual_bytes": 2776833,
+      "expected_sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "actual_sha256": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-0.6B",
+      "revision": "e61197ed45024b0ed8a2d74b80b4d909f1255473",
+      "file": "/home/jxqu/Share/Match/models/Qwen3-Reranker-0.6B/merges.txt",
+      "expected_bytes": 1671853,
+      "actual_bytes": 1671853,
+      "expected_sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "actual_sha256": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+      "size_matches": true,
+      "hash_matches": true
+    }
+  ]
+}

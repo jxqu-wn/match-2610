@@ -20,26 +20,28 @@ from sklearn.linear_model import LogisticRegression
 
 from ..config import settings
 from ..io import file_sha256, get_logger, read_json, sha256_text, write_json
+from ..llm.client import ChatClient
 from ..models import Catalog
 from ..retrieval.context import ContextBuilder
 from ..retrieval.embedding import retrieval_encoder
 from ..retrieval.index import RetrievalIndex, tokenize
 from ..routing.classifier import label
 from ..routing.embedding import EmbeddingService
-from ..llm.client import ChatClient
+from .prompts import with_query_rules
 from .validate import validate_answer
 
 logger = get_logger(__name__)
 
 MODEL = "deepseek-v4-pro"
 TRAINING_SOURCE = "data/赛题8/QA_train.json"
-SYSTEM = """根据提供的问题、schema、原始知识和训练案例生成最终可执行查询。仅返回JSON对象：
+BASE_SYSTEM = """根据提供的问题、schema、原始知识和训练案例生成最终可执行查询。仅返回JSON对象：
 {"status":"complete","answer":{"question_id":原ID,"db":"数据库系统","query":"查询字符串"},"requirements":[{"requirement":"题目的一项要求","tables":["table_id"],"columns":["字段"]}],"assumptions":[]}。
 跨系统查询answer使用db1/query1、db2/query2，必要时db3/query3；后续查询以result代替前一步执行结果。单系统跨业务库仍使用db/query。
 跨系统完整answer格式示例：{"question_id":原ID,"db1":"MYSQL","query1":"真实的第一步SELECT语句","db2":"POSTGRESQL","query2":"真实的第二步SELECT语句，其中引用result"}。禁止MYSQL/POSTGRESQL之类组合db值，禁止以db1/query1等占位文字代替真实查询。
 SQL数据库系统名仅MYSQL、POSTGRESQL、SQLite；Elasticsearch的query为JSON DSL字符串。SQL使用schema中的真实库表与字段，按对应方言引用特殊标识符；仅生成读取查询，不执行查询。SQLite表使用业务库.表名限定，MySQL同理；PostgreSQL使用schema.表名。
 逐项覆盖输出、过滤、日期、分组、统计对象、去重及引用方向，检查统计粒度、必要连接、分母和排序。每张最终表必须承担需求或必要关联任务，不能因存在外键就添加连接。不要遗漏仅用于条件的字段。训练案例不是保证正确的答案，先检查问题差异；不得编造schema字段。优先采用已有明确知识，冲突或问题歧义在assumptions中如实记录，仍给出最有依据的查询，不把明确未满足的要求当成假设。
 如果缺少必要schema，不猜表字段，返回{"status":"need_more_evidence","search_queries":["具体检索词"],"engines":["系统名"],"reason":"缺少的需求"}。分类和候选排序不是业务正确性证明。不得输出Markdown。"""
+SYSTEM = with_query_rules(BASE_SYSTEM)
 
 MAX_INPUT_TOKENS = 21000
 MAX_OUTPUT_TOKENS = 3000
@@ -149,7 +151,7 @@ def prepare(
         )
     builder = ContextBuilder(index)
     index.encoder.encode([row["question"] for row in rows])
-    for row, prediction in zip(rows, labels):
+    for row, prediction in zip(rows, labels, strict=True):
         target = directory / f"prepared_{row['question_id']}.json"
         if target.exists():
             continue
@@ -175,12 +177,12 @@ def prepare(
     write_json(directory / "schema_fallback.json", schema_fallback(catalog))
 
 
-def _resume(directory: Path, row: dict[str, Any], resolver: Any) -> dict[str, Any] | None:
+def _resume(directory: Path, row: dict[str, Any], resolver: Any, model: str = MODEL) -> dict[str, Any] | None:
     target = directory / f"question_{row['question_id']}.json"
     if not target.exists():
         return None
     old = read_json(target)
-    if old.get("model") == MODEL and old.get("question") == row and not validate_answer(old.get("answer"), row, resolver):
+    if old.get("model") == model and old.get("question") == row and not validate_answer(old.get("answer"), row, resolver):
         return old
     return None
 
@@ -223,19 +225,24 @@ def generate_one(
     client: ChatClient,
     estimator: InputEstimator,
     keyword: SchemaKeywordSearch,
+    model: str = MODEL,
+    system: str = SYSTEM,
+    max_added_tables: int = MAX_ADDED_TABLES,
+    expansion_token_reserve: int = 0,
+    expand_all_engines: bool = False,
 ) -> dict[str, Any]:
     tables = catalog.by_id()
     from ..submission.validate import resolver_for
 
     resolver = resolver_for(tables)
-    resumed = _resume(directory, row, resolver)
+    resumed = _resume(directory, row, resolver, model)
     if resumed is not None:
         return resumed
 
     prepared = read_json(directory / f"prepared_{row['question_id']}.json")
     context = prepared["context"]
     messages: list[dict[str, str]] = [
-        {"role": "system", "content": SYSTEM},
+        {"role": "system", "content": system},
         {"role": "user", "content": json.dumps(context, ensure_ascii=False)},
     ]
     supplied = {t["table_id"] for t in context["candidate_tables"]}
@@ -244,7 +251,12 @@ def generate_one(
         allowed = set(engines) if engines else None
         chosen: list[dict[str, Any]] = []
         instruction = "以下是按缺口文本检索的真实schema。严格使用其中字段；跨系统使用db1/query1、db2/query2和result。请生成最终answer。"
-        for candidate in keyword.rank(query):
+        ranked = keyword.rank(query)
+        if expand_all_engines and allowed is not None and not any(
+            item["table_id"] not in supplied and item["engine"] in allowed for item in ranked
+        ):
+            allowed = None
+        for candidate in ranked:
             if candidate["table_id"] in supplied:
                 continue
             if allowed is not None and candidate["engine"] not in allowed:
@@ -255,9 +267,9 @@ def generate_one(
                     {"additional_schemas": chosen + [candidate], "instruction": instruction}, ensure_ascii=False
                 ),
             }
-            if estimator(messages + [trial]) <= MAX_INPUT_TOKENS:
+            if estimator(messages + [trial]) <= MAX_INPUT_TOKENS - expansion_token_reserve:
                 chosen.append(candidate)
-            if len(chosen) >= MAX_ADDED_TABLES:
+            if len(chosen) >= max_added_tables:
                 break
         messages.append(
             {"role": "user", "content": json.dumps({"additional_schemas": chosen, "instruction": instruction}, ensure_ascii=False)}
@@ -311,7 +323,7 @@ def generate_one(
                 errors = [f"输出非法：{type(error).__name__}: {str(error)[:200]}"]
             if not errors:
                 output = {
-                    "model": MODEL,
+                    "model": model,
                     "question": row,
                     "answer": answer,
                     "analysis": value,
@@ -343,7 +355,7 @@ def generate_one(
         raise ValueError("四次调用后仍未得到合法提交答案")
     except Exception as error:  # noqa: BLE001 - 失败题目单独保存
         output = {
-            "model": MODEL,
+            "model": model,
             "question": row,
             "error": str(error),
             "trace": trace,

@@ -56,6 +56,7 @@ class ChatClient:
         cache_dir: Any = None,
         json_mode: bool = True,
         thinking: bool = False,
+        default_headers: dict[str, str] | None = None,
     ) -> None:
         key = api_key or settings.api_key
         if not key:
@@ -71,6 +72,7 @@ class ChatClient:
             base_url=base_url or settings.base_url,
             timeout=timeout or settings.llm_timeout,
             max_retries=0,
+            default_headers=default_headers,
         )
         self.cache = diskcache.Cache(str(cache_dir)) if cache_dir else None
         self.calls: list[CallRecord] = []

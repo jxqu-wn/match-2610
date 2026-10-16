@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":316,\"db\":\"MYSQL\",\"query\":\"SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND (r.non_taxable_income IS NULL OR r.non_taxable_income = 0);\"},\"requirements\":[{\"requirement\":\"查询2025年度没有不征税收入的企业名称\",\"tables\":[\"MYSQL:finance_tax.corporate_income_tax_returns\",\"MYSQL:finance_tax.companies\"],\"columns\":[\"tax_year\",\"non_taxable_income\",\"company_name\",\"company_id\"]}],\"assumptions\":[\"“没有不征税收入”解释为不征税收入与免税收入合计为0或为空\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.5359157620114274,
+      "usage": {
+        "completion_tokens": 184,
+        "prompt_tokens": 11368,
+        "total_tokens": 11552,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 10600
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":3012,\"db1\":\"POSTGRESQL\",\"query1\":\"SELECT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3\",\"db2\":\"MYSQL\",\"query2\":\"SELECT sc.company_name FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) ORDER BY sc.company_name ASC\"},\"requirements\":[{\"requirement\":\"最近24小时内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"timestamp\"]},{\"requirement\":\"出现在点(118.7,20.1)8公里范围内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"geom\"]},{\"requirement\":\"出现次数超过3次\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\"]},{\"requirement\":\"按公司名称升序排列\",\"tables\":[\"MYSQL:transportation.shipping_company\"],\"columns\":[\"company_name\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.5347040959750302,
+      "usage": {
+        "completion_tokens": 301,
+        "prompt_tokens": 12726,
+        "total_tokens": 13027,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 12544
+        },
+        "prompt_cache_hit_tokens": 12544,
+        "prompt_cache_miss_tokens": 182
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

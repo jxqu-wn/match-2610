@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":1853,\"db\":\"MYSQL\",\"query\":\"WITH s2024 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), s2025 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), common AS (SELECT s2024.student_id, s2024.course_id, s2024.total_score AS total_2024, s2025.total_score AS total_2025 FROM s2024 JOIN s2025 ON s2024.student_id=s2025.student_id AND s2024.course_id=s2025.course_id), agg AS (SELECT student_id, SUM(total_2024) AS sum_2024, SUM(total_2025) AS sum_2025 FROM common GROUP BY student_id), ranked AS (SELECT student_id, sum_2024, sum_2025, ROW_NUMBER() OVER (ORDER BY sum_2025 ASC, student_id ASC) AS rn FROM agg) SELECT st.student_no, ROUND(r.sum_2024,2) AS total_2024, ROUND(r.sum_2025,2) AS total_2025 FROM ranked r JOIN education_2025.student st ON st.student_id=r.student_id WHERE r.rn=1;\"},\"requirements\":[{\"requirement\":\"找出2024与2025中共同选修的学生\",\"tables\":[\"MYSQL:education_2024.enrollment\",\"MYSQL:education_2025.enrollment\"],\"columns\":[\"student_id\",\"course_id\"]},{\"requirement\":\"学期编号为1并排除退课\",\"tables\":[\"MYSQL:education_2024.enrollment\",\"MYSQL:education_2025.enrollment\"],\"columns\":[\"semester_id\",\"is_withdraw\"]},{\"requirement\":\"2025中总评最低的排名第一的学生\",\"tables\":[\"MYSQL:education_2025.enrollment\",\"MYSQL:education_2025.exam_score\"],\"columns\":[\"student_id\",\"exam_item\",\"score\"]},{\"requirement\":\"按两年共同课程计算总评相加不低于实际\",\"tables\":[\"MYSQL:education_2024.enrollment\",\"MYSQL:education_2024.exam_score\",\"MYSQL:education_2025.enrollment\",\"MYSQL:education_2025.exam_score\"],\"columns\":[\"student_id\",\"course_id\",\"exam_item\",\"score\"]},{\"requirement\":\"返回学号与两年总评\",\"tables\":[\"MYSQL:education_2025.student\"],\"columns\":[\"student_no\"]}],\"assumptions\":[\"总评折算分按平时30%、期中30%、期末40%计算，与训练案例一致\",\"共同选修指同一学生在两年中选修了同一门课程\",\"排名第一按2025年共同课程总评之和升序排列，若相同则按学号升序\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 3.4451755170011893,
+      "usage": {
+        "completion_tokens": 828,
+        "prompt_tokens": 14642,
+        "total_tokens": 15470,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 13874
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

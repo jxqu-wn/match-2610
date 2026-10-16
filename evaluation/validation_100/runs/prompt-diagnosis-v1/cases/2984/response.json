@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2984,\"db1\":\"POSTGRESQL\",\"query1\":\"SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hour' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)\",\"db2\":\"MYSQL\",\"query2\":\"SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company c ON v.company_id = c.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND v.captain_name <> '' AND c.company_name <> '中远海运'\"},\"requirements\":[{\"requirement\":\"最近24小时内出现在(118.7, 20.1)半径7公里内的船舶\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"mmsi\",\"timestamp\",\"geom\"]},{\"requirement\":\"船长姓名不为空\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"captain_name\"]},{\"requirement\":\"所属公司不是‘中远海运’\",\"tables\":[\"MYSQL:transportation.vessel\",\"MYSQL:transportation.shipping_company\"],\"columns\":[\"company_id\",\"company_name\"]},{\"requirement\":\"输出MMSI\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"mmsi\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.7294552649836987,
+      "usage": {
+        "completion_tokens": 332,
+        "prompt_tokens": 11508,
+        "total_tokens": 11840,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 11264
+        },
+        "prompt_cache_hit_tokens": 11264,
+        "prompt_cache_miss_tokens": 244
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":489,\"db\":\"MYSQL\",\"query\":\"SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / (f.total_assets - f.total_liabilities) * 100, 2) AS tax_to_net_profit_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND YEAR(f.report_date) = r.tax_year WHERE s.stock_name = '顺丰速运' AND r.tax_year = 2025;\"},\"requirements\":[{\"requirement\":\"计算顺丰速运2025年度所得税费用\",\"tables\":[\"MYSQL:finance_tax.corporate_income_tax_returns\",\"MYSQL:finance_tax.companies\"],\"columns\":[\"revenue\",\"non_taxable_income\",\"deductions\",\"prior_year_losses\",\"is_key_high_tech\",\"employee_count\",\"total_assets\",\"is_restricted_industry\"]},{\"requirement\":\"计算顺丰速运2025年度净利润\",\"tables\":[\"MYSQL:finance_tax.company_financials\"],\"columns\":[\"total_assets\",\"total_liabilities\",\"report_date\"]},{\"requirement\":\"筛选顺丰速运\",\"tables\":[\"MYSQL:finance_tax.stocks\"],\"columns\":[\"stock_name\",\"company_id\"]},{\"requirement\":\"计算所得税费用占净利润的比例\",\"tables\":[],\"columns\":[]}],\"assumptions\":[\"净利润采用知识库定义：总资产减总负债（company_financials表）\",\"所得税费用采用知识库定义：应纳税所得额乘以适用税率，税率根据高新技术企业15%、小型微利企业20%、其他25%判定\",\"顺丰速运对应stocks.stock_name字段值\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 3.1713610980077647,
+      "usage": {
+        "completion_tokens": 522,
+        "prompt_tokens": 12760,
+        "total_tokens": 13282,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11992
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

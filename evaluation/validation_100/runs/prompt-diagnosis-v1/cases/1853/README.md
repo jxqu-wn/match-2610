@@ -1,0 +1,128 @@
+# 1853：找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。
+
+归类：**题目、参考或数据口径尚不能裁定**；原语义审查状态：`different`。
+
+预测按题面共同课程取两年课程交集，参考仅按共同学生对两年全部课程求和。虽然初始缺2025.student结构，主要分歧是参考是否落实共同课程，不能把合理题意执行直接判为模型错。
+
+[实际请求和完整提示词](request.json) · [实际响应](response.json) · [结构化证据](diagnosis.json)
+
+## 参考与预测
+
+参考：
+
+```json
+{
+  "question_id": 1853,
+  "question": "找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。",
+  "db": "MYSQL",
+  "query": "WITH per2024 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2024 FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), per2025 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2025 FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), common_students AS ( SELECT p24.student_id, p24.total_score_2024, p25.total_score_2025 FROM per2024 p24 JOIN per2025 p25 ON p25.student_id = p24.student_id ) SELECT s.student_no, ROUND(c.total_score_2024, 2) AS total_score_2024, ROUND(c.total_score_2025, 2) AS total_score_2025 FROM common_students c JOIN education_2025.student s ON s.student_id = c.student_id ORDER BY c.total_score_2025 ASC, s.student_no ASC LIMIT 1;"
+}
+```
+
+预测：
+
+```json
+{
+  "question_id": 1853,
+  "db": "MYSQL",
+  "query": "WITH s2024 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), s2025 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), common AS (SELECT s2024.student_id, s2024.course_id, s2024.total_score AS total_2024, s2025.total_score AS total_2025 FROM s2024 JOIN s2025 ON s2024.student_id=s2025.student_id AND s2024.course_id=s2025.course_id), agg AS (SELECT student_id, SUM(total_2024) AS sum_2024, SUM(total_2025) AS sum_2025 FROM common GROUP BY student_id), ranked AS (SELECT student_id, sum_2024, sum_2025, ROW_NUMBER() OVER (ORDER BY sum_2025 ASC, student_id ASC) AS rn FROM agg) SELECT st.student_no, ROUND(r.sum_2024,2) AS total_2024, ROUND(r.sum_2025,2) AS total_2025 FROM ranked r JOIN education_2025.student st ON st.student_id=r.student_id WHERE r.rn=1;"
+}
+```
+
+## 输入证据
+
+```json
+{
+  "prompt_table_ids": [
+    "MYSQL:education_2024.enrollment",
+    "MYSQL:education_2024.exam_score",
+    "MYSQL:education_2024.semester",
+    "MYSQL:education_2024.student",
+    "MYSQL:education_2025.enrollment",
+    "MYSQL:education_2025.exam_score"
+  ],
+  "reference_tables_not_in_prompt": [
+    "MYSQL:education_2025.student"
+  ],
+  "predicted_tables_not_in_prompt": [
+    "MYSQL:education_2025.student"
+  ],
+  "prompt_knowledge_ids": [
+    1575,
+    1576,
+    1385,
+    887,
+    885,
+    877,
+    1026,
+    855,
+    1027,
+    1294,
+    1513,
+    894
+  ],
+  "prompt_example_ids": [
+    1865,
+    1946,
+    1975,
+    1887
+  ],
+  "pruned_evidence": [],
+  "rule_priority_excerpts": [
+    "本次问题的统一口径如下，优先于训练案例及不明确的知识描述：",
+    "1.比率、比例、百分比、平均值，用 ROUND(..., 2)。",
+    "2.公式算出来的比率类、平均值类结果，以及每股类指标，包括资产负债率、总资产收益率、市盈率、每股现金分红 DPS 等，用 ROUND(..., 2)。",
+    "3.其他情况一律不使用 ROUND。"
+  ],
+  "examples_in_actual_prompt": [
+    {
+      "question_id": 1946,
+      "question": "比较2024与2025两年共同学生中，按学号，学期一中平均总评折算分提升最多的第一名，即2025减2024，排除退课。",
+      "steps": [
+        {
+          "engine": "MYSQL",
+          "query": "WITH per2024 AS ( SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id, e.enrollment_id ), avg2024 AS ( SELECT student_id, AVG(total_score) AS avg_total_2024 FROM per2024 GROUP BY student_id ), per2025 AS ( SELECT e.student_id, e.enrollment_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id, e.enrollment_id ), avg2025 AS ( SELECT student_id, AVG(total_score) AS avg_total_2025 FROM per2025 GROUP BY student_id ) SELECT s.student_no, ROUND(a.avg_total_2024, 2) AS avg_total_2024, ROUND(b.avg_total_2025, 2) AS avg_total_2025, ROUND(b.avg_total_2025 - a.avg_total_2024, 2) AS diff_avg_total_2025_minus_2024 FROM avg2024 a JOIN avg2025 b ON b.student_id = a.student_id JOIN education_2025.student s ON s.student_id = b.student_id ORDER BY diff_avg_total_2025_minus_2024 DESC, s.student_no ASC LIMIT 1;",
+          "step": "query",
+          "table_ids": [
+            "MYSQL:education_2024.enrollment",
+            "MYSQL:education_2024.exam_score",
+            "MYSQL:education_2025.enrollment",
+            "MYSQL:education_2025.exam_score",
+            "MYSQL:education_2025.student"
+          ],
+          "joins": [
+            {
+              "left_table": "MYSQL:education_2024.exam_score",
+              "left_columns": [
+                "enrollment_id"
+              ],
+              "right_table": "MYSQL:education_2024.enrollment",
+              "right_columns": [
+                "enrollment_id"
+              ]
+            },
+            {
+              "left_table": "MYSQL:education_2025.exam_score",
+              "left_columns": [
+                "enrollment_id"
+              ],
+              "right_table": "MYSQL:education_2025.enrollment",
+              "right_columns": [
+                "enrollment_id"
+              ]
+            }
+          ],
+          "parse_status": "parsed",
+          "unresolved_tables": []
+        }
+      ]
+    }
+  ],
+  "knowledge_in_actual_prompt": [],
+  "raw_knowledge_not_in_actual_prompt": []
+}
+```
+
+后续核验：人工确认共同课程定义和排名并列规则，保留当前覆盖缺口作为独立观察。
+
+这是现有请求的静态证据归因，没有运行改提示词或换模型的控制变量实验。

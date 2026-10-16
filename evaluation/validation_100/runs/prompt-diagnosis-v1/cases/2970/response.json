@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2970,\"db1\":\"POSTGRESQL\",\"query1\":\"SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND nav_status = 5 AND longitude >= 121.5 AND longitude <= 121.8 AND latitude >= 31.2 AND latitude <= 31.4\",\"db2\":\"MYSQL\",\"query2\":\"SELECT mmsi FROM transportation.vessel WHERE captain_name = '张海' AND mmsi IN (result)\"},\"requirements\":[{\"requirement\":\"船长姓名为‘张海’\",\"tables\":[\"MYSQL:transportation.vessel\"],\"columns\":[\"captain_name\",\"mmsi\"]},{\"requirement\":\"2024年6月1日08:00至12:00期间\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"timestamp\"]},{\"requirement\":\"位于(121.5, 31.2)至(121.8, 31.4)矩形区域内\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"longitude\",\"latitude\"]},{\"requirement\":\"航行状态为系泊\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\"],\"columns\":[\"nav_status\"]},{\"requirement\":\"输出MMSI\",\"tables\":[\"POSTGRESQL:public.vessel_ais_data\",\"MYSQL:transportation.vessel\"],\"columns\":[\"mmsi\"]}],\"assumptions\":[]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.9173591940198094,
+      "usage": {
+        "completion_tokens": 358,
+        "prompt_tokens": 11909,
+        "total_tokens": 12267,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 11141
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

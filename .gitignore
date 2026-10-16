@@ -29,6 +29,7 @@ wandb/
 
 # Independent evaluation references are versioned for reproducible comparison.
 !/evaluation/table_knowledge/runs/
+!/evaluation/validation_100/runs/
 
 # Temporary working files
 tmp/

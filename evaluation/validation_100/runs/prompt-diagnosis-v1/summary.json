@@ -1,0 +1,81 @@
+{
+  "reviewed_cases": 40,
+  "source_status_counts": {
+    "different": 36,
+    "uncertain": 3,
+    "rules_only_difference": 1
+  },
+  "primary_counts": {
+    "prompt_evidence_gap": 4,
+    "prompt_conflict": 3,
+    "mixed": 10,
+    "model_following": 4,
+    "underdetermined": 19
+  },
+  "primary_ids": {
+    "prompt_evidence_gap": [
+      2125,
+      2462,
+      2487,
+      2908
+    ],
+    "prompt_conflict": [
+      476,
+      1588,
+      2950
+    ],
+    "mixed": [
+      139,
+      441,
+      489,
+      716,
+      758,
+      935,
+      1050,
+      1870,
+      1996,
+      2347
+    ],
+    "model_following": [
+      245,
+      2907,
+      2942,
+      3012
+    ],
+    "underdetermined": [
+      107,
+      136,
+      275,
+      316,
+      498,
+      822,
+      861,
+      952,
+      989,
+      1723,
+      1728,
+      1853,
+      1919,
+      2358,
+      2792,
+      2970,
+      2972,
+      2980,
+      2984
+    ]
+  },
+  "prompt_issue_observed_including_mixed": 17,
+  "model_following_issue_observed_including_mixed": 14,
+  "causal_experiment_performed": false,
+  "new_LLM_calls": 0,
+  "original_100_semantic_scores_changed": false,
+  "all_actual_requests_match_prepared_messages": true,
+  "all_selected_evidence_exists_in_actual_prompt": true,
+  "all_missing_knowledge_verified_absent": true,
+  "input_fingerprint": {
+    "notes_sha256": "500e32578e5b13deaf4a6373705f573202778b25c4b5d86f195d416c27e53373",
+    "source_artifacts_sha256": "cc71aeaca4748948f9b12909b508c4fc5f8f143f72beff416cd5b4298c396139",
+    "source_review_pack_sha256": "2ededa3b070977614bafa0d692efe38c3a3cd98e225c0ada5632697a29aa6d5d",
+    "knowledge_source_sha256": "e752a624077c4eb9aafb586638f72397c2e440f8c3134ff970daaa0f4c1151e6"
+  }
+}

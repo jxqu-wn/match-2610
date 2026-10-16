@@ -1,0 +1,26 @@
+{
+  "raw": "{\"status\":\"complete\",\"answer\":{\"question_id\":2347,\"db\":\"Elasticsearch\",\"query\":\"{\\\"size\\\":3,\\\"query\\\":{\\\"match_all\\\":{}},\\\"sort\\\":[{\\\"_geo_distance\\\":{\\\"location\\\":{\\\"lat\\\":31.2235,\\\"lon\\\":121.4447},\\\"order\\\":\\\"asc\\\",\\\"unit\\\":\\\"km\\\"}}],\\\"_source\\\":[\\\"name\\\",\\\"annual_outpatient\\\"]}\"},\"requirements\":[{\"requirement\":\"找到最靠近上海静安寺的3个医院\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"location\"]},{\"requirement\":\"返回名称和日均门诊量\",\"tables\":[\"Elasticsearch:medical_institutions\"],\"columns\":[\"name\",\"annual_outpatient\"]}],\"assumptions\":[\"日均门诊量由年门诊量 annual_outpatient 除以365计算，但Elasticsearch查询无法直接计算，因此返回 annual_outpatient 字段，后续可计算日均门诊量。\",\"上海静安寺的坐标采用训练案例中的 (31.2235, 121.4447)。\"]}",
+  "calls": [
+    {
+      "purpose": "generation",
+      "attempt": 1,
+      "latency_seconds": 1.7336084360140376,
+      "usage": {
+        "completion_tokens": 237,
+        "prompt_tokens": 5226,
+        "total_tokens": 5463,
+        "completion_tokens_details": null,
+        "prompt_tokens_details": {
+          "audio_tokens": null,
+          "cached_tokens": 768
+        },
+        "prompt_cache_hit_tokens": 768,
+        "prompt_cache_miss_tokens": 4458
+      },
+      "success": true,
+      "response_model": "deepseek-flash",
+      "finish_reason": "stop",
+      "output_token_limit": 3000
+    }
+  ]
+}

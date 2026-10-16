@@ -1,0 +1,34 @@
+[21:53:03] INFO     Loading SentenceTransformer model from                      
+                    /root/autodl-tmp/match/models/Qwen3-Embedding-0.6B.         
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 11525.26it/s]
+[21:53:04] INFO     Loaded 1 prompt with these keys: ['query']                  
+[21:53:05] INFO     Loading faiss with AVX512-SPR support.                      
+           INFO     Could not load library with AVX512-SPR support due to:      
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512_spr'")                              
+           INFO     Loading faiss with AVX512 support.                          
+           INFO     Could not load library with AVX512 support due to:          
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx512'")                                  
+           INFO     Loading faiss with AVX2 support.                            
+           INFO     Could not load library with AVX2 support due to:            
+                    ModuleNotFoundError("No module named                        
+                    'faiss.swigfaiss_avx2'")                                    
+           INFO     Loading faiss.                                              
+           INFO     Successfully loaded faiss.                                  
+           INFO     Loading CrossEncoder model from                             
+                    /root/autodl-tmp/match/models/Qwen3-Reranker-0.6B.          
+Loading weights:   0%|          | 0/310 [00:00<?, ?it/s]Loading weights: 100%|██████████| 310/310 [00:00<00:00, 12613.10it/s]
+           INFO     Loaded 1 prompt with these keys: ['query']                  
+           WARNING  Default prompt name is set to 'query'. This prompt will be  
+                    applied to all inference calls, except if a `prompt` or     
+                    `prompt_name` parameter is provided.                        
+....
+============================= slowest 5 durations ==============================
+115.35s setup    tests/test_local_models.py::test_local_embedding_rrf_and_reranking
+6.73s call     tests/test_local_models.py::test_local_embedding_rrf_and_reranking
+0.15s call     tests/test_hybrid_evaluation.py::test_schema_queries_have_no_knowledge_associations
+0.04s teardown tests/test_hybrid_evaluation.py::test_schema_queries_have_no_knowledge_associations
+
+(1 durations < 0.005s hidden.  Use -vv to show these durations.)
+4 passed in 122.31s (0:02:02)

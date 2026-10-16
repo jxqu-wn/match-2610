@@ -1,0 +1,130 @@
+{
+  "verified_at": "2026-10-15T12:27:57.041758+00:00",
+  "mode": "sha256",
+  "all_sizes_match": true,
+  "all_hashes_match": true,
+  "total_expected_bytes": 31534622441,
+  "files": [
+    {
+      "repo": "Qwen/Qwen3-Embedding-8B",
+      "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Embedding-8B/model-00001-of-00004.safetensors",
+      "expected_bytes": 4900037024,
+      "actual_bytes": 4900037024,
+      "expected_sha256": "99b343597fe840706146144699a8b9188dd3387e43eb61faf0231b70b249d451",
+      "actual_sha256": "99b343597fe840706146144699a8b9188dd3387e43eb61faf0231b70b249d451",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-8B",
+      "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Embedding-8B/model-00002-of-00004.safetensors",
+      "expected_bytes": 4915959512,
+      "actual_bytes": 4915959512,
+      "expected_sha256": "dff635b0f6dbbaad2a2d633ef037ec0a39bc165cc1806c712fbd6fcbcb4526c0",
+      "actual_sha256": "dff635b0f6dbbaad2a2d633ef037ec0a39bc165cc1806c712fbd6fcbcb4526c0",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-8B",
+      "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Embedding-8B/model-00003-of-00004.safetensors",
+      "expected_bytes": 4983067656,
+      "actual_bytes": 4983067656,
+      "expected_sha256": "30b1d4c53d84eb018f642cad7b373f0aabf79699872d8702c1f38577c0a59a2f",
+      "actual_sha256": "30b1d4c53d84eb018f642cad7b373f0aabf79699872d8702c1f38577c0a59a2f",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-8B",
+      "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Embedding-8B/model-00004-of-00004.safetensors",
+      "expected_bytes": 335570376,
+      "actual_bytes": 335570376,
+      "expected_sha256": "36cbc9c60375693629f25743c1e77ebb1724af58e671b2376463193c7fd21ef6",
+      "actual_sha256": "36cbc9c60375693629f25743c1e77ebb1724af58e671b2376463193c7fd21ef6",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Embedding-8B",
+      "revision": "1d8ad4ca9b3dd8059ad90a75d4983776a23d44af",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Embedding-8B/tokenizer.json",
+      "expected_bytes": 11422947,
+      "actual_bytes": 11422947,
+      "expected_sha256": "83cdf8c3a34f68862319cb1810ee7b1e2c0a44e0864ae930194ddb76bb7feb8d",
+      "actual_sha256": "83cdf8c3a34f68862319cb1810ee7b1e2c0a44e0864ae930194ddb76bb7feb8d",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/model-00001-of-00005.safetensors",
+      "expected_bytes": 4027618768,
+      "actual_bytes": 4027618768,
+      "expected_sha256": "22cdfea4a13b7b3e866573800eeeb638fc38962940adf631d06dc03befed047a",
+      "actual_sha256": "22cdfea4a13b7b3e866573800eeeb638fc38962940adf631d06dc03befed047a",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/model-00002-of-00005.safetensors",
+      "expected_bytes": 4060268160,
+      "actual_bytes": 4060268160,
+      "expected_sha256": "d2163b74137e35b4614bd2aa5bf27bcb07de4ca61c6962495feb968385eb0df8",
+      "actual_sha256": "d2163b74137e35b4614bd2aa5bf27bcb07de4ca61c6962495feb968385eb0df8",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/model-00003-of-00005.safetensors",
+      "expected_bytes": 4043508680,
+      "actual_bytes": 4043508680,
+      "expected_sha256": "a5038caa78c817e8acce6806104869675938a33fd4e60ed038e9931d390d6989",
+      "actual_sha256": "a5038caa78c817e8acce6806104869675938a33fd4e60ed038e9931d390d6989",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/model-00004-of-00005.safetensors",
+      "expected_bytes": 3003274088,
+      "actual_bytes": 3003274088,
+      "expected_sha256": "247f85538c5996d4c296291b0e4004f618c9b17ca8cdc25d1fc726567eb15803",
+      "actual_sha256": "247f85538c5996d4c296291b0e4004f618c9b17ca8cdc25d1fc726567eb15803",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/model-00005-of-00005.safetensors",
+      "expected_bytes": 1242472576,
+      "actual_bytes": 1242472576,
+      "expected_sha256": "8ba41b93c2e4ec8339ad16b000bc977fde196aeac054956cbfc8c0186ee6d4cf",
+      "actual_sha256": "8ba41b93c2e4ec8339ad16b000bc977fde196aeac054956cbfc8c0186ee6d4cf",
+      "size_matches": true,
+      "hash_matches": true
+    },
+    {
+      "repo": "Qwen/Qwen3-Reranker-8B",
+      "revision": "77d193c791ed757ca307ee72715aa132723da912",
+      "file": "/root/autodl-tmp/match/models/Qwen3-Reranker-8B/tokenizer.json",
+      "expected_bytes": 11422654,
+      "actual_bytes": 11422654,
+      "expected_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "actual_sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+      "size_matches": true,
+      "hash_matches": true
+    }
+  ]
+}
