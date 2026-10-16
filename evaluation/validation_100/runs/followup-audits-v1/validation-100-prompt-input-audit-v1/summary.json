@@ -1,0 +1,164 @@
+{
+  "all_40": {
+    "questions": 40,
+    "complete_business_databases": 39,
+    "complete_business_database_rate": 0.975,
+    "complete_tables": 36,
+    "complete_table_rate": 0.9,
+    "with_knowledge": 40,
+    "with_knowledge_rate": 1.0,
+    "knowledge_occurrences": 427,
+    "knowledge_mean": 10.675,
+    "unique_knowledge_ids": 149,
+    "knowledge_count_distribution": {
+      "5": 5,
+      "6": 3,
+      "12": 32
+    },
+    "explicit_id_citation_questions": 1,
+    "explicit_id_citation_rate": 0.025,
+    "legacy_source_knowledge_occurrences_ID_below_1554": 185,
+    "cases_with_previously_audited_knowledge_gap": 7,
+    "previously_audited_missing_question_knowledge_pairs": 8,
+    "pruned_cases": 0
+  },
+  "different_36": {
+    "questions": 36,
+    "complete_business_databases": 35,
+    "complete_business_database_rate": 0.9722222222222222,
+    "complete_tables": 32,
+    "complete_table_rate": 0.8888888888888888,
+    "with_knowledge": 36,
+    "with_knowledge_rate": 1.0,
+    "knowledge_occurrences": 379,
+    "knowledge_mean": 10.527777777777779,
+    "unique_knowledge_ids": 133,
+    "knowledge_count_distribution": {
+      "5": 5,
+      "6": 3,
+      "12": 28
+    },
+    "explicit_id_citation_questions": 0,
+    "explicit_id_citation_rate": 0.0,
+    "legacy_source_knowledge_occurrences_ID_below_1554": 175,
+    "cases_with_previously_audited_knowledge_gap": 7,
+    "previously_audited_missing_question_knowledge_pairs": 8,
+    "pruned_cases": 0
+  },
+  "by_existing_subsets": {
+    "cross_system": {
+      "questions": 7,
+      "complete_business_databases": 7,
+      "complete_business_database_rate": 1.0,
+      "complete_tables": 7,
+      "complete_table_rate": 1.0,
+      "with_knowledge": 7,
+      "with_knowledge_rate": 1.0,
+      "knowledge_occurrences": 84,
+      "knowledge_mean": 12.0,
+      "unique_knowledge_ids": 22,
+      "knowledge_count_distribution": {
+        "12": 7
+      },
+      "explicit_id_citation_questions": 0,
+      "explicit_id_citation_rate": 0.0,
+      "legacy_source_knowledge_occurrences_ID_below_1554": 41,
+      "cases_with_previously_audited_knowledge_gap": 0,
+      "previously_audited_missing_question_knowledge_pairs": 0,
+      "pruned_cases": 0
+    },
+    "same_system_multi_database": {
+      "questions": 6,
+      "complete_business_databases": 5,
+      "complete_business_database_rate": 0.8333333333333334,
+      "complete_tables": 2,
+      "complete_table_rate": 0.3333333333333333,
+      "with_knowledge": 6,
+      "with_knowledge_rate": 1.0,
+      "knowledge_occurrences": 72,
+      "knowledge_mean": 12.0,
+      "unique_knowledge_ids": 40,
+      "knowledge_count_distribution": {
+        "12": 6
+      },
+      "explicit_id_citation_questions": 0,
+      "explicit_id_citation_rate": 0.0,
+      "legacy_source_knowledge_occurrences_ID_below_1554": 48,
+      "cases_with_previously_audited_knowledge_gap": 0,
+      "previously_audited_missing_question_knowledge_pairs": 0,
+      "pruned_cases": 0
+    },
+    "same_system_multi_table": {
+      "questions": 14,
+      "complete_business_databases": 13,
+      "complete_business_database_rate": 0.9285714285714286,
+      "complete_tables": 10,
+      "complete_table_rate": 0.7142857142857143,
+      "with_knowledge": 14,
+      "with_knowledge_rate": 1.0,
+      "knowledge_occurrences": 168,
+      "knowledge_mean": 12.0,
+      "unique_knowledge_ids": 90,
+      "knowledge_count_distribution": {
+        "12": 14
+      },
+      "explicit_id_citation_questions": 0,
+      "explicit_id_citation_rate": 0.0,
+      "legacy_source_knowledge_occurrences_ID_below_1554": 84,
+      "cases_with_previously_audited_knowledge_gap": 1,
+      "previously_audited_missing_question_knowledge_pairs": 1,
+      "pruned_cases": 0
+    },
+    "direction:MYSQL -> POSTGRESQL": {
+      "questions": 4,
+      "complete_business_databases": 4,
+      "complete_business_database_rate": 1.0,
+      "complete_tables": 4,
+      "complete_table_rate": 1.0,
+      "with_knowledge": 4,
+      "with_knowledge_rate": 1.0,
+      "knowledge_occurrences": 48,
+      "knowledge_mean": 12.0,
+      "unique_knowledge_ids": 18,
+      "knowledge_count_distribution": {
+        "12": 4
+      },
+      "explicit_id_citation_questions": 0,
+      "explicit_id_citation_rate": 0.0,
+      "legacy_source_knowledge_occurrences_ID_below_1554": 25,
+      "cases_with_previously_audited_knowledge_gap": 0,
+      "previously_audited_missing_question_knowledge_pairs": 0,
+      "pruned_cases": 0
+    },
+    "direction:POSTGRESQL -> MYSQL": {
+      "questions": 3,
+      "complete_business_databases": 3,
+      "complete_business_database_rate": 1.0,
+      "complete_tables": 3,
+      "complete_table_rate": 1.0,
+      "with_knowledge": 3,
+      "with_knowledge_rate": 1.0,
+      "knowledge_occurrences": 36,
+      "knowledge_mean": 12.0,
+      "unique_knowledge_ids": 20,
+      "knowledge_count_distribution": {
+        "12": 3
+      },
+      "explicit_id_citation_questions": 0,
+      "explicit_id_citation_rate": 0.0,
+      "legacy_source_knowledge_occurrences_ID_below_1554": 16,
+      "cases_with_previously_audited_knowledge_gap": 0,
+      "previously_audited_missing_question_knowledge_pairs": 0,
+      "pruned_cases": 0
+    }
+  },
+  "necessary_knowledge_coverage_rate": null,
+  "actual_semantic_knowledge_use_rate": null,
+  "knowledge_metric_limit": "No per-question exhaustive necessary-knowledge reference labels; output schema does not require knowledge_id citations. Presence or explicit ID mentions do not measure actual knowledge use. Previously audited gaps were selected for diagnosis, not a representative denominator.",
+  "source_hashes": {
+    "archive_artifact_sha256": "e7217c21e402f5e971f46652d5020d9f2211ef045547503279474fa197bd73af",
+    "source_semantic_details": "d70c7c4fd8356b044e344eb8635d535012f1890d6b053ea74efaa14a1522dc6f"
+  },
+  "new_LLM_calls": 0,
+  "database_execution_performed": false
+}

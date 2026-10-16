@@ -1,0 +1,990 @@
+[
+  {
+    "question_id": 107,
+    "question": "查询所有车辆中颜色为'黑'且品牌为'奔驰'的车辆",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题目只说查询车辆，没有限定车牌一列。参考只输出plate_number，预测SELECT *；案例229支持车牌投影，但不能消除题目本身的输出口径缺失。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "bab82924b4055091c5287a03398932167ba92cff584f0a61a3b9a9d63e18e1bb",
+    "response_sha256": "3fc87300022be756398eb5b26716dec9adfc16a49906bdfff6aa706e0b95acaf",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/107/request.json",
+    "reference": {
+      "question_id": 107,
+      "question": "查询所有车辆中颜色为'黑'且品牌为'奔驰'的车辆",
+      "db": "MYSQL",
+      "query": "SELECT plate_number FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';"
+    },
+    "predicted": {
+      "question_id": 107,
+      "db": "MYSQL",
+      "query": "SELECT * FROM transportation.vehicle WHERE color = '黑' AND brand = '奔驰';"
+    }
+  },
+  {
+    "question_id": 136,
+    "question": "统计湖北省各公司拥有的危化品车辆数",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题面湖北省各公司可以理解为公司注册地，参考却按车辆注册地筛选。两个area_id都在Schema中；未规定地域修饰对象，不能仅凭与参考不同认定模型能力不足。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "8699283237632356b135e76b4517a6613b3edd738147243c7838da3dcae354f1",
+    "response_sha256": "dc877239be232e60f5b0dd7187bd7e210e078310d3c28dc1e7b41374f7f99c17",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/136/request.json",
+    "reference": {
+      "question_id": 136,
+      "question": "统计湖北省各公司拥有的危化品车辆数",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE v.area_id LIKE '42%' AND t.type_name = '危化品车' GROUP BY c.company_id;"
+    },
+    "predicted": {
+      "question_id": 136,
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code JOIN common.administrative_division a ON c.area_id = a.id WHERE t.type_name = '危化品车' AND a.province_name = '湖北省' GROUP BY c.company_id, c.company_name;"
+    }
+  },
+  {
+    "question_id": 139,
+    "question": "查询四川省所有危化品车辆的公司分布",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "缺common.vehicle_type_dict的结构，但案例130已给出相关连接。",
+    "observed_model_behavior": "未补证据，且把车辆所在地约束错误绑定到公司所在地。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "6eaabb07b329446d693510109bf09bc0e99da6507571b3981dfa3be24877aab1",
+    "response_sha256": "086e679ba9678925f49633afb87e8ee8c2459a65032acda02d74f8aca2f429b6",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/139/request.json",
+    "reference": {
+      "question_id": 139,
+      "question": "查询四川省所有危化品车辆的公司分布",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name, COUNT(v.vehicle_id) AS hazmat_count FROM transportation.vehicle_company c JOIN transportation.vehicle v ON c.company_id = v.company_id JOIN common.vehicle_type_dict t ON v.vehicle_type_code = t.type_code WHERE v.area_id LIKE '51%' AND t.type_name = '危化品车' GROUP BY c.company_id;"
+    },
+    "predicted": {
+      "question_id": 139,
+      "db": "MYSQL",
+      "query": "SELECT vc.company_name, COUNT(DISTINCT v.vehicle_id) AS hazmat_vehicle_count FROM transportation.vehicle_company vc JOIN transportation.vehicle v ON vc.company_id = v.company_id JOIN common.vehicle_type_dict vtd ON v.vehicle_type_code = vtd.type_code JOIN common.administrative_division ad ON vc.area_id = ad.id WHERE ad.province_name = '四川省' AND vtd.type_name = '危化品车' GROUP BY vc.company_id, vc.company_name ORDER BY hazmat_vehicle_count DESC;"
+    }
+  },
+  {
+    "question_id": 245,
+    "question": "查询济南市注册的所有新能源车数量",
+    "group": "模型处理失误证据较明确",
+    "input_evidence_or_issue": "案例155已有新能源车的电动品牌匹配条件。",
+    "observed_model_behavior": "把已有%电动%改为%新能源%，错误声明缺少标识依据。",
+    "certainty": "可直接观察已有证据被改写或输出/规划未满足要求；未证明固有能力上限",
+    "original_diagnosis": "model_following",
+    "original_semantic_status": "different",
+    "request_sha256": "3752aa3599fdcf380cd13fa0435febf94b5eaf822d029b3de1b82893d822b4ef",
+    "response_sha256": "41643f3e874aeb36b2559723436230f551256a3b2262fb8b836413543c44aa59",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/245/request.json",
+    "reference": {
+      "question_id": 245,
+      "question": "查询济南市注册的所有新能源车数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle WHERE area_id LIKE '3701%' AND brand LIKE '%电动%';"
+    },
+    "predicted": {
+      "question_id": 245,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) FROM transportation.vehicle v JOIN common.administrative_division ad ON v.area_id = ad.id WHERE ad.city_name = '济南市' AND v.brand LIKE '%新能源%';"
+    }
+  },
+  {
+    "question_id": 275,
+    "question": "查询广州市注册的所有车辆",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题面未列输出字段，参考SELECT *，模型返回车牌；召回案例236、263都使用车牌标识车辆。输入案例对精简投影有支持，不能直接归为模型漏需求。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "c325c89058ef726baccd7f59c2ca76085e4d9deeebe3b5f5cb9302466f6ff99d",
+    "response_sha256": "cad14886f8d1aad05e2b6be61acf351a6d818cc03da8546c840c3c478661dff5",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/275/request.json",
+    "reference": {
+      "question_id": 275,
+      "question": "查询广州市注册的所有车辆",
+      "db": "MYSQL",
+      "query": "SELECT * FROM transportation.vehicle WHERE area_id LIKE '4401%';"
+    },
+    "predicted": {
+      "question_id": 275,
+      "db": "MYSQL",
+      "query": "SELECT v.plate_number FROM transportation.vehicle v JOIN common.administrative_division a ON v.area_id = a.id WHERE a.city_name = '广州市'"
+    }
+  },
+  {
+    "question_id": 316,
+    "question": "查询2025年度没有不征税收入的企业名称",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "non_taxable_income在Schema中可空，但没有业务规则说明没有收入是否包含NULL。预测接受0或NULL，参考只接受0；这是数据缺失和零值的未定义口径。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "b746b9922a35197b7ccce8668fa08128d14c0d93917202faad42cb3f2de1723f",
+    "response_sha256": "dc13255b38bb8647b9871bc66c95a8bb09d610f2e6db7dbb3ae633c013e9837c",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/316/request.json",
+    "reference": {
+      "question_id": 316,
+      "question": "查询2025年度没有不征税收入的企业名称",
+      "db": "MYSQL",
+      "query": "SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND r.non_taxable_income = 0;"
+    },
+    "predicted": {
+      "question_id": 316,
+      "db": "MYSQL",
+      "query": "SELECT c.company_name FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE r.tax_year = 2025 AND (r.non_taxable_income IS NULL OR r.non_taxable_income = 0);"
+    }
+  },
+  {
+    "question_id": 441,
+    "question": "查询2025年每股净资产超过股价的股票（破净股）",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "专门BPS知识1624未提供，附近EPS知识可能干扰；但案例433/439有正确BPS公式。",
+    "observed_model_behavior": "没有使用案例中的正确BPS表达式，改为减负债公式。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "6576baec5af7e4307fa77b8bca134732ae1edac835be57a641c28e55aadc998f",
+    "response_sha256": "cc738166185fb8e0255f90f419ea6142d7dc2454b8b45640fbdc727d16ca324f",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/441/request.json",
+    "reference": {
+      "question_id": 441,
+      "question": "查询2025年每股净资产超过股价的股票（破净股）",
+      "db": "MYSQL",
+      "query": "SELECT s.stock_name, (f.total_assets * 10000 / s.total_shares) AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets * 10000 / s.total_shares) > s.current_price;"
+    },
+    "predicted": {
+      "question_id": 441,
+      "db": "MYSQL",
+      "query": "SELECT s.stock_name, (f.total_assets - f.total_liabilities) * 10000 / s.total_shares AS bps, s.current_price FROM finance_tax.stocks s JOIN finance_tax.company_financials f ON s.company_id = f.company_id WHERE f.report_date = '2025-12-31' AND (f.total_assets - f.total_liabilities) * 10000 / s.total_shares > s.current_price"
+    }
+  },
+  {
+    "question_id": 476,
+    "question": "请计算顺丰控股2025年度所得税额占营业收入的比例",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "固定税率/分档税率案例混杂，比例与百分数单位未明确。",
+    "observed_model_behavior": "选用分档税率与原始参考不一致，不能据此确认模型能力不足。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_conflict",
+    "original_semantic_status": "different",
+    "request_sha256": "af7a282ecece8696cce5408ff74d2a3500139847fb810aa83cbacbcda7eb2956",
+    "response_sha256": "d191f5107f3fae5fb529c809c0ed3bf729f7bdd4173f11af5037744fd4c1312b",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/476/request.json",
+    "reference": {
+      "question_id": 476,
+      "question": "请计算顺丰控股2025年度所得税额占营业收入的比例",
+      "db": "MYSQL",
+      "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * 0.25 / r.revenue) * 100 AS tax_burden FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;"
+    },
+    "predicted": {
+      "question_id": 476,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / r.revenue, 2) AS tax_to_revenue_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.companies c ON r.company_id = c.company_id WHERE s.stock_name = '顺丰控股' AND r.tax_year = 2025;"
+    }
+  },
+  {
+    "question_id": 489,
+    "question": "请计算顺丰速运2025年度所得税费用占净利润的比例",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "固定25%与分档税率案例并存；年度报表是否只取年末未明确。",
+    "observed_model_behavior": "采用年内所有报告期，可能改变行数；该选择也受报告期定义不足影响，不能单独判定固有能力。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "d8ab59c790de1c3e2eefa41b7e45202ced7a253a160b769bc4d1d90ca3c5f865",
+    "response_sha256": "b7e717a033bf58f871a7f641432a752cde3f4abc6026c03a3f4748e6a8510c88",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/489/request.json",
+    "reference": {
+      "question_id": 489,
+      "question": "请计算顺丰速运2025年度所得税费用占净利润的比例",
+      "db": "MYSQL",
+      "query": "SELECT ((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * 0.25) / (f.total_assets - f.total_liabilities) * 100 AS ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND r.tax_year = 2025 JOIN finance_tax.stocks s ON r.company_id = s.company_id WHERE s.stock_name = '顺丰速运' AND f.report_date = '2025-12-31';"
+    },
+    "predicted": {
+      "question_id": 489,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(((r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) * CASE WHEN c.is_key_high_tech THEN 0.15 WHEN (r.revenue - r.non_taxable_income - r.deductions - r.prior_year_losses) <= 100 AND r.employee_count <= 300 AND r.total_assets <= 5000 AND r.is_restricted_industry = FALSE THEN 0.20 ELSE 0.25 END) / (f.total_assets - f.total_liabilities) * 100, 2) AS tax_to_net_profit_ratio FROM finance_tax.corporate_income_tax_returns r JOIN finance_tax.companies c ON r.company_id = c.company_id JOIN finance_tax.stocks s ON r.company_id = s.company_id JOIN finance_tax.company_financials f ON r.company_id = f.company_id AND YEAR(f.report_date) = r.tax_year WHERE s.stock_name = '顺丰速运' AND r.tax_year = 2025;"
+    }
+  },
+  {
+    "question_id": 498,
+    "question": "计算海康威视2025年总市值是行业平均市值的多少倍",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "参考将行业均值硬编码183000000000，输入没有这个常量及其数据来源；预测用行业AVG有题意依据。缺少真实数据，不能判定常量和动态平均是否相等。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "uncertain",
+    "request_sha256": "88e031d8be4956487c306f6ad9215ea344a73a477b4d7ee2570849285c66eb8a",
+    "response_sha256": "0f41549d29d68b12fe62214dbcc9948dbbc5fc962edb677abf167a8fd336063b",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/498/request.json",
+    "reference": {
+      "question_id": 498,
+      "question": "计算海康威视2025年总市值是行业平均市值的多少倍",
+      "db": "MYSQL",
+      "query": "SELECT (s.current_price * s.total_shares) / 183000000000 AS ratio FROM finance_tax.stocks s WHERE s.stock_name = '海康威视';"
+    },
+    "predicted": {
+      "question_id": 498,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(hk.total_mv / avg_ind.avg_mv, 2) AS ratio FROM (SELECT s.current_price * s.total_shares AS total_mv FROM finance_tax.stocks s JOIN finance_tax.companies c ON s.company_id = c.company_id WHERE c.company_name = '海康威视' LIMIT 1) hk CROSS JOIN (SELECT AVG(s2.current_price * s2.total_shares) AS avg_mv FROM finance_tax.stocks s2 JOIN finance_tax.companies c2 ON s2.company_id = c2.company_id WHERE c2.industry_code = (SELECT c3.industry_code FROM finance_tax.companies c3 WHERE c3.company_name = '海康威视' LIMIT 1)) avg_ind;"
+    }
+  },
+  {
+    "question_id": 716,
+    "question": "统计吉林省电力企业中硕士学历员工的数量",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "行政区划表DDL未提供；省级前缀知识1761已给出。",
+    "observed_model_behavior": "猜表结构并全码连接后限定省级记录，没有覆盖全省区县。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "504ceb883c819d67d0dbceb4e7908266cfa483a5f4f8594ecc6b25c91557fc03",
+    "response_sha256": "b8f53bd0efe09ae391f3f04defb9c050e764ee3b877b263eb1ce27cb54a2e038",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/716/request.json",
+    "reference": {
+      "question_id": 716,
+      "question": "统计吉林省电力企业中硕士学历员工的数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS master_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE LEFT(ec.area_id,2) = '22' AND e.education = '硕士';"
+    },
+    "predicted": {
+      "question_id": 716,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.level = 1 AND ad.name = '吉林省' AND e.education = '硕士'"
+    }
+  },
+  {
+    "question_id": 758,
+    "question": "统计武汉市电力企业中学历为大专的员工数量",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "行政区划表DDL未提供；城市前缀知识1761已给出。",
+    "observed_model_behavior": "猜表结构后用精确name=武汉市，混淆城市与下属区县层级。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "f9848dc57a9c41a922b80b8fadac6db4ec3097bc1e793dd76116ff074435da4a",
+    "response_sha256": "efadd09e461fa3a8f4f5c392e4b4a9ad489a531a816f25df2fa7b0d907597166",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/758/request.json",
+    "reference": {
+      "question_id": 758,
+      "question": "统计武汉市电力企业中学历为大专的员工数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS diploma_count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE ec.area_id LIKE '4201%' AND e.education = '大专';"
+    },
+    "predicted": {
+      "question_id": 758,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS count FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id JOIN common.administrative_division ad ON ec.area_id = ad.id WHERE ad.name = '武汉市' AND e.education = '大专';"
+    }
+  },
+  {
+    "question_id": 822,
+    "question": "查询各电力企业中员工年龄小于25岁的员工姓名和年龄",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题目明确要求员工姓名和年龄，参考额外包含公司名称。案例696/556含公司维度，598不含；是否必须输出企业名没有统一口径，不能仅从少一列认定模型不理解年龄查询。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "ec9725e313c8cf08a1ddd5c49d584071ec652d0a6d09efd6e4b31ca0d9bef681",
+    "response_sha256": "1b785048789ada734c47c38826e91d910de9166d610a9bfaa6089dc0614e6ee4",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/822/request.json",
+    "reference": {
+      "question_id": 822,
+      "question": "查询各电力企业中员工年龄小于25岁的员工姓名和年龄",
+      "db": "MYSQL",
+      "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age, ec.company_name FROM energy.employee e JOIN energy.energy_company ec ON e.company_id = ec.company_id WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25;"
+    },
+    "predicted": {
+      "question_id": 822,
+      "db": "MYSQL",
+      "query": "SELECT e.name, TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) AS age FROM energy.employee e WHERE TIMESTAMPDIFF(YEAR, e.birth_date, CURDATE()) < 25"
+    }
+  },
+  {
+    "question_id": 861,
+    "question": "统计东莞市发电场站中运营超过15年的场站数量",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "预测按场站category=发电过滤，题面也写发电场站；参考未做该过滤。知识1582和案例615支持发电/非发电区分，预测的额外条件可能符合题意。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "de29fa4027887b1d3ffb4a68b46e423f9d8873b61cc915f6fe9881ed29c0bd8d",
+    "response_sha256": "d1b13b2cca95019d7b7f70efa2c526b80c20f2180de9c1f455deb53bf1ed604d",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/861/request.json",
+    "reference": {
+      "question_id": 861,
+      "question": "统计东莞市发电场站中运营超过15年的场站数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS old_station_count FROM energy.energy_station WHERE area_id LIKE '4419%' AND TIMESTAMPDIFF(YEAR, grid_connect_date, CURDATE()) > 15;"
+    },
+    "predicted": {
+      "question_id": 861,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS station_count FROM energy.energy_station es JOIN common.station_type_dict std ON es.station_type_code = std.type_code JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.city_name = '东莞市' AND std.category = '发电' AND TIMESTAMPDIFF(YEAR, es.grid_connect_date, CURDATE()) > 15;"
+    }
+  },
+  {
+    "question_id": 935,
+    "question": "统计衡阳市发电场站中火电场的装机容量",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "正确能源类型映射1581未召回；场站类型知识和两类字典的区别可见。",
+    "observed_model_behavior": "把能源类型火电放入场站类型字典，猜测没有依据的字典值。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "d5c312b0329ca1c15f9c5349ebab18e51ff02476cb17a64f4e21b62eb664e8df",
+    "response_sha256": "72cd2e3460696c32520448e79b9143b2cae9a2373731582a36830ecc516fd625",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/935/request.json",
+    "reference": {
+      "question_id": 935,
+      "question": "统计衡阳市发电场站中火电场的装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS thermal_capacity FROM energy.energy_station WHERE area_id LIKE '4304%' AND energy_type_code = 'THERMAL';"
+    },
+    "predicted": {
+      "question_id": 935,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_installed_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id JOIN common.station_type_dict std ON es.station_type_code = std.type_code WHERE ad.city_name = '衡阳市' AND std.type_name = '火电';"
+    }
+  },
+  {
+    "question_id": 952,
+    "question": "统计伊犁州发电场站中风电场的总装机容量",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "伊犁州full_name前缀是否为伊犁需要实际字典值，Schema仅声明行政区划全称。当前输入与离线资料均不足以验证名称前缀和6540编码等价。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "uncertain",
+    "request_sha256": "72903b0cea1ea751067c4e0a1a046312ed5474522f5897d8f990c2a306c6781c",
+    "response_sha256": "d4f36e3d332ef8172820b601c6344e7c8f99f04bbdb11526abcb3ad48aa4deae",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/952/request.json",
+    "reference": {
+      "question_id": 952,
+      "question": "统计伊犁州发电场站中风电场的总装机容量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS wind_capacity FROM energy.energy_station WHERE area_id LIKE '6540%' AND station_type_code = 'WP';"
+    },
+    "predicted": {
+      "question_id": 952,
+      "db": "MYSQL",
+      "query": "SELECT SUM(es.installed_capacity) AS total_capacity FROM energy.energy_station es JOIN common.administrative_division ad ON es.area_id = ad.id WHERE ad.full_name LIKE '伊犁%' AND es.station_type_code = 'WP';"
+    }
+  },
+  {
+    "question_id": 989,
+    "question": "统计山东省拥有风力发电场的电力企业数量",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题面说山东省拥有风场的企业，模型按企业注册地，参考按场站所在地。两者业务意义不同，但题面没有清楚说明采用哪一处位置。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "94c6504c914192dcd42dc25614a6fb49e6ca76677249a4ddc80f6bd3b02a2332",
+    "response_sha256": "a6ee379abe508c4f84032fa24cbb98cfd5040bebc4a9c962aa18026fee6c09d8",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/989/request.json",
+    "reference": {
+      "question_id": 989,
+      "question": "统计山东省拥有风力发电场的电力企业数量",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT company_id) AS company_count FROM energy.energy_station WHERE area_id LIKE '37%' AND station_type_code = 'WP';"
+    },
+    "predicted": {
+      "question_id": 989,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(DISTINCT ec.company_id) AS company_count FROM energy.energy_company ec JOIN energy.energy_station es ON ec.company_id = es.company_id WHERE ec.area_id LIKE '37%' AND es.station_type_code = 'WP';"
+    }
+  },
+  {
+    "question_id": 1050,
+    "question": "查询西电东送送端省份的总装机容量和总年发电量",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "西电东送送端知识1590未提供；原知识与参考省份集合也不完全一致。",
+    "observed_model_behavior": "将仅对发电量适用的排除条件作用于装机容量；说明中的省份与SQL不同。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "23224de88ec59ea908a1efe5fd6f62b17ddecead7b44f917f4854a6c7612485b",
+    "response_sha256": "ca80ce6ff00aba30dcc86c8c601545f8a20e3a379868d03ace4a86c2763f32c4",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1050/request.json",
+    "reference": {
+      "question_id": 1050,
+      "question": "查询西电东送送端省份的总装机容量和总年发电量",
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_capacity, SUM(annual_generation) AS total_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('50','51','52','53','54','61','62','63','64','65');"
+    },
+    "predicted": {
+      "question_id": 1050,
+      "db": "MYSQL",
+      "query": "SELECT SUM(installed_capacity) AS total_installed_capacity, SUM(annual_generation) AS total_annual_generation FROM energy.energy_station WHERE LEFT(area_id,2) IN ('44','45','50','51','52','53','54','61','62','63','64','65') AND energy_type_code <> 'PUMPED';"
+    }
+  },
+  {
+    "question_id": 1588,
+    "question": "请统计整体退款率，输出结果。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "系统明确ROUND2优先，案例及监督为ROUND4。",
+    "observed_model_behavior": "执行系统优先级，只有精度变化；不归为模型失误。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_conflict",
+    "original_semantic_status": "rules_only_difference",
+    "request_sha256": "1aca9c149cd7fa55ebdd5d8a124c9833a6c72d0dd0208e243a72e401d00ab941",
+    "response_sha256": "1288100721ff9c4771958e49ad84704d9d4fa6b5341bd32415d7c0328fe7f975",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1588/request.json",
+    "reference": {
+      "question_id": 1588,
+      "question": "请统计整体退款率，输出结果。",
+      "db": "MYSQL",
+      "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 4) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+    },
+    "predicted": {
+      "question_id": 1588,
+      "db": "MYSQL",
+      "query": "SELECT ROUND(COUNT(DISTINCT CASE WHEN oi.refund_amount > 0 THEN o.order_id END) / NULLIF(COUNT(DISTINCT o.order_id), 0), 2) AS refund_rate FROM ecommerce.orders o LEFT JOIN ecommerce.order_item oi ON o.order_id = oi.order_id;"
+    }
+  },
+  {
+    "question_id": 1723,
+    "question": "统计学期表共有多少条记录，并返回数量。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "两个年份semester表都在提示词中，问题未指明年份。参考选2025、预测选2024，输入无法提供唯一正确年份，不是系统路由漏库。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "c4e9d502a12eaf5176fdd4e7cd615bc6eb9ea7cf785998057ff4a14d1c964a90",
+    "response_sha256": "22696ab12b194991207d2a125b4465aec2c405de790a18356e40f9511c6b11fe",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1723/request.json",
+    "reference": {
+      "question_id": 1723,
+      "question": "统计学期表共有多少条记录，并返回数量。",
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS semester_cnt FROM education_2025.semester sem;"
+    },
+    "predicted": {
+      "question_id": 1723,
+      "db": "MYSQL",
+      "query": "SELECT COUNT(*) AS semester_cnt FROM education_2024.semester;"
+    }
+  },
+  {
+    "question_id": 1728,
+    "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "两个年份class表都已召回，题面不含年份且结构相同，参考2025与预测2024的差异没有题面裁决依据。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "f64f29c4f7ea09e5a7f270ae83969c2c1a1bda293c024f04df64d875d3afbc83",
+    "response_sha256": "ba82c070e4c475b1da4a4320136b2e6bb79cf670cce0445463752363c7a0ccf3",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1728/request.json",
+    "reference": {
+      "question_id": 1728,
+      "question": "查询院系编号为2的班级列表，返回班级编号与名称，并按班级编号升序取前30条。",
+      "db": "MYSQL",
+      "query": "SELECT cl.class_id, cl.class_name FROM education_2025.class cl WHERE cl.department_id=2 ORDER BY cl.class_id ASC LIMIT 30;"
+    },
+    "predicted": {
+      "question_id": 1728,
+      "db": "MYSQL",
+      "query": "SELECT cl.class_id, cl.class_name FROM education_2024.class cl WHERE cl.department_id = 2 ORDER BY cl.class_id ASC LIMIT 30;"
+    }
+  },
+  {
+    "question_id": 1853,
+    "question": "找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "预测按题面共同课程取两年课程交集，参考仅按共同学生对两年全部课程求和。虽然初始缺2025.student结构，主要分歧是参考是否落实共同课程，不能把合理题意执行直接判为模型错。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "e030b66a28697635cf451d4063d62c9e2c698ed5cbedbd2eff53abc273689546",
+    "response_sha256": "983563328fe359c824310adc66034602ec734f5a7d333f2a75b682a4e1f68ffa",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1853/request.json",
+    "reference": {
+      "question_id": 1853,
+      "question": "找出2024与2025中共同选修的学生，学期编号为1并排除退课，2025中总评最低的排名第一的学生，按两年共同课程计算总评相加不低于实际，返回学号与两年总评。",
+      "db": "MYSQL",
+      "query": "WITH per2024 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2024 FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), per2025 AS ( SELECT e.student_id, SUM(CASE WHEN es.exam_item = '平时' THEN es.score * 0.30 WHEN es.exam_item = '期中' THEN es.score * 0.30 WHEN es.exam_item = '期末' THEN es.score * 0.40 ELSE 0 END) AS total_score_2025 FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id = e.enrollment_id WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.student_id ), common_students AS ( SELECT p24.student_id, p24.total_score_2024, p25.total_score_2025 FROM per2024 p24 JOIN per2025 p25 ON p25.student_id = p24.student_id ) SELECT s.student_no, ROUND(c.total_score_2024, 2) AS total_score_2024, ROUND(c.total_score_2025, 2) AS total_score_2025 FROM common_students c JOIN education_2025.student s ON s.student_id = c.student_id ORDER BY c.total_score_2025 ASC, s.student_no ASC LIMIT 1;"
+    },
+    "predicted": {
+      "question_id": 1853,
+      "db": "MYSQL",
+      "query": "WITH s2024 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2024.enrollment e JOIN education_2024.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), s2025 AS (SELECT e.student_id, e.course_id, SUM(CASE WHEN es.exam_item='平时' THEN es.score*0.30 WHEN es.exam_item='期中' THEN es.score*0.30 WHEN es.exam_item='期末' THEN es.score*0.40 ELSE 0 END) AS total_score FROM education_2025.enrollment e JOIN education_2025.exam_score es ON es.enrollment_id=e.enrollment_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY e.student_id, e.course_id), common AS (SELECT s2024.student_id, s2024.course_id, s2024.total_score AS total_2024, s2025.total_score AS total_2025 FROM s2024 JOIN s2025 ON s2024.student_id=s2025.student_id AND s2024.course_id=s2025.course_id), agg AS (SELECT student_id, SUM(total_2024) AS sum_2024, SUM(total_2025) AS sum_2025 FROM common GROUP BY student_id), ranked AS (SELECT student_id, sum_2024, sum_2025, ROW_NUMBER() OVER (ORDER BY sum_2025 ASC, student_id ASC) AS rn FROM agg) SELECT st.student_no, ROUND(r.sum_2024,2) AS total_2024, ROUND(r.sum_2025,2) AS total_2025 FROM ranked r JOIN education_2025.student st ON st.student_id=r.student_id WHERE r.rn=1;"
+    }
+  },
+  {
+    "question_id": 1870,
+    "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "两年课程表结构缺失；案例已有COUNT DISTINCT学生。",
+    "observed_model_behavior": "未补结构，改COUNT(*)、统计院系集合、NULL与输出列；具体正确口径仍需确认。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "a5e068c46c66ec066120b82ff2bb29980d58c382a87d58f2018122e04097d4a7",
+    "response_sha256": "41caeff063b4c85dcbc27a20f0daaf7e0d72beb5003363212a6ef6c216e9c931",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1870/request.json",
+    "reference": {
+      "question_id": 1870,
+      "question": "比较2024与2025学期一中每个院系的平均选课学生数，按院系的课程汇总的选课人数均值，排除退课，返回两年院系平均选课人数前5，按2025均值降序。",
+      "db": "MYSQL",
+      "query": "WITH e2024 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2024 FROM education_2024.enrollment e JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2024 AS (SELECT department_id, AVG(enroll_cnt_2024) AS avg_enroll_per_course_2024 FROM e2024 GROUP BY department_id), e2025 AS (SELECT c.department_id, e.course_id, COUNT(DISTINCT e.student_id) AS enroll_cnt_2025 FROM education_2025.enrollment e JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0 GROUP BY c.department_id, e.course_id), a2025 AS (SELECT department_id, AVG(enroll_cnt_2025) AS avg_enroll_per_course_2025 FROM e2025 GROUP BY department_id) SELECT COALESCE(a2024.department_id,a2025.department_id) AS department_id, ROUND(a2024.avg_enroll_per_course_2024,2) AS avg_enroll_per_course_2024, ROUND(a2025.avg_enroll_per_course_2025,2) AS avg_enroll_per_course_2025 FROM a2025 LEFT JOIN a2024 ON a2024.department_id=a2025.department_id ORDER BY avg_enroll_per_course_2025 DESC, department_id ASC LIMIT 5;"
+    },
+    "predicted": {
+      "question_id": 1870,
+      "db": "MYSQL",
+      "query": "WITH d2024 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2024 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2024.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2024.course c ON c.course_id = t.course_id GROUP BY c.department_id), d2025 AS (SELECT c.department_id, AVG(cnt) AS avg_enroll_2025 FROM (SELECT e.course_id, COUNT(*) AS cnt FROM education_2025.enrollment e WHERE e.semester_id = 1 AND e.is_withdraw = 0 GROUP BY e.course_id) t JOIN education_2025.course c ON c.course_id = t.course_id GROUP BY c.department_id) SELECT d.department_id, d.department_name, ROUND(COALESCE(d2024.avg_enroll_2024, 0), 2) AS avg_enroll_2024, ROUND(COALESCE(d2025.avg_enroll_2025, 0), 2) AS avg_enroll_2025 FROM education_2025.department d LEFT JOIN d2024 ON d2024.department_id = d.department_id LEFT JOIN d2025 ON d2025.department_id = d.department_id ORDER BY avg_enroll_2025 DESC, d.department_id ASC LIMIT 5;"
+    }
+  },
+  {
+    "question_id": 1919,
+    "question": "比较2024与2025学期表中结束日期键最大的记录数量，按结束日期键排序取前1学期代码后，再统计该前1对应的行数，返回两年数量。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题面明确先取前1学期代码再计数，预测正按semester_code实现；参考按最大end_date_key并列计数且改变结果布局。该题先要裁定参考与题意，而不是按生成算法不同推断模型能力。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "02f6700ef1872e7b49a2c3f861ebabe5c8e3ed3718ba3171a38c39dff9879f31",
+    "response_sha256": "142f61ad0a079b62aeab1bddb2e659a58274dcf56015bc1e6e82be6fd0202d3f",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1919/request.json",
+    "reference": {
+      "question_id": 1919,
+      "question": "比较2024与2025学期表中结束日期键最大的记录数量，按结束日期键排序取前1学期代码后，再统计该前1对应的行数，返回两年数量。",
+      "db": "MYSQL",
+      "query": "WITH t2024 AS (SELECT end_date_key, COUNT(*) AS cnt FROM education_2024.semester WHERE end_date_key IS NOT NULL GROUP BY end_date_key ORDER BY end_date_key DESC LIMIT 1), t2025 AS (SELECT end_date_key, COUNT(*) AS cnt FROM education_2025.semester WHERE end_date_key IS NOT NULL GROUP BY end_date_key ORDER BY end_date_key DESC LIMIT 1) SELECT t2025.cnt AS top_end_date_key_row_cnt_2025, t2024.cnt AS top_end_date_key_row_cnt_2024 FROM t2024 CROSS JOIN t2025;"
+    },
+    "predicted": {
+      "question_id": 1919,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, COUNT(*) AS cnt FROM education_2024.semester WHERE semester_code = (SELECT semester_code FROM education_2024.semester ORDER BY end_date_key DESC LIMIT 1) UNION ALL SELECT '2025' AS year, COUNT(*) AS cnt FROM education_2025.semester WHERE semester_code = (SELECT semester_code FROM education_2025.semester ORDER BY end_date_key DESC LIMIT 1);"
+    }
+  },
+  {
+    "question_id": 1996,
+    "question": "比较2024与2025学期一中每门课程的平均学分，取课程表学分，返回两年平均学分，对课程求平均。",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "2025业务库结构缺失，且存在题面与SQL不一致的召回案例。",
+    "observed_model_behavior": "把明确的学期一解释为学年，删掉选课/退课范围，没有请求补证据。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "2fb37a90b6d3e44fb63754e2a7d3ca78f6a9ccf28305c80bdaa4a7b73063a0e7",
+    "response_sha256": "2202445cc8ba728cd2a3f3dd4bd6627e7148e6a327e80be80e6d5d0bee677243",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/1996/request.json",
+    "reference": {
+      "question_id": 1996,
+      "question": "比较2024与2025学期一中每门课程的平均学分，取课程表学分，返回两年平均学分，对课程求平均。",
+      "db": "MYSQL",
+      "query": "WITH p2024 AS (SELECT DISTINCT e.course_id, c.credit FROM education_2024.enrollment e JOIN education_2024.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0), p2025 AS (SELECT DISTINCT e.course_id, c.credit FROM education_2025.enrollment e JOIN education_2025.course c ON c.course_id=e.course_id WHERE e.semester_id=1 AND e.is_withdraw=0) SELECT (SELECT ROUND(AVG(credit),2) FROM p2024) AS avg_credit_for_distinct_courses_2024, (SELECT ROUND(AVG(credit),2) FROM p2025) AS avg_credit_for_distinct_courses_2025;"
+    },
+    "predicted": {
+      "question_id": 1996,
+      "db": "MYSQL",
+      "query": "SELECT '2024' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2024.course UNION ALL SELECT '2025' AS year, ROUND(AVG(credit),2) AS avg_credit FROM education_2025.course;"
+    }
+  },
+  {
+    "question_id": 2125,
+    "question": "成都天府广场周围8公里内，找出24小时急诊且救护车数大于10的医院。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "缺天府广场坐标知识1689，案例也无该坐标。",
+    "observed_model_behavior": "自行选另一坐标；输入不足是主要可见缺口，仍需核验模型是否应识别不足。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_evidence_gap",
+    "original_semantic_status": "different",
+    "request_sha256": "63b2e361f2b6ef95dc04196c427f1b2dd06c4fa21ec09a6784146e62af76c410",
+    "response_sha256": "5f1179fa24e38a17a0d35382fba47659475361b8272bf1b91b7bff8cbe1e502b",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2125/request.json",
+    "reference": {
+      "question_id": 2125,
+      "question": "成都天府广场周围8公里内，找出24小时急诊且救护车数大于10的医院。",
+      "db": "Elasticsearch",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"range\":{\"ambulance_count\":{\"gt\":10}}}],\"filter\":{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":30.6600,\"lon\":104.0630}}}}},\"_source\":[\"name\"]}"
+    },
+    "predicted": {
+      "question_id": 2125,
+      "db": "Elasticsearch",
+      "query": "{\"query\":{\"bool\":{\"must\":[{\"term\":{\"emergency_24h\":true}},{\"range\":{\"ambulance_count\":{\"gt\":10}}}],\"filter\":{\"geo_distance\":{\"distance\":\"8km\",\"location\":{\"lat\":30.657,\"lon\":104.065}}}}},\"_source\":[\"name\"]}"
+    }
+  },
+  {
+    "question_id": 2347,
+    "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+    "group": "混合：输入与模型处理需分别修正",
+    "input_evidence_or_issue": "Schema没有daily_outpatient，而两个案例使用该字段，输入及参考互相矛盾。",
+    "observed_model_behavior": "知道题目要日均，却只输出年门诊量并假定本流程不存在的后续计算。",
+    "certainty": "两侧均有可定位问题或口径依赖，需控制变量实验分离贡献",
+    "original_diagnosis": "mixed",
+    "original_semantic_status": "different",
+    "request_sha256": "3d8e8851bcdec59e1ea71070624c917341cbeb07ad39066918b91dec3e1a0de8",
+    "response_sha256": "25d24288fc61a79ef1fbfc8378beac3ad8646733ccb9e6fcff77a472d69a9113",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2347/request.json",
+    "reference": {
+      "question_id": 2347,
+      "question": "找到最靠近上海静安寺的3个医院，返回名称和日均门诊量。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\",\"daily_outpatient\"],\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2347,
+      "db": "Elasticsearch",
+      "query": "{\"size\":3,\"query\":{\"match_all\":{}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":31.2235,\"lon\":121.4447},\"order\":\"asc\",\"unit\":\"km\"}}],\"_source\":[\"name\",\"annual_outpatient\"]}"
+    }
+  },
+  {
+    "question_id": 2358,
+    "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "题面只要求医疗机构，没有说只返回name；最相近案例2338恰好省略_source。预测沿用该返回格式，不能根据参考多了_source就认定模型未遵守明确输出要求。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "8c836148fcead53f33f42fe805191edda972663b9cfda66b62da7c03ea99c137",
+    "response_sha256": "b6d5fc5f0bf4f38e6c2aec8438007845fc406547b51f0a44a11e37328c4a07e3",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2358/request.json",
+    "reference": {
+      "question_id": 2358,
+      "question": "找到最靠近北京天安门广场且为三级甲等的5个医疗机构。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":5,\"_source\":[\"name\"],\"query\":{\"bool\":{\"filter\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    },
+    "predicted": {
+      "question_id": 2358,
+      "db": "Elasticsearch",
+      "query": "{\"size\":5,\"query\":{\"bool\":{\"must\":{\"term\":{\"level\":\"三甲\"}}}},\"sort\":[{\"_geo_distance\":{\"location\":{\"lat\":39.9087,\"lon\":116.3975},\"order\":\"asc\",\"unit\":\"km\"}}]}"
+    }
+  },
+  {
+    "question_id": 2462,
+    "question": "统计所有高负荷医院的床位数的统计值（总和、平均值、最大值、最小值）。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "高负荷定义1706未召回，无法从给定结构推出专用阈值。",
+    "observed_model_behavior": "用大型医院定义代替高负荷，属于在信息缺失时猜测。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_evidence_gap",
+    "original_semantic_status": "different",
+    "request_sha256": "abd072bd797d26d6765e4439da69bba5bbd44cea40c6693e17d71a0bb24d0fcd",
+    "response_sha256": "56ff22c83886a4a546e32058aa6db3693f57c4ac87670f8e2311425d58c56f94",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2462/request.json",
+    "reference": {
+      "question_id": 2462,
+      "question": "统计所有高负荷医院的床位数的统计值（总和、平均值、最大值、最小值）。",
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"range\":{\"annual_outpatient\":{\"gte\":5000000}}},\"aggs\":{\"beds_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+    },
+    "predicted": {
+      "question_id": 2462,
+      "db": "Elasticsearch",
+      "query": "{\"size\":0,\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}}]}},\"aggs\":{\"beds_stats\":{\"stats\":{\"field\":\"bed_count\"}}}}"
+    }
+  },
+  {
+    "question_id": 2487,
+    "question": "查询所有超大规模且优秀护理的医院的名称。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "超大规模定义1709未召回；护理条件已由案例2473给出。",
+    "observed_model_behavior": "用大型定义代替超大规模；不是所有条件都缺证据。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_evidence_gap",
+    "original_semantic_status": "different",
+    "request_sha256": "e0861d1ea4609a7465b3b1baad76602ed8f76a3247158acc931158771b2b0959",
+    "response_sha256": "6bf3e52d5770d39d8cdecaf6b45a980293a95a2f92f9c7eec7ded67b81debca2",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2487/request.json",
+    "reference": {
+      "question_id": 2487,
+      "question": "查询所有超大规模且优秀护理的医院的名称。",
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":2000}}},{\"range\":{\"annual_outpatient\":{\"gte\":6000000}}},{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}}}"
+    },
+    "predicted": {
+      "question_id": 2487,
+      "db": "Elasticsearch",
+      "query": "{\"_source\":[\"name\"],\"query\":{\"bool\":{\"must\":[{\"range\":{\"bed_count\":{\"gte\":1500}}},{\"range\":{\"doctor_count\":{\"gte\":1500}}},{\"range\":{\"nurse_count\":{\"gte\":2000}}},{\"script\":{\"script\":{\"source\":\"doc['bed_count'].value / doc['nurse_count'].value <= 1.2\"}}}]}}}"
+    }
+  },
+  {
+    "question_id": 2792,
+    "question": "查询船首向（heading）在0到90度之间且对地航向（cog）也在0到90度之间的船舶",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "案例中既有船舶AIS记录SELECT *，也有按MMSI去重；题面没有写每船一行或返回三列。参考和预测的行粒度有差异，但当前输入缺少统一船舶查询默认粒度。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "2250ba99829f57c9487656c31c458ac4a2f32b7da760f53f20ba8233c1e7a75b",
+    "response_sha256": "d5f832caf847be4c159fb55a96f8b78d558d32ff7a98ba6668aa138d999aaf39",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2792/request.json",
+    "reference": {
+      "question_id": 2792,
+      "question": "查询船首向（heading）在0到90度之间且对地航向（cog）也在0到90度之间的船舶",
+      "db": "POSTGRESQL",
+      "query": "SELECT DISTINCT ON (mmsi) mmsi, heading, cog FROM vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90 ORDER BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2792,
+      "db": "POSTGRESQL",
+      "query": "SELECT * FROM public.vessel_ais_data WHERE heading BETWEEN 0 AND 90 AND cog BETWEEN 0 AND 90"
+    }
+  },
+  {
+    "question_id": 2907,
+    "question": "查询今天出现在青岛朝连岛附近水域禁航区的船舶MMSI和平均航速。",
+    "group": "模型处理失误证据较明确",
+    "input_evidence_or_issue": "案例2932已有同名禁航区的完整多边形。",
+    "observed_model_behavior": "声称没有边界并改写已有坐标。",
+    "certainty": "可直接观察已有证据被改写或输出/规划未满足要求；未证明固有能力上限",
+    "original_diagnosis": "model_following",
+    "original_semantic_status": "different",
+    "request_sha256": "b864b8cf663ab0cf4da280c87c5a309bf87ab091e3bcdf9c3c3e60787e8e5bd2",
+    "response_sha256": "db34e5c28ab32c8f3df727bdd5d1ccbe2ca0b4f9f2a9a25c159bb8688b9d07c7",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2907/request.json",
+    "reference": {
+      "question_id": 2907,
+      "question": "查询今天出现在青岛朝连岛附近水域禁航区的船舶MMSI和平均航速。",
+      "db": "POSTGRESQL",
+      "query": "SELECT mmsi, AVG(sog) AS avg_sog FROM vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((121.1667 35.8333, 121.50 35.8333, 121.50 35.5833, 121.1667 35.5833, 121.1667 35.8333))', 4326)) GROUP BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2907,
+      "db": "POSTGRESQL",
+      "query": "SELECT mmsi, ROUND(AVG(sog), 2) AS avg_sog FROM public.vessel_ais_data WHERE timestamp::date = CURRENT_DATE AND ST_Within(geom, ST_GeomFromText('POLYGON((120.9167 35.8333, 121.1667 35.8333, 121.1667 35.5833, 120.9167 35.5833, 120.9167 35.8333))', 4326)) GROUP BY mmsi"
+    }
+  },
+  {
+    "question_id": 2908,
+    "question": "统计最近48小时内进入日照港石臼港区警戒区的船舶数量，按航行状态分组。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "缺日照港警戒区中心、半径知识1742，案例也未给出。",
+    "observed_model_behavior": "自行构造矩形，无法据当前输入恢复指定业务区域。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_evidence_gap",
+    "original_semantic_status": "different",
+    "request_sha256": "a2b5da27e5719a1dff8751f2219f22f13a57c8378fec74c9c2f929e3cc718035",
+    "response_sha256": "23e7e88bfae37ff542cd19746fc03b1225c1660d19823c3e65c18fa7deb7f93b",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2908/request.json",
+    "reference": {
+      "question_id": 2908,
+      "question": "统计最近48小时内进入日照港石臼港区警戒区的船舶数量，按航行状态分组。",
+      "db": "POSTGRESQL",
+      "query": "SELECT nav_status, COUNT(DISTINCT mmsi) AS cnt FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(119.5833, 35.3333), 4326)::geography, 926) GROUP BY nav_status"
+    },
+    "predicted": {
+      "question_id": 2908,
+      "db": "POSTGRESQL",
+      "query": "SELECT nav_status, COUNT(DISTINCT mmsi) AS vessel_count FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '48 hours' AND ST_Within(geom, ST_GeomFromText('POLYGON((119.45 35.30, 119.65 35.30, 119.65 35.45, 119.45 35.45, 119.45 35.30))', 4326)) GROUP BY nav_status"
+    }
+  },
+  {
+    "question_id": 2942,
+    "question": "查询所属公司为长航集团的船舶，在2024年6月1日经过(121.0,31.0)至(121.5,31.5)矩形区域的轨迹，并返回船舶MMSI和在区域内的部分轨迹长度",
+    "group": "模型处理失误证据较明确",
+    "input_evidence_or_issue": "两系统所需结构、日期和区域都已提供；案例有先成轨迹的方式。",
+    "observed_model_behavior": "先过滤点再成轨迹、没有整轨迹求交，并产生同层嵌套聚合。",
+    "certainty": "可直接观察已有证据被改写或输出/规划未满足要求；未证明固有能力上限",
+    "original_diagnosis": "model_following",
+    "original_semantic_status": "different",
+    "request_sha256": "e194ad3d34081f2b9b9e88c75f1dcdcb71cbd61c7559a7feef5d3b63ef8a21da",
+    "response_sha256": "154a60fedddf4fa14a00e93871b490f8f158483221c0e266dec5033a83f7af69",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2942/request.json",
+    "reference": {
+      "question_id": 2942,
+      "question": "查询所属公司为长航集团的船舶，在2024年6月1日经过(121.0,31.0)至(121.5,31.5)矩形区域的轨迹，并返回船舶MMSI和在区域内的部分轨迹长度",
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'",
+      "db2": "POSTGRESQL",
+      "query2": "WITH tracks AS (SELECT mmsi, ST_MakeLine(geom ORDER BY timestamp) AS track FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp::date = '2024-06-01' GROUP BY mmsi) SELECT mmsi, ST_Length(ST_Intersection(track, ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326))::geography) AS length_in_area FROM tracks WHERE ST_Intersects(track, ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326))"
+    },
+    "predicted": {
+      "question_id": 2942,
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE sc.company_name = '长航集团'",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT mmsi, ROUND(SUM(ST_Length(ST_Transform(ST_MakeLine(geom ORDER BY timestamp), 3857)))::numeric, 2) AS track_length_meters FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= '2024-06-01 00:00:00' AND timestamp < '2024-06-02 00:00:00' AND geom && ST_MakeEnvelope(121.0, 31.0, 121.5, 31.5, 4326) GROUP BY mmsi"
+    }
+  },
+  {
+    "question_id": 2950,
+    "question": "找到最大航速大于20节的船舶，统计其在最近24小时内以(121.5,31.2)为中心、半径15公里范围内的出现次数。",
+    "group": "输入信息或规则有明确问题",
+    "input_evidence_or_issue": "单列数量规则与参考MMSI+次数两列冲突；题面其的逐船含义需明确。",
+    "observed_model_behavior": "列数冲突不要求删除GROUP BY；漏分组的原因仍未证实，不能归为纯提示词错误。",
+    "certainty": "确认输入缺口/冲突；除1588外，不据此证明它是全部错误的唯一原因",
+    "original_diagnosis": "prompt_conflict",
+    "original_semantic_status": "different",
+    "request_sha256": "db30d37209549ae0079548b66c86518a58310b24581e91953be6eb09c1b7dace",
+    "response_sha256": "9f7ff2e6510d954deac350315c6a57bd5f2a0c5fa9a16d8174ddc30c3ebc74cf",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2950/request.json",
+    "reference": {
+      "question_id": 2950,
+      "question": "找到最大航速大于20节的船舶，统计其在最近24小时内以(121.5,31.2)为中心、半径15公里范围内的出现次数。",
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_speed > 20",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT mmsi, COUNT(*) AS appearances FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000) GROUP BY mmsi"
+    },
+    "predicted": {
+      "question_id": 2950,
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE max_speed > 20",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT COUNT(*) FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(121.5, 31.2), 4326)::geography, 15000)"
+    }
+  },
+  {
+    "question_id": 2970,
+    "question": "查询船长姓名为‘张海’的船舶，在2024年6月1日08:00至12:00期间位于(121.5, 31.2)至(121.8, 31.4)矩形区域内且航行状态为系泊的MMSI。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "两系统、公司/船长条件都保留，主要差异是BETWEEN闭边界与参考ST_Within开边界。题面矩形区域内未定义边界集合，不能据此断言路由或跨系统规划仍失败。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "36165876c6b65c245632c16a92ffbe55ccbc0a93909f0c3fba754713497c1a70",
+    "response_sha256": "7a2a2958ab0c8e7f79cf0286acae8af347153bea560774720f7c13e3f01eab51",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2970/request.json",
+    "reference": {
+      "question_id": 2970,
+      "question": "查询船长姓名为‘张海’的船舶，在2024年6月1日08:00至12:00期间位于(121.5, 31.2)至(121.8, 31.4)矩形区域内且航行状态为系泊的MMSI。",
+      "db1": "MYSQL",
+      "query1": "SELECT v.mmsi FROM transportation.vessel v WHERE v.captain_name = '张海'",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp BETWEEN '2024-06-01 08:00:00' AND '2024-06-01 12:00:00' AND nav_status = 5 AND ST_Within(geom, ST_MakeEnvelope(121.5, 31.2, 121.8, 31.4, 4326))"
+    },
+    "predicted": {
+      "question_id": 2970,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= '2024-06-01 08:00:00' AND timestamp <= '2024-06-01 12:00:00' AND nav_status = 5 AND longitude >= 121.5 AND longitude <= 121.8 AND latitude >= 31.2 AND latitude <= 31.4",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE captain_name = '张海' AND mmsi IN (result)"
+    }
+  },
+  {
+    "question_id": 2972,
+    "question": "查询自持力超过45天的船舶，在最近24小时内位于(122.0, 30.0)至(122.2, 30.2)矩形内且速度小于3节的MMSI。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "业务条件和两步result完整，差异仍在矩形边界是否纳入。题面没有给出边界约定，属于与参考严格不等价但无法唯一判定题意错误。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "8fbe47523d13081423343fa4019d3688141eb73a6950f9cdab9cd83e24546857",
+    "response_sha256": "32dd723bea801f9cf00b572b91ab4fd915c5a19cb65cb80d9febc732458c170a",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2972/request.json",
+    "reference": {
+      "question_id": 2972,
+      "question": "查询自持力超过45天的船舶，在最近24小时内位于(122.0, 30.0)至(122.2, 30.2)矩形内且速度小于3节的MMSI。",
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 45",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND sog < 3 AND ST_Within(geom, ST_MakeEnvelope(122.0, 30.0, 122.2, 30.2, 4326))"
+    },
+    "predicted": {
+      "question_id": 2972,
+      "db1": "MYSQL",
+      "query1": "SELECT mmsi FROM transportation.vessel WHERE endurance > 45",
+      "db2": "POSTGRESQL",
+      "query2": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE mmsi IN (result) AND timestamp >= NOW() - INTERVAL '24 hours' AND longitude BETWEEN 122.0 AND 122.2 AND latitude BETWEEN 30.0 AND 30.2 AND sog < 3"
+    }
+  },
+  {
+    "question_id": 2980,
+    "question": "查询过去24小时内航向在270至360度之间且速度大于8节的船舶，再从中找出自持力超过90天的MMSI。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "自持力只有VARCHAR类型和天数或海里的业务描述，未声明天数/海里字符串格式。参考隐式转数值、预测截斜杠并CAST，是否一致依赖实际取值，当前无法归因。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "uncertain",
+    "request_sha256": "67fc0fa7f80fc5f92271e98965aaf2fa11018cef1945cd27843bdc8ec288fce6",
+    "response_sha256": "b0d08435456fe63ee8fefa8e401a1a6a8b6ecca61b9bd9518b1b662b9c00128a",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2980/request.json",
+    "reference": {
+      "question_id": 2980,
+      "question": "查询过去24小时内航向在270至360度之间且速度大于8节的船舶，再从中找出自持力超过90天的MMSI。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog BETWEEN 270 AND 360 AND sog > 8",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND endurance > 90"
+    },
+    "predicted": {
+      "question_id": 2980,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND cog >= 270 AND cog <= 360 AND sog > 8",
+      "db2": "MYSQL",
+      "query2": "SELECT mmsi FROM transportation.vessel WHERE mmsi IN (result) AND CAST(SUBSTRING_INDEX(endurance, '/', 1) AS UNSIGNED) > 90"
+    }
+  },
+  {
+    "question_id": 2984,
+    "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+    "group": "题面、参考或数据不足，暂不裁定",
+    "input_evidence_or_issue": "案例108与参考使用IS NOT NULL，模型额外排空串；自然语言不为空通常可含两者，而Schema未禁止空串。缺少空值业务口径，不能直接当作推理能力问题。",
+    "observed_model_behavior": "与参考不同，当前不足以确认是哪一侧导致业务错误。",
+    "certainty": "需要先裁定问题/参考/实际值",
+    "original_diagnosis": "underdetermined",
+    "original_semantic_status": "different",
+    "request_sha256": "66f5578f9bddd72c0574e5408cf22146215bdc4547f6e425f79ce21002d9897d",
+    "response_sha256": "588d6fab54d98297f7856486908c448f1e3a9c1eff56f6cba0c0aaa318bcb38f",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/2984/request.json",
+    "reference": {
+      "question_id": 2984,
+      "question": "查询最近24小时内出现在(118.7, 20.1)半径7公里内的船舶，再找出其中船长姓名不为空且所属公司不是‘中远海运’的MMSI。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+      "db2": "MYSQL",
+      "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND sc.company_name != '中远海运'"
+    },
+    "predicted": {
+      "question_id": 2984,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT DISTINCT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hour' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 7000)",
+      "db2": "MYSQL",
+      "query2": "SELECT v.mmsi FROM transportation.vessel v JOIN transportation.shipping_company c ON v.company_id = c.company_id WHERE v.mmsi IN (result) AND v.captain_name IS NOT NULL AND v.captain_name <> '' AND c.company_name <> '中远海运'"
+    }
+  },
+  {
+    "question_id": 3012,
+    "question": "查询最近24小时内出现在点(118.7,20.1)8公里范围内且出现次数超过3次的船舶，按公司名称升序排列。",
+    "group": "模型处理失误证据较明确",
+    "input_evidence_or_issue": "题目返回船舶、公司名只用于排序；Schema/案例支持关联。",
+    "observed_model_behavior": "只返回公司名称，丢失返回船舶的对象要求。",
+    "certainty": "可直接观察已有证据被改写或输出/规划未满足要求；未证明固有能力上限",
+    "original_diagnosis": "model_following",
+    "original_semantic_status": "different",
+    "request_sha256": "29c2dfc29ed61fbc9bf03b3ee5f1f5d7218c18ec1918f2b4bb6684d8c278e380",
+    "response_sha256": "2c5d1c4c561c4a0593c689a2c920af570552d9dd296875fe9287ab6827cea89a",
+    "request_path": "/home/jxqu/Share/Match/V6/evaluation/validation_100/runs/prompt-diagnosis-v1/cases/3012/request.json",
+    "reference": {
+      "question_id": 3012,
+      "question": "查询最近24小时内出现在点(118.7,20.1)8公里范围内且出现次数超过3次的船舶，按公司名称升序排列。",
+      "db1": "POSTGRESQL",
+      "query1": "SELECT mmsi FROM vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3",
+      "db2": "MYSQL",
+      "query2": "SELECT * FROM transportation.vessel WHERE mmsi IN (result) ORDER BY (SELECT company_name FROM transportation.shipping_company WHERE company_id = vessel.company_id) ASC"
+    },
+    "predicted": {
+      "question_id": 3012,
+      "db1": "POSTGRESQL",
+      "query1": "SELECT mmsi FROM public.vessel_ais_data WHERE timestamp >= NOW() - INTERVAL '24 hours' AND ST_DWithin(geom::geography, ST_SetSRID(ST_MakePoint(118.7, 20.1), 4326)::geography, 8000) GROUP BY mmsi HAVING COUNT(*) > 3",
+      "db2": "MYSQL",
+      "query2": "SELECT sc.company_name FROM transportation.vessel v JOIN transportation.shipping_company sc ON v.company_id = sc.company_id WHERE v.mmsi IN (result) ORDER BY sc.company_name ASC"
+    }
+  }
+]

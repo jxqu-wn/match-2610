@@ -5,6 +5,8 @@
 
 [40题提示词与归因报告](../evaluation/validation_100/runs/prompt-diagnosis-v1/README.md) · [完整提示词JSONL](../evaluation/validation_100/runs/prompt-diagnosis-v1/wrong_prompts.jsonl) · [逐题归因CSV](../evaluation/validation_100/runs/prompt-diagnosis-v1/diagnosis.csv) · [100题预测](../evaluation/validation_100/runs/prompt-diagnosis-v1/predictions_100.json)
 
+[后续审计归档](../evaluation/validation_100/runs/followup-audits-v1/README.md)补充实际提示词的库表覆盖、knowledge输入、差异类型，以及逐题输入问题与模型行为的拆分；保留原始评分。
+
 ## 原始语义审查
 
 100题全部首轮通过已有静态校验。逐题静态语义审查为60题与参考一致、1题仅新增规则导致的精度差异、36题有差异、3题暂不能确认。

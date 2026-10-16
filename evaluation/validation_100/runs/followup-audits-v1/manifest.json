@@ -1,0 +1,42 @@
+{
+  "purpose": "此前覆盖率、差异类型和归因复核的仓库归档；原始评分与真实请求保持不变。",
+  "files": {
+    "validation-100-prompt-input-audit-v1/README.md": {
+      "sha256": "fabe9c2f7db8e86b9f56c8319c10ddf9aead228fc1db34c157606a1b356550a7",
+      "source_sha256": "fabe9c2f7db8e86b9f56c8319c10ddf9aead228fc1db34c157606a1b356550a7"
+    },
+    "validation-100-prompt-input-audit-v1/details.csv": {
+      "sha256": "1d0da05f37149388e4793ffbd88d01d9a77327f25d932700cf6d1507e426a944",
+      "source_sha256": "f144616115e23d87c3c7495dccb59ec480f71c63d3eb34e8c692945ede699dbb"
+    },
+    "validation-100-prompt-input-audit-v1/details.json": {
+      "sha256": "abce5b4f0c756adcd6ef18c928af32b340b208e18ddc7a024cefa312e200f751",
+      "source_sha256": "abce5b4f0c756adcd6ef18c928af32b340b208e18ddc7a024cefa312e200f751"
+    },
+    "validation-100-prompt-input-audit-v1/summary.json": {
+      "sha256": "9cf1332ee86d3747efbe3a7adb7e013b47914da942f2585b2a46357af766789f",
+      "source_sha256": "9cf1332ee86d3747efbe3a7adb7e013b47914da942f2585b2a46357af766789f"
+    },
+    "validation-100-error-patterns-v1/README.md": {
+      "sha256": "223c18c8bc97659986a0742c1b2ceea3a54251eecc6f75cc01acf08bcb532e42",
+      "source_sha256": "223c18c8bc97659986a0742c1b2ceea3a54251eecc6f75cc01acf08bcb532e42"
+    },
+    "validation-100-error-patterns-v1/summary.json": {
+      "sha256": "df07765691d2de1d60788ef892752f058868b47af7422e9c96de55c55f829978",
+      "source_sha256": "df07765691d2de1d60788ef892752f058868b47af7422e9c96de55c55f829978"
+    },
+    "validation-100-attribution-breakdown-v1/README.md": {
+      "sha256": "bfe4c2b7894c41b68ca36ff19dea33a54ad0d207049db7a32318375146df8888",
+      "source_sha256": "6a46a97eefd6e8a33350958d8f5138f0a001978c55bb047d9cbefa0e3d7aa2a1"
+    },
+    "validation-100-attribution-breakdown-v1/details.json": {
+      "sha256": "15150f2d57bdbbd8081e8d78bf203d160cf3370296f67e59d39892bf50ae02d6",
+      "source_sha256": "15150f2d57bdbbd8081e8d78bf203d160cf3370296f67e59d39892bf50ae02d6"
+    },
+    "validation-100-attribution-breakdown-v1/summary.json": {
+      "sha256": "ab49cb3f586b689e66ba2be613f1a0a89469fc3bff8bd152d3ee2cef89ee9d70",
+      "source_sha256": "ab49cb3f586b689e66ba2be613f1a0a89469fc3bff8bd152d3ee2cef89ee9d70"
+    }
+  },
+  "archive_normalization": "Markdown绝对链接转换为相对链接；CSV换行CRLF转换为LF；保留source_sha256以追溯原文件。"
+}
