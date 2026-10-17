@@ -1,0 +1,85 @@
+{
+  "version": "prompt-quality-evaluation-v1",
+  "status": "proposed_not_executed",
+  "scope": "实际发送的完整消息；现有100题用于开发回归，不代表独立测试",
+  "source_statuses": [
+    "resolved",
+    "multiple_acceptable_interpretations",
+    "source_missing",
+    "source_ambiguous",
+    "unreviewed"
+  ],
+  "fact_statuses": [
+    "supported",
+    "derivable",
+    "missing",
+    "contradictory",
+    "unjudgeable"
+  ],
+  "prompt_statuses": [
+    "answerable",
+    "missing_evidence",
+    "unresolved_conflict",
+    "unjudgeable"
+  ],
+  "status_rules": {
+    "answerable": "存在一个完整合法的证据组合，所有必须事实可判定且有支持，没有关键未决冲突",
+    "missing_evidence": "原始资料有必须事实，但当前提示词缺失；已知问题仍逐项保留",
+    "unresolved_conflict": "提示词中有影响需求、且优先级不能裁决的关键矛盾；可与缺失标记并存",
+    "unjudgeable": "源资料或业务口径未决，或必要审查信息不足；必须记录具体原因",
+    "resolved_priority": "明确优先级可裁决的矛盾不作为关键未决冲突；旧参考错配另记",
+    "irrelevant_defect": "无关坏知识计有害噪声，不直接判整题不可回答"
+  },
+  "primary_metrics": [
+    "answerable_prompt_rate_on_evaluable_questions",
+    "confirmed_answerable_share_on_all_questions",
+    "required_fact_coverage_micro_and_macro",
+    "complete_business_fact_support_rate",
+    "complete_valid_schema_path_support_rate",
+    "critical_unresolved_conflict_rate",
+    "irrelevant_and_incorrect_evidence_token_share",
+    "evidence_annotation_coverage",
+    "source_fidelity",
+    "traceability",
+    "context_cost"
+  ],
+  "denominator_rules": [
+    "全部抽样题、可评价题、源资料未决题和审查未完成题分别计数",
+    "必须事实未判定不计已覆盖，题目不计确认可回答",
+    "无必须knowledge时知识专项指标记不适用，不能填100%",
+    "未审查证据不默认相关，未标注不当负例",
+    "替代合法查询路径允许不同表集合；参考表覆盖仅为辅助指标",
+    "无关和错误token分开计数，片段不重复计量"
+  ],
+  "exclusive_topology_groups": [
+    "single_business_single_table",
+    "single_business_multiple_tables",
+    "single_system_multiple_business_databases",
+    "cross_system_federation"
+  ],
+  "review_protocol": {
+    "requirements_before_prompt_comparison": true,
+    "hide_generated_queries_during_input_review": true,
+    "reference_sql_is_unverified_clue": true,
+    "independent_reviews_before_adjudication": true,
+    "require_source_and_prompt_evidence_locations": true,
+    "llm_labels_not_called_human_gold": true,
+    "production_must_not_read_evaluation_labels": true,
+    "current_sample_has_sqlite": false
+  },
+  "controlled_comparison": {
+    "first_comparison": "仅改变知识候选资格；保持模型、任务协议、路由、表候选、TopK、RRF参数及提示词预算一致",
+    "diagnostic_conditions": [
+      "补齐已核定的最少必要事实",
+      "仅去除已核定无关或错误干扰",
+      "按既有业务优先级显式处理冲突"
+    ],
+    "suggested_repeats_per_condition": 3,
+    "oracle_prompt_not_production_retrieval_score": true,
+    "model_comparison_optional_after_prompt_review": true,
+    "execution_and_static_review_reported_separately": true
+  },
+  "composite_score": null,
+  "causal_effect_measured": false,
+  "external_calls_performed_for_this_protocol": false
+}

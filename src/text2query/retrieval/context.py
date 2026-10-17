@@ -36,12 +36,13 @@ class Budget:
             self.extra_tables,
             self.total_tables,
             self.knowledge,
-            self.examples,
             self.context_tokens,
             self.output_tokens,
             self.judgment_calls,
         ) < 1:
             raise ValueError("检索/上下文/调用上限必须为正")
+        if self.examples < 0:
+            raise ValueError("案例数量必须非负")
         if not 0 <= self.expansion_rounds <= 1 or self.judgment_calls > 2 or self.repair_calls > 1:
             raise ValueError("首版最多一轮扩展、两次判断、一次修复")
         if self.repair_reserve < 0 or self.repair_calls < 0 or self.transport_retries < 0:
@@ -469,7 +470,8 @@ class ContextBuilder:
         for name in ("knowledge", "examples"):
             kept = []
             for item in context[name]:
-                if set(self.index.by_id[item["source_id"]]["table_ids"]) & keys:
+                independent_candidate = name == "knowledge" and item.get("retrieval_scope") == "global"
+                if independent_candidate or set(self.index.by_id[item["source_id"]]["table_ids"]) & keys:
                     kept.append(item)
                 else:
                     context["omitted_evidence"].append(item["source_id"])

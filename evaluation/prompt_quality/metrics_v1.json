@@ -1,0 +1,785 @@
+{
+  "version": "prompt-quality-programmatic-metrics-v1",
+  "status": "specification_only",
+  "scoring_engine_implemented": false,
+  "fact_benchmark_completed": false,
+  "new_scores_produced": false,
+  "formula_language": "数学伪代码；不是可直接eval的程序表达式",
+  "documentation": "../../docs/prompt_quality_programmatic_metrics.md",
+  "input_contract": {
+    "actual_requests": "保存发送边界的完整消息与非凭证生成参数；未发送缓存不冒充实际请求",
+    "Q": "全部固定抽样题",
+    "Q0": "源资料、任务约定和必须事实清单已核定的固定题集",
+    "Fq": "语义去重的必须业务事实；通用SQL规划不是必须外部事实",
+    "Hq": "合法证据路径，不能混合不同路径的局部支持",
+    "support_states": [
+      "T",
+      "F",
+      "U"
+    ],
+    "evidence_token_partition": [
+      "required_support_R",
+      "related_background_B",
+      "irrelevant_I",
+      "harmful_H",
+      "unknown_U"
+    ],
+    "evidence_token_denominator": "实际证据及其元数据/包装，不含system指令与用户问题本身",
+    "structure_coverage": "严格DDL覆盖与允许替代证据的联合结构支持分别报告"
+  },
+  "reporting_rules": [
+    "每项输出分子、分母、未知数、不适用数和版本；分母零为NA",
+    "宏平均为主，微平均与完整率并列；多路径微平均结构基准固定",
+    "来源、系统约定、金标变化后两版本重新计算",
+    "部分相关性标签不把未标注当负例",
+    "噪声密度必须附标注覆盖率和未知范围",
+    "联邦与同系统跨业务库单列，不只交整体平均",
+    "不按知识ID补生产例外，不将基准传入生产检索",
+    "C类执行状态未知单列，不随意删题；查询非空不等于正确",
+    "没有经过校准的加权总分；保存各维结果和工程硬失败"
+  ],
+  "metrics": [
+    {
+      "id": "A1",
+      "name": "请求一致率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "matched_actual_requests / available_actual_requests",
+      "required_inputs": [
+        "actual_requests",
+        "send_boundary_records"
+      ],
+      "design_reason": "评价真实输入；另报available_actual_requests / all_questions。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A2",
+      "name": "知识索引完整率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "raw_knowledge_with_matching_id_and_text_in_index / raw_knowledge_count",
+      "required_inputs": [
+        "raw_knowledge",
+        "index_documents"
+      ],
+      "design_reason": "区分源文件存在与索引漏入；不是实际召回率。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A3",
+      "name": "提示词来源保真率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "source_matching_prompt_items / source_verifiable_prompt_items",
+      "required_inputs": [
+        "actual_requests",
+        "source_files",
+        "projection_contract"
+      ],
+      "design_reason": "比较解码后的知识原文及已声明的结构投影；配合A5/A7防止隐藏未知。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A4",
+      "name": "Schema事实有效率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "validated_structural_assertions / verifiable_structural_assertions",
+      "required_inputs": [
+        "actual_requests",
+        "raw_schema",
+        "parsed_assertions"
+      ],
+      "design_reason": "字段、类型、约束应与来源一致；配合解析覆盖与未知上下界。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A5",
+      "name": "来源可追踪率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "evidence_items_with_verified_source_location_hash_quote / prompt_evidence_items",
+      "required_inputs": [
+        "actual_requests",
+        "source_manifest",
+        "source_locations"
+      ],
+      "design_reason": "有source_id不代表其来源、引文和位置真实。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A6",
+      "name": "运行可复现率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "normalized_outputs_equal_frozen_baseline / repeated_runs",
+      "required_inputs": [
+        "repeated_run_artifacts",
+        "normalization_contract"
+      ],
+      "design_reason": "同输入同配置核对内容，稳定不等于正确。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "A7",
+      "name": "证据解析覆盖率",
+      "tier": "A",
+      "direction": "higher",
+      "formula": "fully_parsed_and_checkable_blocks / actual_evidence_blocks",
+      "required_inputs": [
+        "actual_requests",
+        "parser_capability_manifest"
+      ],
+      "design_reason": "未解析块不能当没有错误，按证据类型分组。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B1",
+      "name": "系统召回率及完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "recall(q,h)=|E(q,h) intersect provided_E(q)|/|E(q,h)|; complete(q,h)=I(E(q,h) subset provided_E(q)); macro=mean_q(recall); micro=sum_hits/sum_required; complete_rate=sum_complete/questions",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths"
+      ],
+      "design_reason": "跨系统所需引擎是否齐全。多路径微平均固定可比路径；单维最优不能拼成联合完整。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B2",
+      "name": "业务库召回率及完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "recall(q,h)=|D(q,h) intersect provided_D(q)|/|D(q,h)|; complete(q,h)=I(D(q,h) subset provided_D(q)); macro=mean_q(recall); micro=sum_hits/sum_required; complete_rate=sum_complete/questions",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths"
+      ],
+      "design_reason": "用引擎加业务命名空间标识，不能只看引擎。多路径微平均固定可比路径；单维最优不能拼成联合完整。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B3",
+      "name": "表召回率及完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "recall(q,h)=|T(q,h) intersect provided_T(q)|/|T(q,h)|; complete(q,h)=I(T(q,h) subset provided_T(q)); macro=mean_q(recall); micro=sum_hits/sum_required; complete_rate=sum_complete/questions",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths"
+      ],
+      "design_reason": "检查主表、字典表与跨年度表。多路径微平均固定可比路径；单维最优不能拼成联合完整。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B4",
+      "name": "必要字段召回率及完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "recall(q,h)=|C(q,h) intersect provided_C(q)|/|C(q,h)|; complete(q,h)=I(C(q,h) subset provided_C(q)); macro=mean_q(recall); micro=sum_hits/sum_required; complete_rate=sum_complete/questions",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths"
+      ],
+      "design_reason": "按限定字段及必要类型、单位等事实核对。多路径微平均固定可比路径；单维最优不能拼成联合完整。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B5",
+      "name": "必要关系召回率及完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "recall(q,h)=|J(q,h) intersect provided_J(q)|/|J(q,h)|; complete(q,h)=I(J(q,h) subset provided_J(q)); macro=mean_q(recall); micro=sum_hits/sum_required; complete_rate=sum_complete/questions",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths"
+      ],
+      "design_reason": "只评价任务必需关系，核对键和关系语义。多路径微平均固定可比路径；单维最优不能拼成联合完整。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "B6",
+      "name": "联合结构完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "questions_with_one_valid_path_having_all_required_structural_facts_supported / |Q0|",
+      "required_inputs": [
+        "actual_requests",
+        "verified_structure_paths",
+        "fact_support"
+      ],
+      "design_reason": "必须同一合法路径完整；参考严格DDL覆盖另作辅助。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K1",
+      "name": "已知正例Recall@k",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "|Gq intersect Lq,k| / |Gq|",
+      "required_inputs": [
+        "stage_rankings",
+        "verified_positive_knowledge"
+      ],
+      "design_reason": "只描述已核定正例，知识记录覆盖不等于全提示词事实覆盖。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K2",
+      "name": "已标注Precision@k",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "TP / (TP + FP)",
+      "required_inputs": [
+        "stage_rankings",
+        "verified_relevance_labels"
+      ],
+      "design_reason": "未知不当负例，必须与K3同时报告。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K3",
+      "name": "排序标注覆盖率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "(TP + FP) / actual_returned_count",
+      "required_inputs": [
+        "stage_rankings",
+        "verified_relevance_labels"
+      ],
+      "design_reason": "披露已标注精确率的覆盖范围。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K4",
+      "name": "全返回精确率区间",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "[TP/m, (TP+U)/m], m=actual_returned_count",
+      "required_inputs": [
+        "stage_rankings",
+        "verified_relevance_labels"
+      ],
+      "design_reason": "展示未标注候选的不确定范围。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K5",
+      "name": "已知正例MRR@k",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "mean_q(1/first_verified_positive_rank_within_k); no_verified_hit=0",
+      "required_inputs": [
+        "stage_rankings",
+        "verified_positive_knowledge"
+      ],
+      "design_reason": "评价第一个已核定相关项的排序。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K6",
+      "name": "nDCG@k",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "DCG=sum_i((2^rel_i-1)/log2(i+1)); nDCG=DCG/IDCG",
+      "required_inputs": [
+        "stage_rankings",
+        "sufficient_graded_relevance_labels"
+      ],
+      "design_reason": "IDCG需充分标注；未知不能默认0，IDCG=0为NA。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K7",
+      "name": "范围筛选损失",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "stage_recall=|G intersect S|/|G|; absolute_loss=|G intersect (Sprev minus Snext)|/|G|; conditional_drop=|G intersect (Sprev minus Snext)|/|G intersect Sprev|",
+      "required_inputs": [
+        "stage_event_graph",
+        "verified_positive_knowledge"
+      ],
+      "design_reason": "仅用于单调删除边scope_filter；多路新增分别记录，源资料缺失另列。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K8",
+      "name": "候选与排序截断损失",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "stage_recall=|G intersect S|/|G|; absolute_loss=|G intersect (Sprev minus Snext)|/|G|; conditional_drop=|G intersect (Sprev minus Snext)|/|G intersect Sprev|",
+      "required_inputs": [
+        "stage_event_graph",
+        "verified_positive_knowledge"
+      ],
+      "design_reason": "仅用于单调删除边candidate_or_ranking_cut；多路新增分别记录，源资料缺失另列。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "K9",
+      "name": "知识预算损失",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "stage_recall=|G intersect S|/|G|; absolute_loss=|G intersect (Sprev minus Snext)|/|G|; conditional_drop=|G intersect (Sprev minus Snext)|/|G intersect Sprev|",
+      "required_inputs": [
+        "stage_event_graph",
+        "verified_positive_knowledge"
+      ],
+      "design_reason": "仅用于单调删除边budget_cut；多路新增分别记录，源资料缺失另列。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F1",
+      "name": "必须事实覆盖率下界",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "macro=mean_q(max_h(t(q,h)/|Fq|)); micro=sum_q(max_h(t(q,h)))/sum_q(|Fq|)",
+      "required_inputs": [
+        "actual_requests",
+        "verified_required_facts",
+        "allowed_support_paths",
+        "fact_match_results"
+      ],
+      "design_reason": "只认同一路径内已证实支持；每题同一事实多次出现只计一次。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F2",
+      "name": "必须事实覆盖率上界",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "macro=mean_q(max_h((t(q,h)+u(q,h))/|Fq|)); micro=sum_q(max_h(t(q,h)+u(q,h)))/sum_q(|Fq|)",
+      "required_inputs": [
+        "actual_requests",
+        "verified_required_facts",
+        "allowed_support_paths",
+        "fact_match_results"
+      ],
+      "design_reason": "未知可能被支持的宽松上界，不当已达成结果。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F3",
+      "name": "完整业务事实覆盖率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "questions_with_exists_h_all_required_business_facts_T / questions_in_Q0_with_nonempty_Fq",
+      "required_inputs": [
+        "fact_match_results",
+        "verified_required_facts",
+        "allowed_support_paths"
+      ],
+      "design_reason": "平均事实覆盖高仍可能每题都不完整；冲突另算。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F4",
+      "name": "程序事实判定覆盖率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "(T_count+F_count)/(T_count+F_count+U_count) over fixed_registered_path_fact_units",
+      "required_inputs": [
+        "fact_match_results",
+        "fixed_path_fact_registry"
+      ],
+      "design_reason": "区分提示词缺陷与匹配器判断不足。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F5",
+      "name": "确认可回答率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "count(a_q=T)/|Q0|; a_q=OR_h(all_required_structural_and_business_and_contract_support_T AND no_critical_unresolved_conflict)",
+      "required_inputs": [
+        "fact_match_results",
+        "verified_structure_paths",
+        "task_contract",
+        "conflict_results"
+      ],
+      "design_reason": "主指标；同一合法路径完整、分母固定，通用SQL推理无需已写进提示词。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F6",
+      "name": "可回答率不确定上界",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "(count(a_q=T)+count(a_q=U))/|Q0|",
+      "required_inputs": [
+        "answerability_states",
+        "frozen_Q0"
+      ],
+      "design_reason": "仅覆盖固定Q0内的程序未知，不把源资料确定无解视为可答。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F7",
+      "name": "全样本确认可回答占比",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "count(a_q=T)/N",
+      "required_inputs": [
+        "answerability_states",
+        "all_questions"
+      ],
+      "design_reason": "避免排除源疑点和金标未完成题抬高主成绩。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "F8",
+      "name": "评价状态分布",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "counts(T,F,U); |Q0|/N; counts_by_unknown_reason/N",
+      "required_inputs": [
+        "answerability_states",
+        "source_and_benchmark_statuses"
+      ],
+      "design_reason": "单列源缺失、源歧义、基准未完、解析未知。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "C1",
+      "name": "关键未决冲突题率",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "questions_with_requirement_relevant_unresolved_conflict / |Q0|",
+      "required_inputs": [
+        "actual_requests",
+        "scope_aware_conflict_rules",
+        "task_contract"
+      ],
+      "design_reason": "不把不同概念或已明确裁决的案例差异混为关键矛盾。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "C2",
+      "name": "关键错误事实暴露率",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "questions_exposed_to_verified_wrong_required_fact / |Q0|",
+      "required_inputs": [
+        "actual_requests",
+        "verified_wrong_fact_labels",
+        "required_facts"
+      ],
+      "design_reason": "与缺失及无关坏知识分开。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "C3",
+      "name": "已裁决冲突传达率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "conflicts_with_verified_priority_clearly_presented / conflicts_requiring_priority_presentation",
+      "required_inputs": [
+        "actual_requests",
+        "verified_priority_rules"
+      ],
+      "design_reason": "明确传达system优先级的冲突不判未决。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "C4",
+      "name": "任务参考版本错配率",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "verified_reference_contract_mismatch_questions / reviewed_reference_questions",
+      "required_inputs": [
+        "verified_reference_queries",
+        "task_contract"
+      ],
+      "design_reason": "规则与旧监督冲突独立于提示词信息缺失。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N1",
+      "name": "已确认有用证据密度",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "(TR+TB)/TE",
+      "required_inputs": [
+        "token_offsets",
+        "reviewed_evidence_labels"
+      ],
+      "design_reason": "必要支持和相关背景都可有用，未使用DDL不自动是噪声。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N2",
+      "name": "已确认无关密度",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "TI/TE",
+      "required_inputs": [
+        "token_offsets",
+        "reviewed_evidence_labels"
+      ],
+      "design_reason": "旧来源ID或参考未使用不自动当无关。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N3",
+      "name": "已确认有害密度",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "TH/TE; verified_wrong_tokens/TE reported_separately",
+      "required_inputs": [
+        "token_offsets",
+        "reviewed_evidence_labels"
+      ],
+      "design_reason": "有害包含已核定错误及误导性冲突等，真假未决不称确定错误。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N4",
+      "name": "噪声区间",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "[(TI+TH)/TE, (TI+TH+TU)/TE]",
+      "required_inputs": [
+        "token_offsets",
+        "reviewed_evidence_labels"
+      ],
+      "design_reason": "披露未知对噪声估计的影响。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N5",
+      "name": "证据标注覆盖率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "1-TU/TE",
+      "required_inputs": [
+        "token_offsets",
+        "reviewed_evidence_labels"
+      ],
+      "design_reason": "噪声比例必须配套标注覆盖。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N6",
+      "name": "精确重复token率",
+      "tier": "A",
+      "direction": "lower",
+      "formula": "sum_g((ng-1)*Tg)/TE",
+      "required_inputs": [
+        "actual_requests",
+        "stable_evidence_segmentation",
+        "token_offsets"
+      ],
+      "design_reason": "精确重复组按同内容切分规范；语义相近不直接去重。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "N7",
+      "name": "检索元数据占用",
+      "tier": "A",
+      "direction": "diagnostic",
+      "formula": "Tmetadata/Tinput; raw_Tmetadata",
+      "required_inputs": [
+        "actual_requests",
+        "token_offsets"
+      ],
+      "design_reason": "分数和检索日志的上下文成本，不预判其是否有用。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "P1",
+      "name": "输入长度分布",
+      "tier": "A",
+      "direction": "diagnostic",
+      "formula": "P50(Tinput), P95(Tinput), max(Tinput); by_content_block",
+      "required_inputs": [
+        "actual_requests",
+        "fixed_tokenizer_and_template"
+      ],
+      "design_reason": "与生成器不同的分词器标为比较用估算。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "P2",
+      "name": "超预算率",
+      "tier": "A",
+      "direction": "lower",
+      "formula": "count(Tinput>Tavailable)/N; Tavailable=context_limit-output_reserve-other_required_reserve",
+      "required_inputs": [
+        "actual_requests",
+        "token_counts",
+        "request_budget_contract"
+      ],
+      "design_reason": "不重复扣除本轮未使用的未来调用预算。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "P3",
+      "name": "必须事实裁剪损失",
+      "tier": "B",
+      "direction": "lower",
+      "formula": "count(required_fact_T_before_and_F_after)/count(required_fact_T_before); T_to_U_separate",
+      "required_inputs": [
+        "before_and_after_budget_messages",
+        "verified_facts",
+        "fact_match_results"
+      ],
+      "design_reason": "重复来源仍支持同一事实时不计确定丢失。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "P4",
+      "name": "每千token有效事实数",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "1000*unique_confirmed_supported_required_facts/TE",
+      "required_inputs": [
+        "fact_match_results",
+        "token_counts"
+      ],
+      "design_reason": "只在同题同基准比较，效率不能替代完整性。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "P5",
+      "name": "耗时与精排工作量",
+      "tier": "A",
+      "direction": "diagnostic",
+      "formula": "P50/P95_latency; candidate_count; reranked_pairs; cache_hits",
+      "required_inputs": [
+        "retrieval_runtime_logs",
+        "hardware_model_cache_manifest"
+      ],
+      "design_reason": "首次加载、稳定运行、硬件和缓存条件分别报告。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "M1",
+      "name": "同系统跨库结构完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "B6_pass_count_in_same_system_cross_business / evaluable_questions_in_group",
+      "required_inputs": [
+        "topology_labels",
+        "verified_structure_paths",
+        "fact_match_results"
+      ],
+      "design_reason": "主表完整不能掩盖跨库字典与年度库遗漏。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "M2",
+      "name": "跨库关系完整率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "questions_with_one_path_all_required_cross_business_relations_supported / evaluable_questions_in_group",
+      "required_inputs": [
+        "topology_labels",
+        "verified_relation_facts",
+        "fact_match_results"
+      ],
+      "design_reason": "核对连接键、类型、单位及粒度。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "M3",
+      "name": "联邦接口事实覆盖率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "supported_required_interface_facts / required_interface_facts",
+      "required_inputs": [
+        "federation_path_labels",
+        "interface_facts",
+        "fact_match_results"
+      ],
+      "design_reason": "检查输出标识、result接收字段、类型/单位和必要去重/粒度。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "M4",
+      "name": "联邦完整支持率",
+      "tier": "B",
+      "direction": "higher",
+      "formula": "federation_questions_with_one_valid_path_all_structure_interface_business_supported_no_critical_conflict / evaluable_federation_questions",
+      "required_inputs": [
+        "federation_path_labels",
+        "fact_match_results",
+        "conflict_results"
+      ],
+      "design_reason": "等价步骤顺序可接受；不要求提示词预写最终查询。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "V1",
+      "name": "确认可回答率配对变化",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "(|Pass_new|-|Pass_old|)/|Q0|",
+      "required_inputs": [
+        "paired_answerability_states",
+        "frozen_Q0"
+      ],
+      "design_reason": "基准变动时重评两版，不直接混用旧分数。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "V2",
+      "name": "三态转移及改善退化",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "3x3 transition_counts(T,F,U); verified_gain=count(F_to_T); verified_loss=count(T_to_F)",
+      "required_inputs": [
+        "paired_answerability_states"
+      ],
+      "design_reason": "U转T是确认改善，不能宣称原先确定不可回答。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "V3",
+      "name": "必须事实确定救回与退化率",
+      "tier": "B",
+      "direction": "diagnostic",
+      "formula": "rescue=count(F_to_T)/count(old_F); regression=count(T_to_F)/count(old_T)",
+      "required_inputs": [
+        "paired_fact_states",
+        "fixed_path_fact_registry"
+      ],
+      "design_reason": "事实、范围和路径绑定固定，未知单列。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "Z1",
+      "name": "当前数据执行结果等价率",
+      "tier": "C",
+      "direction": "higher",
+      "formula": "verified_equivalent_results / fixed_executable_evaluation_questions",
+      "required_inputs": [
+        "generated_queries",
+        "verified_result_contract",
+        "database_execution_results"
+      ],
+      "design_reason": "保留重复行，按需求判断顺序，空结果也可能正确；静态审查不得冒充执行。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    },
+    {
+      "id": "Z2",
+      "name": "确认可答子集生成正确率",
+      "tier": "C",
+      "direction": "higher",
+      "formula": "execution_confirmed_correct_within_fixed_answerable_subset / executable_questions_in_same_subset",
+      "required_inputs": [
+        "answerability_states",
+        "generated_queries",
+        "verified_execution_results"
+      ],
+      "design_reason": "反映给定模型利用输入的表现；模型比较固定同一子集和提示词。",
+      "unknown_policy": "保留T/F/U；未知不算通过，分母为0记NA，并同时输出分子、分母与未知数。"
+    }
+  ],
+  "relevance_grade_contract": {
+    "0": "已核定不相关或不适用",
+    "1": "相关背景",
+    "2": "能正确支持至少一项必须事实",
+    "note": "错误/冲突另记；正例定义在基准中预先冻结，不随版本变化"
+  }
+}

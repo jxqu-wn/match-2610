@@ -21,11 +21,14 @@ class RecallConfig:
     rrf_k: int = 60
     rerank_top_k: int = 50
     rerank_enabled: bool = True
+    knowledge_support_weight: float = 0.25
 
     def __post_init__(self) -> None:
         for name in ("bm25_top_k", "embedding_top_k", "rrf_k", "rerank_top_k"):
             if getattr(self, name) < 1:
                 raise ValueError(f"{name} 必须大于 0")
+        if not np.isfinite(self.knowledge_support_weight) or self.knowledge_support_weight < 0:
+            raise ValueError("knowledge_support_weight 必须为非负有限数")
 
     @classmethod
     def from_settings(cls) -> RecallConfig:

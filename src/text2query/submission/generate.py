@@ -230,6 +230,7 @@ def generate_one(
     max_added_tables: int = MAX_ADDED_TABLES,
     expansion_token_reserve: int = 0,
     expand_all_engines: bool = False,
+    max_input_tokens: int = MAX_INPUT_TOKENS,
 ) -> dict[str, Any]:
     tables = catalog.by_id()
     from ..submission.validate import resolver_for
@@ -267,7 +268,7 @@ def generate_one(
                     {"additional_schemas": chosen + [candidate], "instruction": instruction}, ensure_ascii=False
                 ),
             }
-            if estimator(messages + [trial]) <= MAX_INPUT_TOKENS - expansion_token_reserve:
+            if estimator(messages + [trial]) <= max_input_tokens - expansion_token_reserve:
                 chosen.append(candidate)
             if len(chosen) >= max_added_tables:
                 break
@@ -300,7 +301,7 @@ def generate_one(
     try:
         for attempt in range(MAX_ATTEMPTS):
             estimate = estimator(messages)
-            if estimate > MAX_INPUT_TOKENS:
+            if estimate > max_input_tokens:
                 raise ValueError("输入估算超过上限；保留 schema 并失败，不静默截断")
             raw = client.complete(messages, MAX_OUTPUT_TOKENS, "generation" if attempt == 0 else "repair_or_expansion")
             trace.append({"attempt": attempt + 1, "raw": raw, "estimated_input_tokens": estimate})

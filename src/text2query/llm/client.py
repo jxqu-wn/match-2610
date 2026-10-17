@@ -6,6 +6,7 @@ DeepSeek 通过 OpenAI 协议访问；非思考模式与 JSON 输出通过 ``ext
 
 from __future__ import annotations
 
+import json
 import time
 from dataclasses import dataclass, field
 from typing import Any
@@ -56,6 +57,7 @@ class ChatClient:
         cache_dir: Any = None,
         json_mode: bool = True,
         thinking: bool = False,
+        reasoning_effort: str | None = None,
         default_headers: dict[str, str] | None = None,
     ) -> None:
         key = api_key or settings.api_key
@@ -66,6 +68,11 @@ class ChatClient:
         self.model = model or settings.judge_model
         self.json_mode = json_mode
         self.thinking = thinking
+        if reasoning_effort not in {None, "low", "high", "max"}:
+            raise ValueError("reasoning_effort 必须为 low/high/max")
+        if reasoning_effort is not None and not thinking:
+            raise ValueError("reasoning_effort 需要启用 thinking")
+        self.reasoning_effort = reasoning_effort
         self.retries = retries
         self.client = openai.OpenAI(
             api_key=key,
@@ -79,6 +86,14 @@ class ChatClient:
 
     def _cache_key(self, payload: dict[str, Any]) -> str:
         return sha256_text(canonical_json(payload))
+
+    def _cacheable(self, content: str) -> bool:
+        if not self.json_mode:
+            return True
+        try:
+            return isinstance(json.loads(content), dict)
+        except (ValueError, TypeError):
+            return False
 
     def complete(
         self,
@@ -96,12 +111,13 @@ class ChatClient:
         }
         if self.json_mode:
             payload["response_format"] = {"type": "json_object"}
-        if not self.thinking:
-            payload["extra_body"] = {"thinking": {"type": "disabled"}}
+        payload["extra_body"] = {"thinking": {"type": "enabled" if self.thinking else "disabled"}}
+        if self.reasoning_effort is not None:
+            payload["reasoning_effort"] = self.reasoning_effort
 
         if self.cache is not None:
             cached = self.cache.get(self._cache_key(payload))
-            if cached is not None:
+            if cached is not None and cached.get("finish_reason") == "stop" and self._cacheable(cached.get("content")):
                 record = CallRecord(purpose=purpose, attempt=1, success=True, usage=cached.get("usage", {}))
                 record.response_model = cached.get("model")
                 record.finish_reason = "cached"
@@ -134,8 +150,8 @@ class ChatClient:
                     record.finish_reason = response.get("finish_reason")
                     record.output_token_limit = max_tokens
                     content = response["content"]
-                    if self.cache is not None:
-                        self.cache.set(self._cache_key(payload), {"content": content, **response})
+                    if self.cache is not None and record.finish_reason == "stop" and self._cacheable(content):
+                        self.cache.set(self._cache_key(payload), {"content": content, **response, "usage": record.usage})
                     return content
         except RETRYABLE as error:
             raise RuntimeError(f"API 传输失败：{type(error).__name__}") from error

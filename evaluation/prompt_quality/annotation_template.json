@@ -1,0 +1,86 @@
+{
+  "protocol_version": "prompt-quality-evaluation-v1",
+  "template_only": true,
+  "question_id": null,
+  "question": null,
+  "request_sha256": null,
+  "source_manifest_sha256": null,
+  "task_contract_sha256": null,
+  "review_status": "unreviewed",
+  "source_assessment": {
+    "status": "unreviewed",
+    "acceptable_interpretations": [],
+    "missing_or_ambiguous_facts": [],
+    "reference_contract_mismatch": null,
+    "evidence": []
+  },
+  "topology_group": null,
+  "requirements": [],
+  "allowed_evidence_paths": [],
+  "facts": [],
+  "fact_record_template": {
+    "fact_id": "<fact_id>",
+    "requirement_ids": [],
+    "necessity": "required_or_optional_or_conditional",
+    "statement": "<核定的必要事实或结构信息>",
+    "applicability_conditions": [],
+    "source_status": "unreviewed",
+    "source_evidence": [
+      {
+        "path": "<原始文件>",
+        "sha256": null,
+        "json_pointer_or_line": null,
+        "quote": null
+      }
+    ],
+    "prompt_status": "unjudgeable",
+    "prompt_evidence": [
+      {
+        "message_index": null,
+        "json_pointer_or_span": null,
+        "source_id": null,
+        "quote": null
+      }
+    ],
+    "derivation": null,
+    "conflict_priority_resolution": null,
+    "loss_stage": null,
+    "review_notes": null
+  },
+  "evidence_segments": [],
+  "critical_unresolved_conflicts": [],
+  "resolved_conflicts": [],
+  "quality_metrics": {
+    "required_fact_coverage": null,
+    "complete_business_fact_support": null,
+    "complete_valid_schema_path_support": null,
+    "irrelevant_token_share": null,
+    "incorrect_token_share": null,
+    "evidence_annotation_coverage": null,
+    "source_fidelity": null,
+    "traceability": null
+  },
+  "token_measurement": {
+    "tokenizer_and_version": null,
+    "exact_for_generator": null,
+    "system": null,
+    "question": null,
+    "schema": null,
+    "knowledge": null,
+    "examples": null,
+    "relations": null,
+    "retrieval_metadata": null,
+    "other_and_message_overhead": null,
+    "total": null
+  },
+  "prompt_assessment": {
+    "status": "unjudgeable",
+    "unknown_reason": "not_reviewed",
+    "observed_issue_layers": [],
+    "rationale": null,
+    "causal_experiment_performed": false
+  },
+  "independent_reviews": [],
+  "adjudication": null,
+  "downstream_experiment": null
+}

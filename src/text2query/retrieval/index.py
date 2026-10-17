@@ -553,7 +553,7 @@ class RetrievalIndex:
         for hit in base:
             key = hit["table_ids"][0]
             rank = ranks.get(key)
-            support_score = 0.25 / (self.recall_config.rrf_k + rank) if rank else 0.0
+            support_score = self.recall_config.knowledge_support_weight / (self.recall_config.rrf_k + rank) if rank else 0.0
             candidate_score = hit["rrf_score"] + support_score
             results.append(
                 {

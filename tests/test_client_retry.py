@@ -26,7 +26,7 @@ def connection_error():
 
 def test_retry_success_records_attempts_and_cache_hit(fake_transport, monkeypatch, tmp_path):
     args, waits = fake_transport
-    client = ChatClient(api_key="test-only", retries=2, cache_dir=tmp_path / "cache")
+    client = ChatClient(api_key="test-only", retries=2, cache_dir=tmp_path / "cache", json_mode=False)
     attempts = []
 
     def request(payload):
@@ -74,3 +74,37 @@ def test_non_retryable_failure_is_not_retried(fake_transport, monkeypatch):
     with pytest.raises(ValueError, match="invalid response"):
         client.complete([], 100, "test")
     assert len(client.calls) == 1 and waits == []
+
+
+def test_thinking_payload_and_cache_preserve_usage(fake_transport, monkeypatch, tmp_path):
+    client = ChatClient(api_key="test-only", thinking=True, reasoning_effort="high", cache_dir=tmp_path / "cache")
+    seen = []
+
+    def request(payload):
+        seen.append(payload)
+        return {"content": "{}", "usage": {"total_tokens": 30}, "model": "test", "finish_reason": "stop"}
+
+    monkeypatch.setattr(client, "_request", request)
+    client.complete([], 100, "first")
+    client.complete([], 100, "repeat")
+    assert len(seen) == 1
+    assert seen[0]["extra_body"] == {"thinking": {"type": "enabled"}}
+    assert seen[0]["reasoning_effort"] == "high"
+    assert client.calls[-1].usage == {"total_tokens": 30}
+    client.cache.close()
+
+
+def test_json_mode_does_not_cache_empty_or_malformed_responses(fake_transport, monkeypatch, tmp_path):
+    client = ChatClient(api_key="test-only", cache_dir=tmp_path / "cache")
+    requests = []
+
+    def request(payload):
+        requests.append(payload)
+        return {"content": "", "usage": {}, "model": "test", "finish_reason": "stop"}
+
+    monkeypatch.setattr(client, "_request", request)
+    client.complete([], 100, "first")
+    client.complete([], 100, "retry")
+    assert len(requests) == 2
+    assert len(client.cache) == 0
+    client.cache.close()
